@@ -1,0 +1,128 @@
+<div>
+  <button onclick="openCodModal()" class="btn btn-success">COD Payment</button>
+</div>
+
+<script>
+  {%- liquid
+    assign target = product.selected_or_first_available_variant
+  -%}
+  let finalVariantId = '';
+  function openCodModal() {
+    console.log('sundar here---------------');
+    const urlParams = new URLSearchParams(window.location.search);
+    let variantId = urlParams.get('variant');
+
+    if (variantId) {
+      finalVariantId = variantId;
+    } else {
+      finalVariantId = '{{ target.id }}';
+    }
+
+    console.log(finalVariantId);
+
+    getCartDetails();
+
+
+    document.getElementById('ba-cod-modal-btn').click();
+  }
+
+  function getCartDetails() {
+    let requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+
+    fetch(`/cart.js`, requestOptions)
+      .then(response => {
+        if (response.status === 200) {
+          response.json().then(result => {
+            localStorage.setItem('baCodCartStorage', JSON.stringify(result['items']));
+            console.log(JSON.parse(localStorage.getItem('baCodCartStorage')));
+            clearCart();
+          });
+        } else {
+          console.log('Unable to clear cart');
+        }
+      }).catch(error => {
+      console.log('error: ', error);
+    });
+  }
+
+  function clearCart() {
+    let requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+
+    fetch(`/cart/clear.js`, requestOptions)
+      .then(response => {
+        if (response.status === 200) {
+          // response.json().then(result => {
+          // });
+          updateCartDetails();
+        } else {
+          console.log('Unable to clear cart');
+        }
+      }).catch(error => {
+      console.log('error: ', error);
+    });
+  }
+
+  function updateCartDetails() {
+    console.log('Inside update', finalVariantId);
+    let quantity = document.getElementsByClassName('quantity__input')[0];
+    let updates = {};
+    updates[finalVariantId] = quantity.value;
+    fetch('/cart/update.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({'updates': updates})
+    }).then(res => res.json())
+      .then(res => {
+          localStorage.setItem('baUpdateCartResponse', JSON.stringify(res));
+          setBaItems();
+        }
+      );
+  }
+
+  function addCartDetails() {
+    let items = JSON.parse(localStorage.getItem('baCodCartStorage'));
+
+    if (items) {
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({'items': items})
+      }).then(res => res.json())
+        .then(res => console.log(res));
+    }
+
+    // fetch(`/cart/add.js`, requestOptions)
+    //   .then(response => {
+    //     if (response.status === 200) {
+    //       response.json().then(result => {
+    //         localStorage.setItem('baCodCartStorage', JSON.stringify(result['items']));
+    //         console.log();
+    //         clearCart();
+    //       });
+    //     } else {
+    //       console.log('Unable to clear cart');
+    //     }
+    //   }).catch(error => {
+    //   console.log('error: ', error);
+    // });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "COD Payment",
+  "target": "section",
+  "settings": []
+}
+{% endschema %}
+

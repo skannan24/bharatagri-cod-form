@@ -1,0 +1,27 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "bharatagri-cod-form"
+client_id = "0a4f33d76e6fccd9e087716b261a0f8f"
+application_url = "https://43ed-36-255-87-6.ngrok-free.app"
+embedded = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products"
+
+[auth]
+redirect_urls = [
+  "https://43ed-36-255-87-6.ngrok-free.app/auth/callback",
+  "https://43ed-36-255-87-6.ngrok-free.app/auth/shopify/callback",
+  "https://43ed-36-255-87-6.ngrok-free.app/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2023-10"
+
+[pos]
+embedded = false
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "quickstart-322972d3.myshopify.com"

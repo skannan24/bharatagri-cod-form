@@ -1,0 +1,1183 @@
+<style>
+  .ba-modal-dialog {
+    width: 100%;
+    height: 100%;
+    padding-right: 12px;
+    /*margin: 0;*/
+    /*padding: 0;*/
+  }
+
+  .ba-modal-content {
+    height: auto;
+    min-height: 100%;
+    border-radius: 0;
+  }
+
+  .ba-modal-body {
+    overflow-x: hidden;
+  }
+
+  .ba-cod-product-header {
+    font-family: Noto Sans;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 25px;
+  }
+
+  .ba-cod-product-title {
+    font-family: Noto Sans;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #707890;
+  }
+
+  .ba-cod-variant-info {
+    font-family: Noto Sans;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #181B26;
+  }
+
+  .ba-cod-product-discount {
+    font-family: Noto Sans;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #0A8047;
+  }
+
+  .ba-cod-actual-price {
+    font-family: Noto Sans;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #707890;
+    text-decoration-line: line-through;
+  }
+
+  .ba-cod-selling-price {
+    font-family: Noto Sans;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #181B26;
+  }
+
+  .ba-cod-product-img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .ba-cod-discount-header {
+    font-family: Noto Sans;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 25px;
+    letter-spacing: 0em;
+    text-align: left;
+  }
+
+  .ba-cod-discount-row {
+    max-width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .ba-cod-discount-coupon {
+    background: linear-gradient(180deg, #03B369 0%, #0A8047 100%);
+    color: #FFFFFF;
+    border-radius: 4px;
+    gap: 4px;
+  }
+
+  .ba-cod-discount-title {
+    height: 50px;
+  }
+
+  .ba-cod-discount-title1 {
+    font-family: Noto Sans;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 22px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #181B26;
+  }
+
+  .ba-cod-discount-title2 {
+    font-family: Noto Sans;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #707890;
+  }
+
+  .ba-cod-discount-apply-btn {
+    color: #0A8047;
+    cursor: pointer;
+  }
+
+  .ba-cod-discount-card {
+    border-radius: 10px;
+    border: 1px solid #E6E8EB;
+    max-width: 70%;
+    width: 70%;
+  }
+
+  .ba-cod-discount-card-active {
+    border-radius: 10px;
+    border: 1px solid #13CD80;
+    background: linear-gradient(0deg, #F6FEFA, #F6FEFA), linear-gradient(0deg, #13CD80, #13CD80);
+    max-width: 70%;
+    width: 70%;
+  }
+
+  .ba-discount-applied-name {
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+    color: #0A8047;
+  }
+
+  .ba-cod-separator {
+    background: #F2F3F4;
+    display: block!important
+  }
+
+  .ba-cod-input-field {
+    height: 48px;
+    font-size: 14px;
+    border-color: #E6E8EB;
+  }
+
+  .has-float-label {
+    display: block;
+    position: relative
+  }
+
+  .has-float-label label,.has-float-label>span {
+    position: absolute;
+    cursor: text;
+    font-size: 11px;
+    opacity: 1;
+    -webkit-transition: all .2s;
+    transition: all .2s;
+    top: -.5em;
+    left: .75rem;
+    z-index: 3;
+    line-height: 1;
+    padding: 0 1px;
+    color: #ADB2C0;
+    background: white;
+  }
+
+  .has-float-label label::after,.has-float-label>span::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    background: #fff;
+    height: 2px;
+    top: 50%;
+    left: -.2em;
+    right: -.2em;
+    z-index: -1
+  }
+
+  .has-float-label .form-control::-webkit-input-placeholder {
+    opacity: 1;
+    -webkit-transition: all .2s;
+    transition: all .2s
+  }
+
+  .has-float-label .form-control:placeholder-shown:not(:focus)::-webkit-input-placeholder {
+    opacity: 0
+  }
+
+  .has-float-label .form-control:placeholder-shown:not(:focus)+* {
+    font-size: 13px;
+    /*opacity: .5;*/
+    top: 1.3em;
+    color: black;
+  }
+
+  .input-group .has-float-label {
+    display: table-cell
+  }
+
+  .input-group .has-float-label .form-control {
+    border-radius: .25rem
+  }
+
+  .input-group .has-float-label:not(:last-child),.input-group .has-float-label:not(:last-child) .form-control {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    border-right: 0
+  }
+
+  .input-group .has-float-label:not(:first-child),.input-group .has-float-label:not(:first-child) .form-control {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0
+  }
+
+  .ba-cod-select-field {
+    height: 48px;
+    font-size: 14px;
+    border-color: #E6E8EB;
+    text-align: left;
+  }
+
+  .ba-cod-options-field {
+    width: 100%;
+    font-size: 14px;
+    max-height: 240px;
+    overflow-y: scroll;
+  }
+
+  ::-webkit-scrollbar { display: none; }
+
+</style>
+
+<!-- Button trigger modal -->
+<div class="d-flex justify-content-end">
+  <button id="ba-cod-modal-btn" style="visibility: hidden" type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
+    Launch modal
+  </button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog ba-modal-dialog modal-dialog-scrollable">
+    <div class="modal-content ba-modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">
+          <div>
+            <span class="ba-cod-product-header" id="product-header-id"></span>
+            <span class="ba-cod-product-header"> (<span id="product-count-id"></span>) </span>
+          </div>
+        </h5>
+        <button onclick="clearCartEmbed()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body ba-modal-body p-0">
+        <!-- Product info card -->
+        <div id="product-info-div" class="p-2 m-2">
+        </div>
+
+        <div class="pt-1 mt-3 mb-3 ba-cod-separator"></div>
+
+        <!-- Discount coupon card -->
+        <div id="ba-discount-coupon-div" class="p-2 m-2">
+          <div class="d-flex align-items-center">
+            <span class="ba-cod-discount-header" id="discount-header-id"></span>
+            <div id="ba-cod-discount-loader" style="display: none" class="spinner-border text-secondary ml-2" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <div id="ba-cod-discount-div" class="row ba-cod-discount-row mt-2 ml-0">
+
+            <div id="ba-active-coupon" style="display: none" class="col-auto p-3 ba-cod-discount-card ba-cod-discount-card-active mr-2">
+              <div class="row pt-2 justify-content-between mb-3 ba-cod-discount-title">
+                <div class="col-auto">
+                  <div id="ba-cod-saved-amount" class="ba-cod-discount-title1"></div>
+                  <div id="ba-cod-saved-amount-line2" class="ba-cod-discount-title2"></div>
+                </div>
+                <div class="col-auto">
+                  {% render 'ba-discount-active-tick' %}
+                </div>
+              </div>
+              <div>
+                <span>{% render 'ba-discount-percent-icon' %} </span> <span id="ba-cod-applied-coupon-content" class="ba-discount-applied-name"></span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="pt-1 mt-3 mb-3 ba-cod-separator"></div>
+
+        <!-- Delivery address form fields card -->
+        <div id="ba-cod-form-div" class="p-2 m-2">
+          <div class="d-flex align-items-center">
+            <span class="ba-cod-discount-header" id="delivery-address-header-id"></span>
+          </div>
+
+          <div class="row mt-3">
+            <div class="col-6 pr-1">
+              <div class="form-group has-float-label">
+                <input class="form-control ba-cod-input-field" id="farmerName" placeholder="Name"/>
+                <label for="farmerName">Name</label>
+              </div>
+            </div>
+            <div class="col-6 pl-1">
+              <div class="form-group has-float-label">
+                <input class="form-control ba-cod-input-field" id="farmerMobile" type="text" maxlength="10" pattern="\d{10}" placeholder="Mobile Number"/>
+                <label for="farmerMobile">Mobile Number</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-3">
+            <div class="col-6 pr-1">
+              <div class="form-group has-float-label">
+                <input class="form-control ba-cod-input-field" id="alternateMobile" placeholder="Alternate Number"/>
+                <label for="alternateMobile">Alternate Number</label>
+              </div>
+            </div>
+            <div class="col-6 pl-1">
+              <div class="form-group has-float-label">
+                <input class="form-control ba-cod-input-field" id="baCodPincode" type="text" maxlength="6" placeholder="Pincode"/>
+                <label for="baCodPincode">Pincode</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-3">
+
+            <div class="col-6 pr-1">
+              <div class="dropdown">
+                <button id="baCodStateSelect" class="btn btn-lg btn-block ba-cod-select-field btn-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  State
+                </button>
+                <div id="baCodStateOptions" class="dropdown-menu ba-cod-options-field" aria-labelledby="baCodStateSelect">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 pl-1">
+              <div class="dropdown">
+                <button id="baCodDistrictSelect" class="btn btn-lg btn-block ba-cod-select-field btn-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span id="baCodDistrictSelectLabel">District</span>
+                  <div id="ba-cod-district-loader" style="display: none" class="spinner-border text-secondary ml-2" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </button>
+                <div id="baCodDistrictOptions" class="dropdown-menu ba-cod-options-field" aria-labelledby="baCodDistrictSelect">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentUrl1 = window.location.href;
+  let lang = 'hi';
+  if (currentUrl1?.includes('.com/en')) {
+    lang = 'en';
+  } else if (currentUrl1?.includes('.com/mr')) {
+    lang = 'mr';
+  } else {
+    lang = 'hi';
+  }
+
+  let productHeader = 'Product hi';
+  let discountHeader = 'Discount Coupon hi';
+  let applyCouponBtn = 'Apply hi';
+  let deliveryAddressHeader = 'Delivery Address hi';
+
+  let nameLabel = 'Name hi';
+  let mobileLabel = 'Mobile Number hi';
+  let alternateMobileLabel = 'Alternate Number hi';
+  let pincodeLabel = 'Pincode hi';
+  let stateLabel = 'State hi';
+  let districtLabel = 'District hi';
+  let talukaLabel = 'Taluka hi';
+  let villageLabel = 'Village hi';
+  let addressLabel = 'Address (ex : plot no, street name, road etc) hi';
+  let landmarkLabel = 'Landmark (ex : near gopal mandir, school etc) hi';
+  let postOfficeLabel = 'Post Office (Optional) hi';
+
+  if (lang === 'en') {
+    productHeader = 'Product';
+    discountHeader = 'Discount Coupon';
+    applyCouponBtn = 'Apply';
+    deliveryAddressHeader = 'Delivery Address';
+
+    nameLabel = 'Name';
+    mobileLabel = 'Mobile Number';
+    alternateMobileLabel = 'Alternate Number';
+    pincodeLabel = 'Pincode';
+    stateLabel = 'State';
+    districtLabel = 'District';
+    talukaLabel = 'Taluka';
+    villageLabel = 'Village';
+    addressLabel = 'Address (ex : plot no, street name, road etc)';
+    landmarkLabel = 'Landmark (ex : near gopal mandir, school etc)';
+    postOfficeLabel = 'Post Office (Optional)';
+  }
+
+  if (lang === 'mr') {
+    productHeader = 'Product mr';
+    discountHeader = 'Discount Coupon mr';
+    applyCouponBtn = 'Apply mr';
+    deliveryAddressHeader = 'Delivery Address mr';
+
+    nameLabel = 'Name mr';
+    mobileLabel = 'Mobile Number mr';
+    alternateMobileLabel = 'Alternate Number mr';
+    pincodeLabel = 'Pincode mr';
+    stateLabel = 'State mr';
+    districtLabel = 'District mr';
+    talukaLabel = 'Taluka mr';
+    villageLabel = 'Village mr';
+    addressLabel = 'Address (ex : plot no, street name, road etc) mr';
+    landmarkLabel = 'Landmark (ex : near gopal mandir, school etc) mr';
+    postOfficeLabel = 'Post Office (Optional) mr';
+  }
+  document.getElementById('product-header-id').innerHTML = productHeader;
+  document.getElementById('discount-header-id').innerHTML = discountHeader;
+  document.getElementById('delivery-address-header-id').innerHTML = deliveryAddressHeader;
+</script>
+
+<script>
+  function setBaItems() {
+    let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+    console.log('BA update cart', baUpdateCart);
+    let items = baUpdateCart.items;
+    console.log('Sundar items: ', items);
+
+    for (let i = 0; i < items?.length; i++) {
+      const parentContainer = document.getElementById('product-info-div');
+      parentContainer.replaceChildren();
+
+      let productMainDiv = document.createElement('div');
+      document.getElementById('product-info-div').appendChild(productMainDiv);
+
+      let productRowDiv = document.createElement('div');
+      productRowDiv.className = "row align-items-center";
+      productMainDiv.appendChild(productRowDiv);
+
+      let productImageColDiv = document.createElement('div');
+      productImageColDiv.className = "col-3 pr-0";
+      productRowDiv.appendChild(productImageColDiv);
+
+      let productImage = document.createElement('img');
+      productImage.className = "ba-cod-product-img";
+      productImage.src = items[i]?.image;
+      productImage.alt = 'product image';
+      productImageColDiv.appendChild(productImage);
+
+      let productTitleColDiv = document.createElement('div');
+      productTitleColDiv.className = "col-5 pr-0 pl-0";
+      productRowDiv.appendChild(productTitleColDiv);
+
+      let productTitle = document.createElement('div');
+      productTitle.className = "ba-cod-product-title";
+      productTitle.innerHTML = items[i]?.product_title;
+      productTitleColDiv.appendChild(productTitle);
+
+      let productVariantTitle = document.createElement('div');
+      productVariantTitle.className = "ba-cod-variant-info";
+      productVariantTitle.innerHTML = items[i]?.variant_title;
+      productTitleColDiv.appendChild(productVariantTitle);
+
+      let productPriceColDiv = document.createElement('div');
+      productPriceColDiv.className = "col-4";
+      productRowDiv.appendChild(productPriceColDiv);
+
+      // Commenting out the discount percent off value
+      // let productDiscount = document.createElement('div');
+      // productDiscount.className = "ba-cod-product-discount";
+      // productDiscount.innerHTML = '3% off';
+      // productPriceColDiv.appendChild(productDiscount);
+
+      let productPriceDiv = document.createElement('div');
+      productPriceColDiv.appendChild(productPriceDiv);
+
+      // Commenting out the slash (original) price
+      // let productActualPrice = document.createElement('span');
+      // productActualPrice.className = "ba-cod-actual-price mr-2";
+      // productActualPrice.innerHTML = items[i]?.original_price ? `₹ ${Number(items[i]?.original_price)/100}` : '0';
+      // productPriceDiv.appendChild(productActualPrice);
+
+      let productSellingPrice = document.createElement('span');
+      productSellingPrice.className = "ba-cod-selling-price";
+      productSellingPrice.innerHTML = items[i]?.final_price ? `₹ ${Number(items[i]?.final_price)/100}` : '0';
+      productPriceDiv.appendChild(productSellingPrice);
+    }
+
+    loadCouponCodes();
+    resetCodFormFields();
+  }
+
+  function clearCartEmbed() {
+    let requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+
+    fetch(`/cart/clear.js`, requestOptions)
+      .then(response => {
+        if (response.status === 200) {
+          // response.json().then(result => {
+          // });
+          addCartDetailsEmbed();
+        } else {
+          console.log('Unable to clear cart');
+        }
+      }).catch(error => {
+      console.log('error: ', error);
+    });
+  }
+
+  function addCartDetailsEmbed() {
+    let items = JSON.parse(localStorage.getItem('baCodCartStorage'));
+
+    if (items) {
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 'items': items })
+      }).then(res => res.json())
+        .then(res => console.log(res));
+    }
+    localStorage.removeItem('baCodCartStorage');
+    localStorage.removeItem('baUpdateCartResponse');
+    resetCodFormFields();
+  }
+
+  function loadCouponCodes() {
+    let requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    fetch(`https://s3.ap-south-1.amazonaws.com/shopify-krushidukan-apis/price_rules/en/coupons/price_rule_list.json`, requestOptions)
+      .then(response => {
+        if (response.status === 200) {
+          response.json().then(result => {
+            console.log('Discount codes: ', result);
+            setDiscountCoupons(result?.data);
+          });
+        } else {
+          console.log('Unable to fetch discount coupons');
+        }
+      }).catch(error => {
+      console.log('error: ', error);
+    });
+  }
+
+  function setDiscountCoupons(discounts) {
+    const discountDiv = document.getElementById('ba-cod-discount-div');
+    const discountActiveDiv = document.getElementById('ba-active-coupon');
+
+    discountDiv.replaceChildren();
+    discountDiv.appendChild(discountActiveDiv);
+
+    let finalCodes = [];
+
+    for (let i = 0; i < discounts?.length; i++) {
+      let today = new Date();
+      today.setHours(0,0,0);
+      let endDate = null;
+      if (discounts[i]?.ends_at !== 'None') {
+        endDate = new Date(discounts[i]?.ends_at);
+      }
+      if (endDate >= today || endDate === null) {
+        finalCodes.push(discounts[i]);
+      }
+    }
+    console.log('Sundar Final Discounts', finalCodes);
+
+    for (let i=0; i < finalCodes?.length; i++) {
+      let discountCardColDiv = document.createElement('div');
+      discountCardColDiv.id = finalCodes[i]?.title;
+      discountCardColDiv.className = 'col-auto p-3 ba-cod-discount-card mr-2';
+      discountDiv.appendChild(discountCardColDiv);
+
+      let discountTitleDiv = document.createElement('div');
+      discountTitleDiv.className = 'mb-3 ba-cod-discount-title';
+      discountCardColDiv.appendChild(discountTitleDiv);
+
+      let discountTitle1 = document.createElement('span');
+      discountTitle1.className = 'ba-cod-discount-title1 mr-3';
+      discountTitle1.innerHTML = finalCodes[i]?.coupon_title;
+      discountTitleDiv.appendChild(discountTitle1);
+
+      let discountTitle2 = document.createElement('span');
+      discountTitle2.className = 'ba-cod-discount-title2';
+      discountTitle2.innerHTML = finalCodes[i]?.coupon_sub_title;
+      discountTitleDiv.appendChild(discountTitle2);
+
+      let discountInfoApplyDiv = document.createElement('div');
+      discountInfoApplyDiv.className = 'row m-1 pt-2 align-items-center justify-content-between';
+      discountCardColDiv.appendChild(discountInfoApplyDiv);
+
+      let discountMainTitle = document.createElement('div');
+      discountMainTitle.className = 'col-auto ba-cod-discount-coupon';
+      discountMainTitle.innerHTML = finalCodes[i]?.title;
+      discountInfoApplyDiv.appendChild(discountMainTitle);
+
+      let discountApplyBtn = document.createElement('div');
+      discountApplyBtn.className = 'col-auto ba-cod-discount-apply-btn';
+      discountApplyBtn.innerHTML = applyCouponBtn;
+      discountApplyBtn.addEventListener("click", function(){ applyCouponCodes(finalCodes[i]?.title); });
+      discountInfoApplyDiv.appendChild(discountApplyBtn);
+    }
+  }
+</script>
+
+<script>
+  let previousCouponCode = '';
+   function applyCouponCodes(couponCode) {
+     document.getElementById('ba-cod-discount-loader').style.display = 'block';
+     if (!previousCouponCode) {
+       previousCouponCode = couponCode;
+     }
+     let shopify_features_script = document.querySelector("script[id='shopify-features']");
+     let shopify_features_json = JSON.parse(shopify_features_script.innerHTML);
+
+     console.log(shopify_features_json);
+
+     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+     let items = baUpdateCart.items;
+     let lineItems = [];
+
+     if (previousCouponCode) {
+       let activeCouponEl = document.getElementById(previousCouponCode);
+       if (activeCouponEl) {
+         activeCouponEl.style.display = 'block';
+       }
+     }
+
+     let activeCouponCardEl = document.getElementById('ba-active-coupon');
+     if (activeCouponCardEl) {
+       activeCouponCardEl.style.display = 'none';
+     }
+
+     for (let i = 0; i < items?.length; i++) {
+       let variant = {'variant_id': items[i]?.variant_id, 'quantity': items[i]?.quantity, 'properties': {}};
+       lineItems.push(variant);
+     }
+
+    let payload = {
+      "checkout": {
+        "discount_code": couponCode,
+        "line_items": lineItems,
+        "presentment_currency": "INR"
+      }
+    }
+
+    fetch('/wallets/checkouts/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': 'Basic ' + btoa(shopify_features_json.accessToken)
+      },
+      body: JSON.stringify(payload)
+    }).then(response => {
+      if (response.status === 201) {
+        response.json().then(result => {
+          console.log('Wallet values: ', result);
+          document.getElementById(couponCode).style.display = 'none';
+          document.getElementById('ba-active-coupon').style.display = 'block';
+          document.getElementById('ba-cod-saved-amount').innerHTML = `Saved ₹${result?.checkout?.total_discount_amount?.replace('.00', '')}`;
+          document.getElementById('ba-cod-saved-amount-line2').innerHTML = 'with discount Coupon';
+          document.getElementById('ba-cod-applied-coupon-content').innerHTML = `${couponCode} Applied!`;
+
+          previousCouponCode = couponCode;
+          document.getElementById('ba-cod-discount-loader').style.display = 'none';
+
+          document.getElementById('ba-active-coupon').scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      } else {
+        console.log('Unable to fetch wallet');
+        document.getElementById('ba-cod-discount-loader').style.display = 'none';
+      }
+    }).catch(error => {
+      console.log('error: ', error);
+      document.getElementById('ba-cod-discount-loader').style.display = 'none';
+    });
+  }
+</script>
+
+<script>
+  let stateId = '';
+  let districtId = '';
+
+
+  const stateList = [
+    {
+      "id": 50,
+      "name": "Andhra Pradesh",
+      "name_en": "Andhra Pradesh",
+      "name_mr": "आंध्र प्रदेश",
+      "name_hi": "आंध्र प्रदेश",
+      "name_te": "ఆంధ్రప్రదేశ్",
+      "name_kn": "ಆಂಧ್ರ ಪ್ರದೇಶ",
+      "country": 1
+    },
+    {
+      "id": 51,
+      "name": "Arunachal Pradesh",
+      "name_en": "Arunachal Pradesh",
+      "name_mr": "अरुणाचल प्रदेश",
+      "name_hi": "अरुणाचल प्रदेश",
+      "name_te": "అరుణాచల్ ప్రదేశ్",
+      "name_kn": "ಅರುಣಾಚಲ ಪ್ರದೇಶ",
+      "country": 1
+    },
+    {
+      "id": 52,
+      "name": "Assam",
+      "name_en": "Assam",
+      "name_mr": "आसाम",
+      "name_hi": "आसाम",
+      "name_te": "అస్సాం",
+      "name_kn": "ಅಸ್ಸಾಂ",
+      "country": 1
+    },
+    {
+      "id": 53,
+      "name": "Bihar",
+      "name_en": "Bihar",
+      "name_mr": "बिहार",
+      "name_hi": "बिहार",
+      "name_te": "బీహార్",
+      "name_kn": "ಬಿಹಾರ",
+      "country": 1
+    },
+    {
+      "id": 54,
+      "name": "Chhattisgarh",
+      "name_en": "Chhattisgarh",
+      "name_mr": "छत्तीसगड",
+      "name_hi": "छत्तीसगड",
+      "name_te": "ఛత్తీస్గఢ్",
+      "name_kn": "ಛತ್ತೀಸ್ಗಢ",
+      "country": 1
+    },
+    {
+      "id": 55,
+      "name": "Goa",
+      "name_en": "Goa",
+      "name_mr": "गोवा",
+      "name_hi": "गोआ",
+      "name_te": "గోవా",
+      "name_kn": "ಗೋವಾ",
+      "country": 1
+    },
+    {
+      "id": 56,
+      "name": "Gujarat",
+      "name_en": "Gujarat",
+      "name_mr": "गुजरात",
+      "name_hi": "गुजरात",
+      "name_te": "హర్యానా",
+      "name_kn": "ಗುಜರಾತ್",
+      "country": 1
+    },
+    {
+      "id": 57,
+      "name": "Haryana",
+      "name_en": "Haryana",
+      "name_mr": "हरियाणा",
+      "name_hi": "हरयाणा",
+      "name_te": "హర్యానా",
+      "name_kn": "ಹರಿಯಾಣ",
+      "country": 1
+    },
+    {
+      "id": 58,
+      "name": "Himachal Pradesh",
+      "name_en": "Himachal Pradesh",
+      "name_mr": "हिमाचल प्रदेश",
+      "name_hi": "हिमाचल प्रदेश",
+      "name_te": "హిమాచల్ ప్రదేశ్",
+      "name_kn": "ಹಿಮಾಚಲ ಪ್ರದೇಶ",
+      "country": 1
+    },
+    {
+      "id": 59,
+      "name": "Jammu & Kashmir",
+      "name_en": "Jammu & Kashmir",
+      "name_mr": "जम्मू-काश्मीर",
+      "name_hi": "जम्मू और कश्मीर",
+      "name_te": "జమ్మూ మరియు కాశ్మీర్",
+      "name_kn": "ಜಮ್ಮು ಮತ್ತು ಕಾಶ್ಮೀರ",
+      "country": 1
+    },
+    {
+      "id": 60,
+      "name": "Jharkhand",
+      "name_en": "Jharkhand",
+      "name_mr": "झारखंड",
+      "name_hi": "झारखंड",
+      "name_te": "జార్ఖండ్",
+      "name_kn": "ಜಾರ್ಖಂಡ್",
+      "country": 1
+    },
+    {
+      "id": 61,
+      "name": "Karnataka",
+      "name_en": "Karnataka",
+      "name_mr": "कर्नाटक",
+      "name_hi": "कर्नाटक",
+      "name_te": "కర్ణాటక",
+      "name_kn": "ಕರ್ನಾಟಕ",
+      "country": 1
+    },
+    {
+      "id": 62,
+      "name": "Kerala",
+      "name_en": "Kerala",
+      "name_mr": "केरळ",
+      "name_hi": "केरल",
+      "name_te": "కేరళ",
+      "name_kn": "ಕೇರಳ",
+      "country": 1
+    },
+    {
+      "id": 63,
+      "name": "Madhya Pradesh",
+      "name_en": "Madhya Pradesh",
+      "name_mr": "मध्य प्रदेश",
+      "name_hi": "मध्य प्रदेश",
+      "name_te": "మధ్యప్రదేశ్",
+      "name_kn": "ಮಧ್ಯ ಪ್ರದೇಶ",
+      "country": 1
+    },
+    {
+      "id": 64,
+      "name": "Maharashtra",
+      "name_en": "Maharashtra",
+      "name_mr": "महाराष्ट्र",
+      "name_hi": "महाराष्ट्र",
+      "name_te": "మహారాష్ట్ర",
+      "name_kn": "ಮಹಾರಾಷ್ಟ್ರ",
+      "country": 1
+    },
+    {
+      "id": 65,
+      "name": "Manipur",
+      "name_en": "Manipur",
+      "name_mr": "मणिपूर",
+      "name_hi": "मणिपुर",
+      "name_te": "మణిపూర్",
+      "name_kn": "ಮಣಿಪುರ",
+      "country": 1
+    },
+    {
+      "id": 66,
+      "name": "Meghalaya",
+      "name_en": "Meghalaya",
+      "name_mr": "मेघालय",
+      "name_hi": "मेघालय",
+      "name_te": "మేఘాలయ",
+      "name_kn": "ಮೇಘಾಲಯ",
+      "country": 1
+    },
+    {
+      "id": 67,
+      "name": "Mizoram",
+      "name_en": "Mizoram",
+      "name_mr": "मिझोरम",
+      "name_hi": "मिजोरम",
+      "name_te": "మిజోరం",
+      "name_kn": "ಮಿಜೋರಾಮ್",
+      "country": 1
+    },
+    {
+      "id": 68,
+      "name": "Nagaland",
+      "name_en": "Nagaland",
+      "name_mr": "नागालँड",
+      "name_hi": "नागालैंड",
+      "name_te": "నాగాలాండ్",
+      "name_kn": "ನಾಗಾಲ್ಯಾಂಡ್",
+      "country": 1
+    },
+    {
+      "id": 69,
+      "name": "Odisha",
+      "name_en": "Odisha",
+      "name_mr": "उडीसा ",
+      "name_hi": "उड़ीसा ",
+      "name_te": "ఒడిషా",
+      "name_kn": "ಒಡಿಶಾ",
+      "country": 1
+    },
+    {
+      "id": 70,
+      "name": "Punjab",
+      "name_en": "Punjab",
+      "name_mr": "पंजाब",
+      "name_hi": "पंजाब",
+      "name_te": "పంజాబ్",
+      "name_kn": "ಪಂಜಾಬ್",
+      "country": 1
+    },
+    {
+      "id": 71,
+      "name": "Rajasthan",
+      "name_en": "Rajasthan",
+      "name_mr": "राजस्थान",
+      "name_hi": "राजस्थान",
+      "name_te": "రాజస్థాన్",
+      "name_kn": "ರಾಜಸ್ಥಾನ",
+      "country": 1
+    },
+    {
+      "id": 72,
+      "name": "Sikkim",
+      "name_en": "Sikkim",
+      "name_mr": "सिक्किम",
+      "name_hi": "सिक्किम",
+      "name_te": "సిక్కిం",
+      "name_kn": "ಸಿಕ್ಕಿಂ",
+      "country": 1
+    },
+    {
+      "id": 73,
+      "name": "Tamil Nadu",
+      "name_en": "Tamil Nadu",
+      "name_mr": "तमिळनाडु",
+      "name_hi": "तमिलनाडु",
+      "name_te": "తమిళనాడు",
+      "name_kn": "ತಮಿಳುನಾಡು",
+      "country": 1
+    },
+    {
+      "id": 74,
+      "name": "Telangana",
+      "name_en": "Telangana",
+      "name_mr": "तेलंगना",
+      "name_hi": "तेलंगना",
+      "name_te": "తెలంగాణ",
+      "name_kn": "ತೆಲಂಗಾಣ",
+      "country": 1
+    },
+    {
+      "id": 75,
+      "name": "Tripura",
+      "name_en": "Tripura",
+      "name_mr": "त्रिपुरा",
+      "name_hi": "त्रिपुरा",
+      "name_te": "త్రిపుర",
+      "name_kn": "ತ್ರಿಪುರ",
+      "country": 1
+    },
+    {
+      "id": 76,
+      "name": "Uttar Pradesh",
+      "name_en": "Uttar Pradesh",
+      "name_mr": "उत्तर प्रदेश",
+      "name_hi": "उत्तर प्रदेश",
+      "name_te": "ఉత్తరప్రదేశ్",
+      "name_kn": "ಉತ್ತರ ಪ್ರದೇಶ",
+      "country": 1
+    },
+    {
+      "id": 77,
+      "name": "Uttarakhand",
+      "name_en": "Uttarakhand",
+      "name_mr": "उत्तराखंड",
+      "name_hi": "उत्तराखंड",
+      "name_te": "ఉత్తరాఖండ్",
+      "name_kn": "ಉತ್ತರಾಖಂಡ್",
+      "country": 1
+    },
+    {
+      "id": 78,
+      "name": "West Bengal",
+      "name_en": "West Bengal",
+      "name_mr": "पश्चिम बंगाल",
+      "name_hi": "पश्चिम बंगाल",
+      "name_te": "పశ్చిమబెంగాల్",
+      "name_kn": "ಪಶ್ಚಿಮ ಬಂಗಾಳ",
+      "country": 1
+    },
+    {
+      "id": 79,
+      "name": "Andaman & Nicobar Islands",
+      "name_en": "Andaman & Nicobar Islands",
+      "name_mr": "अंदमान आणि निकोबार बेटे",
+      "name_hi": "अंदमान और निकोबार द्वीप समूह",
+      "name_te": "అండమాన్ మరియు నికోబార్ దీవులు",
+      "name_kn": "ಅಂಡಮಾನ್ ಮತ್ತು ನಿಕೋಬಾರ್ ದ್ವೀಪಗಳು",
+      "country": 1
+    },
+    {
+      "id": 80,
+      "name": "Chandigarh",
+      "name_en": "Chandigarh",
+      "name_mr": "चंदीगड",
+      "name_hi": "चंडीगढ़",
+      "name_te": "చండీగఢ్",
+      "name_kn": "ಚಂಡೀಗಢ",
+      "country": 1
+    },
+    {
+      "id": 81,
+      "name": "Dadra & Nagar Haveli",
+      "name_en": "Dadra & Nagar Haveli",
+      "name_mr": "दादर आणि नगर हवेली",
+      "name_hi": "दादर और नगर हवेली",
+      "name_te": "దాదర్ మరియు నాగర్ హవేలీ",
+      "name_kn": "ದಾದರ್ ಮತ್ತು ನಗರ್ ಹವೇಲಿ",
+      "country": 1
+    },
+    {
+      "id": 82,
+      "name": "Daman & Diu",
+      "name_en": "Daman & Diu",
+      "name_mr": "दमण आणि दीव",
+      "name_hi": "दमन और दीव",
+      "name_te": "డామన్ మరియు డయు",
+      "name_kn": "ದಮನ್ ಮತ್ತು ಡಿಯು",
+      "country": 1
+    },
+    {
+      "id": 83,
+      "name": "Delhi",
+      "name_en": "Delhi",
+      "name_mr": "दिल्ली",
+      "name_hi": "दिल्ली",
+      "name_te": "ఢిల్లీ",
+      "name_kn": "ದೆಹಲಿ",
+      "country": 1
+    },
+    {
+      "id": 84,
+      "name": "Lakshadweep",
+      "name_en": "Lakshadweep",
+      "name_mr": "लक्षद्वीप",
+      "name_hi": "लक्षद्वीप",
+      "name_te": "లక్షదీప్",
+      "name_kn": "ಲಕ್ಷದ್ವೀಪ",
+      "country": 1
+    },
+    {
+      "id": 85,
+      "name": "Pondicherry",
+      "name_en": "Pondicherry",
+      "name_mr": "पॉण्डिचेरी ",
+      "name_hi": "पदुच्चेरी   ",
+      "name_te": " పాండిచేరి ",
+      "name_kn": "ಪುದುಚೇರಿ (ಪಾಂಡಿಚೆರಿ)",
+      "country": 1
+    },
+    {
+      "id": 86,
+      "name": "Ladakh",
+      "name_en": "Ladakh",
+      "name_mr": "लद्दाख",
+      "name_hi": "लद्दाख",
+      "name_te": null,
+      "name_kn": null,
+      "country": 1
+    }
+  ];
+  console.log(stateList);
+
+  const stateDiv = document.getElementById('baCodStateOptions');
+  stateDiv.replaceChildren();
+
+  for (let i=0; i < stateList?.length; i++) {
+    let stateName = lang === 'en' ? stateList[i]?.name_en : ( lang === 'mr' ? stateList[i]?.name_mr : stateList[i]?.name_hi);
+
+    let stateOptionsBtn = document.createElement('button');
+    stateOptionsBtn.className = 'dropdown-item';
+    stateOptionsBtn.type = 'button';
+    stateOptionsBtn.innerHTML = stateName;
+    stateOptionsBtn.addEventListener("click", function(){ onStateClick(stateList[i]?.id, stateName); });
+    stateDiv.appendChild(stateOptionsBtn);
+  }
+
+
+  function resetCodFormFields() {
+    stateId = '';
+    districtId = '';
+    document.getElementById('baCodStateSelect').innerHTML = stateLabel;
+    document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
+  }
+  function onStateClick(id, name) {
+    document.getElementById('baCodStateSelect').innerHTML = name?.length > 18 ? name?.slice(0,18) + '..' : name;
+    console.log('Update District options');
+    document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
+    loadDistricts(id);
+  }
+
+  function onDistrictClick(id, name) {
+    document.getElementById('baCodDistrictSelectLabel').innerHTML = name?.length > 18 ? name?.slice(0,18) + '..' : name;
+  }
+
+  function loadDistricts(stateId) {
+    document.getElementById('ba-cod-district-loader').style.display = 'inline-block';
+    let requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    fetch(`https://s3.ap-south-1.amazonaws.com/cached-bharatagri-apis/location/district_list/en/${stateId}/district_list.json`, requestOptions)
+      .then(response => {
+        if (response.status === 200) {
+          response.json().then(result => {
+            console.log('District list: ', result);
+            document.getElementById('ba-cod-district-loader').style.display = 'none';
+            setDistricts(result?.data);
+          });
+        } else {
+          console.log('Unable to fetch district list');
+          document.getElementById('ba-cod-district-loader').style.display = 'none';
+        }
+      }).catch(error => {
+      document.getElementById('ba-cod-district-loader').style.display = 'none';
+      console.log('error: ', error);
+    });
+  }
+
+  function setDistricts(districts) {
+    const districtDiv = document.getElementById('baCodDistrictOptions');
+    districtDiv.replaceChildren();
+
+    for (let i=0; i < districts?.length; i++) {
+      let districtName = lang === 'en' ? districts[i]?.name_en : ( lang === 'mr' ? districts[i]?.name_mr : districts[i]?.name_hi);
+
+      let districtOptionsBtn = document.createElement('button');
+      districtOptionsBtn.className = 'dropdown-item';
+      districtOptionsBtn.type = 'button';
+      districtOptionsBtn.innerHTML = districtName;
+      districtOptionsBtn.addEventListener("click", function(){ onDistrictClick(stateList[i]?.id, districtName); });
+      districtDiv.appendChild(districtOptionsBtn);
+    }
+  }
+</script>
+
+
+{% comment %}<div style="position: fixed; bottom: 0; right: 0">{% endcomment %}
+  {% comment %}{{ "thumbs-up.png" | asset_url | img_tag }}{% endcomment %}
+{% comment %}</div>{% endcomment %}
+{% schema %}
+{
+  "name": "App Embed",
+  "target": "body",
+  "settings": []
+}
+{% endschema %}
