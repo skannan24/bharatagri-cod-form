@@ -542,7 +542,7 @@
         <!-- Trust badge card -->
         <div>
           {% comment %}{{ "ba_cod_trust_badge_en.png" | asset_url | img_tag }}{% endcomment %}
-          <img id="ba-cod-trust-badge-img" class="w-100" alt="ba-trust-badge"/>
+          <img id="ba-cod-trust-badge-img" class="w-100" alt="ba-trust-badge" loading="lazy"/>
         </div>
 
       </div>
@@ -755,6 +755,7 @@
       productImage.className = "ba-cod-product-img";
       productImage.src = items[i]?.image;
       productImage.alt = 'product image';
+      productImage.loading = "lazy";
       productImageColDiv.appendChild(productImage);
 
       let productTitleColDiv = document.createElement('div');
