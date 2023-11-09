@@ -80,7 +80,7 @@
     height: 60px;
   }
 
-  .ba-cod-discount-header {
+  .ba-cod-card-header {
     font-family: Noto Sans;
     font-size: 18px;
     font-weight: 600;
@@ -247,6 +247,95 @@
     overflow-y: scroll;
   }
 
+  .ba-mandatory-field-text {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #D42216;
+    display: none;
+  }
+
+  .ba-mandatory-field-border {
+    border-color: #D42216;
+  }
+
+  .ba-cod-price-details-items {
+    font-family: Noto Sans;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0em;
+    color: #474D61;
+  }
+
+  .ba-cod-price-details-discount {
+    font-family: Noto Sans;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 18px;
+    letter-spacing: 0em;
+    color: #0A8047;
+    display: none;
+  }
+
+  .ba-cod-price-details-total-amount {
+    font-family: Noto Sans;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 18px;
+    letter-spacing: 0em;
+    color: #181B26;
+  }
+
+  .ba-cod-footer {
+    background: linear-gradient(180deg, #03B369 0%, #0A8047 100%);
+  }
+
+  .ba-cod-footer-delivery-label {
+    color: #FFFFFF;
+    font-family: Noto Sans;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0em;
+  }
+
+  .ba-cod-footer-total {
+    color: #FFFFFF;
+    font-family: Noto Sans;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 27px;
+    letter-spacing: 0em;
+  }
+
+  .ba-cod-footer-place-order {
+    color: #FFFFFF;
+    font-family: Noto Sans;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 27px;
+    letter-spacing: 0em;
+    text-align: center;
+  }
+
+  .ba-cod-footer-line-separator {
+    font-family: Noto Sans;
+    font-size: 44px;
+    font-weight: 100;
+    line-height: 27px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #FFFFFF;
+  }
+
+  .ba-cod-create-order-button {
+    background: none;
+    border: none;
+  }
+
   ::-webkit-scrollbar { display: none; }
 
 </style>
@@ -283,7 +372,7 @@
         <!-- Discount coupon card -->
         <div id="ba-discount-coupon-div" class="p-2 m-2">
           <div class="d-flex align-items-center">
-            <span class="ba-cod-discount-header" id="discount-header-id"></span>
+            <span class="ba-cod-card-header" id="discount-header-id"></span>
             <div id="ba-cod-discount-loader" style="display: none" class="spinner-border text-secondary ml-2" role="status">
               <span class="sr-only">Loading...</span>
             </div>
@@ -313,71 +402,165 @@
         <!-- Delivery address form fields card -->
         <div id="ba-cod-form-div" class="p-2 m-2">
           <div class="d-flex align-items-center">
-            <span class="ba-cod-discount-header" id="delivery-address-header-id"></span>
+            <span class="ba-cod-card-header" id="delivery-address-header-id"></span>
           </div>
 
-          <div class="row mt-3">
+          <div class="row mt-3 pb-2">
             <div class="col-6 pr-1">
-              <div class="form-group has-float-label">
+              <div class="form-group has-float-label mb-0">
                 <input class="form-control ba-cod-input-field" id="farmerName" placeholder="Name"/>
-                <label for="farmerName">Name</label>
+                <label id="farmerNameLabel" for="farmerName">Name</label>
               </div>
+              <span id="farmerNameRequired" class="ba-mandatory-field-text pl-1">Enter name</span>
             </div>
             <div class="col-6 pl-1">
-              <div class="form-group has-float-label">
-                <input class="form-control ba-cod-input-field" id="farmerMobile" type="text" maxlength="10" pattern="\d{10}" placeholder="Mobile Number"/>
-                <label for="farmerMobile">Mobile Number</label>
+              <div class="form-group has-float-label mb-0">
+                <input class="form-control ba-cod-input-field" id="farmerMobile" type="text" maxlength="10" placeholder="Mobile Number"/>
+                <label id="farmerMobileLabel" for="farmerMobile">Mobile Number</label>
               </div>
+              <span id="farmerMobileRequired" class="ba-mandatory-field-text pl-1">Enter mobile number</span>
             </div>
           </div>
 
-          <div class="row mt-3">
+          <div class="row mt-3 pb-2">
             <div class="col-6 pr-1">
-              <div class="form-group has-float-label">
-                <input class="form-control ba-cod-input-field" id="alternateMobile" placeholder="Alternate Number"/>
-                <label for="alternateMobile">Alternate Number</label>
+              <div class="form-group has-float-label mb-0">
+                <input class="form-control ba-cod-input-field" id="alternateMobile" type="text" maxlength="10" placeholder="Alternate Number"/>
+                <label id="alternateMobileLabel" for="alternateMobile">Alternate Number</label>
               </div>
             </div>
             <div class="col-6 pl-1">
-              <div class="form-group has-float-label">
+              <div class="form-group has-float-label mb-0">
                 <input class="form-control ba-cod-input-field" id="baCodPincode" type="text" maxlength="6" placeholder="Pincode"/>
-                <label for="baCodPincode">Pincode</label>
+                <label id="baCodPincodeLabel" for="baCodPincode">Pincode</label>
               </div>
+              <span id="baCodPincodeRequired" class="ba-mandatory-field-text pl-1">Enter pincode</span>
             </div>
           </div>
 
-          <div class="row mt-3">
-
+          <div class="row mt-3 pb-2">
             <div class="col-6 pr-1">
-              <div class="dropdown">
+              <div class="form-group has-float-label dropdown">
                 <button id="baCodStateSelect" class="btn btn-lg btn-block ba-cod-select-field btn-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   State
                 </button>
+                <label id="baCodStateSelectLabel" for="baCodStateSelect">State</label>
                 <div id="baCodStateOptions" class="dropdown-menu ba-cod-options-field" aria-labelledby="baCodStateSelect">
                 </div>
               </div>
+              <span id="baCodStateSelectRequired" class="ba-mandatory-field-text pl-1">Enter State</span>
             </div>
-
             <div class="col-6 pl-1">
-              <div class="dropdown">
+              <div class="form-group has-float-label dropdown">
                 <button id="baCodDistrictSelect" class="btn btn-lg btn-block ba-cod-select-field btn-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span id="baCodDistrictSelectLabel">District</span>
                   <div id="ba-cod-district-loader" style="display: none" class="spinner-border text-secondary ml-2" role="status">
                     <span class="sr-only">Loading...</span>
                   </div>
                 </button>
+                <label id="baCodDistrictSelectLabel2" for="baCodDistrictSelect">State</label>
                 <div id="baCodDistrictOptions" class="dropdown-menu ba-cod-options-field" aria-labelledby="baCodDistrictSelect">
                 </div>
+              </div>
+              <span id="baCodDistrictSelectRequired" class="ba-mandatory-field-text pl-1">Enter District</span>
+            </div>
+          </div>
+
+          <div class="row mt-3 pb-2">
+            <div class="col-6 pr-1">
+              <div class="form-group has-float-label mb-0">
+                <input class="form-control ba-cod-input-field" id="talukaName" placeholder="Taluka"/>
+                <label id="talukaNameLabel" for="talukaName">Taluka</label>
+              </div>
+              <span id="talukaNameRequired" class="ba-mandatory-field-text pl-1">Enter taluka</span>
+            </div>
+            <div class="col-6 pl-1">
+              <div class="form-group has-float-label mb-0">
+                <input class="form-control ba-cod-input-field" id="villageName" placeholder="Village"/>
+                <label id="villageNameLabel" for="villageName">Village</label>
+              </div>
+              <span id="villageNameRequired" class="ba-mandatory-field-text pl-1">Enter village</span>
+            </div>
+          </div>
+
+          <div class="row mt-3 pb-2">
+            <div class="col-12">
+              <div class="form-group has-float-label mb-0">
+                <input class="form-control ba-cod-input-field" id="baAddress" placeholder="Address (ex : plot no, street name, road etc)"/>
+                <label id="baAddressLabel" for="baAddress">Address (ex : plot no, street name, road etc)</label>
+              </div>
+              <span id="baAddressRequired" class="ba-mandatory-field-text pl-1">Enter address</span>
+            </div>
+          </div>
+
+          <div class="row mt-3 pb-2">
+            <div class="col-12">
+              <div class="form-group has-float-label mb-0">
+                <input class="form-control ba-cod-input-field" id="baLandmark" placeholder="Landmark (ex : near gopal mandir, school etc)"/>
+                <label id="baLandmarkLabel" for="baLandmark">Landmark</label>
+              </div>
+              <span id="baLandmarkRequired" class="ba-mandatory-field-text pl-1">Enter landmark</span>
+            </div>
+          </div>
+
+          <div class="row mt-3 pb-2">
+            <div class="col-12">
+              <div class="form-group has-float-label">
+                <input class="form-control ba-cod-input-field" id="baPostOffice" placeholder="Post Office (Optional)"/>
+                <label id="baPostOfficeLabel" for="baPostOffice">Post Office</label>
               </div>
             </div>
           </div>
 
         </div>
 
+        <div class="pt-1 mt-3 mb-3 ba-cod-separator"></div>
+
+        <!-- Free Delivery card -->
+        <div id="ba-cod-free-delivery-div" class="p-2 m-2">
+          <div class="d-flex align-items-center">
+            {% render 'ba-free-delivery-icon' %}
+            <span class="pl-2 pr-2" style="color: #0A8047; font-size: 14px; font-weight: 600;"
+                  id="ba-cod-delivery-days-label"> FREE Delivery</span>
+            <span class="pl-3 pr-3" style="color: #CED1D9; font-size: 18px; font-weight: 600;"
+            > | </span>
+            <span class="pl-2 pr-2" id="ba-cod-delivery-date" style="color: #181B26; font-size: 14px; font-weight: 600;"
+            >  </span>
+          </div>
+        </div>
+
+        <div class="pt-1 mt-3 mb-3 ba-cod-separator"></div>
+
+        <!-- Price details card -->
+        <div id="ba-cod-price-details-div" class="p-2 m-2">
+          <div class="d-flex align-items-center">
+            <span class="ba-cod-card-header" id="ba-cod-price-header-id"></span>
+          </div>
+          <div id="ba-cod-price-details-content" class="mt-3 pb-2"></div>
+        </div>
+
+        <!-- Trust badge card -->
+        <div>
+          {% comment %}{{ "ba_cod_trust_badge_en.png" | asset_url | img_tag }}{% endcomment %}
+          <img id="ba-cod-trust-badge-img" class="w-100" alt="ba-trust-badge"/>
+        </div>
+
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
+      <div class="modal-footer ba-cod-footer p-3">
+        <button id="ba-cod-create-order-button" class="row w-100 ba-cod-create-order-button d-flex align-items-center justify-content-between"
+                onclick="createOrderObject()">
+          <div class="col-auto">
+            <div id="ba-cod-footer-delivery-label" class="ba-cod-footer-delivery-label"></div>
+            <div id="ba-cod-footer-total-amount" class="ba-cod-footer-total"></div>
+          </div>
+          <div class="col-auto">
+            <div class="ba-cod-footer-line-separator"> | </div>
+          </div>
+          <div class="col-auto">
+            <div id="ba-cod-footer-place-order" class="ba-cod-footer-place-order"></div>
+          </div>
+        </button>
+        {% comment %}<button type="button" onclick="createOrderObject()" class="btn btn-primary">Understood</button>{% endcomment %}
       </div>
     </div>
   </div>
@@ -394,28 +577,46 @@
     lang = 'hi';
   }
 
-  let productHeader = 'Product hi';
-  let discountHeader = 'Discount Coupon hi';
-  let applyCouponBtn = 'Apply hi';
-  let deliveryAddressHeader = 'Delivery Address hi';
+  let productHeader = 'प्रोडक्ट';
+  let discountHeader = 'डिस्काउंट कूपन';
+  let applyCouponBtn = 'अप्लाई करें';
+  let deliveryAddressHeader = 'डिलीवरी पता';
+  let priceDetailsHeader = 'ऑर्डर की जानकारी';
 
-  let nameLabel = 'Name hi';
-  let mobileLabel = 'Mobile Number hi';
-  let alternateMobileLabel = 'Alternate Number hi';
-  let pincodeLabel = 'Pincode hi';
-  let stateLabel = 'State hi';
-  let districtLabel = 'District hi';
-  let talukaLabel = 'Taluka hi';
-  let villageLabel = 'Village hi';
-  let addressLabel = 'Address (ex : plot no, street name, road etc) hi';
-  let landmarkLabel = 'Landmark (ex : near gopal mandir, school etc) hi';
-  let postOfficeLabel = 'Post Office (Optional) hi';
+  let nameLabel = 'नाम';
+  let mobileLabel = 'मोबाइल नंबर';
+  let alternateMobileLabel = 'कोई दूसरा मोबाइल नंबर';
+  let pincodeLabel = 'पिनकोड';
+  let stateLabel = 'राज्य';
+  let districtLabel = 'जिला';
+  let talukaLabel = 'तहसील';
+  let villageLabel = 'गावं';
+  let addressLabel = 'मकान नंबर, रोड, कॉलोनी';
+  let landmarkLabel = 'लैंडमार्क (मंदिर, स्कूल, नहर के पास)';
+  let postOfficeLabel = 'पोस्ट ऑफिस';
+
+  let nameRequiredLabel = 'नाम';
+  let mobileRequiredLabel = 'मोबाइल नंबर';
+  let pincodeRequiredLabel = 'पिनकोड';
+  let stateRequiredLabel = 'राज्य';
+  let districtRequiredLabel = 'जिला';
+  let talukaRequiredLabel = 'तहसील';
+  let villageRequiredLabel = 'गावं';
+  let addressRequiredLabel = 'मकान नंबर, रोड, कॉलोनी';
+  let landmarkRequiredLabel = 'लैंडमार्क';
+
+  let priceDetailsDiscountLabel = 'प्रोडक्ट डिस्काउंट';
+  let priceDetailsTotalAmountLabel = 'कुल बिल';
+
+  let cashOnDeliveryLabel = 'कैश ऑन डिलीवरी (COD)';
+  let placeOrderLabel = 'ऑर्डर पूरा करें';
 
   if (lang === 'en') {
     productHeader = 'Product';
     discountHeader = 'Discount Coupon';
     applyCouponBtn = 'Apply';
     deliveryAddressHeader = 'Delivery Address';
+    priceDetailsHeader = 'Price Details';
 
     nameLabel = 'Name';
     mobileLabel = 'Mobile Number';
@@ -428,29 +629,104 @@
     addressLabel = 'Address (ex : plot no, street name, road etc)';
     landmarkLabel = 'Landmark (ex : near gopal mandir, school etc)';
     postOfficeLabel = 'Post Office (Optional)';
+
+    nameRequiredLabel = 'Enter Name';
+    mobileRequiredLabel = 'Enter Mobile Number';
+    pincodeRequiredLabel = 'Enter Pincode';
+    stateRequiredLabel = 'Enter State';
+    districtRequiredLabel = 'Enter District';
+    talukaRequiredLabel = 'Enter Taluka';
+    villageRequiredLabel = 'Enter Village';
+    addressRequiredLabel = 'Enter Address';
+    landmarkRequiredLabel = 'Enter Landmark';
+
+    priceDetailsDiscountLabel = 'Items Discount';
+    priceDetailsTotalAmountLabel = 'Total Amount';
+
+    cashOnDeliveryLabel = 'Cash on delivery';
+    placeOrderLabel = 'Place Order';
   }
 
   if (lang === 'mr') {
-    productHeader = 'Product mr';
-    discountHeader = 'Discount Coupon mr';
-    applyCouponBtn = 'Apply mr';
-    deliveryAddressHeader = 'Delivery Address mr';
+    productHeader = 'प्रॉडक्ट';
+    discountHeader = 'डिस्काउंट कूपन';
+    applyCouponBtn = 'लागू करा';
+    deliveryAddressHeader = 'डिलिव्हरी पत्ता';
+    priceDetailsHeader = 'ऑर्डरची माहिती';
 
-    nameLabel = 'Name mr';
-    mobileLabel = 'Mobile Number mr';
-    alternateMobileLabel = 'Alternate Number mr';
-    pincodeLabel = 'Pincode mr';
-    stateLabel = 'State mr';
-    districtLabel = 'District mr';
-    talukaLabel = 'Taluka mr';
-    villageLabel = 'Village mr';
-    addressLabel = 'Address (ex : plot no, street name, road etc) mr';
-    landmarkLabel = 'Landmark (ex : near gopal mandir, school etc) mr';
-    postOfficeLabel = 'Post Office (Optional) mr';
+    nameLabel = 'नाव';
+    mobileLabel = 'मोबाइल नंबर';
+    alternateMobileLabel = 'पर्यायी मोबाइल नंबर';
+    pincodeLabel = 'पिनकोड';
+    stateLabel = 'राज्य';
+    districtLabel = 'जिला';
+    talukaLabel = 'तालुका';
+    villageLabel = 'गाव';
+    addressLabel = 'घर क्रमांक, रस्ता, कॉलनी';
+    landmarkLabel = 'जवळची खूण ( उदाहरणार्थ : गोपाळ मंदिराजवळ )';
+    postOfficeLabel = 'पोस्ट ऑफिस';
+
+    nameRequiredLabel = 'नाव';
+    mobileRequiredLabel = 'मोबाइल नंबर';
+    pincodeRequiredLabel = 'पिनकोड';
+    stateRequiredLabel = 'राज्य';
+    districtRequiredLabel = 'जिला';
+    talukaRequiredLabel = 'तालुका';
+    villageRequiredLabel = 'गाव';
+    addressRequiredLabel = 'घर क्रमांक, रस्ता, कॉलनी';
+    landmarkRequiredLabel = 'जवळची खूण';
+
+    priceDetailsDiscountLabel = 'प्रॉडक्ट डिस्काउंट';
+    priceDetailsTotalAmountLabel = 'एकूण रक्कम';
+
+    cashOnDeliveryLabel = 'कैश ऑन डिलिव्हरी';
+    placeOrderLabel = 'खरेदी करा';
   }
   document.getElementById('product-header-id').innerHTML = productHeader;
   document.getElementById('discount-header-id').innerHTML = discountHeader;
   document.getElementById('delivery-address-header-id').innerHTML = deliveryAddressHeader;
+  document.getElementById('ba-cod-price-header-id').innerHTML = priceDetailsHeader;
+
+  document.getElementById('ba-cod-footer-place-order').innerHTML = placeOrderLabel;
+  document.getElementById('ba-cod-footer-delivery-label').innerHTML = cashOnDeliveryLabel;
+
+  document.getElementById('farmerName').placeholder = nameLabel;
+  document.getElementById('farmerNameLabel').innerHTML = nameLabel;
+  document.getElementById('farmerNameRequired').innerHTML = nameRequiredLabel;
+
+  document.getElementById('farmerMobile').placeholder = mobileLabel;
+  document.getElementById('farmerMobileLabel').innerHTML = mobileLabel;
+  document.getElementById('farmerMobileRequired').innerHTML = mobileRequiredLabel;
+
+  document.getElementById('alternateMobile').placeholder = alternateMobileLabel;
+  document.getElementById('alternateMobileLabel').innerHTML = alternateMobileLabel;
+
+  document.getElementById('baCodPincode').placeholder = pincodeLabel;
+  document.getElementById('baCodPincodeLabel').innerHTML = pincodeLabel;
+  document.getElementById('baCodPincodeRequired').innerHTML = pincodeRequiredLabel;
+
+  document.getElementById('talukaName').placeholder = talukaLabel;
+  document.getElementById('talukaNameLabel').innerHTML = talukaLabel;
+  document.getElementById('talukaNameRequired').innerHTML = talukaRequiredLabel;
+
+  document.getElementById('villageName').placeholder = villageLabel;
+  document.getElementById('villageNameLabel').innerHTML = villageLabel;
+  document.getElementById('villageNameRequired').innerHTML = villageRequiredLabel;
+
+  document.getElementById('baAddress').placeholder = addressLabel;
+  document.getElementById('baAddressLabel').innerHTML = addressLabel;
+  document.getElementById('baAddressRequired').innerHTML = addressRequiredLabel;
+
+  document.getElementById('baLandmark').placeholder = landmarkLabel;
+  document.getElementById('baLandmarkLabel').innerHTML = landmarkLabel;
+  document.getElementById('baLandmarkRequired').innerHTML = landmarkRequiredLabel;
+
+  document.getElementById('baPostOffice').placeholder = postOfficeLabel;
+  document.getElementById('baPostOfficeLabel').innerHTML = postOfficeLabel;
+
+  document.getElementById('baCodStateSelectRequired').innerHTML = stateRequiredLabel;
+  document.getElementById('baCodDistrictSelectRequired').innerHTML = districtRequiredLabel;
+
 </script>
 
 <script>
@@ -487,12 +763,12 @@
 
       let productTitle = document.createElement('div');
       productTitle.className = "ba-cod-product-title";
-      productTitle.innerHTML = items[i]?.product_title;
+      productTitle.innerHTML = items[i]?.product_title?.length > 50 ? items[i]?.product_title?.slice(0,50) + '..' : items[i]?.product_title;
       productTitleColDiv.appendChild(productTitle);
 
       let productVariantTitle = document.createElement('div');
       productVariantTitle.className = "ba-cod-variant-info";
-      productVariantTitle.innerHTML = items[i]?.variant_title;
+      productVariantTitle.innerHTML = items[i]?.variant_title?.length > 25 ? items[i]?.variant_title?.slice(0,25) + '..' : items[i]?.variant_title;
       productTitleColDiv.appendChild(productVariantTitle);
 
       let productPriceColDiv = document.createElement('div');
@@ -516,12 +792,13 @@
 
       let productSellingPrice = document.createElement('span');
       productSellingPrice.className = "ba-cod-selling-price";
-      productSellingPrice.innerHTML = items[i]?.final_price ? `₹ ${Number(items[i]?.final_price)/100}` : '0';
+      productSellingPrice.innerHTML = items[i]?.final_line_price ? `₹ ${Number(items[i]?.final_line_price)/100}` : '0';
       productPriceDiv.appendChild(productSellingPrice);
     }
 
     loadCouponCodes();
     resetCodFormFields();
+    populatePriceDetailsCard();
   }
 
   function clearCartEmbed() {
@@ -557,8 +834,21 @@
       }).then(res => res.json())
         .then(res => console.log(res));
     }
+
+    // resetting cart storage
     localStorage.removeItem('baCodCartStorage');
     localStorage.removeItem('baUpdateCartResponse');
+
+    // reset coupon code
+    localStorage.removeItem('BA_COD_Coupon_code');
+    previousCouponCode = '';
+    let resetActiveCouponCardEl = document.getElementById('ba-active-coupon');
+    if (resetActiveCouponCardEl) {
+      resetActiveCouponCardEl.style.display = 'none';
+    }
+
+    document.getElementById('ba-cod-create-order-button').disabled = false;
+
     resetCodFormFields();
   }
 
@@ -576,9 +866,11 @@
           });
         } else {
           console.log('Unable to fetch discount coupons');
+          document.getElementById('ba-discount-coupon-div').style.display = 'none';
         }
       }).catch(error => {
       console.log('error: ', error);
+      document.getElementById('ba-discount-coupon-div').style.display = 'none';
     });
   }
 
@@ -603,6 +895,10 @@
       }
     }
     console.log('Sundar Final Discounts', finalCodes);
+
+    if (finalCodes?.length === 0) {
+      document.getElementById('ba-discount-coupon-div').style.display = 'none';
+    }
 
     for (let i=0; i < finalCodes?.length; i++) {
       let discountCardColDiv = document.createElement('div');
@@ -658,6 +954,12 @@
      let items = baUpdateCart.items;
      let lineItems = [];
 
+     // Resetting price details card discount and total amount
+     document.getElementById('ba-price-details-discount-value').innerHTML = `0`;
+     document.getElementById('ba-price-details-discount-row').style.display = 'none';
+     document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${baUpdateCart?.total_price/100}`;
+     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${baUpdateCart?.total_price/100}`;
+
      if (previousCouponCode) {
        let activeCouponEl = document.getElementById(previousCouponCode);
        if (activeCouponEl) {
@@ -700,20 +1002,28 @@
           document.getElementById('ba-cod-saved-amount-line2').innerHTML = 'with discount Coupon';
           document.getElementById('ba-cod-applied-coupon-content').innerHTML = `${couponCode} Applied!`;
 
+          document.getElementById('ba-price-details-discount-value').innerHTML = `-₹ ${result?.checkout?.total_discount_amount?.replace('.00', '')}`;
+          document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${result?.checkout?.total_price?.replace('.00', '')}`;
+          document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${result?.checkout?.total_price?.replace('.00', '')}`;
+          document.getElementById('ba-price-details-discount-row').style.display = 'flex';
+
           previousCouponCode = couponCode;
           document.getElementById('ba-cod-discount-loader').style.display = 'none';
 
           document.getElementById('ba-active-coupon').scrollIntoView({
             behavior: 'smooth'
           });
+          localStorage.setItem('BA_COD_Coupon_code', couponCode);
         });
       } else {
         console.log('Unable to fetch wallet');
         document.getElementById('ba-cod-discount-loader').style.display = 'none';
+        localStorage.removeItem('BA_COD_Coupon_code');
       }
     }).catch(error => {
       console.log('error: ', error);
       document.getElementById('ba-cod-discount-loader').style.display = 'none';
+      localStorage.removeItem('BA_COD_Coupon_code');
     });
   }
 </script>
@@ -721,6 +1031,8 @@
 <script>
   let stateId = '';
   let districtId = '';
+  let stateName = '';
+  let districtName = '';
 
 
   const stateList = [
@@ -1115,17 +1427,62 @@
   function resetCodFormFields() {
     stateId = '';
     districtId = '';
+    stateName = '';
+    districtName = '';
     document.getElementById('baCodStateSelect').innerHTML = stateLabel;
+    document.getElementById('baCodStateSelectLabel').innerHTML = stateLabel;
     document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
+    document.getElementById('baCodDistrictSelectLabel2').innerHTML = districtLabel;
+
+    document.getElementById('farmerName').value = '';
+    document.getElementById('farmerMobile').value = '';
+    document.getElementById('alternateMobile').value = '';
+    document.getElementById('baCodPincode').value = '';
+    document.getElementById('talukaName').value = '';
+    document.getElementById('villageName').value = '';
+    document.getElementById('baAddress').value = '';
+    document.getElementById('baLandmark').value = '';
+    document.getElementById('baPostOffice').value = '';
+
+    resetFormFieldsValidation();
   }
+
+  function resetFormFieldsValidation() {
+    document.getElementById('farmerName').classList.remove('ba-mandatory-field-border');
+    document.getElementById('farmerMobile').classList.remove('ba-mandatory-field-border');
+    document.getElementById('baCodPincode').classList.remove('ba-mandatory-field-border');
+    document.getElementById('baCodStateSelect').classList.remove('ba-mandatory-field-border');
+    document.getElementById('baCodDistrictSelect').classList.remove('ba-mandatory-field-border');
+    document.getElementById('talukaName').classList.remove('ba-mandatory-field-border');
+    document.getElementById('villageName').classList.remove('ba-mandatory-field-border');
+    document.getElementById('baAddress').classList.remove('ba-mandatory-field-border');
+    document.getElementById('baLandmark').classList.remove('ba-mandatory-field-border');
+
+    document.getElementById('farmerNameRequired').style.display = 'none';
+    document.getElementById('farmerMobileRequired').style.display = 'none';
+    document.getElementById('baCodPincodeRequired').style.display = 'none';
+    document.getElementById('baCodStateSelectRequired').style.display = 'none';
+    document.getElementById('baCodDistrictSelectRequired').style.display = 'none';
+    document.getElementById('talukaNameRequired').style.display = 'none';
+    document.getElementById('villageNameRequired').style.display = 'none';
+    document.getElementById('baAddressRequired').style.display = 'none';
+    document.getElementById('baLandmarkRequired').style.display = 'none';
+  }
+
   function onStateClick(id, name) {
     document.getElementById('baCodStateSelect').innerHTML = name?.length > 18 ? name?.slice(0,18) + '..' : name;
     console.log('Update District options');
     document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
+    stateId = id;
+    stateName = name;
+    districtId = '';
+    districtName = '';
     loadDistricts(id);
   }
 
   function onDistrictClick(id, name) {
+    districtId = id;
+    districtName = name;
     document.getElementById('baCodDistrictSelectLabel').innerHTML = name?.length > 18 ? name?.slice(0,18) + '..' : name;
   }
 
@@ -1168,6 +1525,435 @@
       districtDiv.appendChild(districtOptionsBtn);
     }
   }
+
+  function createOrderObject() {
+    document.getElementById('ba-cod-create-order-button').disabled = true;
+
+    let name = document.getElementById('farmerName');
+    let mobile = document.getElementById('farmerMobile');
+    let alternateMobile = document.getElementById('alternateMobile');
+    let pincode = document.getElementById('baCodPincode');
+    let stateField = document.getElementById('baCodStateSelect');
+    let districtField = document.getElementById('baCodDistrictSelect');
+    let state = stateName;
+    let district = districtName;
+    let taluka = document.getElementById('talukaName');
+    let village = document.getElementById('villageName');
+    let address = document.getElementById('baAddress');
+    let landmark = document.getElementById('baLandmark');
+    let postOffice = document.getElementById('baPostOffice');
+
+    let validationError = false;
+
+    resetFormFieldsValidation();
+
+    if (!(name.value)) {
+      name.classList.add('ba-mandatory-field-border');
+      document.getElementById('farmerNameRequired').style.display = 'block';
+      validationError = true;
+    }
+
+    if (mobile?.value?.length !== 10) {
+      mobile.classList.add('ba-mandatory-field-border');
+      document.getElementById('farmerMobileRequired').style.display = 'block';
+      validationError = true;
+    }
+
+    if (pincode?.value?.length !== 6) {
+      pincode.classList.add('ba-mandatory-field-border');
+      document.getElementById('baCodPincodeRequired').style.display = 'block';
+      validationError = true;
+    }
+
+    if (!state) {
+      stateField.classList.add('ba-mandatory-field-border');
+      document.getElementById('baCodStateSelectRequired').style.display = 'block';
+      validationError = true;
+    }
+
+    if (!district) {
+      districtField.classList.add('ba-mandatory-field-border');
+      document.getElementById('baCodDistrictSelectRequired').style.display = 'block';
+      validationError = true;
+    }
+
+    if (!(taluka.value)) {
+      taluka.classList.add('ba-mandatory-field-border');
+      document.getElementById('talukaNameRequired').style.display = 'block';
+      validationError = true;
+    }
+
+    if (!(village.value)) {
+      village.classList.add('ba-mandatory-field-border');
+      document.getElementById('villageNameRequired').style.display = 'block';
+      validationError = true;
+    }
+
+    if (!(address.value)) {
+      address.classList.add('ba-mandatory-field-border');
+      document.getElementById('baAddressRequired').style.display = 'block';
+      validationError = true;
+    }
+
+    if (!(landmark.value)) {
+      landmark.classList.add('ba-mandatory-field-border');
+      document.getElementById('baLandmarkRequired').style.display = 'block';
+      validationError = true;
+    }
+
+    if (!validationError) {
+      let nameValue = name?.value;
+      let mobileValue = mobile?.value;
+      let alternateMobileValue = alternateMobile?.value ? alternateMobile?.value : '';
+      let  pincodeValue = pincode?.value;
+      let stateValue = state;
+      let districtValue = district;
+      let talukaValue = taluka?.value;
+      let villageValue = village?.value;
+      let addressValue = address?.value;
+      let landmarkValue = landmark?.value;
+      let postOfficeValue = postOffice?.value ? postOffice?.value : '';
+
+      let baOrder = {
+        name: name?.value,
+        mobile: mobile?.value,
+        alternateMobile: alternateMobile?.value ? alternateMobile?.value : '',
+        pincode: pincode?.value,
+        state: state,
+        district: district,
+        taluka: taluka?.value,
+        village: village?.value,
+        address: address?.value,
+        landmark: landmark?.value,
+        postOffice: postOffice?.value ? postOffice?.value : ''
+      }
+
+      let noteAttributesArray = [];
+
+      for (let [key, value] of Object.entries(baOrder)) {
+        let noteAttributesObject = {"name": key, "value": value};
+        noteAttributesArray.push(noteAttributesObject);
+      }
+
+      let createOrderDiscount = document.getElementById('ba-price-details-discount-value').innerHTML;
+      let createOrderTotalValue = document.getElementById('ba-price-details-total-value').innerHTML;
+
+      createOrderDiscount = createOrderDiscount?.replace('-₹ ', '');
+      createOrderTotalValue = createOrderTotalValue?.replace('₹ ', '');
+
+      let createOrderDiscountCode = '';
+      if (Number(createOrderDiscount) > 0) {
+        createOrderDiscountCode = localStorage.getItem('BA_COD_Coupon_code');
+      }
+
+      let baUpdateCartCreateOrder = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+      let createOrderItems = baUpdateCartCreateOrder.items;
+      let createOrderLineItems = [];
+
+      for (let i = 0; i < createOrderItems?.length; i++) {
+        let variant = {'variant_id': createOrderItems[i]?.variant_id, 'quantity': createOrderItems[i]?.quantity, 'properties': {}};
+        createOrderLineItems.push(variant);
+      }
+
+      let baO2 = {
+        "order": {
+          "line_items":createOrderLineItems,
+          "customer": {
+            "first_name": nameValue,
+            "email": `+91${mobileValue}@bharatagri.co`,
+            "phone": `+91${mobileValue}`,
+          },
+          "email": `+91${mobileValue}@bharatagri.co`,
+          "phone": `+91${mobileValue}`,
+          "shipping_address": {
+            "first_name": nameValue,
+            "address1": addressValue,
+            "phone": `+91${mobileValue}`,
+            "city": districtValue,
+            "province": stateValue,
+            "country": "India",
+            "zip": pincodeValue
+          },
+          "billing_address": {
+            "first_name": nameValue,
+            "address1": addressValue,
+            "phone": `+91${mobileValue}`,
+            "city": districtValue,
+            "province": stateValue,
+            "country": "India",
+            "zip": pincodeValue
+          },
+          "financial_status": "pending",
+          "transactions": [
+            {
+              "kind": "sale",
+              "status": "pending",
+              "amount": createOrderTotalValue,
+              "gateway": "Cash on Delivery (COD)",
+              "processing_method": "manual"
+            }
+          ],
+          "tags": "BharatAgri COD Form",
+          "note_attributes": noteAttributesArray
+        }
+      }
+
+      if (Number(createOrderDiscount) > 0) {
+        baO2["order"]["discount_codes"] = [
+          {
+            "code": createOrderDiscountCode,
+            "amount": createOrderDiscount
+          }
+        ]
+      }
+
+      fetch('/admin/api/2021-10/orders.json', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Access-Token': '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'
+        },
+        body: JSON.stringify(baO2)
+      }).then(response => {
+        if (response.status === 201) {
+          response.json().then( result => {
+            window.open(result?.order?.order_status_url, '_self');
+          });
+        } else {
+          document.getElementById('ba-cod-create-order-button').disabled = false;
+        }
+      }).catch(error => {
+        console.log('error: ', error);
+        document.getElementById('ba-cod-create-order-button').disabled = false;
+      });
+    } else {
+      document.getElementById('ba-cod-create-order-button').disabled = false;
+    }
+  }
+
+  // Interval to reset values and mobile validation
+
+  let mobile = document.getElementById('farmerMobile');
+  mobile.addEventListener('keydown', (event) => {
+    let arr = [];
+    let kk = event.which;
+
+    for (let i = 48; i < 58; i++)
+      arr.push(i);
+
+    arr.push(8);
+
+    if (!(arr.indexOf(kk)>=0))
+      event.preventDefault();
+  });
+
+  let alternateMobile = document.getElementById('alternateMobile');
+  alternateMobile.addEventListener('keydown', (event) => {
+    let arr = [];
+    let kk = event.which;
+
+    for (let i = 48; i < 58; i++)
+      arr.push(i);
+
+    arr.push(8);
+
+    if (!(arr.indexOf(kk)>=0))
+      event.preventDefault();
+  });
+
+  let pincode = document.getElementById('baCodPincode');
+  pincode.addEventListener('keydown', (event) => {
+    let arr = [];
+    let kk = event.which;
+
+    for (let i = 48; i < 58; i++)
+      arr.push(i);
+
+    arr.push(8);
+
+    if (!(arr.indexOf(kk)>=0))
+      event.preventDefault();
+  });
+
+  setInterval(() => {
+    let name = document.getElementById('farmerName');
+    let mobile = document.getElementById('farmerMobile');
+    let pincode = document.getElementById('baCodPincode');
+    let stateField = document.getElementById('baCodStateSelect');
+    let districtField = document.getElementById('baCodDistrictSelect');
+    let state = stateName;
+    let district = districtName;
+    let taluka = document.getElementById('talukaName');
+    let village = document.getElementById('villageName');
+    let address = document.getElementById('baAddress');
+    let landmark = document.getElementById('baLandmark');
+
+
+    if (name.value) {
+      name.classList.remove('ba-mandatory-field-border');
+      document.getElementById('farmerNameRequired').style.display = 'none';
+    }
+
+    if (mobile?.value?.length === 10) {
+      mobile.classList.remove('ba-mandatory-field-border');
+      document.getElementById('farmerMobileRequired').style.display = 'none';
+    }
+
+    if (pincode?.value?.length === 6) {
+      pincode.classList.remove('ba-mandatory-field-border');
+      document.getElementById('baCodPincodeRequired').style.display = 'none';
+    }
+
+    if (state) {
+      stateField.classList.remove('ba-mandatory-field-border');
+      document.getElementById('baCodStateSelectRequired').style.display = 'none';
+    }
+
+    if (district) {
+      districtField.classList.remove('ba-mandatory-field-border');
+      document.getElementById('baCodDistrictSelectRequired').style.display = 'none';
+    }
+
+    if (taluka.value) {
+      taluka.classList.remove('ba-mandatory-field-border');
+      document.getElementById('talukaNameRequired').style.display = 'none';
+    }
+
+    if (village.value) {
+      village.classList.remove('ba-mandatory-field-border');
+      document.getElementById('villageNameRequired').style.display = 'none';
+    }
+
+    if (address.value) {
+      address.classList.remove('ba-mandatory-field-border');
+      document.getElementById('baAddressRequired').style.display = 'none';
+    }
+
+    if (landmark.value) {
+      landmark.classList.remove('ba-mandatory-field-border');
+      document.getElementById('baLandmarkRequired').style.display = 'none';
+    }
+  }, 2500);
+</script>
+
+<script>
+  calculateBaCodDeliveryDates();
+  function calculateBaCodDeliveryDates() {
+    let someDate = new Date();
+    let numberOfDaysToAdd = 4;
+    let result = someDate.setDate(someDate.getDate() + numberOfDaysToAdd);
+    result = new Date(result);
+    getBaCodDeliveryFormatDate(result);
+  }
+
+  function getBaCodDeliveryFormatDate(dDate) {
+    dDate = new Date(dDate);
+    let weekEn = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+    let weekHi = new Array('रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार');
+    let weekMr = new Array('रविवार', 'सोमवार', 'मंगळवार', 'बुधवार', 'गुरुवारी', 'शुक्रवार', 'शनिवार');
+    let monthEn = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    let monthHi = ['जनवरी', 'फरवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितम्बर', 'अक्टूबर', 'नवम्बर', 'दिसम्बर'];
+    let monthMr = ['जानेवारी', 'फेब्रुवारी', 'मार्च', 'एप्रिल', 'मे', 'जून', 'जुलै', 'ऑगस्ट', 'सप्टेंबर', 'ऑक्टोबर', 'नोव्हेंबर', 'डिसेंबर'];
+    let day = '';
+    let month = '';
+    let currentUrl = window.location.href;
+    currentUrl = currentUrl.toString();
+    console.log(currentUrl);
+    console.log(currentUrl?.includes('.com/en'));
+    if (currentUrl?.includes('.com/en')) {
+      day = weekEn[dDate.getDay()];
+      month = monthEn[dDate.getMonth()];
+      document.getElementById('ba-cod-delivery-days-label').innerHTML = ' FREE Delivery';
+    } else if (currentUrl?.includes('.com/mr')) {
+      day = weekMr[dDate.getDay()];
+      month = monthMr[dDate.getMonth()];
+      document.getElementById('ba-cod-delivery-days-label').innerHTML = ' फ्री डिलिव्हरी';
+    } else {
+      day = weekHi[dDate.getDay()];
+      month = monthHi[dDate.getMonth()];
+      document.getElementById('ba-cod-delivery-days-label').innerHTML = ' फ्री डिलीवरी';
+    }
+    document.getElementById('ba-cod-delivery-date').innerHTML = day + ', ' + dDate.getDate() + ' ' + month;
+  }
+</script>
+
+<script>
+  function populatePriceDetailsCard() {
+    let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+    let items = baUpdateCart.items;
+    console.log('Price details items: ', items);
+
+    const priceParentContainer = document.getElementById('ba-cod-price-details-content');
+    priceParentContainer.replaceChildren();
+
+    let priceItemsMainDiv = document.createElement('div');
+    priceItemsMainDiv.id = 'ba-cod-price-details-items';
+    document.getElementById('ba-cod-price-details-content').appendChild(priceItemsMainDiv);
+
+    for (let i = 0; i < items?.length; i++) {
+      let priceItemsRow = document.createElement('div');
+      priceItemsRow.className = 'row mt-2 pb-2 align-items-center ba-cod-price-details-items';
+      priceItemsMainDiv.appendChild(priceItemsRow);
+
+      let priceItemsCol1 = document.createElement('div');
+      priceItemsCol1.className = 'col-9';
+      priceItemsCol1.innerHTML = items[i]?.product_title?.length > 34 ? items[i]?.product_title?.slice(0,34) + '..' : items[i]?.product_title;
+      priceItemsRow.appendChild(priceItemsCol1);
+
+      let priceItemsCol2 = document.createElement('div');
+      priceItemsCol2.className = 'col-3';
+      priceItemsCol2.innerHTML = items[i]?.final_line_price ? `₹ ${Number(items[i]?.final_line_price)/100}` : '0';
+      priceItemsRow.appendChild(priceItemsCol2);
+    }
+
+    let priceItemsDiscountDiv = document.createElement('div');
+    priceItemsDiscountDiv.id = 'ba-price-details-discount-row';
+    priceItemsDiscountDiv.className = 'row mt-2 pb-2 align-items-center ba-cod-price-details-discount';
+    document.getElementById('ba-cod-price-details-content').appendChild(priceItemsDiscountDiv);
+
+    let priceItemsDiscountCol1 = document.createElement('div');
+    priceItemsDiscountCol1.className = 'col-9';
+    priceItemsDiscountCol1.innerHTML = priceDetailsDiscountLabel;
+    priceItemsDiscountDiv.appendChild(priceItemsDiscountCol1);
+
+    let priceItemsDiscountCol2 = document.createElement('div');
+    priceItemsDiscountCol2.className = 'col-3';
+    priceItemsDiscountCol2.id = 'ba-price-details-discount-value';
+    priceItemsDiscountDiv.appendChild(priceItemsDiscountCol2);
+
+    let priceItemsTotalDiv = document.createElement('div');
+    priceItemsTotalDiv.id = 'ba-price-details-discount-total';
+    priceItemsTotalDiv.className = 'row mt-3 pb-2 align-items-center ba-cod-price-details-total-amount';
+    document.getElementById('ba-cod-price-details-content').appendChild(priceItemsTotalDiv);
+
+    let priceItemsTotalCol1 = document.createElement('div');
+    priceItemsTotalCol1.className = 'col-9';
+    priceItemsTotalCol1.innerHTML = priceDetailsTotalAmountLabel;
+    priceItemsTotalDiv.appendChild(priceItemsTotalCol1);
+
+    let priceItemsTotalCol2 = document.createElement('div');
+    priceItemsTotalCol2.className = 'col-3';
+    priceItemsTotalCol2.innerHTML = `₹ ${baUpdateCart?.total_price/100}`;
+    priceItemsTotalCol2.id = 'ba-price-details-total-value';
+    priceItemsTotalDiv.appendChild(priceItemsTotalCol2);
+
+    // Setting price value on the BA COD place order button
+    document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${baUpdateCart?.total_price/100}`;
+  }
+</script>
+
+<script>
+  let imgUrl = ''
+  let currentUrlForTrustBadge = window.location.href;
+  if (currentUrlForTrustBadge?.includes('.com/en')) {
+    imgUrl = 'https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/ba_cod_trust_badge_en.png';
+  } else if (currentUrlForTrustBadge?.includes('.com/mr')) {
+    imgUrl = 'https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/ba_cod_trust_badge_mr.png';
+  } else {
+    imgUrl = 'https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/ba_cod_trust_badge_hi.png';
+  }
+
+  document.getElementById('ba-cod-trust-badge-img').src = imgUrl;
 </script>
 
 
