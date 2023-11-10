@@ -827,7 +827,7 @@
   function addCartDetailsEmbed() {
     let items = JSON.parse(localStorage.getItem('baCodCartStorage'));
 
-    if (items) {
+    if (items?.length > 0) {
       fetch('/cart/add.js', {
         method: 'POST',
         headers: {
