@@ -358,7 +358,7 @@
             <span class="ba-cod-product-header"> (<span id="product-count-id"></span>) </span>
           </div>
         </h5>
-        <button onclick="clearCartEmbed()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button id="baCodFormClose" onclick="clearCartEmbed()" type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -1712,17 +1712,16 @@
         ]
       }
 
-      fetch('/admin/api/2021-10/orders.json', {
+      fetch('https://pre-prod.leanagri.com/third_parties/shopify_cod_app/api/v1/create-order/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // 'X-Shopify-Access-Token': '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'
-          'X-Shopify-Access-Token': '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'
         },
         body: JSON.stringify(baO2)
       }).then(response => {
         if (response.status === 201) {
           response.json().then( result => {
+            document.getElementById('baCodFormClose').click();
             window.open(result?.order?.order_status_url, '_self');
           });
         } else {
