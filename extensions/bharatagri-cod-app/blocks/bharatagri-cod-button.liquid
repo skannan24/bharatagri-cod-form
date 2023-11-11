@@ -1,11 +1,20 @@
 <div class="m-2">
-  <button onclick="openCodModal()" class="w-100 btn btn-success">COD Payment</button>
+  <button id="ba-cod-buy-now-btn" onclick="openCodModal()" class="w-100 btn btn-success">Buy NOW - COD</button>
 </div>
 
 <script>
   {%- liquid
     assign target = product.selected_or_first_available_variant
   -%}
+  let currentUrlBaCodBtn = window.location.href;
+  let baCodBuyNowBtn = document.getElementById('ba-cod-buy-now-btn');
+  if (currentUrlBaCodBtn?.includes('.com/en')) {
+    baCodBuyNowBtn.innerHTML = 'Buy Now';
+  } else if (currentUrlBaCodBtn?.includes('.com/mr')) {
+    baCodBuyNowBtn.innerHTML = 'कैश ऑन डिलीवरी से खरीदें';
+  } else {
+    baCodBuyNowBtn.innerHTML = 'कैश ऑन डिलीवरी से खरीदें';
+  }
   let finalVariantId = '';
   function openCodModal() {
     console.log('sundar here---------------');
