@@ -878,7 +878,7 @@
       redirect: 'follow'
     };
 
-    fetch(`https://krushidukan.bharatagri.com/cart/clear.js`, requestOptions)
+    fetch(`/cart/clear.js`, requestOptions)
       .then(response => {
         if (response.status === 200) {
           // response.json().then(result => {
@@ -896,7 +896,7 @@
     let items = JSON.parse(localStorage.getItem('baCodCartStorage'));
 
     if (items?.length > 0) {
-      fetch('https://krushidukan.bharatagri.com/cart/add.js', {
+      fetch('/cart/add.js', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
