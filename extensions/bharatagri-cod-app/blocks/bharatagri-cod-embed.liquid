@@ -1058,7 +1058,7 @@
       }
     }
 
-    fetch('https://krushidukan.bharatagri.com/wallets/checkouts/', {
+    fetch('/wallets/checkouts/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1734,6 +1734,14 @@
         createOrderLineItems.push(variant);
       }
 
+      // draft product variant info test - draft order
+      // let testDraftVariant = {
+      //   'variant_id': 47264201310529,
+      //   'quantity': 1,
+      //   'properties': {},
+      // }
+      // createOrderLineItems.push(testDraftVariant);
+
       let baO2 = {
         "order": {
           "line_items":createOrderLineItems,
@@ -1825,6 +1833,7 @@
       //   console.log('error: ', error);
       //   document.getElementById('ba-cod-create-order-button').disabled = false;
       // });
+
     } else {
       document.getElementById('ba-cod-create-order-button').disabled = false;
     }
