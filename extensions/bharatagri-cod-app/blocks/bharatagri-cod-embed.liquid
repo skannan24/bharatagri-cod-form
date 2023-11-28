@@ -1790,6 +1790,14 @@
             "amount": createOrderDiscount
           }
         ]
+
+        // apply custom or extra discount on the
+        // baO2["order"]["discount_codes"] =
+        //   {
+        //     "code": createOrderDiscountCode + ', custom code',
+        //     "amount": createOrderDiscount + 'custom price'
+        //   }
+        // ]
       }
 
       fetch('https://pre-prod.leanagri.com/third_parties/shopify_cod_app/api/v1/create-order/', {
