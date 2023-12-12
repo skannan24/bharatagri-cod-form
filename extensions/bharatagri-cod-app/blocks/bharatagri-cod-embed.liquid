@@ -753,8 +753,8 @@
   let cashOnDeliveryLabel = 'कैश ऑन डिलीवरी (COD)';
   let placeOrderLabel = 'ऑर्डर पूरा करें';
 
-  let removeIconLabel = 'Remove hi';
-  let addIconLabel = 'Add hi';
+  let removeIconLabel = 'हटाए';
+  let addIconLabel = 'जोड़ें';
 
   if (lang === 'en') {
     productHeader = 'Product';
@@ -830,8 +830,8 @@
     cashOnDeliveryLabel = 'कैश ऑन डिलिव्हरी';
     placeOrderLabel = 'खरेदी करा';
 
-    removeIconLabel = 'Remove mr';
-    addIconLabel = 'Add mr';
+    removeIconLabel = 'हटाए';
+    addIconLabel = 'जोड़ें';
   }
   document.getElementById('product-header-id').innerHTML = productHeader;
   document.getElementById('discount-header-id').innerHTML = discountHeader;
@@ -1017,9 +1017,12 @@
       method: 'GET',
       redirect: 'follow'
     };
-    let bundleVariant = '43829369078003';
+    // let bundleVariant = '43829369078003';
+    let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+    let items = baUpdateCart.items;
+    let bundleVariant = items[0]?.id
 
-    fetch(`https://pre-prod.leanagri.com/third_parties/shopify_cod_app/api/v1/cod-bundles/?variant_id=${bundleVariant}&lang=${lang}`, requestOptions)
+    fetch(`https://lcrks.leanagri.com/third_parties/shopify_cod_app/api/v1/cod-bundles/?variant_id=${bundleVariant}&lang=${lang}`, requestOptions)
       .then(response => {
         if (response.status === 200) {
           response.json().then(result => {
@@ -2177,11 +2180,18 @@
         }
       }
 
-      if (Number(createOrderDiscount) > 0) {
+      if (Number(createOrderDiscount) > 0 || createCartBundleTotalDiscount > 0) {
+        // Bundle Discounts logic
+        let couponText = createOrderDiscountCode ? createOrderDiscountCode : '';
+        couponText = couponText ? couponText + ', BA Custom Bundles Discount' : 'BA Custom Bundles Discount';
+
+        let couponDiscount = Number(createOrderDiscount) > 0 ? Number(createOrderDiscount) : 0;
+        couponDiscount = couponDiscount + createCartBundleTotalDiscount;
+
         baO2["order"]["discount_codes"] = [
           {
-            "code": createOrderDiscountCode,
-            "amount": createOrderDiscount
+            "code": couponText,
+            "amount": couponDiscount
           }
         ]
 
@@ -2192,15 +2202,6 @@
         //     "amount": createOrderDiscount + 'custom price'
         //   }
         // ]
-      }
-
-      // Bundle Discounts logic
-      if (createCartBundleTotalDiscount > 0) {
-        let baCustomTickDiscount = {
-          'code': 'BA Custom Bundles Discount',
-          'amount': createCartBundleTotalDiscount
-        }
-        baO2["order"]["discount_codes"].push(baCustomTickDiscount);
       }
 
       fetch('https://pre-prod.leanagri.com/third_parties/shopify_cod_app/api/v1/create-order/', {
