@@ -621,7 +621,7 @@
           <div class="row mt-3 pb-2">
             <div class="col-12">
               <div class="form-group has-float-label mb-0">
-                <input class="form-control ba-cod-input-field" id="baAddress" placeholder="Address (ex : plot no, street name, road etc)"/>
+                <input class="form-control ba-cod-input-field" id="baAddress" maxlength="150" placeholder="Address (ex : plot no, street name, road etc)"/>
                 <label id="baAddressLabel" for="baAddress">Address (ex : plot no, street name, road etc)</label>
               </div>
               <span id="baAddressRequired" class="ba-mandatory-field-text pl-1">Enter address</span>
@@ -631,7 +631,7 @@
           <div class="row mt-3 pb-2">
             <div class="col-12">
               <div class="form-group has-float-label mb-0">
-                <input class="form-control ba-cod-input-field" id="baLandmark" placeholder="Landmark (ex : near gopal mandir, school etc)"/>
+                <input class="form-control ba-cod-input-field" id="baLandmark" maxlength="150" placeholder="Landmark (ex : near gopal mandir, school etc)"/>
                 <label id="baLandmarkLabel" for="baLandmark">Landmark</label>
               </div>
               <span id="baLandmarkRequired" class="ba-mandatory-field-text pl-1">Enter landmark</span>
@@ -883,9 +883,7 @@
 <script>
   function setBaItems() {
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
-    console.log('BA update cart', baUpdateCart);
     let items = baUpdateCart.items;
-    console.log('Sundar items: ', items);
 
     document.getElementById('product-count-id').innerHTML = items?.length;
 
@@ -1026,7 +1024,6 @@
       .then(response => {
         if (response.status === 200) {
           response.json().then(result => {
-            console.log('BA web bundles: ', result);
             setBaProductBundles(result?.data);
           });
         } else {
@@ -1131,6 +1128,8 @@
     bundleProductPush['selected'] = true;
 
     selectedBundles.push(bundleProductPush);
+    let productCountHeader = Number(document.getElementById('product-count-id').innerHTML);
+    document.getElementById('product-count-id').innerHTML = String(productCountHeader + 1);
     let selectedBundlesIndex = selectedBundles?.length - 1;
 
     let bundleProductTitle = product?.secondary_product?.product?.title;
@@ -1255,12 +1254,11 @@
   }
 
   function onBaProductBundleRemoveClick(index) {
-    console.log('remove product');
-    console.log(index);
     selectedBundles[index].selected = false;
+    let productCountHeader = Number(document.getElementById('product-count-id').innerHTML);
+    document.getElementById('product-count-id').innerHTML = String(productCountHeader - 1);
     document.getElementById(`bundleCartRow${index}`).style.display = 'none';
     document.getElementById(`bundlePriceRow${index}`).style.display = 'none';
-    console.log(selectedBundles);
 
     // Updating price details card
     let bundleOrderTotalValue = document.getElementById('ba-price-details-total-value').innerHTML;
@@ -1301,7 +1299,6 @@
       .then(response => {
         if (response.status === 200) {
           response.json().then(result => {
-            console.log('Discount codes: ', result);
             setDiscountCoupons(result?.data);
           });
         } else {
@@ -1321,6 +1318,9 @@
     discountDiv.replaceChildren();
     discountDiv.appendChild(discountActiveDiv);
 
+    let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+    let discountCouponsCartItemTotalValue = Number(baUpdateCart?.total_price/100);
+
     let finalCodes = [];
 
     for (let i = 0; i < discounts?.length; i++) {
@@ -1330,14 +1330,15 @@
       if (discounts[i]?.ends_at !== 'None') {
         endDate = new Date(discounts[i]?.ends_at);
       }
-      if (endDate >= today || endDate === null) {
+      if ((endDate >= today || endDate === null) && discountCouponsCartItemTotalValue > discounts[i]?.min_amount_rule ) {
         finalCodes.push(discounts[i]);
       }
     }
-    console.log('Sundar Final Discounts', finalCodes);
 
     if (finalCodes?.length === 0) {
       document.getElementById('ba-discount-coupon-div').style.display = 'none';
+    } else {
+      finalCodes = finalCodes.sort((a, b) => b?.priority_index - a?.priority_index);
     }
 
     for (let i=0; i < finalCodes?.length; i++) {
@@ -1388,7 +1389,7 @@
      let shopify_features_script = document.querySelector("script[id='shopify-features']");
      let shopify_features_json = JSON.parse(shopify_features_script.innerHTML);
 
-     console.log(shopify_features_json);
+     // console.log(shopify_features_json);
 
      let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
      let items = baUpdateCart.items;
@@ -1444,7 +1445,7 @@
       if (response.status === 201) {
         response.json().then(result => {
           if (result?.checkout?.applied_discount?.applicable) {
-            console.log('Wallet values: ', result);
+            // console.log('Wallet values: ', result);
             document.getElementById(couponCode).style.display = 'none';
             document.getElementById('ba-active-coupon').style.display = 'block';
             document.getElementById('ba-cod-saved-amount').innerHTML = `Saved ₹${result?.checkout?.total_discount_amount?.replace('.00', '')}`;
@@ -1866,7 +1867,6 @@
       "country": 1
     }
   ];
-  console.log(stateList);
 
   const stateDiv = document.getElementById('baCodStateOptions');
   stateDiv.replaceChildren();
@@ -1930,7 +1930,6 @@
 
   function onStateClick(id, name) {
     document.getElementById('baCodStateSelect').innerHTML = name?.length > 18 ? name?.slice(0,18) + '..' : name;
-    console.log('Update District options');
     document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
     stateId = id;
     stateName = name;
@@ -1955,7 +1954,6 @@
       .then(response => {
         if (response.status === 200) {
           response.json().then(result => {
-            console.log('District list: ', result);
             document.getElementById('ba-cod-district-loader').style.display = 'none';
             setDistricts(result?.data);
           });
@@ -2371,8 +2369,6 @@
     let month = '';
     let currentUrl = window.location.href;
     currentUrl = currentUrl.toString();
-    console.log(currentUrl);
-    console.log(currentUrl?.includes('.com/en'));
     if (currentUrl?.includes('.com/en')) {
       day = weekEn[dDate.getDay()];
       month = monthEn[dDate.getMonth()];
@@ -2394,7 +2390,6 @@
   function populatePriceDetailsCard() {
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
     let items = baUpdateCart.items;
-    console.log('Price details items: ', items);
 
     const priceParentContainer = document.getElementById('ba-cod-price-details-content');
     priceParentContainer.replaceChildren();
