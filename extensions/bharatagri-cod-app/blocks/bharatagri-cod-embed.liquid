@@ -482,10 +482,10 @@
         <!-- Product info card -->
         <div id="product-info-div" class="p-2 m-2 mb-3">
 
-          {% comment %} Product info div loader {% endcomment %}
-          <div id="ba-product-info-div-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
+        </div>
+        {% comment %} Product info div loader {% endcomment %}
+        <div id="ba-product-info-div-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-3" role="status">
+          <span class="sr-only">Loading...</span>
         </div>
 
         <!-- Bundle product card -->
@@ -509,11 +509,6 @@
           </div>
           <div id="ba-cod-discount-div" class="row ba-cod-discount-row mt-2 ml-0">
 
-            {% comment %} Discount coupon div loader {% endcomment %}
-            <div id="ba-discount-coupon-div-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-
             <div id="ba-active-coupon" style="display: none" class="col-auto p-3 ba-cod-discount-card ba-cod-discount-card-active mr-2">
               <div class="row pt-2 justify-content-between mb-3 ba-cod-discount-title">
                 <div class="col-auto">
@@ -529,6 +524,10 @@
               </div>
             </div>
 
+          </div>
+          {% comment %} Discount coupon div loader {% endcomment %}
+          <div id="ba-discount-coupon-div-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2" role="status">
+            <span class="sr-only">Loading...</span>
           </div>
         </div>
 
@@ -681,17 +680,17 @@
         </div>
 
       </div>
-      <div class="modal-footer ba-cod-footer p-3">
+      <div class="modal-footer ba-cod-footer p-2">
         <button id="ba-cod-create-order-button" class="row w-100 ba-cod-create-order-button d-flex align-items-center justify-content-between"
                 onclick="createOrderObject()">
-          <div class="col-auto">
+          <div class="col-4">
             <div id="ba-cod-footer-delivery-label" class="ba-cod-footer-delivery-label"></div>
             <div id="ba-cod-footer-total-amount" class="ba-cod-footer-total"></div>
           </div>
-          <div class="col-auto">
+          <div class="col-4">
             <div class="ba-cod-footer-line-separator"> | </div>
           </div>
-          <div class="col-auto">
+          <div class="col-4">
             <div id="ba-cod-footer-place-order" class="ba-cod-footer-place-order"></div>
           </div>
         </button>
@@ -891,6 +890,8 @@
       const parentContainer = document.getElementById('product-info-div');
       parentContainer.replaceChildren();
 
+      document.getElementById('ba-product-info-div-loader').style.display = 'none';
+
       let productMainDiv = document.createElement('div');
       document.getElementById('product-info-div').appendChild(productMainDiv);
 
@@ -992,6 +993,22 @@
     localStorage.removeItem('baCodCartStorage');
     localStorage.removeItem('baUpdateCartResponse');
 
+    // resetting the main product cart values
+    const parentContainer = document.getElementById('product-info-div');
+    parentContainer.replaceChildren();
+    document.getElementById('ba-product-info-div-loader').style.display = 'block';
+
+    // resetting discount div card
+    const discountDiv = document.getElementById('ba-cod-discount-div');
+    const discountActiveDiv = document.getElementById('ba-active-coupon');
+    discountDiv.replaceChildren();
+    discountDiv.appendChild(discountActiveDiv);
+    document.getElementById('ba-discount-coupon-div-loader').style.display = 'block';
+
+    // resetting bundles values
+    const bundlesDiv = document.getElementById('ba-cod-bundle-cards-div');
+    bundlesDiv.replaceChildren();
+
     // reset coupon code
     localStorage.removeItem('BA_COD_Coupon_code');
     previousCouponCode = '';
@@ -1042,6 +1059,9 @@
 
     if (bundles?.length === 0) {
       document.getElementById('ba-cod-bundle-div').style.display = 'none';
+    } else {
+      bundles = bundles?.sort((a, b) => b?.priority_index - a?.priority_index);
+      document.getElementById('ba-cod-bundle-div').style.display = 'block';
     }
 
     let bundleImagePlaceholder = 'https://leanconnect.s3.ap-south-1.amazonaws.com/shopify-static-images/product-img-placeholder.png';
@@ -1124,6 +1144,8 @@
 
   function onBaProductBundleClick(product) {
     let bundleProductPush = structuredClone(product);
+
+    sendBaCodGEvents('BA_bundle_cart_added', {'product': product, 'from_fragment': currentUrl1});
 
     bundleProductPush['selected'] = true;
 
@@ -1249,11 +1271,13 @@
     bundleOrderTotalValue = bundleOrderTotalValue?.replace('₹ ', '');
 
     bundleOrderTotalValue = Number(bundleOrderTotalValue) + bundleProductDiscountPrice;
+    bundleOrderTotalValue = Number.isInteger(bundleOrderTotalValue) ? Number(bundleOrderTotalValue) : bundleOrderTotalValue.toFixed(2);
     document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${bundleOrderTotalValue}`;
     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${bundleOrderTotalValue}`;
   }
 
   function onBaProductBundleRemoveClick(index) {
+    sendBaCodGEvents('BA_bundle_cart_removal', {'product': selectedBundles[index], 'from_fragment': currentUrl1});
     selectedBundles[index].selected = false;
     let productCountHeader = Number(document.getElementById('product-count-id').innerHTML);
     document.getElementById('product-count-id').innerHTML = String(productCountHeader - 1);
@@ -1265,6 +1289,7 @@
     bundleOrderTotalValue = bundleOrderTotalValue?.replace('₹ ', '');
 
     bundleOrderTotalValue = Number(bundleOrderTotalValue) - selectedBundles[index]?.price;
+    bundleOrderTotalValue = Number.isInteger(bundleOrderTotalValue) ? Number(bundleOrderTotalValue) : bundleOrderTotalValue.toFixed(2);
     document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${bundleOrderTotalValue}`;
     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${bundleOrderTotalValue}`;
   }
@@ -1317,6 +1342,7 @@
 
     discountDiv.replaceChildren();
     discountDiv.appendChild(discountActiveDiv);
+    document.getElementById('ba-discount-coupon-div-loader').style.display = 'none';
 
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
     let discountCouponsCartItemTotalValue = Number(baUpdateCart?.total_price/100);
@@ -1338,10 +1364,27 @@
     if (finalCodes?.length === 0) {
       document.getElementById('ba-discount-coupon-div').style.display = 'none';
     } else {
-      finalCodes = finalCodes.sort((a, b) => b?.priority_index - a?.priority_index);
+      finalCodes = finalCodes?.sort((a, b) => b?.priority_index - a?.priority_index);
     }
 
     for (let i=0; i < finalCodes?.length; i++) {
+      let coupon_title_translation = '';
+      let coupon_sub_title_translation = '';
+      console.log('sdsdsdsd', lang);
+      if (lang === 'en') {
+        coupon_title_translation = finalCodes[i]?.coupon_title_en;
+        coupon_sub_title_translation = finalCodes[i]?.coupon_sub_title_en;
+      } else if (lang === 'mr') {
+        coupon_title_translation = finalCodes[i]?.coupon_title_mr;
+        coupon_sub_title_translation = finalCodes[i]?.coupon_sub_title_mr;
+      } else {
+        coupon_title_translation = finalCodes[i]?.coupon_title_hi;
+        coupon_sub_title_translation = finalCodes[i]?.coupon_sub_title_hi;
+      }
+
+      console.log(coupon_title_translation);
+      console.log(coupon_sub_title_translation);
+
       let discountCardColDiv = document.createElement('div');
       discountCardColDiv.id = finalCodes[i]?.title;
       discountCardColDiv.className = 'col-auto p-3 ba-cod-discount-card mr-2';
@@ -1353,12 +1396,12 @@
 
       let discountTitle1 = document.createElement('span');
       discountTitle1.className = 'ba-cod-discount-title1 mr-3';
-      discountTitle1.innerHTML = finalCodes[i]?.coupon_title;
+      discountTitle1.innerHTML = coupon_title_translation;
       discountTitleDiv.appendChild(discountTitle1);
 
       let discountTitle2 = document.createElement('span');
       discountTitle2.className = 'ba-cod-discount-title2';
-      discountTitle2.innerHTML = finalCodes[i]?.coupon_sub_title;
+      discountTitle2.innerHTML = coupon_sub_title_translation;
       discountTitleDiv.appendChild(discountTitle2);
 
       let discountInfoApplyDiv = document.createElement('div');
@@ -1404,6 +1447,8 @@
      let bundleCartOrderTotalValue = getBundlesTotalPrice();
      let priceDetailsTotalValue = Number(baUpdateCart?.total_price/100);
      priceDetailsTotalValue = priceDetailsTotalValue + bundleCartOrderTotalValue;
+
+     sendBaCodGEvents('BA_cart_cc_clk', {'discount_coupon': couponCode, 'order_value': priceDetailsTotalValue, 'from_fragment': currentUrl1});
 
 
      document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsTotalValue}`;
@@ -1494,392 +1539,36 @@
   let stateName = '';
   let districtName = '';
 
+  let stateList = [];
 
-  const stateList = [
-    {
-      "id": 50,
-      "name": "Andhra Pradesh",
-      "name_en": "Andhra Pradesh",
-      "name_mr": "आंध्र प्रदेश",
-      "name_hi": "आंध्र प्रदेश",
-      "name_te": "ఆంధ్రప్రదేశ్",
-      "name_kn": "ಆಂಧ್ರ ಪ್ರದೇಶ",
-      "country": 1
-    },
-    {
-      "id": 51,
-      "name": "Arunachal Pradesh",
-      "name_en": "Arunachal Pradesh",
-      "name_mr": "अरुणाचल प्रदेश",
-      "name_hi": "अरुणाचल प्रदेश",
-      "name_te": "అరుణాచల్ ప్రదేశ్",
-      "name_kn": "ಅರುಣಾಚಲ ಪ್ರದೇಶ",
-      "country": 1
-    },
-    {
-      "id": 52,
-      "name": "Assam",
-      "name_en": "Assam",
-      "name_mr": "आसाम",
-      "name_hi": "आसाम",
-      "name_te": "అస్సాం",
-      "name_kn": "ಅಸ್ಸಾಂ",
-      "country": 1
-    },
-    {
-      "id": 53,
-      "name": "Bihar",
-      "name_en": "Bihar",
-      "name_mr": "बिहार",
-      "name_hi": "बिहार",
-      "name_te": "బీహార్",
-      "name_kn": "ಬಿಹಾರ",
-      "country": 1
-    },
-    {
-      "id": 54,
-      "name": "Chhattisgarh",
-      "name_en": "Chhattisgarh",
-      "name_mr": "छत्तीसगड",
-      "name_hi": "छत्तीसगड",
-      "name_te": "ఛత్తీస్గఢ్",
-      "name_kn": "ಛತ್ತೀಸ್ಗಢ",
-      "country": 1
-    },
-    {
-      "id": 55,
-      "name": "Goa",
-      "name_en": "Goa",
-      "name_mr": "गोवा",
-      "name_hi": "गोआ",
-      "name_te": "గోవా",
-      "name_kn": "ಗೋವಾ",
-      "country": 1
-    },
-    {
-      "id": 56,
-      "name": "Gujarat",
-      "name_en": "Gujarat",
-      "name_mr": "गुजरात",
-      "name_hi": "गुजरात",
-      "name_te": "హర్యానా",
-      "name_kn": "ಗುಜರಾತ್",
-      "country": 1
-    },
-    {
-      "id": 57,
-      "name": "Haryana",
-      "name_en": "Haryana",
-      "name_mr": "हरियाणा",
-      "name_hi": "हरयाणा",
-      "name_te": "హర్యానా",
-      "name_kn": "ಹರಿಯಾಣ",
-      "country": 1
-    },
-    {
-      "id": 58,
-      "name": "Himachal Pradesh",
-      "name_en": "Himachal Pradesh",
-      "name_mr": "हिमाचल प्रदेश",
-      "name_hi": "हिमाचल प्रदेश",
-      "name_te": "హిమాచల్ ప్రదేశ్",
-      "name_kn": "ಹಿಮಾಚಲ ಪ್ರದೇಶ",
-      "country": 1
-    },
-    {
-      "id": 59,
-      "name": "Jammu & Kashmir",
-      "name_en": "Jammu & Kashmir",
-      "name_mr": "जम्मू-काश्मीर",
-      "name_hi": "जम्मू और कश्मीर",
-      "name_te": "జమ్మూ మరియు కాశ్మీర్",
-      "name_kn": "ಜಮ್ಮು ಮತ್ತು ಕಾಶ್ಮೀರ",
-      "country": 1
-    },
-    {
-      "id": 60,
-      "name": "Jharkhand",
-      "name_en": "Jharkhand",
-      "name_mr": "झारखंड",
-      "name_hi": "झारखंड",
-      "name_te": "జార్ఖండ్",
-      "name_kn": "ಜಾರ್ಖಂಡ್",
-      "country": 1
-    },
-    {
-      "id": 61,
-      "name": "Karnataka",
-      "name_en": "Karnataka",
-      "name_mr": "कर्नाटक",
-      "name_hi": "कर्नाटक",
-      "name_te": "కర్ణాటక",
-      "name_kn": "ಕರ್ನಾಟಕ",
-      "country": 1
-    },
-    {
-      "id": 62,
-      "name": "Kerala",
-      "name_en": "Kerala",
-      "name_mr": "केरळ",
-      "name_hi": "केरल",
-      "name_te": "కేరళ",
-      "name_kn": "ಕೇರಳ",
-      "country": 1
-    },
-    {
-      "id": 63,
-      "name": "Madhya Pradesh",
-      "name_en": "Madhya Pradesh",
-      "name_mr": "मध्य प्रदेश",
-      "name_hi": "मध्य प्रदेश",
-      "name_te": "మధ్యప్రదేశ్",
-      "name_kn": "ಮಧ್ಯ ಪ್ರದೇಶ",
-      "country": 1
-    },
-    {
-      "id": 64,
-      "name": "Maharashtra",
-      "name_en": "Maharashtra",
-      "name_mr": "महाराष्ट्र",
-      "name_hi": "महाराष्ट्र",
-      "name_te": "మహారాష్ట్ర",
-      "name_kn": "ಮಹಾರಾಷ್ಟ್ರ",
-      "country": 1
-    },
-    {
-      "id": 65,
-      "name": "Manipur",
-      "name_en": "Manipur",
-      "name_mr": "मणिपूर",
-      "name_hi": "मणिपुर",
-      "name_te": "మణిపూర్",
-      "name_kn": "ಮಣಿಪುರ",
-      "country": 1
-    },
-    {
-      "id": 66,
-      "name": "Meghalaya",
-      "name_en": "Meghalaya",
-      "name_mr": "मेघालय",
-      "name_hi": "मेघालय",
-      "name_te": "మేఘాలయ",
-      "name_kn": "ಮೇಘಾಲಯ",
-      "country": 1
-    },
-    {
-      "id": 67,
-      "name": "Mizoram",
-      "name_en": "Mizoram",
-      "name_mr": "मिझोरम",
-      "name_hi": "मिजोरम",
-      "name_te": "మిజోరం",
-      "name_kn": "ಮಿಜೋರಾಮ್",
-      "country": 1
-    },
-    {
-      "id": 68,
-      "name": "Nagaland",
-      "name_en": "Nagaland",
-      "name_mr": "नागालँड",
-      "name_hi": "नागालैंड",
-      "name_te": "నాగాలాండ్",
-      "name_kn": "ನಾಗಾಲ್ಯಾಂಡ್",
-      "country": 1
-    },
-    {
-      "id": 69,
-      "name": "Odisha",
-      "name_en": "Odisha",
-      "name_mr": "उडीसा ",
-      "name_hi": "उड़ीसा ",
-      "name_te": "ఒడిషా",
-      "name_kn": "ಒಡಿಶಾ",
-      "country": 1
-    },
-    {
-      "id": 70,
-      "name": "Punjab",
-      "name_en": "Punjab",
-      "name_mr": "पंजाब",
-      "name_hi": "पंजाब",
-      "name_te": "పంజాబ్",
-      "name_kn": "ಪಂಜಾಬ್",
-      "country": 1
-    },
-    {
-      "id": 71,
-      "name": "Rajasthan",
-      "name_en": "Rajasthan",
-      "name_mr": "राजस्थान",
-      "name_hi": "राजस्थान",
-      "name_te": "రాజస్థాన్",
-      "name_kn": "ರಾಜಸ್ಥಾನ",
-      "country": 1
-    },
-    {
-      "id": 72,
-      "name": "Sikkim",
-      "name_en": "Sikkim",
-      "name_mr": "सिक्किम",
-      "name_hi": "सिक्किम",
-      "name_te": "సిక్కిం",
-      "name_kn": "ಸಿಕ್ಕಿಂ",
-      "country": 1
-    },
-    {
-      "id": 73,
-      "name": "Tamil Nadu",
-      "name_en": "Tamil Nadu",
-      "name_mr": "तमिळनाडु",
-      "name_hi": "तमिलनाडु",
-      "name_te": "తమిళనాడు",
-      "name_kn": "ತಮಿಳುನಾಡು",
-      "country": 1
-    },
-    {
-      "id": 74,
-      "name": "Telangana",
-      "name_en": "Telangana",
-      "name_mr": "तेलंगना",
-      "name_hi": "तेलंगना",
-      "name_te": "తెలంగాణ",
-      "name_kn": "ತೆಲಂಗಾಣ",
-      "country": 1
-    },
-    {
-      "id": 75,
-      "name": "Tripura",
-      "name_en": "Tripura",
-      "name_mr": "त्रिपुरा",
-      "name_hi": "त्रिपुरा",
-      "name_te": "త్రిపుర",
-      "name_kn": "ತ್ರಿಪುರ",
-      "country": 1
-    },
-    {
-      "id": 76,
-      "name": "Uttar Pradesh",
-      "name_en": "Uttar Pradesh",
-      "name_mr": "उत्तर प्रदेश",
-      "name_hi": "उत्तर प्रदेश",
-      "name_te": "ఉత్తరప్రదేశ్",
-      "name_kn": "ಉತ್ತರ ಪ್ರದೇಶ",
-      "country": 1
-    },
-    {
-      "id": 77,
-      "name": "Uttarakhand",
-      "name_en": "Uttarakhand",
-      "name_mr": "उत्तराखंड",
-      "name_hi": "उत्तराखंड",
-      "name_te": "ఉత్తరాఖండ్",
-      "name_kn": "ಉತ್ತರಾಖಂಡ್",
-      "country": 1
-    },
-    {
-      "id": 78,
-      "name": "West Bengal",
-      "name_en": "West Bengal",
-      "name_mr": "पश्चिम बंगाल",
-      "name_hi": "पश्चिम बंगाल",
-      "name_te": "పశ్చిమబెంగాల్",
-      "name_kn": "ಪಶ್ಚಿಮ ಬಂಗಾಳ",
-      "country": 1
-    },
-    {
-      "id": 79,
-      "name": "Andaman & Nicobar Islands",
-      "name_en": "Andaman & Nicobar Islands",
-      "name_mr": "अंदमान आणि निकोबार बेटे",
-      "name_hi": "अंदमान और निकोबार द्वीप समूह",
-      "name_te": "అండమాన్ మరియు నికోబార్ దీవులు",
-      "name_kn": "ಅಂಡಮಾನ್ ಮತ್ತು ನಿಕೋಬಾರ್ ದ್ವೀಪಗಳು",
-      "country": 1
-    },
-    {
-      "id": 80,
-      "name": "Chandigarh",
-      "name_en": "Chandigarh",
-      "name_mr": "चंदीगड",
-      "name_hi": "चंडीगढ़",
-      "name_te": "చండీగఢ్",
-      "name_kn": "ಚಂಡೀಗಢ",
-      "country": 1
-    },
-    {
-      "id": 81,
-      "name": "Dadra & Nagar Haveli",
-      "name_en": "Dadra & Nagar Haveli",
-      "name_mr": "दादर आणि नगर हवेली",
-      "name_hi": "दादर और नगर हवेली",
-      "name_te": "దాదర్ మరియు నాగర్ హవేలీ",
-      "name_kn": "ದಾದರ್ ಮತ್ತು ನಗರ್ ಹವೇಲಿ",
-      "country": 1
-    },
-    {
-      "id": 82,
-      "name": "Daman & Diu",
-      "name_en": "Daman & Diu",
-      "name_mr": "दमण आणि दीव",
-      "name_hi": "दमन और दीव",
-      "name_te": "డామన్ మరియు డయు",
-      "name_kn": "ದಮನ್ ಮತ್ತು ಡಿಯು",
-      "country": 1
-    },
-    {
-      "id": 83,
-      "name": "Delhi",
-      "name_en": "Delhi",
-      "name_mr": "दिल्ली",
-      "name_hi": "दिल्ली",
-      "name_te": "ఢిల్లీ",
-      "name_kn": "ದೆಹಲಿ",
-      "country": 1
-    },
-    {
-      "id": 84,
-      "name": "Lakshadweep",
-      "name_en": "Lakshadweep",
-      "name_mr": "लक्षद्वीप",
-      "name_hi": "लक्षद्वीप",
-      "name_te": "లక్షదీప్",
-      "name_kn": "ಲಕ್ಷದ್ವೀಪ",
-      "country": 1
-    },
-    {
-      "id": 85,
-      "name": "Pondicherry",
-      "name_en": "Pondicherry",
-      "name_mr": "पॉण्डिचेरी ",
-      "name_hi": "पदुच्चेरी   ",
-      "name_te": " పాండిచేరి ",
-      "name_kn": "ಪುದುಚೇರಿ (ಪಾಂಡಿಚೆರಿ)",
-      "country": 1
-    },
-    {
-      "id": 86,
-      "name": "Ladakh",
-      "name_en": "Ladakh",
-      "name_mr": "लद्दाख",
-      "name_hi": "लद्दाख",
-      "name_te": null,
-      "name_kn": null,
-      "country": 1
+  fetch('https://cached-bharatagri-apis.s3.ap-south-1.amazonaws.com/location/state_list/en/state/state_list.json', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
     }
-  ];
+  }).then(response => {
+    response.json().then( result => {
+      stateList = result?.data;
+      setStates();
+    });
+  }).catch(error => {
+    console.log('Unable to get states : ', error);
+  });
 
-  const stateDiv = document.getElementById('baCodStateOptions');
-  stateDiv.replaceChildren();
+  function setStates() {
+    const stateDiv = document.getElementById('baCodStateOptions');
+    stateDiv.replaceChildren();
 
-  for (let i=0; i < stateList?.length; i++) {
-    let stateName = lang === 'en' ? stateList[i]?.name_en : ( lang === 'mr' ? stateList[i]?.name_mr : stateList[i]?.name_hi);
+    for (let i=0; i < stateList?.length; i++) {
+      let stateName = lang === 'en' ? stateList[i]?.name_en : ( lang === 'mr' ? stateList[i]?.name_mr : stateList[i]?.name_hi);
 
-    let stateOptionsBtn = document.createElement('button');
-    stateOptionsBtn.className = 'dropdown-item';
-    stateOptionsBtn.type = 'button';
-    stateOptionsBtn.innerHTML = stateName;
-    stateOptionsBtn.addEventListener("click", function(){ onStateClick(stateList[i]?.id, stateName); });
-    stateDiv.appendChild(stateOptionsBtn);
+      let stateOptionsBtn = document.createElement('button');
+      stateOptionsBtn.className = 'dropdown-item';
+      stateOptionsBtn.type = 'button';
+      stateOptionsBtn.innerHTML = stateName;
+      stateOptionsBtn.addEventListener("click", function(){ onStateClick(stateList[i]?.id, stateName); });
+      stateDiv.appendChild(stateOptionsBtn);
+    }
   }
 
 
@@ -2195,7 +1884,7 @@
         ]
       }
 
-      fetch('https://pre-prod.leanagri.com/third_parties/shopify_cod_app/api/v1/create-order/', {
+      fetch('https://lcrks.leanagri.com/third_parties/shopify_cod_app/api/v1/create-order/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -2447,6 +2136,12 @@
 
     // Setting price value on the BA COD place order button
     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${baUpdateCart?.total_price/100}`;
+  }
+</script>
+
+<script>
+  function sendBaCodGEvents(name, value) {
+    gtag('event', name, {'value': value});
   }
 </script>
 

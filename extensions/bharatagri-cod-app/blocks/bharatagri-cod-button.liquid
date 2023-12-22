@@ -66,8 +66,6 @@
     fetch(`/cart/clear.js`, requestOptions)
       .then(response => {
         if (response.status === 200) {
-          // response.json().then(result => {
-          // });
           updateCartDetails();
         } else {
           console.log('Unable to clear cart');
@@ -109,21 +107,6 @@
       }).then(res => res.json())
         .then(res => console.log(res));
     }
-
-    // fetch(`/cart/add.js`, requestOptions)
-    //   .then(response => {
-    //     if (response.status === 200) {
-    //       response.json().then(result => {
-    //         localStorage.setItem('baCodCartStorage', JSON.stringify(result['items']));
-    //         console.log();
-    //         clearCart();
-    //       });
-    //     } else {
-    //       console.log('Unable to clear cart');
-    //     }
-    //   }).catch(error => {
-    //   console.log('error: ', error);
-    // });
   }
 </script>
 
