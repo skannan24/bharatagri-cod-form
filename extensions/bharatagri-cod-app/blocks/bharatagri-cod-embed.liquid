@@ -14,7 +14,7 @@
   .ba-modal-content {
     height: auto;
     min-height: 100%;
-    border-radius: 0;
+    border-radius: 14px;
   }
 
   .ba-modal-body {
@@ -23,7 +23,7 @@
 
   .ba-cod-product-header {
     font-family: Noto Sans;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
     line-height: 25px;
   }
@@ -35,58 +35,77 @@
 
   .ba-cod-product-title {
     font-family: Noto Sans;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 400;
-    line-height: 18px;
+    line-height: 25px;
     letter-spacing: 0em;
     text-align: left;
-    color: #707890;
+    color: #181B26;
+    overflow: hidden!important;
+    display: -webkit-box!important;
+    -webkit-line-clamp: 2!important;
+    -webkit-box-orient: vertical!important;
   }
 
   .ba-cod-variant-info {
     font-family: Noto Sans;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 20px;
     letter-spacing: 0em;
     text-align: left;
-    color: #181B26;
+    color: #474D61;
   }
 
   .ba-cod-product-discount {
     font-family: Noto Sans;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 600;
     line-height: 20px;
     letter-spacing: 0em;
-    text-align: left;
+    text-align: right;
     color: #0A8047;
   }
 
   .ba-cod-actual-price {
     font-family: Noto Sans;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 400;
     line-height: 20px;
     letter-spacing: 0em;
-    text-align: left;
+    text-align: right;
     color: #707890;
     text-decoration-line: line-through;
+    display: block;
+    padding-top: 3px;
   }
 
   .ba-cod-selling-price {
     font-family: Noto Sans;
-    font-size: 13px;
+    font-size: 18px;
     font-weight: 600;
     line-height: 20px;
     letter-spacing: 0em;
-    text-align: left;
+    text-align: right;
     color: #181B26;
+    display: block;
+    padding-top: 4px;
   }
 
   .ba-cod-product-img {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+  }
+
+  .ba-cod-product-img-quantity {
+    position: absolute;
+    top: -7px;
+    right: 0;
+    background: red;
+    color: white;
+    border-radius: 50px;
+    padding: 1px 8px;
   }
 
   .ba-cod-card-header {
@@ -96,6 +115,8 @@
     line-height: 25px;
     letter-spacing: 0em;
     text-align: left;
+    color: #181B26;
+    padding-bottom: 6px;
   }
 
   .ba-cod-discount-row {
@@ -107,8 +128,12 @@
   .ba-cod-discount-coupon {
     background: linear-gradient(180deg, #03B369 0%, #0A8047 100%);
     color: #FFFFFF;
-    border-radius: 4px;
+    border-radius: 8px;
     gap: 4px;
+    padding: 5px 14px;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 3px;
   }
 
   .ba-cod-discount-title {
@@ -127,7 +152,7 @@
 
   .ba-cod-discount-title2 {
     font-family: Noto Sans;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 18px;
     letter-spacing: 0em;
@@ -138,24 +163,27 @@
   .ba-cod-discount-apply-btn {
     color: #0A8047;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
   }
 
   .ba-cod-discount-card {
     border-radius: 10px;
-    border: 1px solid #E6E8EB;
-    max-width: 70%;
-    width: 70%;
+    border: 1px solid #CED1D9;
+    max-width: 80%;
+    width: 80%;
   }
 
   .ba-cod-discount-card-active {
     border-radius: 10px;
     border: 1px solid #13CD80;
     background: linear-gradient(0deg, #F6FEFA, #F6FEFA), linear-gradient(0deg, #13CD80, #13CD80);
-    max-width: 70%;
-    width: 70%;
+    max-width: 80%;
+    width: 80%;
   }
 
   .ba-discount-applied-name {
+    font-family: Noto Sans;
     font-size: 14px;
     font-weight: 600;
     text-align: left;
@@ -168,8 +196,16 @@
   }
 
   .ba-cod-input-field {
-    height: 48px;
-    font-size: 14px;
+    font-family: Noto Sans;
+    height: 53px;
+    font-size: 16px;
+    border-color: #E6E8EB;
+  }
+
+  .ba-cod-full-width-input-field {
+    font-family: Noto Sans;
+    height: 53px;
+    font-size: 16px;
     border-color: #E6E8EB;
   }
 
@@ -179,6 +215,7 @@
   }
 
   .has-float-label label,.has-float-label>span {
+    font-family: Noto Sans;
     position: absolute;
     cursor: text;
     font-size: 11px;
@@ -195,6 +232,7 @@
   }
 
   .has-float-label label::after,.has-float-label>span::after {
+    font-family: Noto Sans;
     content: " ";
     display: block;
     position: absolute;
@@ -217,10 +255,12 @@
   }
 
   .has-float-label .form-control:placeholder-shown:not(:focus)+* {
-    font-size: 13px;
+    font-family: Noto Sans;
+    font-size: 16px;
     /*opacity: .5;*/
-    top: 1.3em;
+    top: 1em;
     color: black;
+    line-height: 22px;
   }
 
   .input-group .has-float-label {
@@ -243,13 +283,15 @@
   }
 
   .ba-cod-select-field {
+    font-family: Noto Sans;
     height: 48px;
-    font-size: 14px;
+    font-size: 16px;
     border-color: #E6E8EB;
     text-align: left;
   }
 
   .ba-cod-options-field {
+    font-family: Noto Sans;
     width: 100%;
     font-size: 14px;
     max-height: 240px;
@@ -257,6 +299,7 @@
   }
 
   .ba-mandatory-field-text {
+    font-family: Noto Sans;
     font-size: 13px;
     font-weight: 400;
     line-height: 18px;
@@ -272,7 +315,7 @@
 
   .ba-cod-price-details-items {
     font-family: Noto Sans;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 400;
     line-height: 18px;
     letter-spacing: 0em;
@@ -281,7 +324,7 @@
 
   .ba-cod-price-details-discount {
     font-family: Noto Sans;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 500;
     line-height: 18px;
     letter-spacing: 0em;
@@ -291,7 +334,7 @@
 
   .ba-cod-price-details-total-amount {
     font-family: Noto Sans;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 600;
     line-height: 18px;
     letter-spacing: 0em;
@@ -305,26 +348,28 @@
   .ba-cod-footer-delivery-label {
     color: #FFFFFF;
     font-family: Noto Sans;
-    font-size: 13px;
-    font-weight: 400;
+    font-size: 16px;
+    font-weight: 100;
     line-height: 18px;
     letter-spacing: 0em;
+    text-align: left;
   }
 
   .ba-cod-footer-total {
     color: #FFFFFF;
     font-family: Noto Sans;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 600;
     line-height: 27px;
     letter-spacing: 0em;
+    text-align: left;
   }
 
   .ba-cod-footer-place-order {
     color: #FFFFFF;
     font-family: Noto Sans;
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 22px;
+    font-weight: 500;
     line-height: 27px;
     letter-spacing: 0em;
     text-align: center;
@@ -348,28 +393,29 @@
   .ba-cod-bundle-card {
     border-radius: 10px;
     border: 1px solid #E6E8EB;
-    max-width: 45%;
-    width: 45%;
+    max-width: 35%;
+    width: 35%;
     background: white;
     box-shadow: 0px 1px 4px 0px #00000026;
   }
 
   .ba-cod-bundle-title {
     font-family: Noto Sans;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 400;
-    line-height: 18px;
+    line-height: 21px;
     letter-spacing: 0em;
     text-align: left;
     white-space: nowrap;
     width: 100%;
     overflow: hidden;
     text-overflow: "...";
+    color: #181B26;
   }
 
   .ba-cod-bundle-discount {
     font-family: Noto Sans;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
     line-height: 20px;
     letter-spacing: 0em;
@@ -379,17 +425,18 @@
 
   .ba-cod-bundle-price {
     font-family: Noto Sans;
-    font-size: 14px;
-    font-weight: 400;
+    font-size: 18px;
+    font-weight: 600;
     line-height: 20px;
     letter-spacing: 0em;
     text-align: left;
+    color: #181B26;
   }
 
   .ba-cod-bundle-add-btn {
     font-family: Noto Sans;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 600;
     line-height: 18px;
     letter-spacing: 0em;
     text-align: center;
@@ -448,6 +495,41 @@
     border-style: solid;
   }
 
+  .ba-cod-quantity-input {
+    color: currentColor;
+    font-size: 1.4rem;
+    font-weight: 500;
+    opacity: .85;
+    text-align: center;
+    background-color: transparent;
+    border: 0;
+    padding: 0 0.5rem;
+    width: 100%;
+    flex-grow: 1;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .ba-cod-quantity-btn {
+    width: calc(4.5rem / 1.0);
+    flex-shrink: 0;
+    font-size: 1.8rem;
+    /*border: 0;*/
+    background-color: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(18,18,18);
+    padding: 0;
+    border: 1px solid;
+  }
+
+  .ba-cod-quantity-btn svg {
+    width: 1rem;
+    pointer-events: none;
+  }
+
   @keyframes spin {
     100% {
       transform: rotate(360deg);
@@ -467,16 +549,20 @@
 <div class="modal ba-cod-modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog ba-modal-dialog modal-dialog-scrollable">
     <div class="modal-content ba-modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">
-          <div>
-            <span class="ba-cod-product-header" id="product-header-id"></span>
-            <span class="ba-cod-product-header"> (<span id="product-count-id"></span>) </span>
-          </div>
-        </h5>
-        <button id="baCodFormClose" onclick="clearCartEmbed()" type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+      <div class="modal-header row align-items-center p-4">
+        <div class="col-10">
+          <h5 class="modal-title" id="staticBackdropLabel">
+            <div>
+              <span class="ba-cod-product-header" id="product-header-id"></span>
+              <span class="ba-cod-product-header" style="display: none"> (<span id="product-count-id"></span>) </span>
+            </div>
+          </h5>
+        </div>
+        <div class="col-2">
+          <button style="font-size: 30px; font-weight: 100" id="baCodFormClose" onclick="clearCartEmbed()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
       </div>
       <div class="modal-body ba-modal-body p-0">
         <!-- Product info card -->
@@ -489,7 +575,7 @@
         </div>
 
         <!-- Bundle product card -->
-        <div id="ba-cod-bundle-div" class="pt-2 pb-3" style="background: #F2F3F4;">
+        <div id="ba-cod-bundle-div" class="pt-2" style="background: #F2F3F4;">
           <div id="ba-cod-bundle-cards-div" class="row ba-cod-discount-row mt-2 ml-3">
 
           </div>
@@ -497,10 +583,10 @@
 
 
 
-        <div class="pt-1 ba-cod-separator"></div>
+        <div class="pt-3 ba-cod-separator"></div>
 
         <!-- Discount coupon card -->
-        <div id="ba-discount-coupon-div" class="p-2 m-2 mt-3">
+        <div id="ba-discount-coupon-div" class="p-2 m-2">
           <div class="d-flex align-items-center">
             <span class="ba-cod-card-header" id="discount-header-id"></span>
             <div id="ba-cod-discount-loader" style="display: none" class="spinner-border text-secondary ml-2" role="status">
@@ -531,7 +617,7 @@
           </div>
         </div>
 
-        <div class="pt-1 mt-3 mb-3 ba-cod-separator"></div>
+        <div id="ba-discount-div-separator" class="pt-3 mt-3 mb-3 ba-cod-separator"></div>
 
         <!-- Delivery address form fields card -->
         <div id="ba-cod-form-div" class="p-2 m-2">
@@ -540,32 +626,32 @@
           </div>
 
           <div class="row mt-3 pb-2">
-            <div class="col-6 pr-1">
+            <div class="col-12">
               <div class="form-group has-float-label mb-0">
-                <input class="form-control ba-cod-input-field" id="farmerName" placeholder="Name"/>
+                <input onclick="onInputElementClick('name')" class="form-control ba-cod-input-field" id="farmerName" placeholder="Name"/>
                 <label id="farmerNameLabel" for="farmerName">Name</label>
               </div>
               <span id="farmerNameRequired" class="ba-mandatory-field-text pl-1">Enter name</span>
             </div>
-            <div class="col-6 pl-1">
+          </div>
+
+          <div class="row mt-3 pb-2">
+            <div style="display: none" class="col-6 pr-1">
               <div class="form-group has-float-label mb-0">
-                <input class="form-control ba-cod-input-field" id="farmerMobile" type="text" maxlength="10" placeholder="Mobile Number"/>
+                <input onclick="onInputElementClick('alternate mobile')" class="form-control ba-cod-input-field" id="alternateMobile" type="text" maxlength="10" placeholder="Alternate Number"/>
+                <label id="alternateMobileLabel" for="alternateMobile">Alternate Number</label>
+              </div>
+            </div>
+            <div class="col-6 pr-1">
+              <div class="form-group has-float-label mb-0">
+                <input onclick="onInputElementClick('mobile')" class="form-control ba-cod-input-field" id="farmerMobile" type="text" maxlength="10" placeholder="Mobile Number"/>
                 <label id="farmerMobileLabel" for="farmerMobile">Mobile Number</label>
               </div>
               <span id="farmerMobileRequired" class="ba-mandatory-field-text pl-1">Enter mobile number</span>
             </div>
-          </div>
-
-          <div class="row mt-3 pb-2">
-            <div class="col-6 pr-1">
-              <div class="form-group has-float-label mb-0">
-                <input class="form-control ba-cod-input-field" id="alternateMobile" type="text" maxlength="10" placeholder="Alternate Number"/>
-                <label id="alternateMobileLabel" for="alternateMobile">Alternate Number</label>
-              </div>
-            </div>
             <div class="col-6 pl-1">
               <div class="form-group has-float-label mb-0">
-                <input class="form-control ba-cod-input-field" id="baCodPincode" type="text" maxlength="6" placeholder="Pincode"/>
+                <input onclick="onInputElementClick('pincode')" class="form-control ba-cod-input-field" id="baCodPincode" type="text" maxlength="6" placeholder="Pincode"/>
                 <label id="baCodPincodeLabel" for="baCodPincode">Pincode</label>
               </div>
               <span id="baCodPincodeRequired" class="ba-mandatory-field-text pl-1">Enter pincode</span>
@@ -575,7 +661,7 @@
           <div class="row mt-3 pb-2">
             <div class="col-6 pr-1">
               <div class="form-group has-float-label dropdown">
-                <button id="baCodStateSelect" class="btn btn-lg btn-block ba-cod-select-field btn-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button onclick="onInputElementClick('state')" id="baCodStateSelect" class="btn btn-lg btn-block ba-cod-select-field btn-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   State
                 </button>
                 <label id="baCodStateSelectLabel" for="baCodStateSelect">State</label>
@@ -586,7 +672,7 @@
             </div>
             <div class="col-6 pl-1">
               <div class="form-group has-float-label dropdown">
-                <button id="baCodDistrictSelect" class="btn btn-lg btn-block ba-cod-select-field btn-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button onclick="onInputElementClick('district')" id="baCodDistrictSelect" class="btn btn-lg btn-block ba-cod-select-field btn-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span id="baCodDistrictSelectLabel">District</span>
                   <div id="ba-cod-district-loader" style="display: none" class="spinner-border text-secondary ml-2" role="status">
                     <span class="sr-only">Loading...</span>
@@ -603,14 +689,14 @@
           <div class="row mt-3 pb-2">
             <div class="col-6 pr-1">
               <div class="form-group has-float-label mb-0">
-                <input class="form-control ba-cod-input-field" id="talukaName" placeholder="Taluka"/>
+                <input onclick="onInputElementClick('taluka')" class="form-control ba-cod-input-field" id="talukaName" placeholder="Taluka"/>
                 <label id="talukaNameLabel" for="talukaName">Taluka</label>
               </div>
               <span id="talukaNameRequired" class="ba-mandatory-field-text pl-1">Enter taluka</span>
             </div>
             <div class="col-6 pl-1">
               <div class="form-group has-float-label mb-0">
-                <input class="form-control ba-cod-input-field" id="villageName" placeholder="Village"/>
+                <input onclick="onInputElementClick('village')" class="form-control ba-cod-input-field" id="villageName" placeholder="Village"/>
                 <label id="villageNameLabel" for="villageName">Village</label>
               </div>
               <span id="villageNameRequired" class="ba-mandatory-field-text pl-1">Enter village</span>
@@ -620,7 +706,7 @@
           <div class="row mt-3 pb-2">
             <div class="col-12">
               <div class="form-group has-float-label mb-0">
-                <input class="form-control ba-cod-input-field" id="baAddress" maxlength="150" placeholder="Address (ex : plot no, street name, road etc)"/>
+                <input onclick="onInputElementClick('address')" class="form-control ba-cod-full-width-input-field" id="baAddress" maxlength="150" placeholder="Address (ex : plot no, street name, road etc)"/>
                 <label id="baAddressLabel" for="baAddress">Address (ex : plot no, street name, road etc)</label>
               </div>
               <span id="baAddressRequired" class="ba-mandatory-field-text pl-1">Enter address</span>
@@ -630,17 +716,17 @@
           <div class="row mt-3 pb-2">
             <div class="col-12">
               <div class="form-group has-float-label mb-0">
-                <input class="form-control ba-cod-input-field" id="baLandmark" maxlength="150" placeholder="Landmark (ex : near gopal mandir, school etc)"/>
+                <input onclick="onInputElementClick('landmark')" class="form-control ba-cod-full-width-input-field" id="baLandmark" maxlength="150" placeholder="Landmark (ex : near gopal mandir, school etc)"/>
                 <label id="baLandmarkLabel" for="baLandmark">Landmark</label>
               </div>
               <span id="baLandmarkRequired" class="ba-mandatory-field-text pl-1">Enter landmark</span>
             </div>
           </div>
 
-          <div class="row mt-3 pb-2">
+          <div style="display: none" class="row mt-3 pb-2">
             <div class="col-12">
               <div class="form-group has-float-label">
-                <input class="form-control ba-cod-input-field" id="baPostOffice" placeholder="Post Office (Optional)"/>
+                <input onclick="onInputElementClick('post office')" class="form-control ba-cod-full-width-input-field" id="baPostOffice" placeholder="Post Office (Optional)"/>
                 <label id="baPostOfficeLabel" for="baPostOffice">Post Office</label>
               </div>
             </div>
@@ -648,22 +734,22 @@
 
         </div>
 
-        <div class="pt-1 mt-3 mb-3 ba-cod-separator"></div>
+        <div class="pt-3 mt-3 mb-3 ba-cod-separator"></div>
 
         <!-- Free Delivery card -->
         <div id="ba-cod-free-delivery-div" class="p-2 m-2">
           <div class="d-flex align-items-center">
             {% render 'ba-free-delivery-icon' %}
-            <span class="pl-2 pr-2" style="color: #0A8047; font-size: 14px; font-weight: 600;"
+            <span class="pl-2 pr-2" style="color: #0A8047; font-size: 16px; font-weight: 600; line-height: 20px"
                   id="ba-cod-delivery-days-label"> FREE Delivery</span>
             <span class="pl-3 pr-3" style="color: #CED1D9; font-size: 18px; font-weight: 600;"
             > | </span>
-            <span class="pl-2 pr-2" id="ba-cod-delivery-date" style="color: #181B26; font-size: 14px; font-weight: 600;"
+            <span class="pl-2 pr-2" id="ba-cod-delivery-date" style="color: #181B26; font-size: 16px; font-weight: 400; line-height: 20px"
             >  </span>
           </div>
         </div>
 
-        <div class="pt-1 mt-3 mb-3 ba-cod-separator"></div>
+        <div class="pt-3 mt-3 mb-3 ba-cod-separator"></div>
 
         <!-- Price details card -->
         <div id="ba-cod-price-details-div" class="p-2 m-2">
@@ -680,17 +766,17 @@
         </div>
 
       </div>
-      <div class="modal-footer ba-cod-footer p-2">
+      <div class="modal-footer ba-cod-footer">
         <button id="ba-cod-create-order-button" class="row w-100 ba-cod-create-order-button d-flex align-items-center justify-content-between"
                 onclick="createOrderObject()">
-          <div class="col-4">
+          <div class="col-auto">
             <div id="ba-cod-footer-delivery-label" class="ba-cod-footer-delivery-label"></div>
             <div id="ba-cod-footer-total-amount" class="ba-cod-footer-total"></div>
           </div>
-          <div class="col-4">
-            <div class="ba-cod-footer-line-separator"> | </div>
-          </div>
-          <div class="col-4">
+          {% comment %}<div class="col-4">{% endcomment %}
+            {% comment %}<div class="ba-cod-footer-line-separator"> | </div>{% endcomment %}
+          {% comment %}</div>{% endcomment %}
+          <div class="col-auto">
             <div id="ba-cod-footer-place-order" class="ba-cod-footer-place-order"></div>
           </div>
         </button>
@@ -718,7 +804,8 @@
   }
   let selectedBundles = [];
 
-  let productHeader = 'प्रोडक्ट';
+  // let productHeader = 'प्रोडक्ट';
+  let productHeader = 'कैश ऑन डिलीवरी से खरीदें';
   let discountHeader = 'डिस्काउंट कूपन';
   let applyCouponBtn = 'अप्लाई करें';
   let deliveryAddressHeader = 'डिलीवरी पता';
@@ -747,16 +834,20 @@
   let landmarkRequiredLabel = 'लैंडमार्क';
 
   let priceDetailsDiscountLabel = 'प्रोडक्ट डिस्काउंट';
+  let priceDetailsFreeDeliveryLabel = 'डिलीवरी शुल्क';
+  let priceDetailsFreeDeliveryValueLabel = 'फ्री';
   let priceDetailsTotalAmountLabel = 'कुल बिल';
 
   let cashOnDeliveryLabel = 'कैश ऑन डिलीवरी (COD)';
   let placeOrderLabel = 'ऑर्डर पूरा करें';
 
   let removeIconLabel = 'हटाए';
-  let addIconLabel = 'जोड़ें';
+  let addIconLabel = 'जोड़ें +';
+  let addedBtnLabel = 'जोड़ा गया ✓';
 
   if (lang === 'en') {
-    productHeader = 'Product';
+    // productHeader = 'Product';
+    productHeader = 'Cash on delivery';
     discountHeader = 'Discount Coupon';
     applyCouponBtn = 'Apply';
     deliveryAddressHeader = 'Delivery Address';
@@ -785,17 +876,21 @@
     landmarkRequiredLabel = 'Enter Landmark';
 
     priceDetailsDiscountLabel = 'Items Discount';
+    priceDetailsFreeDeliveryLabel = 'Delivery Charges';
+    priceDetailsFreeDeliveryValueLabel = 'FREE'
     priceDetailsTotalAmountLabel = 'Total Amount';
 
     cashOnDeliveryLabel = 'Cash on delivery';
     placeOrderLabel = 'Place Order';
 
     removeIconLabel = 'Remove';
-    addIconLabel = 'Add';
+    addIconLabel = 'Add +';
+    addedBtnLabel = 'Added ✓';
   }
 
   if (lang === 'mr') {
-    productHeader = 'प्रॉडक्ट';
+    // productHeader = 'प्रॉडक्ट';
+    productHeader = 'कैश ऑन डिलीवरी से खरीदें';
     discountHeader = 'डिस्काउंट कूपन';
     applyCouponBtn = 'लागू करा';
     deliveryAddressHeader = 'डिलिव्हरी पत्ता';
@@ -824,13 +919,16 @@
     landmarkRequiredLabel = 'जवळची खूण';
 
     priceDetailsDiscountLabel = 'प्रॉडक्ट डिस्काउंट';
+    priceDetailsFreeDeliveryLabel = 'डिलीवरी शुल्क';
+    priceDetailsFreeDeliveryValueLabel = 'फ्री';
     priceDetailsTotalAmountLabel = 'एकूण रक्कम';
 
     cashOnDeliveryLabel = 'कैश ऑन डिलिव्हरी';
     placeOrderLabel = 'खरेदी करा';
 
     removeIconLabel = 'हटाए';
-    addIconLabel = 'जोड़ें';
+    addIconLabel = 'जोड़ें +';
+    addedBtnLabel = 'जोड़ा गया ✓';
   }
   document.getElementById('product-header-id').innerHTML = productHeader;
   document.getElementById('discount-header-id').innerHTML = discountHeader;
@@ -901,6 +999,7 @@
 
       let productImageColDiv = document.createElement('div');
       productImageColDiv.className = "col-3 pr-0";
+      productImageColDiv.style.position = "relative";
       productRowDiv.appendChild(productImageColDiv);
 
       let productImage = document.createElement('img');
@@ -910,8 +1009,13 @@
       // productImage.loading = "lazy";
       productImageColDiv.appendChild(productImage);
 
+      let productImageQuantity = document.createElement('div');
+      productImageQuantity.className = "ba-cod-product-img-quantity";
+      productImageQuantity.innerHTML = document.getElementsByClassName('quantity__input')[0].value;
+      productImageColDiv.appendChild(productImageQuantity);
+
       let productTitleColDiv = document.createElement('div');
-      productTitleColDiv.className = "col-5 pr-0 pl-0";
+      productTitleColDiv.className = "col-6 pr-0 pl-3";
       productRowDiv.appendChild(productTitleColDiv);
 
       let productTitle = document.createElement('div');
@@ -925,7 +1029,8 @@
       productTitleColDiv.appendChild(productVariantTitle);
 
       let productPriceColDiv = document.createElement('div');
-      productPriceColDiv.className = "col-4";
+      productPriceColDiv.className = "col-3 pl-0";
+      productPriceColDiv.style.paddingRight = "16px";
       productRowDiv.appendChild(productPriceColDiv);
 
       // Commenting out the discount percent off value
@@ -939,12 +1044,13 @@
 
       // Commenting out the slash (original) price
       // let productActualPrice = document.createElement('span');
-      // productActualPrice.className = "ba-cod-actual-price mr-2";
+      // productActualPrice.className = "ba-cod-actual-price";
       // productActualPrice.innerHTML = items[i]?.original_price ? `₹ ${Number(items[i]?.original_price)/100}` : '0';
       // productPriceDiv.appendChild(productActualPrice);
 
       let productSellingPrice = document.createElement('span');
       productSellingPrice.className = "ba-cod-selling-price";
+      productSellingPrice.id = "ba-cod-main-product-price" + i;
       productSellingPrice.innerHTML = items[i]?.final_line_price ? `₹ ${Number(items[i]?.final_line_price)/100}` : '0';
       productPriceDiv.appendChild(productSellingPrice);
     }
@@ -1009,6 +1115,9 @@
     const bundlesDiv = document.getElementById('ba-cod-bundle-cards-div');
     bundlesDiv.replaceChildren();
 
+    // resetting coupon discount apply loader
+    document.getElementById('ba-cod-discount-loader').style.display = 'none';
+
     // reset coupon code
     localStorage.removeItem('BA_COD_Coupon_code');
     previousCouponCode = '';
@@ -1041,7 +1150,11 @@
       .then(response => {
         if (response.status === 200) {
           response.json().then(result => {
-            setBaProductBundles(result?.data);
+            if (result?.data) {
+              setBaProductBundles(result?.data);
+            } else {
+              document.getElementById('ba-cod-bundle-div').style.display = 'none';
+            }
           });
         } else {
           console.log('Unable to fetch web bundle products');
@@ -1087,7 +1200,7 @@
       bundlesDiv.appendChild(bundleCardColDiv);
 
       let bundleCardImagePriceDiv = document.createElement('div');
-      bundleCardImagePriceDiv.className = 'row align-items-center mb-3';
+      bundleCardImagePriceDiv.className = 'row align-items-center mb-2';
       bundleCardColDiv.appendChild(bundleCardImagePriceDiv);
 
       let bundleCardImageDiv = document.createElement('div');
@@ -1097,6 +1210,7 @@
       let bundleCardImage = document.createElement('img');
       bundleCardImage.alt = 'product image';
       bundleCardImage.src = bundleProductImage;
+      bundleCardImage.style.borderRadius = '6px';
       if (bundleImagePlaceholder === bundleProductImage) {
         bundleCardImage.style.width = '65%';
       } else {
@@ -1108,10 +1222,12 @@
       bundleCardPriceDiv.className = 'col-6 pl-0';
       bundleCardImagePriceDiv.appendChild(bundleCardPriceDiv);
 
-      let bundleCardDiscountPercent = document.createElement('div');
-      bundleCardDiscountPercent.className = 'ba-cod-bundle-discount';
-      bundleCardDiscountPercent.innerHTML = `${bundleDiscountPercent}% off`;
-      bundleCardPriceDiv.appendChild(bundleCardDiscountPercent);
+      if (bundleDiscountPercent > 0) {
+        let bundleCardDiscountPercent = document.createElement('div');
+        bundleCardDiscountPercent.className = 'ba-cod-bundle-discount';
+        bundleCardDiscountPercent.innerHTML = `${bundleDiscountPercent}% off`;
+        bundleCardPriceDiv.appendChild(bundleCardDiscountPercent);
+      }
 
       let bundleCardPrice = document.createElement('div');
       bundleCardPrice.className = 'ba-cod-bundle-price';
@@ -1133,19 +1249,30 @@
       bundleCardColDiv.appendChild(bundleCardAddButtonDiv);
 
       let bundleCardAddButton = document.createElement('button');
-      bundleCardAddButton.className = "w-100 ba-cod-bundle-add-btn";
-      bundleCardAddButton.innerHTML = addIconLabel + ' +';
-      bundleCardAddButton.addEventListener("click", function(){ onBaProductBundleClick(bundles[i]); });
+      bundleCardAddButton.className = "w-100 p-3 ba-cod-bundle-add-btn";
+      bundleCardAddButton.id = "bundleAddBtn" + i;
+      bundleCardAddButton.innerHTML = addIconLabel;
+      bundleCardAddButton.addEventListener("click", function(){ onBaProductBundleClick(bundles[i], i); });
       bundleCardAddButtonDiv.appendChild(bundleCardAddButton);
-
 
     }
   }
 
-  function onBaProductBundleClick(product) {
+  function onBaProductBundleClick(product, productIndex) {
+    let bundleAddBtn = document.getElementById(`bundleAddBtn${productIndex}`);
+    bundleAddBtn.disabled = true;
+    bundleAddBtn.innerHTML = addedBtnLabel;
+    bundleAddBtn.style.color = '#707890';
+    bundleAddBtn.style.border = '1px solid #707890';
     let bundleProductPush = structuredClone(product);
 
-    sendBaCodGEvents('BA_bundle_cart_added', {'product': product, 'from_fragment': currentUrl1});
+    sendBaCodGEvents('BA_bundle_cart_added', {
+        'from_frag': currentUrl1,
+        'product_title': product?.secondary_product?.product?.title,
+        'productId': product?.secondary_product?.shopify_id,
+        'variantId': product?.secondary_product?.variant_id,
+        'selling_price': product?.price,
+    });
 
     bundleProductPush['selected'] = true;
 
@@ -1188,7 +1315,7 @@
     productImageColDiv.appendChild(productImage);
 
     let productTitleColDiv = document.createElement('div');
-    productTitleColDiv.className = "col-5 pr-0 pl-0";
+    productTitleColDiv.className = "col-6 pr-0 pl-3";
     productRowDiv.appendChild(productTitleColDiv);
 
     let productTitle = document.createElement('div');
@@ -1208,14 +1335,15 @@
 
     let productRemoveIconBtn = document.createElement('button');
     productRemoveIconBtn.className = "btn btn-outline-danger";
-    productRemoveIconBtn.addEventListener("click", function(){ onBaProductBundleRemoveClick(selectedBundlesIndex); });
+    productRemoveIconBtn.addEventListener("click", function(){ onBaProductBundleRemoveClick(selectedBundlesIndex, productIndex); });
     productRemoveIcon.appendChild(productRemoveIconBtn);
 
 
     let productRemoveIconImg = document.createElement('img');
-    productRemoveIconImg.src = "https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/ba-cod-remove-icon.png";
+    productRemoveIconImg.src = "https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/ba-cod-remove-icon-2.png";
     productRemoveIconImg.alt = 'remove-icon';
     productRemoveIconImg.style.verticalAlign = 'middle';
+    productRemoveIconImg.style.width = '18px';
     productRemoveIconBtn.appendChild(productRemoveIconImg);
 
     let productRemoveIconText = document.createElement('span');
@@ -1225,23 +1353,28 @@
 
 
     let productPriceColDiv = document.createElement('div');
-    productPriceColDiv.className = "col-4";
+    productPriceColDiv.className = "col-3 pl-0";
+    productPriceColDiv.style.paddingRight = "16px";
     productRowDiv.appendChild(productPriceColDiv);
 
     // Commenting out the discount percent off value
-    let productDiscount = document.createElement('div');
-    productDiscount.className = "ba-cod-product-discount";
-    productDiscount.innerHTML = `${bundleDiscountPercent}% off`;
-    productPriceColDiv.appendChild(productDiscount);
+    if (bundleDiscountPercent > 0) {
+      let productDiscount = document.createElement('div');
+      productDiscount.className = "ba-cod-product-discount";
+      productDiscount.innerHTML = `${bundleDiscountPercent}% off`;
+      productPriceColDiv.appendChild(productDiscount);
+    }
 
     let productPriceDiv = document.createElement('div');
     productPriceColDiv.appendChild(productPriceDiv);
 
     // Commenting out the slash (original) price
-    let productActualPrice = document.createElement('span');
-    productActualPrice.className = "ba-cod-actual-price mr-2";
-    productActualPrice.innerHTML = bundleProductPrice ? `₹ ${bundleProductPrice}` : '0';
-    productPriceDiv.appendChild(productActualPrice);
+    if (bundleProductPrice > 0) {
+      let productActualPrice = document.createElement('span');
+      productActualPrice.className = "ba-cod-actual-price";
+      productActualPrice.innerHTML = bundleProductPrice ? `₹ ${bundleProductPrice}` : '0';
+      productPriceDiv.appendChild(productActualPrice);
+    }
 
     let productSellingPrice = document.createElement('span');
     productSellingPrice.className = "ba-cod-selling-price";
@@ -1262,7 +1395,7 @@
     priceItemsRow.appendChild(priceItemsCol1);
 
     let priceItemsCol2 = document.createElement('div');
-    priceItemsCol2.className = 'col-3';
+    priceItemsCol2.className = 'col-3 text-right';
     priceItemsCol2.innerHTML = bundleProductDiscountPrice ? `₹ ${bundleProductDiscountPrice}` : '0';
     priceItemsRow.appendChild(priceItemsCol2);
 
@@ -1276,9 +1409,22 @@
     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${bundleOrderTotalValue}`;
   }
 
-  function onBaProductBundleRemoveClick(index) {
-    sendBaCodGEvents('BA_bundle_cart_removal', {'product': selectedBundles[index], 'from_fragment': currentUrl1});
+  function onBaProductBundleRemoveClick(index, productIndex) {
+    sendBaCodGEvents('BA_bundle_cart_removal', {
+      'from_frag': currentUrl1,
+      'product_title': selectedBundles[index]?.secondary_product?.product?.title,
+      'productId': selectedBundles[index]?.secondary_product?.shopify_id,
+      'variantId': selectedBundles[index]?.secondary_product?.variant_id,
+      'selling_price': selectedBundles[index]?.price,
+    });
     selectedBundles[index].selected = false;
+
+    let bundleAddBtn = document.getElementById(`bundleAddBtn${productIndex}`);
+    bundleAddBtn.disabled = false;
+    bundleAddBtn.innerHTML = addIconLabel;
+    bundleAddBtn.style.color = '#0A8047';
+    bundleAddBtn.style.border = '1px solid #0A8047';
+
     let productCountHeader = Number(document.getElementById('product-count-id').innerHTML);
     document.getElementById('product-count-id').innerHTML = String(productCountHeader - 1);
     document.getElementById(`bundleCartRow${index}`).style.display = 'none';
@@ -1329,10 +1475,12 @@
         } else {
           console.log('Unable to fetch discount coupons');
           document.getElementById('ba-discount-coupon-div').style.display = 'none';
+          document.getElementById('ba-discount-div-separator').setAttribute('style', 'display:none !important');
         }
       }).catch(error => {
       console.log('error: ', error);
       document.getElementById('ba-discount-coupon-div').style.display = 'none';
+      document.getElementById('ba-discount-div-separator').setAttribute('style', 'display:none !important');
     });
   }
 
@@ -1363,14 +1511,16 @@
 
     if (finalCodes?.length === 0) {
       document.getElementById('ba-discount-coupon-div').style.display = 'none';
+      document.getElementById('ba-discount-div-separator').setAttribute('style', 'display:none !important');
     } else {
       finalCodes = finalCodes?.sort((a, b) => b?.priority_index - a?.priority_index);
+      document.getElementById('ba-discount-coupon-div').style.display = 'block';
+      document.getElementById('ba-discount-div-separator').setAttribute('style', 'display:block !important');
     }
 
     for (let i=0; i < finalCodes?.length; i++) {
       let coupon_title_translation = '';
       let coupon_sub_title_translation = '';
-      console.log('sdsdsdsd', lang);
       if (lang === 'en') {
         coupon_title_translation = finalCodes[i]?.coupon_title_en;
         coupon_sub_title_translation = finalCodes[i]?.coupon_sub_title_en;
@@ -1391,7 +1541,7 @@
       discountDiv.appendChild(discountCardColDiv);
 
       let discountTitleDiv = document.createElement('div');
-      discountTitleDiv.className = 'mb-3 ba-cod-discount-title';
+      discountTitleDiv.className = 'ba-cod-discount-title';
       discountCardColDiv.appendChild(discountTitleDiv);
 
       let discountTitle1 = document.createElement('span');
@@ -1405,7 +1555,7 @@
       discountTitleDiv.appendChild(discountTitle2);
 
       let discountInfoApplyDiv = document.createElement('div');
-      discountInfoApplyDiv.className = 'row m-1 pt-2 align-items-center justify-content-between';
+      discountInfoApplyDiv.className = 'row m-1 align-items-center justify-content-between';
       discountCardColDiv.appendChild(discountInfoApplyDiv);
 
       let discountMainTitle = document.createElement('div');
@@ -1416,15 +1566,23 @@
       let discountApplyBtn = document.createElement('div');
       discountApplyBtn.className = 'col-auto ba-cod-discount-apply-btn';
       discountApplyBtn.innerHTML = applyCouponBtn;
-      discountApplyBtn.addEventListener("click", function(){ applyCouponCodes(finalCodes[i]?.title); });
+      discountApplyBtn.addEventListener("click", function(){ applyCouponCodes(finalCodes[i]?.title, true); });
       discountInfoApplyDiv.appendChild(discountApplyBtn);
+
+      // Discount coupon card click at card level
+      discountCardColDiv.addEventListener("click", function(){ applyCouponCodes(finalCodes[i]?.title, true); });
+    }
+
+    // applying first discount code
+    if (finalCodes?.length > 0) {
+      applyCouponCodes(finalCodes[0]?.title, false);
     }
   }
 </script>
 
 <script>
   let previousCouponCode = '';
-   function applyCouponCodes(couponCode) {
+   function applyCouponCodes(couponCode, scrollFlag) {
      document.getElementById('ba-cod-discount-loader').style.display = 'block';
      if (!previousCouponCode) {
        previousCouponCode = couponCode;
@@ -1445,11 +1603,15 @@
 
      // Resetting total amount with the cart and bundles
      let bundleCartOrderTotalValue = getBundlesTotalPrice();
+     let priceDetailsTotalValueWithoutBundle = Number(baUpdateCart?.total_price/100);
      let priceDetailsTotalValue = Number(baUpdateCart?.total_price/100);
      priceDetailsTotalValue = priceDetailsTotalValue + bundleCartOrderTotalValue;
 
-     sendBaCodGEvents('BA_cart_cc_clk', {'discount_coupon': couponCode, 'order_value': priceDetailsTotalValue, 'from_fragment': currentUrl1});
-
+     sendBaCodGEvents('BA_cart_cc_clk', {
+       'from_frag': currentUrl1,
+       'discount_coupon': couponCode,
+       'order_value': priceDetailsTotalValueWithoutBundle,
+     });
 
      document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsTotalValue}`;
      document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue}`;
@@ -1510,9 +1672,12 @@
             previousCouponCode = couponCode;
             document.getElementById('ba-cod-discount-loader').style.display = 'none';
 
-            document.getElementById('ba-active-coupon').scrollIntoView({
-              behavior: 'smooth'
-            });
+            if (scrollFlag) {
+              document.getElementById('ba-active-coupon').scrollIntoView({
+                behavior: 'smooth'
+              });
+            }
+
             localStorage.setItem('BA_COD_Coupon_code', couponCode);
           } else {
             console.log('Coupon not applicable');
@@ -1893,6 +2058,11 @@
       }).then(response => {
         if (response.status === 201) {
           response.json().then( result => {
+            sendBaCodGEvents('BA_cod_ordered', {
+              'from_frag': currentUrl1,
+              'order_value': createOrderTotalValue,
+              'ba_phone_number': mobileValue
+            });
             document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
             window.open(result?.order?.order_status_url, '_self');
           });
@@ -2098,7 +2268,8 @@
       priceItemsRow.appendChild(priceItemsCol1);
 
       let priceItemsCol2 = document.createElement('div');
-      priceItemsCol2.className = 'col-3';
+      priceItemsCol2.className = 'col-3 text-right';
+      priceItemsCol2.id = 'ba-cod-product-price' + i;
       priceItemsCol2.innerHTML = items[i]?.final_line_price ? `₹ ${Number(items[i]?.final_line_price)/100}` : '0';
       priceItemsRow.appendChild(priceItemsCol2);
     }
@@ -2114,9 +2285,24 @@
     priceItemsDiscountDiv.appendChild(priceItemsDiscountCol1);
 
     let priceItemsDiscountCol2 = document.createElement('div');
-    priceItemsDiscountCol2.className = 'col-3';
+    priceItemsDiscountCol2.className = 'col-3 text-right';
     priceItemsDiscountCol2.id = 'ba-price-details-discount-value';
     priceItemsDiscountDiv.appendChild(priceItemsDiscountCol2);
+
+    let priceItemsFreeDeliveryDiv = document.createElement('div');
+    priceItemsFreeDeliveryDiv.className = 'row mt-2 pb-2 align-items-center ba-cod-price-details-items';
+    priceItemsFreeDeliveryDiv.style.color = '#0A8047';
+    document.getElementById('ba-cod-price-details-content').appendChild(priceItemsFreeDeliveryDiv);
+
+    let priceItemsFreeDeliveryCol1 = document.createElement('div');
+    priceItemsFreeDeliveryCol1.className = 'col-9';
+    priceItemsFreeDeliveryCol1.innerHTML = priceDetailsFreeDeliveryLabel;
+    priceItemsFreeDeliveryDiv.appendChild(priceItemsFreeDeliveryCol1);
+
+    let priceItemsFreeDeliveryCol2 = document.createElement('div');
+    priceItemsFreeDeliveryCol2.className = 'col-3 text-right';
+    priceItemsFreeDeliveryCol2.innerHTML = priceDetailsFreeDeliveryValueLabel;
+    priceItemsFreeDeliveryDiv.appendChild(priceItemsFreeDeliveryCol2);
 
     let priceItemsTotalDiv = document.createElement('div');
     priceItemsTotalDiv.id = 'ba-price-details-discount-total';
@@ -2129,7 +2315,7 @@
     priceItemsTotalDiv.appendChild(priceItemsTotalCol1);
 
     let priceItemsTotalCol2 = document.createElement('div');
-    priceItemsTotalCol2.className = 'col-3';
+    priceItemsTotalCol2.className = 'col-3 text-right';
     priceItemsTotalCol2.innerHTML = `₹ ${baUpdateCart?.total_price/100}`;
     priceItemsTotalCol2.id = 'ba-price-details-total-value';
     priceItemsTotalDiv.appendChild(priceItemsTotalCol2);
@@ -2140,8 +2326,23 @@
 </script>
 
 <script>
+  function onInputElementClick(fieldName) {
+    let mobileValue = document.getElementById('farmerMobile').value;
+    if (mobileValue && mobileValue?.length === 10) {
+      sendBaCodGEvents('BA_cart_phn', {
+        'from_frag': currentUrl1,
+        'ba_field_name': fieldName,
+        'ba_phone_number': mobileValue
+      });
+    }
+    sendBaCodGEvents('BA_address_clk', {
+      'from_frag': currentUrl1,
+      'ba_field_name': fieldName
+    });
+  }
+
   function sendBaCodGEvents(name, value) {
-    gtag('event', name, {'value': value});
+    gtag('event', name, value);
   }
 </script>
 
