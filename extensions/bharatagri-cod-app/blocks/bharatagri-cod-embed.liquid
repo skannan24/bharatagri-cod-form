@@ -652,14 +652,16 @@
             </div>
             <div class="col-6 pr-1">
               <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('mobile')" class="form-control ba-cod-input-field" id="farmerMobile" type="text" maxlength="10" placeholder="Mobile Number"/>
+                <input onclick="onInputElementClick('mobile')" class="form-control ba-cod-input-field" id="farmerMobile"
+                       type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="10" placeholder="Mobile Number"/>
                 <label id="farmerMobileLabel" for="farmerMobile">Mobile Number</label>
               </div>
               <span id="farmerMobileRequired" class="ba-mandatory-field-text pl-1">Enter mobile number</span>
             </div>
             <div class="col-6 pl-1">
               <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('pincode')" class="form-control ba-cod-input-field" id="baCodPincode" type="text" maxlength="6" placeholder="Pincode"/>
+                <input onclick="onInputElementClick('pincode')" class="form-control ba-cod-input-field" id="baCodPincode"
+                       type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="6" placeholder="Pincode"/>
                 <label id="baCodPincodeLabel" for="baCodPincode">Pincode</label>
               </div>
               <span id="baCodPincodeRequired" class="ba-mandatory-field-text pl-1">Enter pincode</span>
@@ -1720,6 +1722,7 @@
   let districtName = '';
   let stateNameEn = '';
   let districtNameEn = '';
+  let numericalNumberRegex = /^[0-9]+$/;
 
   let stateList = [];
 
@@ -1886,13 +1889,13 @@
       validationError = true;
     }
 
-    if (mobile?.value?.length !== 10) {
+    if (mobile?.value?.length !== 10 || !(mobile?.value?.match(numericalNumberRegex))) {
       mobile.classList.add('ba-mandatory-field-border');
       document.getElementById('farmerMobileRequired').style.display = 'block';
       validationError = true;
     }
 
-    if (pincode?.value?.length !== 6) {
+    if (pincode?.value?.length !== 6 || !(pincode?.value?.match(numericalNumberRegex))) {
       pincode.classList.add('ba-mandatory-field-border');
       document.getElementById('baCodPincodeRequired').style.display = 'block';
       validationError = true;
@@ -2127,47 +2130,19 @@
 
   // Interval to reset values and mobile validation
 
-  let mobile = document.getElementById('farmerMobile');
-  mobile.addEventListener('keydown', (event) => {
-    let arr = [];
-    let kk = event.which;
-
-    for (let i = 48; i < 58; i++)
-      arr.push(i);
-
-    arr.push(8);
-
-    if (!(arr.indexOf(kk)>=0))
-      event.preventDefault();
-  });
-
-  let alternateMobile = document.getElementById('alternateMobile');
-  alternateMobile.addEventListener('keydown', (event) => {
-    let arr = [];
-    let kk = event.which;
-
-    for (let i = 48; i < 58; i++)
-      arr.push(i);
-
-    arr.push(8);
-
-    if (!(arr.indexOf(kk)>=0))
-      event.preventDefault();
-  });
-
-  let pincode = document.getElementById('baCodPincode');
-  pincode.addEventListener('keydown', (event) => {
-    let arr = [];
-    let kk = event.which;
-
-    for (let i = 48; i < 58; i++)
-      arr.push(i);
-
-    arr.push(8);
-
-    if (!(arr.indexOf(kk)>=0))
-      event.preventDefault();
-  });
+  // let mobile = document.getElementById('farmerMobile');
+  // mobile.addEventListener('keydown', (event) => {
+  //   let arr = [];
+  //   let kk = event.which;
+  //
+  //   for (let i = 48; i < 58; i++)
+  //     arr.push(i);
+  //
+  //   arr.push(8);
+  //
+  //   if (!(arr.indexOf(kk)>=0))
+  //     event.preventDefault();
+  // });
 
   setInterval(() => {
     let name = document.getElementById('farmerName');
@@ -2188,12 +2163,12 @@
       document.getElementById('farmerNameRequired').style.display = 'none';
     }
 
-    if (mobile?.value?.length === 10) {
+    if (mobile?.value?.length === 10 && (mobile?.value?.match(numericalNumberRegex))) {
       mobile.classList.remove('ba-mandatory-field-border');
       document.getElementById('farmerMobileRequired').style.display = 'none';
     }
 
-    if (pincode?.value?.length === 6) {
+    if (pincode?.value?.length === 6 && (pincode?.value?.match(numericalNumberRegex))) {
       pincode.classList.remove('ba-mandatory-field-border');
       document.getElementById('baCodPincodeRequired').style.display = 'none';
     }
