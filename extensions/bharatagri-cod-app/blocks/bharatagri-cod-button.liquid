@@ -6,6 +6,9 @@
   {%- liquid
     assign target = product.selected_or_first_available_variant
   -%}
+  if ('{{ target.available }}' === 'false') {
+    document.getElementById('ba-cod-buy-now-btn').disabled = true;
+  }
   let currentUrlBaCodBtn = window.location.href;
   let baCodBuyNowBtn = document.getElementById('ba-cod-buy-now-btn');
   if (currentUrlBaCodBtn?.includes('.com/en')) {
