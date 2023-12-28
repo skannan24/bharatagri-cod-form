@@ -1718,6 +1718,8 @@
   let districtId = '';
   let stateName = '';
   let districtName = '';
+  let stateNameEn = '';
+  let districtNameEn = '';
 
   let stateList = [];
 
@@ -1746,7 +1748,7 @@
       stateOptionsBtn.className = 'dropdown-item';
       stateOptionsBtn.type = 'button';
       stateOptionsBtn.innerHTML = stateName;
-      stateOptionsBtn.addEventListener("click", function(){ onStateClick(stateList[i]?.id, stateName); });
+      stateOptionsBtn.addEventListener("click", function(){ onStateClick(stateList[i]?.id, stateName, stateList[i]?.name_en); });
       stateDiv.appendChild(stateOptionsBtn);
     }
   }
@@ -1756,7 +1758,9 @@
     stateId = '';
     districtId = '';
     stateName = '';
+    stateNameEn = '';
     districtName = '';
+    districtNameEn = '';
     document.getElementById('baCodStateSelect').innerHTML = stateLabel;
     document.getElementById('baCodStateSelectLabel').innerHTML = stateLabel;
     document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
@@ -1797,19 +1801,22 @@
     document.getElementById('baLandmarkRequired').style.display = 'none';
   }
 
-  function onStateClick(id, name) {
+  function onStateClick(id, name, nameEn) {
     document.getElementById('baCodStateSelect').innerHTML = name?.length > 18 ? name?.slice(0,18) + '..' : name;
     document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
     stateId = id;
     stateName = name;
+    stateNameEn = nameEn;
     districtId = '';
     districtName = '';
+    districtNameEn = '';
     loadDistricts(id);
   }
 
-  function onDistrictClick(id, name) {
+  function onDistrictClick(id, name, nameEn) {
     districtId = id;
     districtName = name;
+    districtNameEn = nameEn;
     document.getElementById('baCodDistrictSelectLabel').innerHTML = name?.length > 18 ? name?.slice(0,18) + '..' : name;
   }
 
@@ -1847,7 +1854,7 @@
       districtOptionsBtn.className = 'dropdown-item';
       districtOptionsBtn.type = 'button';
       districtOptionsBtn.innerHTML = districtName;
-      districtOptionsBtn.addEventListener("click", function(){ onDistrictClick(stateList[i]?.id, districtName); });
+      districtOptionsBtn.addEventListener("click", function(){ onDistrictClick(stateList[i]?.id, districtName, districts[i]?.name_en); });
       districtDiv.appendChild(districtOptionsBtn);
     }
   }
@@ -1861,8 +1868,8 @@
     let pincode = document.getElementById('baCodPincode');
     let stateField = document.getElementById('baCodStateSelect');
     let districtField = document.getElementById('baCodDistrictSelect');
-    let state = stateName;
-    let district = districtName;
+    let state = stateNameEn;
+    let district = districtNameEn;
     let taluka = document.getElementById('talukaName');
     let village = document.getElementById('villageName');
     let address = document.getElementById('baAddress');
@@ -1909,11 +1916,11 @@
       validationError = true;
     }
 
-    if (!(village.value)) {
-      village.classList.add('ba-mandatory-field-border');
-      document.getElementById('villageNameRequired').style.display = 'block';
-      validationError = true;
-    }
+    // if (!(village.value)) {
+    //   village.classList.add('ba-mandatory-field-border');
+    //   document.getElementById('villageNameRequired').style.display = 'block';
+    //   validationError = true;
+    // }
 
     if (!(address.value)) {
       address.classList.add('ba-mandatory-field-border');
@@ -1935,7 +1942,7 @@
       let stateValue = state;
       let districtValue = district;
       let talukaValue = taluka?.value;
-      let villageValue = village?.value;
+      let villageValue = village?.value ? village?.value : '';
       let addressValue = address?.value;
       let landmarkValue = landmark?.value;
       let postOfficeValue = postOffice?.value ? postOffice?.value : '';
@@ -1948,7 +1955,7 @@
         state: state,
         district: district,
         taluka: taluka?.value,
-        village: village?.value,
+        village: village?.value ? village?.value : '',
         address: address?.value,
         landmark: landmark?.value,
         postOffice: postOffice?.value ? postOffice?.value : ''
