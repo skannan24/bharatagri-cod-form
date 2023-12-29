@@ -446,6 +446,9 @@
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
     let items = baUpdateCart.items;
 
+    let quantityFb = document.getElementsByClassName('quantity__input')[0].value;
+    sendBaFbEvents('InitiateCheckout', {currency: "INR", value: Number(items[0]?.final_line_price)/100, 'num_items': Number(quantityFb)});
+
     document.getElementById('product-count-id').innerHTML = items?.length;
 
     for (let i = 0; i < items?.length; i++) {
@@ -1544,6 +1547,7 @@
               'order_value': createOrderTotalValue,
               'ba_phone_number': mobileValue
             });
+            sendBaFbEvents('Purchase', {currency: "INR", value: createOrderTotalValue, num_items: createOrderLineItems?.length});
             document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
             window.open(result?.order?.order_status_url, '_self');
           });
@@ -1788,6 +1792,11 @@
         'ba_phone_number': mobileValue
       });
     }
+    if (fieldName === 'name' || fieldName === 'mobile') {
+      let cartTotalValue = document.getElementById('ba-price-details-total-value').innerHTML;
+      cartTotalValue = cartTotalValue?.replace('₹ ', '');
+      sendBaFbEvents('AddPaymentInfo', {currency: "INR", value: Number(cartTotalValue)});
+    }
     sendBaCodGEvents('BA_address_clk', {
       'from_frag': currentUrl1,
       'ba_field_name': fieldName
@@ -1795,7 +1804,23 @@
   }
 
   function sendBaCodGEvents(name, value) {
-    gtag('event', name, value);
+    try {
+      gtag('event', name, value);
+    } catch (error) {
+      console.log('gtag error');
+    }
+  }
+
+  function sendBaFbEvents(name, value) {
+    // fbq('track', 'Purchase', {currency: "INR", value: createOrderTotalValue});
+    value['content_ids'] = ['{{ product.id }}'];
+    value['content_name'] = '{{ product.title }}';
+    value['content_type'] = 'product_group';
+    try {
+      fbq('track', name, value);
+    } catch (error) {
+      console.log('fbq error');
+    }
   }
 
   async function baCodGetApi(url) {
