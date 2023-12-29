@@ -114,7 +114,7 @@
             </div>
             <div class="col-6 pl-1">
               <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('pincode')" onchange="loadBaLocation(this.value)" class="form-control ba-cod-input-field" id="baCodPincode"
+                <input onclick="onInputElementClick('pincode')"  class="form-control ba-cod-input-field" id="baCodPincode"
                        type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="6" placeholder="Pincode"/>
                 <label id="baCodPincodeLabel" for="baCodPincode">Pincode</label>
               </div>
@@ -142,7 +142,7 @@
                     <span class="sr-only">Loading...</span>
                   </div>
                 </button>
-                <label id="baCodDistrictSelectLabel2" for="baCodDistrictSelect">State</label>
+                <label id="baCodDistrictSelectLabel2" for="baCodDistrictSelect">District</label>
                 <div id="baCodDistrictOptions" class="dropdown-menu ba-cod-options-field" aria-labelledby="baCodDistrictSelect">
                 </div>
               </div>
@@ -1215,6 +1215,20 @@
 
 
   function resetCodFormFields() {
+    resetLocationFields();
+
+    document.getElementById('farmerName').value = '';
+    document.getElementById('farmerMobile').value = '';
+    document.getElementById('alternateMobile').value = '';
+    document.getElementById('baCodPincode').value = '';
+    document.getElementById('baAddress').value = '';
+    document.getElementById('baLandmark').value = '';
+    document.getElementById('baPostOffice').value = '';
+
+    resetFormFieldsValidation();
+  }
+
+  function resetLocationFields() {
     stateId = '';
     districtId = '';
     stateName = '';
@@ -1226,17 +1240,12 @@
     document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
     document.getElementById('baCodDistrictSelectLabel2').innerHTML = districtLabel;
 
-    document.getElementById('farmerName').value = '';
-    document.getElementById('farmerMobile').value = '';
-    document.getElementById('alternateMobile').value = '';
-    document.getElementById('baCodPincode').value = '';
+    resetTalukaAndVillage();
+  }
+
+  function resetTalukaAndVillage() {
     document.getElementById('talukaName').value = '';
     document.getElementById('villageName').value = '';
-    document.getElementById('baAddress').value = '';
-    document.getElementById('baLandmark').value = '';
-    document.getElementById('baPostOffice').value = '';
-
-    resetFormFieldsValidation();
   }
 
   function resetFormFieldsValidation() {
@@ -1823,24 +1832,53 @@
     }
   }
 
-  async function baCodGetApi(url) {
-    try {
-      // return (await fetch(url)).json();
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching data:', error.message);
-      throw error;
+  document.getElementById('baCodPincode').addEventListener('input', function () {
+    if (this.value.length === 6) {
+
+      loadBaLocation(this.value);
+    }
+  });
+
+  function loadBaLocation(value) {
+    if (value?.length === 6) {
+      fetch(`https://s3.ap-south-1.amazonaws.com/shopify-krushidukan-apis/pincode_mapping/en/pincode/${value}/pincode.json`)
+        .then(response => {
+          if (response.status === 200) {
+            response.json().then( result => {
+              if (result?.data) {setPincodeLocation(result?.data);}
+            });
+          } else {
+            resetTalukaAndVillage();
+            console.log('Unable to get location');
+          }
+        }).catch(error => {
+        console.log('Unable to get pincode location: ', error);
+      });
     }
   }
 
-  async function loadBaLocation(value) {
-    if (value?.length === 6) {
-      // baCodGetApi(`https://s3.ap-south-1.amazonaws.com/shopify-krushidukan-apis/pincode_mapping/en/pincode/${value}/pincode.json`)
-      //   .then(response => console.log('API Response:', response)).catch(error => console.error('Error:', error));
-    }
+  function setPincodeLocation(data) {
+    resetLocationFields();
+    const updateElement = (elementId, dataItem) => {
+      if (dataItem?.id && dataItem?.name) {
+        document.getElementById(elementId).value = dataItem[langKey] || dataItem.name;
+      }
+    };
+    const langKey = `name_${lang}`;
+    // updateElement('talukaName', data?.taluka);
+    // updateElement('villageName', data?.village);
+
+    ['state', 'district'].forEach((type) => {
+      const dataItem = data?.[type];
+      if (dataItem) {
+        let name = dataItem[langKey] || dataItem.name;
+        type === 'state'
+          ? onStateClick(dataItem.id, name, dataItem.name_en)
+          : onDistrictClick(dataItem.id, name, dataItem.name_en);
+      }
+    });
   }
+
 </script>
 
 <script>
