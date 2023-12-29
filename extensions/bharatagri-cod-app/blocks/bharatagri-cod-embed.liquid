@@ -1,550 +1,4 @@
-<style>
-  .ba-cod-modal {
-    z-index: 2147483610;
-  }
-
-  .ba-modal-dialog {
-    width: 100%;
-    height: 100%;
-    padding-right: 10px;
-    /*margin: 0;*/
-    /*padding: 0;*/
-  }
-
-  .ba-modal-content {
-    height: auto;
-    min-height: 100%;
-    border-radius: 14px;
-  }
-
-  .ba-modal-body {
-    overflow-x: hidden;
-  }
-
-  .ba-cod-product-header {
-    font-family: Noto Sans;
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 25px;
-  }
-
-  .ba-cod-main-divs-spinner {
-    height: 4rem;
-    width: 4rem;
-  }
-
-  .ba-cod-product-title {
-    font-family: Noto Sans;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 25px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #181B26;
-    overflow: hidden!important;
-    display: -webkit-box!important;
-    -webkit-line-clamp: 2!important;
-    -webkit-box-orient: vertical!important;
-  }
-
-  .ba-cod-variant-info {
-    font-family: Noto Sans;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 20px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #474D61;
-  }
-
-  .ba-cod-product-discount {
-    font-family: Noto Sans;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 20px;
-    letter-spacing: 0em;
-    text-align: right;
-    color: #0A8047;
-  }
-
-  .ba-cod-actual-price {
-    font-family: Noto Sans;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 20px;
-    letter-spacing: 0em;
-    text-align: right;
-    color: #707890;
-    text-decoration-line: line-through;
-    display: block;
-    padding-top: 3px;
-  }
-
-  .ba-cod-selling-price {
-    font-family: Noto Sans;
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 20px;
-    letter-spacing: 0em;
-    text-align: right;
-    color: #181B26;
-    display: block;
-    padding-top: 4px;
-  }
-
-  .ba-cod-product-img {
-    width: 80px;
-    height: 80px;
-    border-radius: 8px;
-  }
-
-  .ba-cod-product-img-quantity {
-    position: absolute;
-    top: -7px;
-    right: 0;
-    background: red;
-    color: white;
-    border-radius: 50px;
-    padding: 1px 8px;
-  }
-
-  .ba-cod-card-header {
-    font-family: Noto Sans;
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 25px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #181B26;
-    padding-bottom: 6px;
-  }
-
-  .ba-cod-discount-row {
-    max-width: 100%;
-    overflow-x: auto;
-    flex-wrap: nowrap;
-  }
-
-  .ba-cod-discount-coupon {
-    background: linear-gradient(180deg, #03B369 0%, #0A8047 100%);
-    color: #FFFFFF;
-    border-radius: 8px;
-    gap: 4px;
-    padding: 5px 14px;
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: 3px;
-  }
-
-  .ba-cod-discount-title {
-    height: 50px;
-  }
-
-  .ba-cod-discount-title1 {
-    font-family: Noto Sans;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 22px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #181B26;
-  }
-
-  .ba-cod-discount-title2 {
-    font-family: Noto Sans;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 18px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #707890;
-  }
-
-  .ba-cod-discount-apply-btn {
-    color: #0A8047;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-  }
-
-  .ba-cod-discount-card {
-    border-radius: 10px;
-    border: 1px solid #CED1D9;
-    max-width: 80%;
-    width: 80%;
-  }
-
-  .ba-cod-discount-card-active {
-    border-radius: 10px;
-    border: 1px solid #13CD80;
-    background: linear-gradient(0deg, #F6FEFA, #F6FEFA), linear-gradient(0deg, #13CD80, #13CD80);
-    max-width: 80%;
-    width: 80%;
-  }
-
-  .ba-discount-applied-name {
-    font-family: Noto Sans;
-    font-size: 14px;
-    font-weight: 600;
-    text-align: left;
-    color: #0A8047;
-  }
-
-  .ba-cod-separator {
-    background: #F2F3F4;
-    display: block!important
-  }
-
-  .ba-cod-input-field {
-    font-family: Noto Sans;
-    height: 53px;
-    font-size: 16px;
-    border-color: #E6E8EB;
-  }
-
-  .ba-cod-full-width-input-field {
-    font-family: Noto Sans;
-    height: 53px;
-    font-size: 16px;
-    border-color: #E6E8EB;
-  }
-
-  .has-float-label {
-    display: block;
-    position: relative
-  }
-
-  .has-float-label label,.has-float-label>span {
-    font-family: Noto Sans;
-    position: absolute;
-    cursor: text;
-    font-size: 11px;
-    opacity: 1;
-    -webkit-transition: all .2s;
-    transition: all .2s;
-    top: -.5em;
-    left: .75rem;
-    z-index: 3;
-    line-height: 1;
-    padding: 0 1px;
-    color: #ADB2C0;
-    background: white;
-  }
-
-  .has-float-label label::after,.has-float-label>span::after {
-    font-family: Noto Sans;
-    content: " ";
-    display: block;
-    position: absolute;
-    background: #fff;
-    height: 2px;
-    top: 50%;
-    left: -.2em;
-    right: -.2em;
-    z-index: -1
-  }
-
-  .has-float-label .form-control::-webkit-input-placeholder {
-    opacity: 1;
-    -webkit-transition: all .2s;
-    transition: all .2s
-  }
-
-  .has-float-label .form-control:placeholder-shown:not(:focus)::-webkit-input-placeholder {
-    opacity: 0
-  }
-
-  .has-float-label .form-control:placeholder-shown:not(:focus)+* {
-    font-family: Noto Sans;
-    font-size: 16px;
-    /*opacity: .5;*/
-    top: 1em;
-    color: black;
-    /*line-height: 22px;*/
-    line-height: 17px;
-  }
-
-  .input-group .has-float-label {
-    display: table-cell
-  }
-
-  .input-group .has-float-label .form-control {
-    border-radius: .25rem
-  }
-
-  .input-group .has-float-label:not(:last-child),.input-group .has-float-label:not(:last-child) .form-control {
-    border-bottom-right-radius: 0;
-    border-top-right-radius: 0;
-    border-right: 0
-  }
-
-  .input-group .has-float-label:not(:first-child),.input-group .has-float-label:not(:first-child) .form-control {
-    border-bottom-left-radius: 0;
-    border-top-left-radius: 0
-  }
-
-  .ba-cod-select-field {
-    font-family: Noto Sans;
-    height: 48px;
-    font-size: 16px;
-    border-color: #E6E8EB;
-    text-align: left;
-  }
-
-  .ba-cod-options-field {
-    font-family: Noto Sans;
-    width: 100%;
-    font-size: 14px;
-    max-height: 240px;
-    overflow-y: scroll;
-  }
-
-  .ba-mandatory-field-text {
-    font-family: Noto Sans;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 18px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #D42216;
-    display: none;
-  }
-
-  .ba-mandatory-field-border {
-    border-color: #D42216;
-  }
-
-  .ba-cod-price-details-items {
-    font-family: Noto Sans;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 18px;
-    letter-spacing: 0em;
-    color: #474D61;
-  }
-
-  .ba-cod-price-details-discount {
-    font-family: Noto Sans;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 18px;
-    letter-spacing: 0em;
-    color: #0A8047;
-    display: none;
-  }
-
-  .ba-cod-price-details-total-amount {
-    font-family: Noto Sans;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 18px;
-    letter-spacing: 0em;
-    color: #181B26;
-  }
-
-  .ba-cod-footer {
-    background: linear-gradient(180deg, #03B369 0%, #0A8047 100%);
-  }
-
-  .ba-cod-footer-delivery-label {
-    color: #FFFFFF;
-    font-family: Noto Sans;
-    font-size: 16px;
-    font-weight: 100;
-    line-height: 18px;
-    letter-spacing: 0em;
-    text-align: left;
-  }
-
-  .ba-cod-footer-total {
-    color: #FFFFFF;
-    font-family: Noto Sans;
-    font-size: 22px;
-    font-weight: 600;
-    line-height: 27px;
-    letter-spacing: 0em;
-    text-align: left;
-  }
-
-  .ba-cod-footer-place-order {
-    color: #FFFFFF;
-    font-family: Noto Sans;
-    font-size: 22px;
-    font-weight: 500;
-    line-height: 27px;
-    letter-spacing: 0em;
-    text-align: right;
-    -webkit-mask:linear-gradient(-60deg,#000 30%,#0005,#000 70%) right/300% 100%;
-    background-repeat: no-repeat;
-    animation: shimmer 2.5s infinite;
-  }
-
-  @keyframes shimmer {
-    100% {-webkit-mask-position:left}
-  }
-
-  .ba-cod-footer-line-separator {
-    font-family: Noto Sans;
-    font-size: 44px;
-    font-weight: 100;
-    line-height: 27px;
-    letter-spacing: 0em;
-    text-align: center;
-    color: #FFFFFF;
-  }
-
-  .ba-cod-create-order-button {
-    background: none;
-    border: none;
-  }
-
-  .ba-cod-bundle-card {
-    border-radius: 10px;
-    border: 1px solid #E6E8EB;
-    max-width: 35%;
-    width: 35%;
-    background: white;
-    box-shadow: 0px 1px 4px 0px #00000026;
-  }
-
-  .ba-cod-bundle-title {
-    font-family: Noto Sans;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 21px;
-    letter-spacing: 0em;
-    text-align: left;
-    white-space: nowrap;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: "...";
-    color: #181B26;
-  }
-
-  .ba-cod-bundle-discount {
-    font-family: Noto Sans;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 20px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #D42216;
-  }
-
-  .ba-cod-bundle-price {
-    font-family: Noto Sans;
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 20px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #181B26;
-  }
-
-  .ba-cod-bundle-add-btn {
-    font-family: Noto Sans;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 18px;
-    letter-spacing: 0em;
-    text-align: center;
-    color: #0A8047;
-    border: 1px solid #0A8047;
-    background: #FFFFFF;
-    border-radius: 4px;
-  }
-
-  .ba-cod-bundle-remove-btn {
-    font-family: Noto Sans;
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 18px;
-    letter-spacing: 0em;
-    text-align: center;
-    vertical-align: middle;
-  }
-
-  ::-webkit-scrollbar { display: none; }
-
-  .ba-cod-form-overlay {
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    background-color: rgba(255, 255, 255, .4);
-    z-index: 2147483612;
-  }
-
-  .ba-cod-form-overlay__inner {
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-  }
-
-  .ba-cod-form-overlay__content {
-    left: 50%;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  .ba-cod-form-overlay-spinner {
-    width: 75px;
-    height: 75px;
-    display: inline-block;
-    border-width: 5px;
-    border-color: #03B369;
-    border-top-color: #fff;
-    animation: spin 1s infinite linear;
-    border-radius: 100%;
-    border-style: solid;
-  }
-
-  .ba-cod-quantity-input {
-    color: currentColor;
-    font-size: 1.4rem;
-    font-weight: 500;
-    opacity: .85;
-    text-align: center;
-    background-color: transparent;
-    border: 0;
-    padding: 0 0.5rem;
-    width: 100%;
-    flex-grow: 1;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-
-  .ba-cod-quantity-btn {
-    width: calc(4.5rem / 1.0);
-    flex-shrink: 0;
-    font-size: 1.8rem;
-    /*border: 0;*/
-    background-color: transparent;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgb(18,18,18);
-    padding: 0;
-    border: 1px solid;
-  }
-
-  .ba-cod-quantity-btn svg {
-    width: 1rem;
-    pointer-events: none;
-  }
-
-  @keyframes spin {
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-</style>
+{{ 'ba-cod-form-style.css' | asset_url | stylesheet_tag }}
 
 <!-- Button trigger modal -->
 <div class="d-flex justify-content-end">
@@ -660,7 +114,7 @@
             </div>
             <div class="col-6 pl-1">
               <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('pincode')" class="form-control ba-cod-input-field" id="baCodPincode"
+                <input onclick="onInputElementClick('pincode')" onchange="loadBaLocation(this.value)" class="form-control ba-cod-input-field" id="baCodPincode"
                        type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="6" placeholder="Pincode"/>
                 <label id="baCodPincodeLabel" for="baCodPincode">Pincode</label>
               </div>
@@ -696,7 +150,7 @@
             </div>
           </div>
 
-          <div class="row mt-3 pb-2">
+          <div style="display: none" class="row mt-3 pb-2">
             <div class="col-6 pr-1">
               <div class="form-group has-float-label mb-0">
                 <input onclick="onInputElementClick('taluka')" class="form-control ba-cod-input-field" id="talukaName" placeholder="Taluka"/>
@@ -1913,11 +1367,11 @@
       validationError = true;
     }
 
-    if (!(taluka.value)) {
-      taluka.classList.add('ba-mandatory-field-border');
-      document.getElementById('talukaNameRequired').style.display = 'block';
-      validationError = true;
-    }
+    // if (!(taluka.value)) {
+    //   taluka.classList.add('ba-mandatory-field-border');
+    //   document.getElementById('talukaNameRequired').style.display = 'block';
+    //   validationError = true;
+    // }
 
     // if (!(village.value)) {
     //   village.classList.add('ba-mandatory-field-border');
@@ -1931,11 +1385,11 @@
       validationError = true;
     }
 
-    if (!(landmark.value)) {
-      landmark.classList.add('ba-mandatory-field-border');
-      document.getElementById('baLandmarkRequired').style.display = 'block';
-      validationError = true;
-    }
+    // if (!(landmark.value)) {
+    //   landmark.classList.add('ba-mandatory-field-border');
+    //   document.getElementById('baLandmarkRequired').style.display = 'block';
+    //   validationError = true;
+    // }
 
     if (!validationError) {
       let nameValue = name?.value;
@@ -1944,10 +1398,10 @@
       let  pincodeValue = pincode?.value;
       let stateValue = state;
       let districtValue = district;
-      let talukaValue = taluka?.value;
+      let talukaValue = taluka?.value ? taluka?.value : '';
       let villageValue = village?.value ? village?.value : '';
       let addressValue = address?.value;
-      let landmarkValue = landmark?.value;
+      let landmarkValue = landmark?.value ? landmark?.value : '';
       let postOfficeValue = postOffice?.value ? postOffice?.value : '';
 
       let baOrder = {
@@ -1957,11 +1411,11 @@
         pincode: pincode?.value,
         state: state,
         district: district,
-        taluka: taluka?.value,
-        village: village?.value ? village?.value : '',
+        taluka: talukaValue,
+        village: villageValue,
         address: address?.value,
-        landmark: landmark?.value,
-        postOffice: postOffice?.value ? postOffice?.value : ''
+        landmark: landmarkValue,
+        postOffice: postOfficeValue
       }
 
       let noteAttributesArray = [];
@@ -2343,6 +1797,25 @@
   function sendBaCodGEvents(name, value) {
     gtag('event', name, value);
   }
+
+  async function baCodGetApi(url) {
+    try {
+      // return (await fetch(url)).json();
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+      throw error;
+    }
+  }
+
+  async function loadBaLocation(value) {
+    if (value?.length === 6) {
+      // baCodGetApi(`https://s3.ap-south-1.amazonaws.com/shopify-krushidukan-apis/pincode_mapping/en/pincode/${value}/pincode.json`)
+      //   .then(response => console.log('API Response:', response)).catch(error => console.error('Error:', error));
+    }
+  }
 </script>
 
 <script>
@@ -2374,9 +1847,6 @@
 </script>
 
 
-{% comment %}<div style="position: fixed; bottom: 0; right: 0">{% endcomment %}
-  {% comment %}{{ "thumbs-up.png" | asset_url | img_tag }}{% endcomment %}
-{% comment %}</div>{% endcomment %}
 {% schema %}
 {
   "name": "App Embed",
