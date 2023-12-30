@@ -750,7 +750,8 @@
     bundleAddBtn.innerHTML = addedBtnLabel;
     bundleAddBtn.style.color = '#707890';
     bundleAddBtn.style.border = '1px solid #707890';
-    let bundleProductPush = structuredClone(product);
+    // let bundleProductPush = structuredClone(product);
+    let bundleProductPush = JSON.parse(JSON.stringify(product));
 
     sendBaCodGEvents('BA_bundle_cart_added', {
         'from_frag': currentUrl1,
