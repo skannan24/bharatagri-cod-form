@@ -1353,53 +1353,62 @@
       name.classList.add('ba-mandatory-field-border');
       document.getElementById('farmerNameRequired').style.display = 'block';
       validationError = true;
+      baScrollToId('farmerName');
     }
 
     if (mobile?.value?.length !== 10 || !(mobile?.value?.match(numericalNumberRegex))) {
       mobile.classList.add('ba-mandatory-field-border');
       document.getElementById('farmerMobileRequired').style.display = 'block';
+      if (!validationError) {baScrollToId('farmerMobile');}
       validationError = true;
     }
 
     if (pincode?.value?.length !== 6 || !(pincode?.value?.match(numericalNumberRegex))) {
       pincode.classList.add('ba-mandatory-field-border');
       document.getElementById('baCodPincodeRequired').style.display = 'block';
+      if (!validationError) {baScrollToId('baCodPincode');}
       validationError = true;
     }
 
     if (!state) {
       stateField.classList.add('ba-mandatory-field-border');
       document.getElementById('baCodStateSelectRequired').style.display = 'block';
+      if (!validationError) {baScrollToId('baCodStateSelect');}
       validationError = true;
     }
 
     if (!district) {
       districtField.classList.add('ba-mandatory-field-border');
       document.getElementById('baCodDistrictSelectRequired').style.display = 'block';
+      if (!validationError) {baScrollToId('baCodDistrictSelect');}
       validationError = true;
     }
 
     // if (!(taluka.value)) {
     //   taluka.classList.add('ba-mandatory-field-border');
     //   document.getElementById('talukaNameRequired').style.display = 'block';
+    // if (!validationError) {baScrollToId('talukaName');}
     //   validationError = true;
     // }
 
     // if (!(village.value)) {
     //   village.classList.add('ba-mandatory-field-border');
     //   document.getElementById('villageNameRequired').style.display = 'block';
+    // if (!validationError) {baScrollToId('villageName');}
     //   validationError = true;
     // }
 
     if (!(address.value)) {
       address.classList.add('ba-mandatory-field-border');
       document.getElementById('baAddressRequired').style.display = 'block';
+      if (!validationError) {baScrollToId('baAddress');}
       validationError = true;
     }
 
     // if (!(landmark.value)) {
     //   landmark.classList.add('ba-mandatory-field-border');
     //   document.getElementById('baLandmarkRequired').style.display = 'block';
+    // if (!validationError) {baScrollToId('baLandmark');}
     //   validationError = true;
     // }
 
@@ -1610,6 +1619,12 @@
   //   if (!(arr.indexOf(kk)>=0))
   //     event.preventDefault();
   // });
+
+  function baScrollToId(id) {
+    document.getElementById(id).scrollIntoView({
+      behavior: 'smooth'
+    });
+  }
 
   setInterval(() => {
     let name = document.getElementById('farmerName');
