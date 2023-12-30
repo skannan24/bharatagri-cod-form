@@ -309,6 +309,10 @@
   let addIconLabel = 'जोड़ें +';
   let addedBtnLabel = 'जोड़ा गया ✓';
 
+  let couponSavedLabel = 'आपकी बचत हुई';
+  let couponWithDiscountLabel = 'डिस्काउंट कूपन से';
+  let couponAppliedLabel = 'लागू हुआ!';
+
   if (lang === 'en') {
     // productHeader = 'Product';
     productHeader = 'Cash On Delivery';
@@ -350,6 +354,10 @@
     removeIconLabel = 'Remove';
     addIconLabel = 'Add +';
     addedBtnLabel = 'Added ✓';
+
+    couponSavedLabel = 'Saved';
+    couponWithDiscountLabel = 'with discount Coupon';
+    couponAppliedLabel = 'Applied!';
   }
 
   if (lang === 'mr') {
@@ -393,6 +401,10 @@
     removeIconLabel = 'हटाए';
     addIconLabel = 'जोड़ें +';
     addedBtnLabel = 'जोड़ा गया ✓';
+
+    couponSavedLabel = 'तुमची बचत झाली';
+    couponWithDiscountLabel = 'अधिक सूट मिळाली';
+    couponAppliedLabel = 'लागू झाला!';
   }
   document.getElementById('product-header-id').innerHTML = productHeader;
   document.getElementById('discount-header-id').innerHTML = discountHeader;
@@ -1129,9 +1141,9 @@
             // console.log('Wallet values: ', result);
             document.getElementById(couponCode).style.display = 'none';
             document.getElementById('ba-active-coupon').style.display = 'block';
-            document.getElementById('ba-cod-saved-amount').innerHTML = `Saved ₹${result?.checkout?.total_discount_amount?.replace('.00', '')}`;
-            document.getElementById('ba-cod-saved-amount-line2').innerHTML = 'with discount Coupon';
-            document.getElementById('ba-cod-applied-coupon-content').innerHTML = `${couponCode} Applied!`;
+            document.getElementById('ba-cod-saved-amount').innerHTML = `${couponSavedLabel} ₹${result?.checkout?.total_discount_amount?.replace('.00', '')}`;
+            document.getElementById('ba-cod-saved-amount-line2').innerHTML = couponWithDiscountLabel;
+            document.getElementById('ba-cod-applied-coupon-content').innerHTML = `${couponCode} ${couponAppliedLabel}`;
 
             document.getElementById('ba-price-details-discount-value').innerHTML = `-₹ ${result?.checkout?.total_discount_amount?.replace('.00', '')}`;
 
