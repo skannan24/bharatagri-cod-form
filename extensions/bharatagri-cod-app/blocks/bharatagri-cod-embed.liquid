@@ -456,9 +456,9 @@
 <script>
   function setBaItems() {
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
-    let items = baUpdateCart.items;
+    let items = baUpdateCart?.items;
 
-    let quantityFb = document.getElementsByClassName('quantity__input')[0].value;
+    let quantityFb = document.getElementsByClassName('quantity__input')[0]?.value;
     sendBaFbEvents('InitiateCheckout', {currency: "INR", value: Number(items[0]?.final_line_price)/100, 'num_items': Number(quantityFb)});
 
     document.getElementById('product-count-id').innerHTML = items?.length;
@@ -1579,6 +1579,7 @@
               'ba_phone_number': mobileValue
             });
             sendBaFbEvents('Purchase', {currency: "INR", value: createOrderTotalValue, num_items: createOrderLineItems?.length});
+            localStorage.setItem('BA_COD_FORM_NOTES_ATTRIBUTES', JSON.stringify(noteAttributesArray));
             document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
             window.open(result?.order?.order_status_url, '_self');
           });
@@ -1849,11 +1850,11 @@
   }
 
   function sendBaFbEvents(name, value) {
-    // fbq('track', 'Purchase', {currency: "INR", value: createOrderTotalValue});
-    value['content_ids'] = ['{{ product.id }}'];
-    value['content_name'] = '{{ product.title }}';
-    value['content_type'] = 'product_group';
     try {
+      // fbq('track', 'Purchase', {currency: "INR", value: createOrderTotalValue});
+      value['content_ids'] = ['{{ product.id }}'];
+      value['content_name'] = "{{ product.title }}";
+      value['content_type'] = 'product_group';
       fbq('track', name, value);
     } catch (error) {
       console.log('fbq error');
