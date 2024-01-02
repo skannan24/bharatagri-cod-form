@@ -1532,15 +1532,18 @@
             "zip": pincodeValue
           },
           "financial_status": "pending",
-          "transactions": [
-            {
-              "kind": "sale",
-              "status": "pending",
-              "amount": createOrderTotalValue,
-              "gateway": "Cash on Delivery (COD)",
-              "processing_method": "manual"
-            }
+          "payment_gateway_names": [
+            "Cash on Delivery (COD)"
           ],
+          // "transactions": [
+          //   {
+          //     "kind": "sale",
+          //     "status": "pending",
+          //     "amount": createOrderTotalValue,
+          //     "gateway": "Cash on Delivery (COD)",
+          //     "processing_method": "manual"
+          //   }
+          // ],
           "tags": "BharatAgri COD Form",
           "note_attributes": noteAttributesArray
         }
