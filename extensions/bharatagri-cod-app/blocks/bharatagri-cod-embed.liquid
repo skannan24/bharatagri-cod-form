@@ -119,6 +119,7 @@
                 <label id="baCodPincodeLabel" for="baCodPincode">Pincode</label>
               </div>
               <span id="baCodPincodeRequired" class="ba-mandatory-field-text pl-1">Enter pincode</span>
+              <span id="baCodPincodeServiceableRequired" class="ba-mandatory-field-text pl-1">Not a valid pincode</span>
             </div>
           </div>
 
@@ -267,6 +268,7 @@
     lang = 'hi';
   }
   let selectedBundles = [];
+  let serviceablePincodeFlag = true;
 
   // let productHeader = 'प्रोडक्ट';
   let productHeader = 'कैश ऑन डिलीवरी से खरीदें';
@@ -290,6 +292,7 @@
   let nameRequiredLabel = 'नाम';
   let mobileRequiredLabel = 'मोबाइल नंबर';
   let pincodeRequiredLabel = 'पिनकोड';
+  let pincodeServiceableRequiredLabel = 'डिलीवरी अनुपलब्ध';
   let stateRequiredLabel = 'राज्य';
   let districtRequiredLabel = 'जिला';
   let talukaRequiredLabel = 'तहसील';
@@ -336,6 +339,7 @@
     nameRequiredLabel = 'Enter Name';
     mobileRequiredLabel = 'Enter Mobile Number';
     pincodeRequiredLabel = 'Enter Pincode';
+    pincodeServiceableRequiredLabel = 'Non-serviceable pincode';
     stateRequiredLabel = 'Enter State';
     districtRequiredLabel = 'Enter District';
     talukaRequiredLabel = 'Enter Taluka';
@@ -383,6 +387,7 @@
     nameRequiredLabel = 'नाव';
     mobileRequiredLabel = 'मोबाइल नंबर';
     pincodeRequiredLabel = 'पिनकोड';
+    pincodeServiceableRequiredLabel = 'डिलीवरी अनुपलब्ध';
     stateRequiredLabel = 'राज्य';
     districtRequiredLabel = 'जिला';
     talukaRequiredLabel = 'तालुका';
@@ -428,6 +433,7 @@
   document.getElementById('baCodPincode').placeholder = pincodeLabel;
   document.getElementById('baCodPincodeLabel').innerHTML = pincodeLabel;
   document.getElementById('baCodPincodeRequired').innerHTML = pincodeRequiredLabel;
+  document.getElementById('baCodPincodeServiceableRequired').innerHTML = pincodeServiceableRequiredLabel;
 
   document.getElementById('talukaName').placeholder = talukaLabel;
   document.getElementById('talukaNameLabel').innerHTML = talukaLabel;
@@ -630,7 +636,7 @@
     // let bundleVariant = '43829369078003';
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
     let items = baUpdateCart.items;
-    let bundleVariant = items[0]?.id
+    let bundleVariant = items[0]?.id;
 
     fetch(`https://lcrks.leanagri.com/third_parties/shopify_cod_app/api/v1/cod-bundles/?variant_id=${bundleVariant}&lang=${lang}`, requestOptions)
       .then(response => {
@@ -1275,6 +1281,7 @@
     document.getElementById('farmerNameRequired').style.display = 'none';
     document.getElementById('farmerMobileRequired').style.display = 'none';
     document.getElementById('baCodPincodeRequired').style.display = 'none';
+    document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';
     document.getElementById('baCodStateSelectRequired').style.display = 'none';
     document.getElementById('baCodDistrictSelectRequired').style.display = 'none';
     document.getElementById('talukaNameRequired').style.display = 'none';
@@ -1495,21 +1502,12 @@
         }
       }
 
-      // draft product variant info test - draft order
-      // let testDraftVariant = {
-      //   'variant_id': 47264201310529,
-      //   'quantity': 1,
-      //   'properties': {},
-      // }
-      // createOrderLineItems.push(testDraftVariant);
-
       let baO2 = {
         "order": {
           "line_items":createOrderLineItems,
           "customer": {
             "first_name": nameValue,
           },
-          // "email": `+91${mobileValue}@bharatagri.co`,
           "phone": `+91${mobileValue}`,
           "shipping_address": {
             "first_name": nameValue,
@@ -1535,15 +1533,6 @@
           "payment_gateway_names": [
             "Cash on Delivery (COD)"
           ],
-          // "transactions": [
-          //   {
-          //     "kind": "sale",
-          //     "status": "pending",
-          //     "amount": createOrderTotalValue,
-          //     "gateway": "Cash on Delivery (COD)",
-          //     "processing_method": "manual"
-          //   }
-          // ],
           "tags": "BharatAgri COD Form",
           "note_attributes": noteAttributesArray
         }
@@ -1866,7 +1855,7 @@
 
   document.getElementById('baCodPincode').addEventListener('input', function () {
     if (this.value.length === 6) {
-
+      document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';
       loadBaLocation(this.value);
     }
   });
@@ -1911,6 +1900,20 @@
       }
     });
   }
+
+  // function checkPincodeCODAndServiceable(value) {
+  //   let pincodeVariantId = '43636516126963';
+  //   let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+  //   let items = baUpdateCart.items;
+  //   // let pincodeVariantId = items[0]?.id;
+  //   fetch(`https://lcrks.leanagri.com/third_parties/shopify_cod_app/api/v1/serviceability/?variant_id=${pincodeVariantId}&pincode=${value}`, {
+  //     method: 'GET',
+  //     headers: {'Content-Type': 'application/json'}
+  //   }).then(res => res.json())
+  //     .then(res => {
+  //       return (res?.data?.serviceable && res?.data?.cod_status);
+  //     });
+  // }
 
 </script>
 
