@@ -465,6 +465,7 @@
     let items = baUpdateCart?.items;
 
     let quantityFb = document.getElementsByClassName('quantity__input')[0]?.value;
+    sendBaFbEvents('AddToCart', {currency: "INR", value: Number(items[0]?.final_line_price)/100, 'num_items': Number(quantityFb)});
     sendBaFbEvents('InitiateCheckout', {currency: "INR", value: Number(items[0]?.final_line_price)/100, 'num_items': Number(quantityFb)});
 
     document.getElementById('product-count-id').innerHTML = items?.length;
