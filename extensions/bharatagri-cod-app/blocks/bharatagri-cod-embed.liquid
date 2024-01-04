@@ -266,9 +266,9 @@
 <script>
   let currentUrl1 = window.location.href;
   let lang = 'hi';
-  if (currentUrl1?.includes('.com/en')) {
+  if (currentUrl1.indexOf('.com/en') > -1) {
     lang = 'en';
-  } else if (currentUrl1?.includes('.com/mr')) {
+  } else if (currentUrl1.indexOf('.com/mr') > -1) {
     lang = 'mr';
   } else {
     lang = 'hi';
@@ -1728,11 +1728,11 @@
     let month = '';
     let currentUrl = window.location.href;
     currentUrl = currentUrl.toString();
-    if (currentUrl?.includes('.com/en')) {
+    if (currentUrl.indexOf('.com/en') > -1) {
       day = weekEn[dDate.getDay()];
       month = monthEn[dDate.getMonth()];
       document.getElementById('ba-cod-delivery-days-label').innerHTML = ' FREE Delivery';
-    } else if (currentUrl?.includes('.com/mr')) {
+    } else if (currentUrl.indexOf('.com/mr') > -1) {
       day = weekMr[dDate.getDay()];
       month = monthMr[dDate.getMonth()];
       document.getElementById('ba-cod-delivery-days-label').innerHTML = ' फ्री डिलिव्हरी';
@@ -1959,9 +1959,9 @@
 <script>
   let imgUrl = ''
   let currentUrlForTrustBadge = window.location.href;
-  if (currentUrlForTrustBadge?.includes('.com/en')) {
+  if (currentUrlForTrustBadge.indexOf('.com/en') > -1) {
     imgUrl = 'https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/ba_cod_trust_badge_en.png';
-  } else if (currentUrlForTrustBadge?.includes('.com/mr')) {
+  } else if (currentUrlForTrustBadge.indexOf('.com/mr') > -1) {
     imgUrl = 'https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/ba_cod_trust_badge_mr.png';
   } else {
     imgUrl = 'https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/ba_cod_trust_badge_hi.png';
