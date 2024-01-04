@@ -90,7 +90,7 @@
           <div class="row mt-3 pb-2">
             <div class="col-12">
               <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('name')" class="form-control ba-cod-input-field" id="farmerName" placeholder="Name"/>
+                <input onclick="onInputElementClick('name')" class="form-control ba-cod-input-field" id="farmerName" name="Name" placeholder="Name"/>
                 <label id="farmerNameLabel" for="farmerName">Name</label>
               </div>
               <span id="farmerNameRequired" class="ba-mandatory-field-text pl-1">Enter name</span>
@@ -100,14 +100,14 @@
           <div class="row mt-3 pb-2">
             <div style="display: none" class="col-6 pr-1">
               <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('alternate mobile')" class="form-control ba-cod-input-field" id="alternateMobile" type="text" maxlength="10" placeholder="Alternate Number"/>
+                <input onclick="onInputElementClick('alternate mobile')" class="form-control ba-cod-input-field" id="alternateMobile" type="text" maxlength="10" name="Alternate Number" placeholder="Alternate Number"/>
                 <label id="alternateMobileLabel" for="alternateMobile">Alternate Number</label>
               </div>
             </div>
             <div class="col-6 pr-1">
               <div class="form-group has-float-label mb-0">
                 <input onclick="onInputElementClick('mobile')" class="form-control ba-cod-input-field" id="farmerMobile"
-                       type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="10" placeholder="Mobile Number"/>
+                       type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="10" name="Mobile Number" placeholder="Mobile Number"/>
                 <label id="farmerMobileLabel" for="farmerMobile">Mobile Number</label>
               </div>
               <span id="farmerMobileRequired" class="ba-mandatory-field-text pl-1">Enter mobile number</span>
@@ -115,7 +115,7 @@
             <div class="col-6 pl-1">
               <div class="form-group has-float-label mb-0">
                 <input onclick="onInputElementClick('pincode')"  class="form-control ba-cod-input-field" id="baCodPincode"
-                       type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="6" placeholder="Pincode"/>
+                       type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="6" name="Pincode" placeholder="Pincode"/>
                 <label id="baCodPincodeLabel" for="baCodPincode">Pincode</label>
               </div>
               <span id="baCodPincodeRequired" class="ba-mandatory-field-text pl-1">Enter pincode</span>
@@ -154,14 +154,14 @@
           <div style="display: none" class="row mt-3 pb-2">
             <div class="col-6 pr-1">
               <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('taluka')" class="form-control ba-cod-input-field" id="talukaName" placeholder="Taluka"/>
+                <input onclick="onInputElementClick('taluka')" class="form-control ba-cod-input-field" id="talukaName" name="Taluka" placeholder="Taluka"/>
                 <label id="talukaNameLabel" for="talukaName">Taluka</label>
               </div>
               <span id="talukaNameRequired" class="ba-mandatory-field-text pl-1">Enter taluka</span>
             </div>
             <div class="col-6 pl-1">
               <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('village')" class="form-control ba-cod-input-field" id="villageName" placeholder="Village"/>
+                <input onclick="onInputElementClick('village')" class="form-control ba-cod-input-field" id="villageName" name="Village" placeholder="Village"/>
                 <label id="villageNameLabel" for="villageName">Village</label>
               </div>
               <span id="villageNameRequired" class="ba-mandatory-field-text pl-1">Enter village</span>
@@ -171,7 +171,7 @@
           <div class="row mt-3 pb-2">
             <div class="col-12">
               <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('address')" class="form-control ba-cod-full-width-input-field" id="baAddress" maxlength="150" placeholder="Address (ex : plot no, street name, road etc)"/>
+                <input onclick="onInputElementClick('address')" class="form-control ba-cod-full-width-input-field" id="baAddress" maxlength="150" name="Address" placeholder="Address (ex : plot no, street name, road etc)"/>
                 <label id="baAddressLabel" for="baAddress">Address (ex : plot no, street name, road etc)</label>
               </div>
               <span id="baAddressRequired" class="ba-mandatory-field-text pl-1">Enter address</span>
@@ -181,7 +181,7 @@
           <div class="row mt-3 pb-2">
             <div class="col-12">
               <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('landmark')" class="form-control ba-cod-full-width-input-field" id="baLandmark" maxlength="150" placeholder="Landmark (ex : near gopal mandir, school etc)"/>
+                <input onclick="onInputElementClick('landmark')" class="form-control ba-cod-full-width-input-field" id="baLandmark" maxlength="150" name="Landmark" placeholder="Landmark (ex : near gopal mandir, school etc)"/>
                 <label id="baLandmarkLabel" for="baLandmark">Landmark</label>
               </div>
               <span id="baLandmarkRequired" class="ba-mandatory-field-text pl-1">Enter landmark</span>
@@ -191,7 +191,7 @@
           <div style="display: none" class="row mt-3 pb-2">
             <div class="col-12">
               <div class="form-group has-float-label">
-                <input onclick="onInputElementClick('post office')" class="form-control ba-cod-full-width-input-field" id="baPostOffice" placeholder="Post Office (Optional)"/>
+                <input onclick="onInputElementClick('post office')" class="form-control ba-cod-full-width-input-field" id="baPostOffice" name="Post Office" placeholder="Post Office (Optional)"/>
                 <label id="baPostOfficeLabel" for="baPostOffice">Post Office</label>
               </div>
             </div>
@@ -269,6 +269,7 @@
   }
   let selectedBundles = [];
   let serviceablePincodeFlag = true;
+  let blacklistedPincodes = [];
 
   // let productHeader = 'प्रोडक्ट';
   let productHeader = 'कैश ऑन डिलीवरी से खरीदें';
@@ -545,6 +546,10 @@
     loadCouponCodes();
     resetCodFormFields();
     populatePriceDetailsCard();
+    if (blacklistedPincodes?.length === 0) {
+      // loadBlackListedPincodes();
+      console.log('pincodes');
+    }
   }
 
   function clearCartEmbed() {
@@ -626,6 +631,7 @@
     resetCodFormFields();
 
     selectedBundles = [];
+    serviceablePincodeFlag = true;
   }
 
   function loadBaProductBundles() {
@@ -1384,7 +1390,7 @@
       validationError = true;
     }
 
-    if (pincode?.value?.length !== 6 || !(pincode?.value?.match(numericalNumberRegex))) {
+    if (pincode?.value?.length !== 6 || !(pincode?.value?.match(numericalNumberRegex))  || pincode?.value[0] === "0") {
       pincode.classList.add('ba-mandatory-field-border');
       document.getElementById('baCodPincodeRequired').style.display = 'block';
       if (!validationError) {baScrollToId('baCodPincode');}
@@ -1657,7 +1663,7 @@
       document.getElementById('farmerMobileRequired').style.display = 'none';
     }
 
-    if (pincode?.value?.length === 6 && (pincode?.value?.match(numericalNumberRegex))) {
+    if (pincode?.value?.length === 6 && (pincode?.value?.match(numericalNumberRegex)) && pincode?.value[0] !== "0") {
       pincode.classList.remove('ba-mandatory-field-border');
       document.getElementById('baCodPincodeRequired').style.display = 'none';
     }
@@ -1901,21 +1907,24 @@
       }
     });
   }
+</script>
 
-  // function checkPincodeCODAndServiceable(value) {
-  //   let pincodeVariantId = '43636516126963';
-  //   let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
-  //   let items = baUpdateCart.items;
-  //   // let pincodeVariantId = items[0]?.id;
-  //   fetch(`https://lcrks.leanagri.com/third_parties/shopify_cod_app/api/v1/serviceability/?variant_id=${pincodeVariantId}&pincode=${value}`, {
-  //     method: 'GET',
-  //     headers: {'Content-Type': 'application/json'}
-  //   }).then(res => res.json())
-  //     .then(res => {
-  //       return (res?.data?.serviceable && res?.data?.cod_status);
-  //     });
-  // }
-
+<script>
+  // Blacklisted pincode api - will be called once when page is loaded
+  function loadBlackListedPincodes() {
+    fetch(`https://s3.ap-south-1.amazonaws.com/shopify-krushidukan-apis/prepaid_product/en/disabled/product_ids.json`, {
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'}
+    }).then(res => res.json())
+      .then(res => {
+        if (res?.data) {
+          blacklistedPincodes = res?.data;
+          console.log('blacklisted pincodes', blacklistedPincodes);
+        } else {
+          blacklistedPincodes = [];
+        }
+      });
+  }
 </script>
 
 <script>
