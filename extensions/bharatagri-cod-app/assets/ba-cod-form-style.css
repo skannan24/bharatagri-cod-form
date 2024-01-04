@@ -558,3 +558,18 @@
     transform: rotate(360deg);
   }
 }
+
+.ba-cod-quantity-selector {
+  display: flex;
+  align-items: center;
+}
+
+.ba-cod-quantity-input {
+  width: 40px;
+  text-align: center;
+  margin: 0 8px;
+}
+
+.ba-cod-quantity-button {
+  cursor: pointer;
+}
