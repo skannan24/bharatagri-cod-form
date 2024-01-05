@@ -469,17 +469,17 @@
 <script>
   function setBaItems() {
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
-    let items = baUpdateCart?.items;
+    let items = baUpdateCart.items;
 
-    let quantityFb = document.getElementsByClassName('quantity__input')[0]?.value;
-    sendBaFbEvents('AddToCart', {currency: "INR", value: Number(items[0]?.final_line_price)/100, 'num_items': Number(quantityFb)});
-    sendBaFbEvents('InitiateCheckout', {currency: "INR", value: Number(items[0]?.final_line_price)/100, 'num_items': Number(quantityFb)});
+    let quantityFb = document.getElementsByClassName('quantity__input')[0].value;
+    sendBaFbEvents('AddToCart', {currency: "INR", value: Number(items[0].final_line_price)/100, 'num_items': Number(quantityFb)});
+    sendBaFbEvents('InitiateCheckout', {currency: "INR", value: Number(items[0].final_line_price)/100, 'num_items': Number(quantityFb)});
 
-    document.getElementById('product-count-id').innerHTML = items?.length;
+    document.getElementById('product-count-id').innerHTML = items.length;
 
-    for (let i = 0; i < items?.length; i++) {
+    for (let i = 0; i < items.length; i++) {
       const parentContainer = document.getElementById('product-info-div');
-      parentContainer.replaceChildren();
+      replaceChildrenAlternative(parentContainer);
 
       document.getElementById('ba-product-info-div-loader').style.display = 'none';
 
@@ -497,7 +497,7 @@
 
       let productImage = document.createElement('img');
       productImage.className = "ba-cod-product-img";
-      productImage.src = items[i]?.image;
+      productImage.src = items[i].image;
       productImage.alt = 'product image';
       // productImage.loading = "lazy";
       productImageColDiv.appendChild(productImage);
@@ -513,12 +513,15 @@
 
       let productTitle = document.createElement('div');
       productTitle.className = "ba-cod-product-title";
-      productTitle.innerHTML = items[i]?.product_title?.length > 50 ? items[i]?.product_title?.slice(0,50) + '..' : items[i]?.product_title;
+      let productTitleValue = (items[i] && items[i].product_title) ? items[i].product_title : '';
+      productTitle.innerHTML = productTitleValue.length > 50 ? productTitleValue.slice(0, 50) + '..' : productTitleValue;
+
       productTitleColDiv.appendChild(productTitle);
 
       let productVariantTitle = document.createElement('div');
       productVariantTitle.className = "ba-cod-variant-info";
-      productVariantTitle.innerHTML = items[i]?.variant_title?.length > 25 ? items[i]?.variant_title?.slice(0,25) + '..' : items[i]?.variant_title;
+      let variantTitleValue = (items[i] && items[i].variant_title) ? items[i].variant_title : '';
+      productVariantTitle.innerHTML = variantTitleValue.length > 25 ? variantTitleValue.slice(0, 25) + '..' : variantTitleValue;
       productTitleColDiv.appendChild(productVariantTitle);
 
       let productPriceColDiv = document.createElement('div');
@@ -544,7 +547,8 @@
       let productSellingPrice = document.createElement('span');
       productSellingPrice.className = "ba-cod-selling-price";
       productSellingPrice.id = "ba-cod-main-product-price" + i;
-      productSellingPrice.innerHTML = items[i]?.final_line_price ? `₹ ${Number(items[i]?.final_line_price)/100}` : '0';
+      productSellingPrice.innerHTML = (items[i] && items[i].final_line_price) ? `₹ ${Number(items[i].final_line_price) / 100}` : '₹ 0';
+
       productPriceDiv.appendChild(productSellingPrice);
     }
 
@@ -552,7 +556,7 @@
     loadCouponCodes();
     resetCodFormFields();
     populatePriceDetailsCard();
-    if (blacklistedPincodes?.length === 0) {
+    if (!blacklistedPincodes || blacklistedPincodes.length === 0) {
       // loadBlackListedPincodes();
       console.log('pincodes');
     }
@@ -581,7 +585,7 @@
   function addCartDetailsEmbed() {
     let items = JSON.parse(localStorage.getItem('baCodCartStorage'));
 
-    if (items?.length > 0) {
+    if (items && items.length > 0) {
       fetch('/cart/add.js', {
         method: 'POST',
         headers: {
@@ -593,7 +597,7 @@
             console.log(res);
             let baBubbleIcon = document.getElementById('ba-cart-icon-value');
             if (baBubbleIcon) {
-              baBubbleIcon.innerHTML = res?.items?.length;
+              baBubbleIcon.innerHTML = (res && res.items) ? res.items.length : 0;
             }
           }
         );
@@ -605,19 +609,19 @@
 
     // resetting the main product cart values
     const parentContainer = document.getElementById('product-info-div');
-    parentContainer.replaceChildren();
+    replaceChildrenAlternative(parentContainer);
     document.getElementById('ba-product-info-div-loader').style.display = 'block';
 
     // resetting discount div card
     const discountDiv = document.getElementById('ba-cod-discount-div');
     const discountActiveDiv = document.getElementById('ba-active-coupon');
-    discountDiv.replaceChildren();
+    replaceChildrenAlternative(discountDiv);
     discountDiv.appendChild(discountActiveDiv);
     document.getElementById('ba-discount-coupon-div-loader').style.display = 'block';
 
     // resetting bundles values
     const bundlesDiv = document.getElementById('ba-cod-bundle-cards-div');
-    bundlesDiv.replaceChildren();
+    replaceChildrenAlternative(bundlesDiv);
 
     // resetting coupon discount apply loader
     document.getElementById('ba-cod-discount-loader').style.display = 'none';
@@ -649,14 +653,14 @@
     // let bundleVariant = '43829369078003';
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
     let items = baUpdateCart.items;
-    let bundleVariant = items[0]?.id;
+    let bundleVariant = items[0].id;
 
     fetch(`https://lcrks.leanagri.com/third_parties/shopify_cod_app/api/v1/cod-bundles/?variant_id=${bundleVariant}&lang=${lang}`, requestOptions)
       .then(response => {
         if (response.status === 200) {
           response.json().then(result => {
-            if (result?.data) {
-              setBaProductBundles(result?.data);
+            if (result && result.data) {
+              setBaProductBundles(result.data);
             } else {
               document.getElementById('ba-cod-bundle-div').style.display = 'none';
             }
@@ -673,34 +677,41 @@
 
   function setBaProductBundles(bundles) {
     const bundlesDiv = document.getElementById('ba-cod-bundle-cards-div');
-    bundlesDiv.replaceChildren();
+    replaceChildrenAlternative(bundlesDiv);
 
-    if (bundles?.length === 0) {
+    if (!bundles || bundles.length === 0) {
+      bundles = [];
       document.getElementById('ba-cod-bundle-div').style.display = 'none';
     } else {
-      bundles = bundles?.sort((a, b) => b?.priority_index - a?.priority_index);
+      bundles = bundles.sort((a, b) => b.priority_index - a.priority_index);
       document.getElementById('ba-cod-bundle-div').style.display = 'block';
     }
 
+
     let bundleImagePlaceholder = 'https://leanconnect.s3.ap-south-1.amazonaws.com/shopify-static-images/product-img-placeholder.png';
 
-    for (let i=0; i < bundles?.length; i++) {
-      let bundleProductTitle = bundles[i]?.secondary_product?.product?.title;
-      let bundleProductVariantTitle = bundles[i]?.secondary_product?.product?.variant_title;
-      let bundleProductPrice = bundles[i]?.secondary_product?.product?.selling_price;
-      let bundleProductDiscountPrice = bundles[i]?.price;
-      let bundleDiscountPercent = ((bundleProductPrice - bundleProductDiscountPrice)/bundleProductPrice) * 100;
-      bundleDiscountPercent = Math.floor(bundleDiscountPercent);
-      let bundleDiscountedAmount = bundleProductPrice - bundleProductDiscountPrice;
-
-      let bundleProductImage = bundleImagePlaceholder;
-      if (bundles[i]?.secondary_product?.product?.images[0]?.media_url) {
-        bundleProductImage = bundles[i]?.secondary_product?.product?.images[0]?.media_url;
+    for (let i=0; i < bundles.length; i++) {
+      const bundle = bundles[i] && bundles[i].secondary_product && bundles[i].secondary_product.product;
+      let bundleProductTitle = bundle && bundle.title;
+      let bundleProductVariantTitle = bundle && bundle.variant_title;
+      let bundleProductPrice = bundle && bundle.selling_price;
+      let bundleProductDiscountPrice = bundles[i] && bundles[i].price;
+      let bundleDiscountPercent;
+      if (bundleProductPrice !== undefined && bundleProductDiscountPrice !== undefined) {
+        bundleDiscountPercent = Math.floor(((bundleProductPrice - bundleProductDiscountPrice) / bundleProductPrice) * 100);
+      }
+      let bundleDiscountedAmount;
+      if (bundleProductPrice !== undefined && bundleProductDiscountPrice !== undefined) {
+        bundleDiscountedAmount = bundleProductPrice - bundleProductDiscountPrice;
       }
 
+      let bundleProductImage = bundleImagePlaceholder;
+      if (bundle && bundle.images && bundle.images[0] && bundle.images[0].media_url) {
+        bundleProductImage = bundle.images[0].media_url;
+      }
 
       let bundleCardColDiv = document.createElement('div');
-      bundleCardColDiv.id = 'baBundleCard' + bundles[i]?.id;
+      bundleCardColDiv.id = 'baBundleCard' + bundles[i].id;
       bundleCardColDiv.className = 'col-4 p-3 ba-cod-bundle-card mr-3';
       bundlesDiv.appendChild(bundleCardColDiv);
 
@@ -741,12 +752,19 @@
 
       let bundleCardProductTitle = document.createElement('div');
       bundleCardProductTitle.className = "ba-cod-bundle-title";
-      bundleCardProductTitle.innerHTML = bundleProductTitle?.length > 18 ? bundleProductTitle?.slice(0,18) + '..' : bundleProductTitle;
+      bundleCardProductTitle.innerHTML = (bundleProductTitle && bundleProductTitle.length > 18)
+        ? bundleProductTitle.slice(0, 18) + '..'
+        : (bundleProductTitle !== null && bundleProductTitle !== undefined) ? bundleProductTitle : '';
+
       bundleCardColDiv.appendChild(bundleCardProductTitle);
 
       let bundleCardProductVariantTitle = document.createElement('div');
       bundleCardProductVariantTitle.className = "ba-cod-bundle-title mt-1";
-      bundleCardProductVariantTitle.innerHTML = bundleProductVariantTitle.length > 18 ? bundleProductVariantTitle?.slice(0,18) + '..' : bundleProductVariantTitle;
+      bundleCardProductVariantTitle.innerHTML = (bundleProductVariantTitle && bundleProductVariantTitle.length > 18)
+        ? bundleProductVariantTitle.slice(0, 18) + '..'
+        : (bundleProductVariantTitle !== null && bundleProductVariantTitle !== undefined) ? bundleProductVariantTitle : '';
+
+
       bundleCardColDiv.appendChild(bundleCardProductVariantTitle);
 
       let bundleCardAddButtonDiv = document.createElement('div');
@@ -774,10 +792,16 @@
 
     sendBaCodGEvents('BA_bundle_cart_added', {
         'from_frag': currentUrl1,
-        'product_title': product?.secondary_product?.product?.title,
-        'productId': product?.secondary_product?.shopify_id,
-        'variantId': product?.secondary_product?.variant_id,
-        'selling_price': product?.price,
+      'product_title': (product && product.secondary_product && product.secondary_product.product)
+        ? product.secondary_product.product.title
+        : undefined,
+      'productId': (product && product.secondary_product)
+        ? product.secondary_product.shopify_id
+        : undefined,
+      'variantId': (product && product.secondary_product)
+        ? product.secondary_product.variant_id
+        : undefined,
+      'selling_price': product ? product.price : undefined,
     });
 
     bundleProductPush['selected'] = true;
@@ -785,20 +809,26 @@
     selectedBundles.push(bundleProductPush);
     let productCountHeader = Number(document.getElementById('product-count-id').innerHTML);
     document.getElementById('product-count-id').innerHTML = String(productCountHeader + 1);
-    let selectedBundlesIndex = selectedBundles?.length - 1;
+    let selectedBundlesIndex = selectedBundles.length - 1;
 
-    let bundleProductTitle = product?.secondary_product?.product?.title;
-    let bundleProductVariantTitle = product?.secondary_product?.product?.variant_title;
-    let bundleProductPrice = product?.secondary_product?.product?.selling_price;
-    let bundleProductDiscountPrice = product?.price;
+    let bundleProductTitle = (product && product.secondary_product && product.secondary_product.product)
+      ? product.secondary_product.product.title
+      : undefined;
+    let bundleProductVariantTitle = (product && product.secondary_product && product.secondary_product.product)
+      ? product.secondary_product.product.variant_title
+      : undefined;
+    let bundleProductPrice = (product && product.secondary_product && product.secondary_product.product)
+      ? product.secondary_product.product.selling_price
+      : undefined;
+    let bundleProductDiscountPrice = product ? product.price : undefined;
     let bundleDiscountPercent = ((bundleProductPrice - bundleProductDiscountPrice)/bundleProductPrice) * 100;
     bundleDiscountPercent = Math.floor(bundleDiscountPercent);
     let bundleDiscountedAmount = bundleProductPrice - bundleProductDiscountPrice;
 
     let bundleProductImage = 'https://leanconnect.s3.ap-south-1.amazonaws.com/shopify-static-images/product-img-placeholder.png';
 
-    if (product?.secondary_product?.product?.images[0]?.media_url) {
-      bundleProductImage = product?.secondary_product?.product?.images[0]?.media_url;
+    if (product.secondary_product.product.images[0] && product.secondary_product.product.images[0].media_urll) {
+      bundleProductImage = product.secondary_product.product.images[0].media_url;
     }
 
     let productMainDiv = document.createElement('div');
@@ -826,12 +856,17 @@
 
     let productTitle = document.createElement('div');
     productTitle.className = "ba-cod-product-title";
-    productTitle.innerHTML = bundleProductTitle?.length > 50 ? bundleProductTitle?.slice(0,50) + '..' : bundleProductTitle;
+    productTitle.innerHTML = (bundleProductTitle && bundleProductTitle.length > 50)
+      ? bundleProductTitle.slice(0, 50) + '..'
+      : (bundleProductTitle !== null && bundleProductTitle !== undefined) ? bundleProductTitle : '';
     productTitleColDiv.appendChild(productTitle);
 
     let productVariantTitle = document.createElement('div');
     productVariantTitle.className = "ba-cod-variant-info";
-    productVariantTitle.innerHTML = bundleProductVariantTitle.length > 25 ? bundleProductVariantTitle?.slice(0,25) + '..' : bundleProductVariantTitle;
+    productVariantTitle.innerHTML = (bundleProductVariantTitle && bundleProductVariantTitle.length > 25)
+      ? bundleProductVariantTitle.slice(0, 25) + '..'
+      : (bundleProductVariantTitle !== null && bundleProductVariantTitle !== undefined) ? bundleProductVariantTitle : '';
+
     productTitleColDiv.appendChild(productVariantTitle);
 
     // Remove icon to delete the product from cart
@@ -897,7 +932,9 @@
 
     let priceItemsCol1 = document.createElement('div');
     priceItemsCol1.className = 'col-9';
-    priceItemsCol1.innerHTML = bundleProductTitle?.length > 34 ? bundleProductTitle?.slice(0,34) + '..' : bundleProductTitle;
+    priceItemsCol1.innerHTML = (bundleProductTitle && bundleProductTitle.length > 34)
+      ? bundleProductTitle.slice(0, 34) + '..'
+      : (bundleProductTitle !== null && bundleProductTitle !== undefined) ? bundleProductTitle : '';
     priceItemsRow.appendChild(priceItemsCol1);
 
     let priceItemsCol2 = document.createElement('div');
@@ -907,7 +944,7 @@
 
     // Updating price details card
     let bundleOrderTotalValue = document.getElementById('ba-price-details-total-value').innerHTML;
-    bundleOrderTotalValue = bundleOrderTotalValue?.replace('₹ ', '');
+    bundleOrderTotalValue = bundleOrderTotalValue && bundleOrderTotalValue.replace('₹ ', '');
 
     bundleOrderTotalValue = Number(bundleOrderTotalValue) + bundleProductDiscountPrice;
     bundleOrderTotalValue = Number.isInteger(bundleOrderTotalValue) ? Number(bundleOrderTotalValue) : bundleOrderTotalValue.toFixed(2);
@@ -918,10 +955,16 @@
   function onBaProductBundleRemoveClick(index, productIndex) {
     sendBaCodGEvents('BA_bundle_cart_removal', {
       'from_frag': currentUrl1,
-      'product_title': selectedBundles[index]?.secondary_product?.product?.title,
-      'productId': selectedBundles[index]?.secondary_product?.shopify_id,
-      'variantId': selectedBundles[index]?.secondary_product?.variant_id,
-      'selling_price': selectedBundles[index]?.price,
+      'product_title': (selectedBundles[index] && selectedBundles[index].secondary_product && selectedBundles[index].secondary_product.product)
+        ? selectedBundles[index].secondary_product.product.title
+        : undefined,
+      'productId': (selectedBundles[index] && selectedBundles[index].secondary_product)
+        ? selectedBundles[index].secondary_product.shopify_id
+        : undefined,
+      'variantId': (selectedBundles[index] && selectedBundles[index].secondary_product)
+        ? selectedBundles[index].secondary_product.variant_id
+        : undefined,
+      'selling_price': selectedBundles[index].price,
     });
     selectedBundles[index].selected = false;
 
@@ -938,9 +981,9 @@
 
     // Updating price details card
     let bundleOrderTotalValue = document.getElementById('ba-price-details-total-value').innerHTML;
-    bundleOrderTotalValue = bundleOrderTotalValue?.replace('₹ ', '');
+    bundleOrderTotalValue = bundleOrderTotalValue && bundleOrderTotalValue.replace('₹ ', '');
 
-    bundleOrderTotalValue = Number(bundleOrderTotalValue) - selectedBundles[index]?.price;
+    bundleOrderTotalValue = Number(bundleOrderTotalValue) - selectedBundles[index].price;
     bundleOrderTotalValue = Number.isInteger(bundleOrderTotalValue) ? Number(bundleOrderTotalValue) : bundleOrderTotalValue.toFixed(2);
     document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${bundleOrderTotalValue}`;
     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${bundleOrderTotalValue}`;
@@ -948,9 +991,11 @@
 
   function getBundlesTotalPrice() {
     let bundleCurrentPrice = 0;
-    for (let i=0; i<selectedBundles?.length; i++) {
-      if (selectedBundles[i]?.enabled && selectedBundles[i]?.selected) {
-        bundleCurrentPrice = bundleCurrentPrice + selectedBundles[i]?.price;
+    if (selectedBundles) {
+      for (let i=0; i<selectedBundles.length; i++) {
+        if (selectedBundles[i].enabled && selectedBundles[i].selected) {
+          bundleCurrentPrice = bundleCurrentPrice + selectedBundles[i].price;
+        }
       }
     }
     return bundleCurrentPrice;
@@ -958,9 +1003,11 @@
 
   function getBundlesActualTotalPriceWithoutDiscount() {
     let bundleFullPrice = 0;
-    for (let i=0; i<selectedBundles?.length; i++) {
-      if (selectedBundles[i]?.enabled && selectedBundles[i]?.selected) {
-        bundleFullPrice = bundleFullPrice + selectedBundles[i]?.secondary_product?.product?.selling_price;
+    if (selectedBundles) {
+      for (let i=0; i<selectedBundles.length; i++) {
+        if (selectedBundles[i].enabled && selectedBundles[i].selected) {
+          bundleFullPrice = bundleFullPrice + selectedBundles[i].secondary_product.product.selling_price;
+        }
       }
     }
     return bundleFullPrice;
@@ -976,7 +1023,9 @@
       .then(response => {
         if (response.status === 200) {
           response.json().then(result => {
-            setDiscountCoupons(result?.data);
+            if (result.data) {
+              setDiscountCoupons(result.data);
+            }
           });
         } else {
           console.log('Unable to fetch discount coupons');
@@ -994,55 +1043,55 @@
     const discountDiv = document.getElementById('ba-cod-discount-div');
     const discountActiveDiv = document.getElementById('ba-active-coupon');
 
-    discountDiv.replaceChildren();
+    replaceChildrenAlternative(discountDiv);
     discountDiv.appendChild(discountActiveDiv);
     document.getElementById('ba-discount-coupon-div-loader').style.display = 'none';
 
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
-    let discountCouponsCartItemTotalValue = Number(baUpdateCart?.total_price/100);
+    let discountCouponsCartItemTotalValue = Number(baUpdateCart.total_price/100);
 
     let finalCodes = [];
 
-    for (let i = 0; i < discounts?.length; i++) {
+    for (let i = 0; i < discounts.length; i++) {
       let today = new Date();
       today.setHours(0,0,0);
       let endDate = null;
-      if (discounts[i]?.ends_at !== 'None') {
-        endDate = new Date(discounts[i]?.ends_at);
+      if (discounts[i].ends_at !== 'None') {
+        endDate = new Date(discounts[i].ends_at);
       }
-      if ((endDate >= today || endDate === null) && discountCouponsCartItemTotalValue > discounts[i]?.min_amount_rule ) {
+      if ((endDate >= today || endDate === null) && discountCouponsCartItemTotalValue > discounts[i].min_amount_rule ) {
         finalCodes.push(discounts[i]);
       }
     }
 
-    if (finalCodes?.length === 0) {
+    if (finalCodes.length === 0) {
       document.getElementById('ba-discount-coupon-div').style.display = 'none';
       document.getElementById('ba-discount-div-separator').setAttribute('style', 'display:none !important');
     } else {
-      finalCodes = finalCodes?.sort((a, b) => b?.priority_index - a?.priority_index);
+      finalCodes = finalCodes.sort((a, b) => b.priority_index - a.priority_index);
       document.getElementById('ba-discount-coupon-div').style.display = 'block';
       document.getElementById('ba-discount-div-separator').setAttribute('style', 'display:block !important');
     }
 
-    for (let i=0; i < finalCodes?.length; i++) {
+    for (let i=0; i < finalCodes.length; i++) {
       let coupon_title_translation = '';
       let coupon_sub_title_translation = '';
       if (lang === 'en') {
-        coupon_title_translation = finalCodes[i]?.coupon_title_en;
-        coupon_sub_title_translation = finalCodes[i]?.coupon_sub_title_en;
+        coupon_title_translation = finalCodes[i].coupon_title_en;
+        coupon_sub_title_translation = finalCodes[i].coupon_sub_title_en;
       } else if (lang === 'mr') {
-        coupon_title_translation = finalCodes[i]?.coupon_title_mr;
-        coupon_sub_title_translation = finalCodes[i]?.coupon_sub_title_mr;
+        coupon_title_translation = finalCodes[i].coupon_title_mr;
+        coupon_sub_title_translation = finalCodes[i].coupon_sub_title_mr;
       } else {
-        coupon_title_translation = finalCodes[i]?.coupon_title_hi;
-        coupon_sub_title_translation = finalCodes[i]?.coupon_sub_title_hi;
+        coupon_title_translation = finalCodes[i].coupon_title_hi;
+        coupon_sub_title_translation = finalCodes[i].coupon_sub_title_hi;
       }
 
       console.log(coupon_title_translation);
       console.log(coupon_sub_title_translation);
 
       let discountCardColDiv = document.createElement('div');
-      discountCardColDiv.id = finalCodes[i]?.title;
+      discountCardColDiv.id = finalCodes[i].title;
       discountCardColDiv.className = 'col-auto p-3 ba-cod-discount-card mr-2';
       discountDiv.appendChild(discountCardColDiv);
 
@@ -1066,22 +1115,22 @@
 
       let discountMainTitle = document.createElement('div');
       discountMainTitle.className = 'col-auto ba-cod-discount-coupon';
-      discountMainTitle.innerHTML = finalCodes[i]?.title;
+      discountMainTitle.innerHTML = finalCodes[i].title;
       discountInfoApplyDiv.appendChild(discountMainTitle);
 
       let discountApplyBtn = document.createElement('div');
       discountApplyBtn.className = 'col-auto ba-cod-discount-apply-btn';
       discountApplyBtn.innerHTML = applyCouponBtn;
-      discountApplyBtn.addEventListener("click", function(){ applyCouponCodes(finalCodes[i]?.title, true); });
+      discountApplyBtn.addEventListener("click", function(){ applyCouponCodes(finalCodes[i].title, true); });
       discountInfoApplyDiv.appendChild(discountApplyBtn);
 
       // Discount coupon card click at card level
-      discountCardColDiv.addEventListener("click", function(){ applyCouponCodes(finalCodes[i]?.title, true); });
+      discountCardColDiv.addEventListener("click", function(){ applyCouponCodes(finalCodes[i].title, true); });
     }
 
     // applying first discount code
-    if (finalCodes?.length > 0) {
-      applyCouponCodes(finalCodes[0]?.title, false);
+    if (finalCodes.length > 0) {
+      applyCouponCodes(finalCodes[0].title, false);
     }
   }
 </script>
@@ -1109,8 +1158,8 @@
 
      // Resetting total amount with the cart and bundles
      let bundleCartOrderTotalValue = getBundlesTotalPrice();
-     let priceDetailsTotalValueWithoutBundle = Number(baUpdateCart?.total_price/100);
-     let priceDetailsTotalValue = Number(baUpdateCart?.total_price/100);
+     let priceDetailsTotalValueWithoutBundle = Number(baUpdateCart.total_price/100);
+     let priceDetailsTotalValue = Number(baUpdateCart.total_price/100);
      priceDetailsTotalValue = priceDetailsTotalValue + bundleCartOrderTotalValue;
 
      sendBaCodGEvents('BA_cart_cc_clk', {
@@ -1134,8 +1183,8 @@
        activeCouponCardEl.style.display = 'none';
      }
 
-     for (let i = 0; i < items?.length; i++) {
-       let variant = {'variant_id': items[i]?.variant_id, 'quantity': items[i]?.quantity, 'properties': {}};
+     for (let i = 0; i < items.length; i++) {
+       let variant = {'variant_id': items[i].variant_id, 'quantity': items[i].quantity, 'properties': {}};
        lineItems.push(variant);
      }
 
@@ -1157,18 +1206,18 @@
     }).then(response => {
       if (response.status === 201) {
         response.json().then(result => {
-          if (result?.checkout?.applied_discount?.applicable) {
+          if (result.checkout.applied_discount.applicable) {
             // console.log('Wallet values: ', result);
             document.getElementById(couponCode).style.display = 'none';
             document.getElementById('ba-active-coupon').style.display = 'block';
-            document.getElementById('ba-cod-saved-amount').innerHTML = `${couponSavedLabel} ₹${result?.checkout?.total_discount_amount?.replace('.00', '')}`;
+            document.getElementById('ba-cod-saved-amount').innerHTML = `${couponSavedLabel} ₹${result.checkout.total_discount_amount.replace('.00', '')}`;
             document.getElementById('ba-cod-saved-amount-line2').innerHTML = couponWithDiscountLabel;
             document.getElementById('ba-cod-applied-coupon-content').innerHTML = `${couponCode} ${couponAppliedLabel}`;
 
-            document.getElementById('ba-price-details-discount-value').innerHTML = `-₹ ${result?.checkout?.total_discount_amount?.replace('.00', '')}`;
+            document.getElementById('ba-price-details-discount-value').innerHTML = `-₹ ${result.checkout.total_discount_amount.replace('.00', '')}`;
 
             bundleCartOrderTotalValue = getBundlesTotalPrice();
-            let priceDetailsWalletTotalValue = Number(result?.checkout?.total_price?.replace('.00', ''));
+            let priceDetailsWalletTotalValue = Number(result.checkout.total_price.replace('.00', ''));
             priceDetailsWalletTotalValue = priceDetailsWalletTotalValue + bundleCartOrderTotalValue;
 
             document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsWalletTotalValue}`;
@@ -1222,7 +1271,7 @@
     }
   }).then(response => {
     response.json().then( result => {
-      stateList = result?.data;
+      stateList = result.data;
       setStates();
     });
   }).catch(error => {
@@ -1231,16 +1280,16 @@
 
   function setStates() {
     const stateDiv = document.getElementById('baCodStateOptions');
-    stateDiv.replaceChildren();
+    replaceChildrenAlternative(stateDiv);
 
-    for (let i=0; i < stateList?.length; i++) {
-      let stateName = lang === 'en' ? stateList[i]?.name_en : ( lang === 'mr' ? stateList[i]?.name_mr : stateList[i]?.name_hi);
+    for (let i=0; i < stateList.length; i++) {
+      let stateName = lang === 'en' ? stateList[i].name_en : ( lang === 'mr' ? stateList[i].name_mr : stateList[i].name_hi);
 
       let stateOptionsBtn = document.createElement('button');
       stateOptionsBtn.className = 'dropdown-item';
       stateOptionsBtn.type = 'button';
       stateOptionsBtn.innerHTML = stateName;
-      stateOptionsBtn.addEventListener("click", function(){ onStateClick(stateList[i]?.id, stateName, stateList[i]?.name_en); });
+      stateOptionsBtn.addEventListener("click", function(){ onStateClick(stateList[i].id, stateName, stateList[i].name_en); });
       stateDiv.appendChild(stateOptionsBtn);
     }
   }
@@ -1304,7 +1353,7 @@
   }
 
   function onStateClick(id, name, nameEn) {
-    document.getElementById('baCodStateSelect').innerHTML = name?.length > 18 ? name?.slice(0,18) + '..' : name;
+    document.getElementById('baCodStateSelect').innerHTML = name.length > 18 ? name.slice(0,18) + '..' : name;
     document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
     stateId = id;
     stateName = name;
@@ -1319,7 +1368,7 @@
     districtId = id;
     districtName = name;
     districtNameEn = nameEn;
-    document.getElementById('baCodDistrictSelectLabel').innerHTML = name?.length > 18 ? name?.slice(0,18) + '..' : name;
+    document.getElementById('baCodDistrictSelectLabel').innerHTML = name.length > 18 ? name.slice(0,18) + '..' : name;
   }
 
   function loadDistricts(stateId) {
@@ -1333,7 +1382,7 @@
         if (response.status === 200) {
           response.json().then(result => {
             document.getElementById('ba-cod-district-loader').style.display = 'none';
-            setDistricts(result?.data);
+            setDistricts(result.data);
           });
         } else {
           console.log('Unable to fetch district list');
@@ -1347,16 +1396,23 @@
 
   function setDistricts(districts) {
     const districtDiv = document.getElementById('baCodDistrictOptions');
-    districtDiv.replaceChildren();
+    replaceChildrenAlternative(districtDiv);
 
-    for (let i=0; i < districts?.length; i++) {
-      let districtName = lang === 'en' ? districts[i]?.name_en : ( lang === 'mr' ? districts[i]?.name_mr : districts[i]?.name_hi);
+    for (let i=0; i < districts.length; i++) {
+      let districtName;
+      if (lang === 'en') {
+        districtName = districts[i] ? districts[i].name_en : undefined;
+      } else if (lang === 'mr') {
+        districtName = districts[i] ? districts[i].name_mr : undefined;
+      } else {
+        districtName = districts[i] ? districts[i].name_hi : undefined;
+      }
 
       let districtOptionsBtn = document.createElement('button');
       districtOptionsBtn.className = 'dropdown-item';
       districtOptionsBtn.type = 'button';
       districtOptionsBtn.innerHTML = districtName;
-      districtOptionsBtn.addEventListener("click", function(){ onDistrictClick(stateList[i]?.id, districtName, districts[i]?.name_en); });
+      districtOptionsBtn.addEventListener("click", function(){ onDistrictClick(stateList[i].id, districtName, districts[i].name_en); });
       districtDiv.appendChild(districtOptionsBtn);
     }
   }
@@ -1389,14 +1445,14 @@
       baScrollToId('farmerName');
     }
 
-    if (mobile?.value?.length !== 10 || !(mobile?.value?.match(numericalNumberRegex))) {
+    if (!mobile || !mobile.value || mobile.value.length !== 10 || !mobile.value.match(numericalNumberRegex)) {
       mobile.classList.add('ba-mandatory-field-border');
       document.getElementById('farmerMobileRequired').style.display = 'block';
       if (!validationError) {baScrollToId('farmerMobile');}
       validationError = true;
     }
 
-    if (pincode?.value?.length !== 6 || !(pincode?.value?.match(numericalNumberRegex))  || pincode?.value[0] === "0") {
+    if (!pincode || !pincode.value || pincode.value.length !== 6 || !pincode.value.match(numericalNumberRegex) || pincode.value[0] === "0") {
       pincode.classList.add('ba-mandatory-field-border');
       document.getElementById('baCodPincodeRequired').style.display = 'block';
       if (!validationError) {baScrollToId('baCodPincode');}
@@ -1446,28 +1502,28 @@
     // }
 
     if (!validationError) {
-      let nameValue = name?.value;
-      let mobileValue = mobile?.value;
-      let alternateMobileValue = alternateMobile?.value ? alternateMobile?.value : '';
-      let  pincodeValue = pincode?.value;
+      let nameValue = name.value;
+      let mobileValue = mobile.value;
+      let alternateMobileValue = alternateMobile.value ? alternateMobile.value : '';
+      let  pincodeValue = pincode.value;
       let stateValue = state;
       let districtValue = district;
-      let talukaValue = taluka?.value ? taluka?.value : '';
-      let villageValue = village?.value ? village?.value : '';
-      let addressValue = address?.value;
-      let landmarkValue = landmark?.value ? landmark?.value : '';
-      let postOfficeValue = postOffice?.value ? postOffice?.value : '';
+      let talukaValue = taluka.value ? taluka.value : '';
+      let villageValue = village.value ? village.value : '';
+      let addressValue = address.value;
+      let landmarkValue = landmark.value ? landmark.value : '';
+      let postOfficeValue = postOffice.value ? postOffice.value : '';
 
       let baOrder = {
-        name: name?.value,
-        mobile: mobile?.value,
-        alternateMobile: alternateMobile?.value ? alternateMobile?.value : '',
-        pincode: pincode?.value,
+        name: name.value,
+        mobile: mobile.value,
+        alternateMobile: alternateMobile.value ? alternateMobile.value : '',
+        pincode: pincode.value,
         state: state,
         district: district,
         taluka: talukaValue,
         village: villageValue,
-        address: address?.value,
+        address: address.value,
         landmark: landmarkValue,
         postOffice: postOfficeValue
       }
@@ -1480,7 +1536,7 @@
       }
 
       let createOrderDiscount = document.getElementById('ba-price-details-discount-value').innerHTML;
-      createOrderDiscount = createOrderDiscount?.replace('-₹ ', '');
+      createOrderDiscount = createOrderDiscount.replace('-₹ ', '');
 
       // Calculating total amount with the cart and bundles for create order
       let createCartBundleOrderTotalValue = getBundlesActualTotalPriceWithoutDiscount();
@@ -1489,7 +1545,7 @@
       let createCartBundleTotalDiscount = 0;
 
       let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
-      let createOrderCartItemTotalValue = Number(baUpdateCart?.total_price/100);
+      let createOrderCartItemTotalValue = Number(baUpdateCart.total_price/100);
       createCartFinalTotalValue = createCartBundleOrderTotalValue + createOrderCartItemTotalValue;
       let createOrderTotalValue = createCartFinalTotalValue;
       createCartBundleTotalDiscount = createCartBundleOrderTotalValue - createCartBundleOrderTotalDiscountedValue;
@@ -1503,14 +1559,14 @@
       let createOrderItems = baUpdateCartCreateOrder.items;
       let createOrderLineItems = [];
 
-      for (let i = 0; i < createOrderItems?.length; i++) {
-        let variant = {'variant_id': createOrderItems[i]?.variant_id, 'quantity': createOrderItems[i]?.quantity, 'properties': {}};
+      for (let i = 0; i < createOrderItems.length; i++) {
+        let variant = {'variant_id': createOrderItems[i].variant_id, 'quantity': createOrderItems[i].quantity, 'properties': {}};
         createOrderLineItems.push(variant);
       }
 
-      for (let i = 0; i < selectedBundles?.length; i++) {
-        if (selectedBundles[i]?.enabled && selectedBundles[i]?.selected) {
-          let variant = {'variant_id': selectedBundles[i]?.secondary_product?.variant_id, 'quantity': 1, 'properties': {}};
+      for (let i = 0; i < selectedBundles.length; i++) {
+        if (selectedBundles[i].enabled && selectedBundles[i].selected) {
+          let variant = {'variant_id': selectedBundles[i].secondary_product.variant_id, 'quantity': 1, 'properties': {}};
           createOrderLineItems.push(variant);
         }
       }
@@ -1583,10 +1639,10 @@
               'order_value': createOrderTotalValue,
               'ba_phone_number': mobileValue
             });
-            sendBaFbEvents('Purchase', {currency: "INR", value: createOrderTotalValue, num_items: createOrderLineItems?.length});
+            sendBaFbEvents('Purchase', {currency: "INR", value: createOrderTotalValue, num_items: createOrderLineItems.length});
             localStorage.setItem('BA_COD_FORM_NOTES_ATTRIBUTES', JSON.stringify(noteAttributesArray));
             document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
-            window.open(result?.order?.order_status_url, '_self');
+            window.open(result.order.order_status_url, '_self');
           });
         } else {
           document.getElementById('ba-cod-create-order-button').disabled = false;
@@ -1664,12 +1720,12 @@
       document.getElementById('farmerNameRequired').style.display = 'none';
     }
 
-    if (mobile?.value?.length === 10 && (mobile?.value?.match(numericalNumberRegex))) {
+    if (mobile && mobile.value && mobile.value.length === 10 && mobile.value.match(numericalNumberRegex)) {
       mobile.classList.remove('ba-mandatory-field-border');
       document.getElementById('farmerMobileRequired').style.display = 'none';
     }
 
-    if (pincode?.value?.length === 6 && (pincode?.value?.match(numericalNumberRegex)) && pincode?.value[0] !== "0") {
+    if (pincode && pincode.value && pincode.value.length === 6 && pincode.value.match(numericalNumberRegex) && pincode.value[0] !== "0") {
       pincode.classList.remove('ba-mandatory-field-border');
       document.getElementById('baCodPincodeRequired').style.display = 'none';
     }
@@ -1751,26 +1807,26 @@
     let items = baUpdateCart.items;
 
     const priceParentContainer = document.getElementById('ba-cod-price-details-content');
-    priceParentContainer.replaceChildren();
+    replaceChildrenAlternative(priceParentContainer);
 
     let priceItemsMainDiv = document.createElement('div');
     priceItemsMainDiv.id = 'ba-cod-price-details-items';
     document.getElementById('ba-cod-price-details-content').appendChild(priceItemsMainDiv);
 
-    for (let i = 0; i < items?.length; i++) {
+    for (let i = 0; i < items.length; i++) {
       let priceItemsRow = document.createElement('div');
       priceItemsRow.className = 'row mt-2 pb-2 align-items-center ba-cod-price-details-items';
       priceItemsMainDiv.appendChild(priceItemsRow);
 
       let priceItemsCol1 = document.createElement('div');
       priceItemsCol1.className = 'col-9';
-      priceItemsCol1.innerHTML = items[i]?.product_title?.length > 34 ? items[i]?.product_title?.slice(0,34) + '..' : items[i]?.product_title;
+      priceItemsCol1.innerHTML = items[i].product_title.length > 34 ? items[i].product_title.slice(0,34) + '..' : items[i].product_title;
       priceItemsRow.appendChild(priceItemsCol1);
 
       let priceItemsCol2 = document.createElement('div');
       priceItemsCol2.className = 'col-3 text-right';
       priceItemsCol2.id = 'ba-cod-product-price' + i;
-      priceItemsCol2.innerHTML = items[i]?.final_line_price ? `₹ ${Number(items[i]?.final_line_price)/100}` : '0';
+      priceItemsCol2.innerHTML = items[i].final_line_price ? `₹ ${Number(items[i].final_line_price)/100}` : '0';
       priceItemsRow.appendChild(priceItemsCol2);
     }
 
@@ -1816,19 +1872,19 @@
 
     let priceItemsTotalCol2 = document.createElement('div');
     priceItemsTotalCol2.className = 'col-3 text-right';
-    priceItemsTotalCol2.innerHTML = `₹ ${baUpdateCart?.total_price/100}`;
+    priceItemsTotalCol2.innerHTML = `₹ ${baUpdateCart.total_price/100}`;
     priceItemsTotalCol2.id = 'ba-price-details-total-value';
     priceItemsTotalDiv.appendChild(priceItemsTotalCol2);
 
     // Setting price value on the BA COD place order button
-    document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${baUpdateCart?.total_price/100}`;
+    document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${baUpdateCart.total_price/100}`;
   }
 </script>
 
 <script>
   function onInputElementClick(fieldName) {
     let mobileValue = document.getElementById('farmerMobile').value;
-    if (mobileValue && mobileValue?.length === 10) {
+    if (mobileValue && mobileValue.length === 10) {
       sendBaCodGEvents('BA_cart_phn', {
         'from_frag': currentUrl1,
         'ba_field_name': fieldName,
@@ -1837,7 +1893,7 @@
     }
     if (fieldName === 'name' || fieldName === 'mobile') {
       let cartTotalValue = document.getElementById('ba-price-details-total-value').innerHTML;
-      cartTotalValue = cartTotalValue?.replace('₹ ', '');
+      cartTotalValue = cartTotalValue.replace('₹ ', '');
       sendBaFbEvents('AddPaymentInfo', {currency: "INR", value: Number(cartTotalValue)});
     }
     sendBaCodGEvents('BA_address_clk', {
@@ -1874,12 +1930,12 @@
   });
 
   function loadBaLocation(value) {
-    if (value?.length === 6) {
+    if (value.length === 6) {
       fetch(`https://s3.ap-south-1.amazonaws.com/shopify-krushidukan-apis/pincode_mapping/en/pincode/${value}/pincode.json`)
         .then(response => {
           if (response.status === 200) {
             response.json().then( result => {
-              if (result?.data) {setPincodeLocation(result?.data);}
+              if (result.data) {setPincodeLocation(result.data);}
             });
           } else {
             resetTalukaAndVillage();
@@ -1893,18 +1949,18 @@
 
   function setPincodeLocation(data) {
     resetLocationFields();
-    const updateElement = (elementId, dataItem) => {
-      if (dataItem?.id && dataItem?.name) {
-        document.getElementById(elementId).value = dataItem[langKey] || dataItem.name;
-      }
-    };
+    // const updateElement = (elementId, dataItem) => {
+    //   if (dataItem?.id && dataItem?.name) {
+    //     document.getElementById(elementId).value = dataItem[langKey] || dataItem.name;
+    //   }
+    // };
     const langKey = `name_${lang}`;
     // commented code to update taluka and village values
     // updateElement('talukaName', data?.taluka);
     // updateElement('villageName', data?.village);
 
     ['state', 'district'].forEach((type) => {
-      const dataItem = data?.[type];
+      const dataItem = data[type];
       if (dataItem) {
         let name = dataItem[langKey] || dataItem.name;
         type === 'state'
@@ -1923,8 +1979,8 @@
       headers: {'Content-Type': 'application/json'}
     }).then(res => res.json())
       .then(res => {
-        if (res?.data) {
-          blacklistedPincodes = res?.data;
+        if (res.data) {
+          blacklistedPincodes = res.data;
           console.log('blacklisted pincodes', blacklistedPincodes);
         } else {
           blacklistedPincodes = [];
@@ -1934,6 +1990,12 @@
 </script>
 
 <script>
+  function replaceChildrenAlternative(parentNode) {
+    while (parentNode.firstChild) {
+      parentNode.removeChild(parentNode.firstChild);
+    }
+  }
+
   function incrementQuantity() {
     var quantityInput = document.getElementById('ba-cod-quantity');
     var currentQuantity = parseInt(quantityInput.value, 10);
@@ -1980,6 +2042,11 @@
   });
 
   window.addEventListener('visibilitychange', () => {
+    let modalOpen = document.body.classList.contains('modal-open');
+
+    if (modalOpen) {
+      document.getElementById('baCodFormClose').click();
+    }
     document.getElementById('ba-cod-form-overlay-loader').style.display = 'none';
   });
 </script>
