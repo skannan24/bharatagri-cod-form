@@ -557,8 +557,7 @@
     resetCodFormFields();
     populatePriceDetailsCard();
     if (!blacklistedPincodes || blacklistedPincodes.length === 0) {
-      // loadBlackListedPincodes();
-      console.log('pincodes');
+      loadBlackListedPincodes();
     }
   }
 
@@ -827,7 +826,7 @@
 
     let bundleProductImage = 'https://leanconnect.s3.ap-south-1.amazonaws.com/shopify-static-images/product-img-placeholder.png';
 
-    if (product.secondary_product.product.images[0] && product.secondary_product.product.images[0].media_urll) {
+    if (product.secondary_product.product.images[0] && product.secondary_product.product.images[0].media_url) {
       bundleProductImage = product.secondary_product.product.images[0].media_url;
     }
 
@@ -1457,6 +1456,11 @@
       document.getElementById('baCodPincodeRequired').style.display = 'block';
       if (!validationError) {baScrollToId('baCodPincode');}
       validationError = true;
+    } else if (String(blacklistedPincodes).indexOf(pincode.value) > -1) {
+      pincode.classList.add('ba-mandatory-field-border');
+      document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
+      if (!validationError) {baScrollToId('baCodPincode');}
+      validationError = true;
     }
 
     if (!state) {
@@ -1726,8 +1730,11 @@
     }
 
     if (pincode && pincode.value && pincode.value.length === 6 && pincode.value.match(numericalNumberRegex) && pincode.value[0] !== "0") {
-      pincode.classList.remove('ba-mandatory-field-border');
       document.getElementById('baCodPincodeRequired').style.display = 'none';
+      if (String(blacklistedPincodes).indexOf(pincode.value) === -1) {
+        pincode.classList.remove('ba-mandatory-field-border');
+        document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';
+      }
     }
 
     if (state) {
@@ -1926,6 +1933,7 @@
     if (this.value.length === 6) {
       document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';
       loadBaLocation(this.value);
+      checkPincodeServiceability(this.value);
     }
   });
 
@@ -1969,18 +1977,25 @@
       }
     });
   }
+
+  function checkPincodeServiceability(value) {
+    if (String(blacklistedPincodes).indexOf(value) > -1) {
+      document.getElementById('baCodPincode').classList.add('ba-mandatory-field-border');
+      document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
+    }
+  }
 </script>
 
 <script>
   // Blacklisted pincode api - will be called once when page is loaded
   function loadBlackListedPincodes() {
-    fetch(`https://s3.ap-south-1.amazonaws.com/shopify-krushidukan-apis/prepaid_product/en/disabled/product_ids.json`, {
+    fetch(`https://s3.ap-south-1.amazonaws.com/shopify-krushidukan-apis/blacklisted_pincodes/en/pincodes/blacklisted.json`, {
       method: 'GET',
       headers: {'Content-Type': 'application/json'}
     }).then(res => res.json())
       .then(res => {
-        if (res.data) {
-          blacklistedPincodes = res.data;
+        if (res.data && res.data.cod_blacklist) {
+          blacklistedPincodes = res.data.cod_blacklist;
           console.log('blacklisted pincodes', blacklistedPincodes);
         } else {
           blacklistedPincodes = [];
@@ -2042,11 +2057,6 @@
   });
 
   window.addEventListener('visibilitychange', () => {
-    let modalOpen = document.body.classList.contains('modal-open');
-
-    if (modalOpen) {
-      document.getElementById('baCodFormClose').click();
-    }
     document.getElementById('ba-cod-form-overlay-loader').style.display = 'none';
   });
 </script>
