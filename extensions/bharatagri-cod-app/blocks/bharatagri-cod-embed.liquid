@@ -63,7 +63,7 @@
           </div>
           <div id="ba-cod-discount-div" class="row ba-cod-discount-row mt-2 ml-0">
 
-            <div id="ba-active-coupon" style="display: none" class="col-auto p-3 ba-cod-discount-card ba-cod-discount-card-active mr-2">
+            <div id="ba-active-coupon" style="display: none" class="col-auto p-3 ba-cod-discount-card ba-cod-discount-card-active mr-2" onclick="openSmileyModal()">
               <div class="row pt-2 justify-content-between mb-3 ba-cod-discount-title">
                 <div class="col-10 pr-0">
                   <div id="ba-cod-saved-amount" class="ba-cod-discount-title1"></div>
@@ -263,6 +263,36 @@
   </div>
 </div>
 
+<!-- Button trigger modal -->
+<button id="ba-party-smiley-btn" style="display: none" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Party smiley button
+</button>
+
+<!-- Modal -->
+<div class="modal ba-party-smiley-modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius: 13px;">
+      <div style="display: none" class="modal-header p-0">
+        <button id="ba-party-smiley-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-5">
+        <div class="row d-flex justify-content-center align-items-center">
+          <img src="https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/party-smiley.png" class="w-25" alt="ba-coupon-applied-img" loading="lazy"/>
+        </div>
+        <div id="ba-smiley-modal-amt-id" class="ba-smiley-modal-discount-amount p-3">
+          ₹100 डिस्काउंट
+        </div>
+        <div class="text-center">
+          <span id="ba-smiley-modal-coupon-id" class="ba-smiley-modal-discount-content mr-2">SUPER5</span>
+          <span id="ba-smiley-modal-applied-id" class="ba-smiley-modal-discount-applied"> कूपन लागू हुआ</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   let currentUrl1 = window.location.href;
   let lang = 'hi';
@@ -323,6 +353,9 @@
   let couponWithDiscountLabel = 'डिस्काउंट कूपन से';
   let couponAppliedLabel = 'लागू हुआ!';
 
+  let smileyModalDiscountLabel = 'डिस्काउंट';
+  let smileyModalDiscountAppliedLabel = 'कूपन लागू हुआ';
+
   if (lang === 'en') {
     // productHeader = 'Product';
     productHeader = 'Cash On Delivery';
@@ -369,6 +402,9 @@
     couponSavedLabel = 'Saved';
     couponWithDiscountLabel = 'with discount Coupon';
     couponAppliedLabel = 'Applied!';
+
+    smileyModalDiscountLabel = 'Discount';
+    smileyModalDiscountAppliedLabel = 'Coupon Applied';
   }
 
   if (lang === 'mr') {
@@ -417,6 +453,9 @@
     couponSavedLabel = 'तुमची बचत झाली';
     couponWithDiscountLabel = 'अधिक सूट मिळाली';
     couponAppliedLabel = 'लागू झाला!';
+
+    smileyModalDiscountLabel = 'डिस्काउंट';
+    smileyModalDiscountAppliedLabel = 'कूपन लागू हुआ';
   }
   document.getElementById('product-header-id').innerHTML = productHeader;
   document.getElementById('discount-header-id').innerHTML = discountHeader;
@@ -465,6 +504,8 @@
   document.getElementById('baCodDistrictSelectRequired').innerHTML = districtRequiredLabel;
 
 </script>
+
+<script src="{{ 'ba-cod-form.js' | asset_url }}" defer="defer"></script>
 
 <script>
   function setBaItems() {
@@ -2008,26 +2049,6 @@
   function replaceChildrenAlternative(parentNode) {
     while (parentNode.firstChild) {
       parentNode.removeChild(parentNode.firstChild);
-    }
-  }
-
-  function incrementQuantity() {
-    var quantityInput = document.getElementById('ba-cod-quantity');
-    var currentQuantity = parseInt(quantityInput.value, 10);
-    var maxQuantity = parseInt(quantityInput.getAttribute('max'), 10);
-
-    if (currentQuantity < maxQuantity) {
-      quantityInput.value = currentQuantity + 1;
-    }
-  }
-
-  function decrementQuantity() {
-    var quantityInput = document.getElementById('ba-cod-quantity');
-    var currentQuantity = parseInt(quantityInput.value, 10);
-    var minQuantity = parseInt(quantityInput.getAttribute('min'), 10);
-
-    if (currentQuantity > minQuantity) {
-      quantityInput.value = currentQuantity - 1;
     }
   }
 </script>
