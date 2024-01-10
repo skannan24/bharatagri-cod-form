@@ -15,6 +15,7 @@ function openSmileyModal() {
 
 }
 
+const updateBaCartApiCaller = createUpdateBaCartApiCaller();
 function incrementQuantity() {
   let quantityInput = document.getElementById('ba-cod-quantity');
   let currentQuantity = Number(quantityInput.value);
@@ -22,7 +23,7 @@ function incrementQuantity() {
 
   if (currentQuantity < maxQuantity) {
     quantityInput.value = currentQuantity + 1;
-    updateBaCart('add', currentQuantity + 1);
+    updateBaCartApiCaller('add', currentQuantity + 1);
   }
 }
 
@@ -33,8 +34,25 @@ function decrementQuantity() {
 
   if (currentQuantity > minQuantity) {
     quantityInput.value = currentQuantity - 1;
-    updateBaCart('remove', currentQuantity - 1);
+    updateBaCartApiCaller('remove', currentQuantity - 1);
   }
+}
+
+function createUpdateBaCartApiCaller() {
+  let latestNumber = 0;
+
+  return function (operation, quantityValue) {
+    latestNumber = quantityValue;
+
+    // Clear any previous timeouts
+    clearTimeout(this.timeout);
+
+    // Set a new timeout for making the API call
+    this.timeout = setTimeout(() => {
+      console.log("API call for number:", latestNumber);
+      updateBaCart(operation, quantityValue);
+    }, 500);
+  };
 }
 
 function updateBaCart(operation, quantityValue) {
