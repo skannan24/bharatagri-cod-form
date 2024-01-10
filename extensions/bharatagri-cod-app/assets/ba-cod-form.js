@@ -17,8 +17,8 @@ function openSmileyModal() {
 
 function incrementQuantity() {
   let quantityInput = document.getElementById('ba-cod-quantity');
-  let currentQuantity = parseInt(quantityInput.value, 10);
-  let maxQuantity = parseInt(quantityInput.getAttribute('max'), 10);
+  let currentQuantity = Number(quantityInput.value);
+  let maxQuantity = 10;
 
   if (currentQuantity < maxQuantity) {
     quantityInput.value = currentQuantity + 1;
@@ -28,8 +28,8 @@ function incrementQuantity() {
 
 function decrementQuantity() {
   let quantityInput = document.getElementById('ba-cod-quantity');
-  let currentQuantity = parseInt(quantityInput.value, 10);
-  let minQuantity = parseInt(quantityInput.getAttribute('min'), 10);
+  let currentQuantity = Number(quantityInput.value);
+  let minQuantity = 1;
 
   if (currentQuantity > minQuantity) {
     quantityInput.value = currentQuantity - 1;
@@ -41,7 +41,7 @@ function updateBaCart(operation, quantityValue) {
   if (quantityValue >= 1 || operation === 'add') {
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
     let items = baUpdateCart.items;
-    let finalVariantId = items[0]?.variant_id;
+    let finalVariantId = items[0].variant_id;
     let updates = {};
     updates[finalVariantId] = quantityValue;
     fetch('/cart/update.js', {
@@ -54,8 +54,8 @@ function updateBaCart(operation, quantityValue) {
       .then(res => {
           localStorage.setItem('baUpdateCartResponse', JSON.stringify(res));
           let bundleCartOrderTotalValue = getBundlesTotalPrice();
-          let priceDetailsTotalValueWithoutBundle = Number(res?.total_price/100);
-          let priceDetailsTotalValue = Number(res?.total_price/100);
+          let priceDetailsTotalValueWithoutBundle = Number(res.total_price/100);
+          let priceDetailsTotalValue = Number(res.total_price/100);
           priceDetailsTotalValue = priceDetailsTotalValue + bundleCartOrderTotalValue;
           document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsTotalValue}`;
           document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue}`;

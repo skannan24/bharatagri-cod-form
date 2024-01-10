@@ -589,7 +589,8 @@
       productPriceDiv.appendChild(productSellingPrice);
 
       let productQuantityMainDiv = document.createElement('div');
-      productQuantityMainDiv.className = "d-flex justify-content-end";
+      productQuantityMainDiv.className = "d-flex justify-content-start";
+      productQuantityMainDiv.style.marginLeft = "94px";
       document.getElementById('product-info-div').appendChild(productQuantityMainDiv);
 
       let productQuantityDiv = document.createElement('div');
@@ -1197,6 +1198,11 @@
     // applying first discount code
     if (finalCodes.length > 0) {
       applyCouponCodes(finalCodes[0].title, false);
+    } else {
+      // Resetting price details card discount amount and ba coupon code
+      document.getElementById('ba-price-details-discount-value').innerHTML = `0`;
+      document.getElementById('ba-price-details-discount-row').style.display = 'none';
+      localStorage.removeItem('BA_COD_Coupon_code');
     }
   }
 </script>
