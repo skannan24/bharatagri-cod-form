@@ -243,6 +243,10 @@
           {% comment %}</div>{% endcomment %}
           <div class="col-6 p-0">
             <div id="ba-cod-footer-place-order" class="ba-cod-footer-place-order"></div>
+            <div id="ba-cod-footer-apply-btn-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2"
+                 role="status" style="display: none; color: white!important;">
+              <span class="sr-only">Loading...</span>
+            </div>
           </div>
         </button>
         {% comment %}<button type="button" onclick="createOrderObject()" class="btn btn-primary">Understood</button>{% endcomment %}
@@ -623,6 +627,7 @@
     loadBaProductBundles();
     loadCouponCodes();
     resetCodFormFields();
+    resetCodFooter();
     populatePriceDetailsCard();
     if (!blacklistedPincodes || blacklistedPincodes.length === 0) {
       loadBlackListedPincodes();
@@ -701,10 +706,8 @@
       resetActiveCouponCardEl.style.display = 'none';
     }
 
-    document.getElementById('ba-cod-create-order-button').disabled = false;
-
     document.getElementById('product-count-id').innerHTML = '';
-
+    resetCodFooter();
     resetCodFormFields();
 
     selectedBundles = [];
@@ -1456,6 +1459,8 @@
     // }
 
     if (!validationError) {
+      document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'inline-block';
+      document.getElementById('ba-cod-footer-place-order').style.display = 'none';
       let nameValue = name.value;
       let mobileValue = mobile.value;
       let alternateMobileValue = alternateMobile.value ? alternateMobile.value : '';
@@ -1600,10 +1605,14 @@
           });
         } else {
           document.getElementById('ba-cod-create-order-button').disabled = false;
+          document.getElementById('ba-cod-footer-place-order').style.display = 'block';
+          document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'none';
         }
       }).catch(error => {
         console.log('error: ', error);
         document.getElementById('ba-cod-create-order-button').disabled = false;
+        document.getElementById('ba-cod-footer-place-order').style.display = 'block';
+        document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'none';
       });
 
       // dev store api call to create order

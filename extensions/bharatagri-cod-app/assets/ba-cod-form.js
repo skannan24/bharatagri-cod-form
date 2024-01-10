@@ -68,6 +68,12 @@ function updateBaCart(operation, quantityValue) {
   }
 }
 
+function resetCodFooter() {
+  document.getElementById('ba-cod-create-order-button').disabled = false;
+  document.getElementById('ba-cod-footer-place-order').style.display = 'block';
+  document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'none';
+}
+
 function resetCodFormFields() {
   resetLocationFields();
 
