@@ -16,41 +16,57 @@ function openSmileyModal() {
 }
 
 function incrementQuantity() {
-  var quantityInput = document.getElementById('ba-cod-quantity');
-  var currentQuantity = parseInt(quantityInput.value, 10);
-  var maxQuantity = parseInt(quantityInput.getAttribute('max'), 10);
+  let quantityInput = document.getElementById('ba-cod-quantity');
+  let currentQuantity = parseInt(quantityInput.value, 10);
+  let maxQuantity = parseInt(quantityInput.getAttribute('max'), 10);
 
   if (currentQuantity < maxQuantity) {
     quantityInput.value = currentQuantity + 1;
+    updateBaCart('add', currentQuantity + 1);
   }
 }
 
 function decrementQuantity() {
-  var quantityInput = document.getElementById('ba-cod-quantity');
-  var currentQuantity = parseInt(quantityInput.value, 10);
-  var minQuantity = parseInt(quantityInput.getAttribute('min'), 10);
+  let quantityInput = document.getElementById('ba-cod-quantity');
+  let currentQuantity = parseInt(quantityInput.value, 10);
+  let minQuantity = parseInt(quantityInput.getAttribute('min'), 10);
 
   if (currentQuantity > minQuantity) {
     quantityInput.value = currentQuantity - 1;
+    updateBaCart('remove', currentQuantity - 1);
   }
 }
 
-function setStates() {
-  const stateDiv = document.getElementById('baCodStateOptions');
-  replaceChildrenAlternative(stateDiv);
-
-  for (let i=0; i < stateList.length; i++) {
-    let stateName = lang === 'en' ? stateList[i].name_en : ( lang === 'mr' ? stateList[i].name_mr : stateList[i].name_hi);
-
-    let stateOptionsBtn = document.createElement('button');
-    stateOptionsBtn.className = 'dropdown-item';
-    stateOptionsBtn.type = 'button';
-    stateOptionsBtn.innerHTML = stateName;
-    stateOptionsBtn.addEventListener("click", function(){ onStateClick(stateList[i].id, stateName, stateList[i].name_en); });
-    stateDiv.appendChild(stateOptionsBtn);
+function updateBaCart(operation, quantityValue) {
+  if (quantityValue >= 1 || operation === 'add') {
+    let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+    let items = baUpdateCart.items;
+    let finalVariantId = items[0]?.variant_id;
+    let updates = {};
+    updates[finalVariantId] = quantityValue;
+    fetch('/cart/update.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({'updates': updates})
+    }).then(res => res.json())
+      .then(res => {
+          localStorage.setItem('baUpdateCartResponse', JSON.stringify(res));
+          let bundleCartOrderTotalValue = getBundlesTotalPrice();
+          let priceDetailsTotalValueWithoutBundle = Number(res?.total_price/100);
+          let priceDetailsTotalValue = Number(res?.total_price/100);
+          priceDetailsTotalValue = priceDetailsTotalValue + bundleCartOrderTotalValue;
+          document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsTotalValue}`;
+          document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue}`;
+          document.getElementById('ba-cod-main-product-price0').innerHTML = `₹ ${priceDetailsTotalValueWithoutBundle}`;
+          document.getElementById('ba-cod-product-price0').innerHTML = `₹ ${priceDetailsTotalValueWithoutBundle}`;
+          document.getElementById('ba-cod-main-product-quantity0').innerHTML = quantityValue;
+          loadCouponCodes();
+        }
+      );
   }
 }
-
 
 function resetCodFormFields() {
   resetLocationFields();
@@ -259,5 +275,11 @@ function checkPincodeServiceability(value) {
   if (String(blacklistedPincodes).indexOf(value) > -1) {
     document.getElementById('baCodPincode').classList.add('ba-mandatory-field-border');
     document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
+  }
+}
+
+function replaceChildrenAlternative(parentNode) {
+  while (parentNode.firstChild) {
+    parentNode.removeChild(parentNode.firstChild);
   }
 }

@@ -36,12 +36,6 @@
           <span class="sr-only">Loading...</span>
         </div>
 
-        {% comment %}<div class="ba-cod-quantity-selector">{% endcomment %}
-          {% comment %}<div class="ba-cod-quantity-button" onclick="decrementQuantity()">-</div>{% endcomment %}
-          {% comment %}<input type="number" class="quantity-input" id="ba-cod-quantity" value="1" min="1" max="10">{% endcomment %}
-          {% comment %}<div class="ba-cod-quantity-button" onclick="incrementQuantity()">+</div>{% endcomment %}
-        {% comment %}</div>{% endcomment %}
-
         <!-- Bundle product card -->
         <div id="ba-cod-bundle-div" class="pt-2" style="background: #F2F3F4;">
           <div id="ba-cod-bundle-cards-div" class="row ba-cod-discount-row mt-2 ml-3">
@@ -245,7 +239,7 @@
             <div id="ba-cod-footer-total-amount" class="ba-cod-footer-total"></div>
           </div>
           {% comment %}<div class="col-4">{% endcomment %}
-            {% comment %}<div class="ba-cod-footer-line-separator"> | </div>{% endcomment %}
+          {% comment %}<div class="ba-cod-footer-line-separator"> | </div>{% endcomment %}
           {% comment %}</div>{% endcomment %}
           <div class="col-6 p-0">
             <div id="ba-cod-footer-place-order" class="ba-cod-footer-place-order"></div>
@@ -546,6 +540,7 @@
 
       let productImageQuantity = document.createElement('div');
       productImageQuantity.className = "ba-cod-product-img-quantity";
+      productImageQuantity.id = "ba-cod-main-product-quantity" + i;
       productImageQuantity.innerHTML = document.getElementsByClassName('quantity__input')[0].value;
       productImageColDiv.appendChild(productImageQuantity);
 
@@ -592,6 +587,36 @@
       productSellingPrice.innerHTML = (items[i] && items[i].final_line_price) ? `₹ ${Number(items[i].final_line_price) / 100}` : '₹ 0';
 
       productPriceDiv.appendChild(productSellingPrice);
+
+      let productQuantityMainDiv = document.createElement('div');
+      productQuantityMainDiv.className = "d-flex justify-content-end";
+      document.getElementById('product-info-div').appendChild(productQuantityMainDiv);
+
+      let productQuantityDiv = document.createElement('div');
+      productQuantityDiv.className = "ba-cod-quantity-div";
+      productQuantityMainDiv.appendChild(productQuantityDiv);
+
+      let productQuantityMinus = document.createElement('span');
+      productQuantityMinus.className = "ba-cod-quantity-symbols";
+      productQuantityMinus.innerHTML = '➖';
+      productQuantityMinus.addEventListener("click", function(){ decrementQuantity(); });
+      productQuantityDiv.appendChild(productQuantityMinus);
+
+      let productQuantityInput = document.createElement('input');
+      productQuantityInput.className = "ba-cod-quantity-number";
+      productQuantityInput.type = "number";
+      productQuantityInput.id = "ba-cod-quantity";
+      productQuantityInput.value = document.getElementsByClassName('quantity__input')[0].value;
+      productQuantityInput.min = "1";
+      productQuantityInput.max = "10";
+      productQuantityInput.disabled = true;
+      productQuantityDiv.appendChild(productQuantityInput);
+
+      let productQuantityPlus = document.createElement('span');
+      productQuantityPlus.className = "ba-cod-quantity-symbols";
+      productQuantityPlus.innerHTML = '➕';
+      productQuantityPlus.addEventListener("click", function(){ incrementQuantity(); });
+      productQuantityDiv.appendChild(productQuantityPlus);
     }
 
     loadBaProductBundles();
@@ -832,7 +857,7 @@
     let bundleProductPush = JSON.parse(JSON.stringify(product));
 
     sendBaCodGEvents('BA_bundle_cart_added', {
-        'from_frag': currentUrl1,
+      'from_frag': currentUrl1,
       'product_title': (product && product.secondary_product && product.secondary_product.product)
         ? product.secondary_product.product.title
         : undefined,
@@ -1178,56 +1203,56 @@
 
 <script>
   let previousCouponCode = '';
-   function applyCouponCodes(couponCode, scrollFlag) {
-     document.getElementById('ba-cod-discount-loader').style.display = 'block';
-     if (!previousCouponCode) {
-       previousCouponCode = couponCode;
-     }
-     let shopify_features_script = document.querySelector("script[id='shopify-features']");
-     let shopify_features_json = JSON.parse(shopify_features_script.innerHTML);
+  function applyCouponCodes(couponCode, scrollFlag) {
+    document.getElementById('ba-cod-discount-loader').style.display = 'block';
+    if (!previousCouponCode) {
+      previousCouponCode = couponCode;
+    }
+    let shopify_features_script = document.querySelector("script[id='shopify-features']");
+    let shopify_features_json = JSON.parse(shopify_features_script.innerHTML);
 
-     // console.log(shopify_features_json);
+    // console.log(shopify_features_json);
 
-     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
-     let items = baUpdateCart.items;
-     let lineItems = [];
+    let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+    let items = baUpdateCart.items;
+    let lineItems = [];
 
-     // Resetting price details card discount and total amount
-     document.getElementById('ba-price-details-discount-value').innerHTML = `0`;
-     document.getElementById('ba-price-details-discount-row').style.display = 'none';
+    // Resetting price details card discount and total amount
+    document.getElementById('ba-price-details-discount-value').innerHTML = `0`;
+    document.getElementById('ba-price-details-discount-row').style.display = 'none';
 
 
-     // Resetting total amount with the cart and bundles
-     let bundleCartOrderTotalValue = getBundlesTotalPrice();
-     let priceDetailsTotalValueWithoutBundle = Number(baUpdateCart.total_price/100);
-     let priceDetailsTotalValue = Number(baUpdateCart.total_price/100);
-     priceDetailsTotalValue = priceDetailsTotalValue + bundleCartOrderTotalValue;
+    // Resetting total amount with the cart and bundles
+    let bundleCartOrderTotalValue = getBundlesTotalPrice();
+    let priceDetailsTotalValueWithoutBundle = Number(baUpdateCart.total_price/100);
+    let priceDetailsTotalValue = Number(baUpdateCart.total_price/100);
+    priceDetailsTotalValue = priceDetailsTotalValue + bundleCartOrderTotalValue;
 
-     sendBaCodGEvents('BA_cart_cc_clk', {
-       'from_frag': currentUrl1,
-       'discount_coupon': couponCode,
-       'order_value': priceDetailsTotalValueWithoutBundle,
-     });
+    sendBaCodGEvents('BA_cart_cc_clk', {
+      'from_frag': currentUrl1,
+      'discount_coupon': couponCode,
+      'order_value': priceDetailsTotalValueWithoutBundle,
+    });
 
-     document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsTotalValue}`;
-     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue}`;
+    document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsTotalValue}`;
+    document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue}`;
 
-     if (previousCouponCode) {
-       let activeCouponEl = document.getElementById(previousCouponCode);
-       if (activeCouponEl) {
-         activeCouponEl.style.display = 'block';
-       }
-     }
+    if (previousCouponCode) {
+      let activeCouponEl = document.getElementById(previousCouponCode);
+      if (activeCouponEl) {
+        activeCouponEl.style.display = 'block';
+      }
+    }
 
-     let activeCouponCardEl = document.getElementById('ba-active-coupon');
-     if (activeCouponCardEl) {
-       activeCouponCardEl.style.display = 'none';
-     }
+    let activeCouponCardEl = document.getElementById('ba-active-coupon');
+    if (activeCouponCardEl) {
+      activeCouponCardEl.style.display = 'none';
+    }
 
-     for (let i = 0; i < items.length; i++) {
-       let variant = {'variant_id': items[i].variant_id, 'quantity': items[i].quantity, 'properties': {}};
-       lineItems.push(variant);
-     }
+    for (let i = 0; i < items.length; i++) {
+      let variant = {'variant_id': items[i].variant_id, 'quantity': items[i].quantity, 'properties': {}};
+      lineItems.push(variant);
+    }
 
     let payload = {
       "checkout": {
@@ -1318,6 +1343,22 @@
   }).catch(error => {
     console.log('Unable to get states : ', error);
   });
+
+  function setStates() {
+    const stateDiv = document.getElementById('baCodStateOptions');
+    replaceChildrenAlternative(stateDiv);
+
+    for (let i=0; i < stateList.length; i++) {
+      let stateName = lang === 'en' ? stateList[i].name_en : ( lang === 'mr' ? stateList[i].name_mr : stateList[i].name_hi);
+
+      let stateOptionsBtn = document.createElement('button');
+      stateOptionsBtn.className = 'dropdown-item';
+      stateOptionsBtn.type = 'button';
+      stateOptionsBtn.innerHTML = stateName;
+      stateOptionsBtn.addEventListener("click", function(){ onStateClick(stateList[i].id, stateName, stateList[i].name_en); });
+      stateDiv.appendChild(stateOptionsBtn);
+    }
+  }
 
   function createOrderObject() {
     document.getElementById('ba-cod-create-order-button').disabled = true;
@@ -1816,14 +1857,6 @@
           blacklistedPincodes = [];
         }
       });
-  }
-</script>
-
-<script>
-  function replaceChildrenAlternative(parentNode) {
-    while (parentNode.firstChild) {
-      parentNode.removeChild(parentNode.firstChild);
-    }
   }
 </script>
 
