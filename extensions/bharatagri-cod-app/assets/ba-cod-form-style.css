@@ -438,6 +438,13 @@
   animation: baFooterShakeAnimation 1.5s cubic-bezier(.36, .07, .19, .97) both infinite;
 }
 
+.ba-cod-create-order-non-sticky-button {
+  background: linear-gradient(180deg, #03B369 0%, #0A8047 100%);
+  border: none;
+  animation: baFooterShakeAnimation 1.5s cubic-bezier(.36, .07, .19, .97) both infinite;
+  border-radius: 8px;
+}
+
 @keyframes baFooterShakeAnimation {
   10%, 90% {
     transform: translate3d(-1px, 0, 0);
@@ -456,8 +463,8 @@
 .ba-cod-bundle-card {
   border-radius: 10px;
   border: 1px solid #E6E8EB;
-  max-width: 35%;
-  width: 35%;
+  max-width: 90%;
+  width: 90%;
   background: white;
   box-shadow: 0px 1px 4px 0px #00000026;
 }

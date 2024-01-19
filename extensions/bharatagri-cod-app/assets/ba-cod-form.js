@@ -80,7 +80,7 @@ function updateBaCart(operation, quantityValue) {
           document.getElementById('ba-cod-main-product-price0').innerHTML = `₹ ${priceDetailsTotalValueWithoutBundle}`;
           document.getElementById('ba-cod-product-price0').innerHTML = `₹ ${priceDetailsTotalValueWithoutBundle}`;
           document.getElementById('ba-cod-main-product-quantity0').innerHTML = quantityValue;
-          loadCouponCodes();
+          loadCouponCodes(false);
         }
       );
   }
