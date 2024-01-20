@@ -24,8 +24,8 @@
   z-index: 2147484610;
   background-color: rgba(0, 0, 0, 0.7);
   padding-top: 35%;
-  padding-left: 7%;
-  padding-right: 7%;
+  padding-left: 7%!important;
+  padding-right: 7%!important;
 }
 
 .ba-smiley-modal-discount-amount {
