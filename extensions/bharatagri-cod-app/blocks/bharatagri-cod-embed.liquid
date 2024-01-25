@@ -1962,13 +1962,16 @@
     }
   });
 
-  window.onbeforeunload = function(event) {
+  let baClosing = function () {
     let modalOpen = document.body.classList.contains('modal-open');
 
     if (modalOpen) {
       document.getElementById('baCodFormClose').click();
     }
   }
+
+  window.onbeforeunload = baClosing;
+
 
   window.addEventListener('visibilitychange', () => {
     document.getElementById('ba-cod-form-overlay-loader').style.display = 'none';
