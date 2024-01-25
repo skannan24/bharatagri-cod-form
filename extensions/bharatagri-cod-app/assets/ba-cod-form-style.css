@@ -231,21 +231,23 @@
 
 .ba-cod-separator {
   background: #F2F3F4;
-  display: block!important
+  display: none!important
 }
 
 .ba-cod-input-field {
   font-family: Noto Sans;
-  height: 53px;
+  height: 44px;
   font-size: 16px;
-  border-color: #E6E8EB;
+  border-color: #ADB2C0;
+  border-radius: 6px;
 }
 
 .ba-cod-full-width-input-field {
   font-family: Noto Sans;
-  height: 53px;
+  height: 44px;
   font-size: 16px;
-  border-color: #E6E8EB;
+  border-color: #ADB2C0;
+  border-radius: 6px;
 }
 
 .has-float-label {
@@ -295,7 +297,7 @@
 
 .has-float-label .form-control:placeholder-shown:not(:focus)+* {
   font-family: Noto Sans;
-  font-size: 16px;
+  font-size: 14px;
   /*opacity: .5;*/
   top: 1em;
   color: black;
@@ -324,10 +326,11 @@
 
 .ba-cod-select-field {
   font-family: Noto Sans;
-  height: 48px;
+  height: 44px;
   font-size: 16px;
-  border-color: #E6E8EB;
   text-align: left;
+  border-color: #ADB2C0;
+  border-radius: 6px;
 }
 
 .ba-cod-options-field {
@@ -351,6 +354,11 @@
 
 .ba-mandatory-field-border {
   border-color: #D42216;
+}
+
+.ba-cod-price-details-main-div {
+  border-radius: 8px;
+  background: #D5E5D7;
 }
 
 .ba-cod-price-details-items {
@@ -379,6 +387,10 @@
   line-height: 18px;
   letter-spacing: 0em;
   color: #181B26;
+  border: 1px solid #B4C9B7;
+  border-color: transparent;
+  border-top-color: #B4C9B7;
+  padding-top: 10px;
 }
 
 .ba-cod-footer {

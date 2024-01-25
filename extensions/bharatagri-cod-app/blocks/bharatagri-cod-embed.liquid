@@ -36,14 +36,20 @@
           <span class="sr-only">Loading...</span>
         </div>
 
+        <!-- Price details card -->
+        <div id="ba-cod-price-details-div" class="pt-2 pb-2 pl-4 pr-4 m-2 ba-cod-price-details-main-div">
+          <div class="d-flex align-items-center" style="display: none!important">
+            <span class="ba-cod-card-header" id="ba-cod-price-header-id"></span>
+          </div>
+          <div id="ba-cod-price-details-content" class="mt-3 pb-2"></div>
+        </div>
+
         <!-- Bundle product card -->
         <div id="ba-cod-bundle-div" class="pt-2" style="background: #F2F3F4;">
           <div id="ba-cod-bundle-cards-div" class="row ba-cod-discount-row mt-2 ml-3">
 
           </div>
         </div>
-
-
 
         <div class="pt-3 ba-cod-separator"></div>
 
@@ -104,7 +110,7 @@
                 <label id="alternateMobileLabel" for="alternateMobile">Alternate Number</label>
               </div>
             </div>
-            <div class="col-6 pr-1">
+            <div class="col-12">
               <div class="form-group has-float-label mb-0">
                 <input onclick="onInputElementClick('mobile')" class="form-control ba-cod-input-field" id="farmerMobile"
                        type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="10" name="Mobile Number" placeholder="Mobile Number"/>
@@ -112,7 +118,10 @@
               </div>
               <span id="farmerMobileRequired" class="ba-mandatory-field-text pl-1">Enter mobile number</span>
             </div>
-            <div class="col-6 pl-1">
+          </div>
+
+          <div class="row mt-3 pb-2">
+            <div class="col-12">
               <div class="form-group has-float-label mb-0">
                 <input onclick="onInputElementClick('pincode')"  class="form-control ba-cod-input-field" id="baCodPincode"
                        type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="6" name="Pincode" placeholder="Pincode"/>
@@ -124,8 +133,8 @@
           </div>
 
           <div class="row mt-3 pb-2">
-            <div class="col-6 pr-1">
-              <div class="form-group has-float-label dropdown">
+            <div class="col-12">
+              <div class="form-group has-float-label dropdown mb-0">
                 <button onclick="onInputElementClick('state')" id="baCodStateSelect" class="btn btn-lg btn-block ba-cod-select-field btn-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   State
                 </button>
@@ -135,8 +144,11 @@
               </div>
               <span id="baCodStateSelectRequired" class="ba-mandatory-field-text pl-1">Enter State</span>
             </div>
-            <div class="col-6 pl-1">
-              <div class="form-group has-float-label dropdown">
+          </div>
+
+          <div class="row mt-3 pb-2">
+            <div class="col-12">
+              <div class="form-group has-float-label dropdown mb-0">
                 <button onclick="onInputElementClick('district')" id="baCodDistrictSelect" class="btn btn-lg btn-block ba-cod-select-field btn-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span id="baCodDistrictSelectLabel">District</span>
                   <div id="ba-cod-district-loader" style="display: none" class="spinner-border text-secondary ml-2" role="status">
@@ -202,7 +214,7 @@
         <div class="pt-3 mt-3 mb-3 ba-cod-separator"></div>
 
         <!-- Free Delivery card -->
-        <div id="ba-cod-free-delivery-div" class="p-2 m-2">
+        <div style="display: none" id="ba-cod-free-delivery-div" class="p-2 m-2">
           <div class="d-flex align-items-center">
             {% render 'ba-free-delivery-icon' %}
             <span class="pl-2 pr-2" style="color: #0A8047; font-size: 16px; font-weight: 600; line-height: 20px"
@@ -215,14 +227,6 @@
         </div>
 
         <div class="pt-3 mt-3 mb-3 ba-cod-separator"></div>
-
-        <!-- Price details card -->
-        <div id="ba-cod-price-details-div" class="p-2 m-2">
-          <div class="d-flex align-items-center">
-            <span class="ba-cod-card-header" id="ba-cod-price-header-id"></span>
-          </div>
-          <div id="ba-cod-price-details-content" class="mt-3 pb-2"></div>
-        </div>
 
         <!-- BA COD button non-sticky -->
         <div class="p-2 mb-2 d-flex justify-content-center">
@@ -1025,14 +1029,14 @@
     bundlePriceItemsMainDiv.appendChild(priceItemsRow);
 
     let priceItemsCol1 = document.createElement('div');
-    priceItemsCol1.className = 'col-9';
+    priceItemsCol1.className = 'col-8';
     priceItemsCol1.innerHTML = (bundleProductTitle && bundleProductTitle.length > 34)
       ? bundleProductTitle.slice(0, 34) + '..'
       : (bundleProductTitle !== null && bundleProductTitle !== undefined) ? bundleProductTitle : '';
     priceItemsRow.appendChild(priceItemsCol1);
 
     let priceItemsCol2 = document.createElement('div');
-    priceItemsCol2.className = 'col-3 text-right';
+    priceItemsCol2.className = 'col-4 text-right pl-0';
     priceItemsCol2.innerHTML = bundleProductDiscountPrice ? `₹ ${bundleProductDiscountPrice}` : '0';
     priceItemsRow.appendChild(priceItemsCol2);
 
@@ -1124,12 +1128,12 @@
         } else {
           console.log('Unable to fetch discount coupons');
           document.getElementById('ba-discount-coupon-div').style.display = 'none';
-          document.getElementById('ba-discount-div-separator').setAttribute('style', 'display:none !important');
+          // document.getElementById('ba-discount-div-separator').setAttribute('style', 'display:none !important');
         }
       }).catch(error => {
       console.log('error: ', error);
       document.getElementById('ba-discount-coupon-div').style.display = 'none';
-      document.getElementById('ba-discount-div-separator').setAttribute('style', 'display:none !important');
+      // document.getElementById('ba-discount-div-separator').setAttribute('style', 'display:none !important');
     });
   }
 
@@ -1165,11 +1169,11 @@
 
     if (finalCodes.length === 0) {
       document.getElementById('ba-discount-coupon-div').style.display = 'none';
-      document.getElementById('ba-discount-div-separator').setAttribute('style', 'display:none !important');
+      // document.getElementById('ba-discount-div-separator').setAttribute('style', 'display:none !important');
     } else {
       finalCodes = finalCodes.sort((a, b) => b.priority_index - a.priority_index);
       document.getElementById('ba-discount-coupon-div').style.display = 'block';
-      document.getElementById('ba-discount-div-separator').setAttribute('style', 'display:block !important');
+      // document.getElementById('ba-discount-div-separator').setAttribute('style', 'display:block !important');
     }
 
     for (let i=0; i < finalCodes.length; i++) {
@@ -1818,12 +1822,12 @@
       priceItemsMainDiv.appendChild(priceItemsRow);
 
       let priceItemsCol1 = document.createElement('div');
-      priceItemsCol1.className = 'col-9';
+      priceItemsCol1.className = 'col-8';
       priceItemsCol1.innerHTML = items[i].product_title.length > 34 ? items[i].product_title.slice(0,34) + '..' : items[i].product_title;
       priceItemsRow.appendChild(priceItemsCol1);
 
       let priceItemsCol2 = document.createElement('div');
-      priceItemsCol2.className = 'col-3 text-right';
+      priceItemsCol2.className = 'col-4 text-right pl-0';
       priceItemsCol2.id = 'ba-cod-product-price' + i;
       priceItemsCol2.innerHTML = items[i].final_line_price ? `₹ ${Number(items[i].final_line_price)/100}` : '0';
       priceItemsRow.appendChild(priceItemsCol2);
@@ -1835,12 +1839,12 @@
     document.getElementById('ba-cod-price-details-content').appendChild(priceItemsDiscountDiv);
 
     let priceItemsDiscountCol1 = document.createElement('div');
-    priceItemsDiscountCol1.className = 'col-9';
+    priceItemsDiscountCol1.className = 'col-8';
     priceItemsDiscountCol1.innerHTML = priceDetailsDiscountLabel;
     priceItemsDiscountDiv.appendChild(priceItemsDiscountCol1);
 
     let priceItemsDiscountCol2 = document.createElement('div');
-    priceItemsDiscountCol2.className = 'col-3 text-right';
+    priceItemsDiscountCol2.className = 'col-4 text-right pl-0';
     priceItemsDiscountCol2.id = 'ba-price-details-discount-value';
     priceItemsDiscountDiv.appendChild(priceItemsDiscountCol2);
 
@@ -1850,12 +1854,12 @@
     document.getElementById('ba-cod-price-details-content').appendChild(priceItemsFreeDeliveryDiv);
 
     let priceItemsFreeDeliveryCol1 = document.createElement('div');
-    priceItemsFreeDeliveryCol1.className = 'col-9';
+    priceItemsFreeDeliveryCol1.className = 'col-8';
     priceItemsFreeDeliveryCol1.innerHTML = priceDetailsFreeDeliveryLabel;
     priceItemsFreeDeliveryDiv.appendChild(priceItemsFreeDeliveryCol1);
 
     let priceItemsFreeDeliveryCol2 = document.createElement('div');
-    priceItemsFreeDeliveryCol2.className = 'col-3 text-right';
+    priceItemsFreeDeliveryCol2.className = 'col-4 text-right pl-0';
     priceItemsFreeDeliveryCol2.innerHTML = priceDetailsFreeDeliveryValueLabel;
     priceItemsFreeDeliveryDiv.appendChild(priceItemsFreeDeliveryCol2);
 
@@ -1865,12 +1869,12 @@
     document.getElementById('ba-cod-price-details-content').appendChild(priceItemsTotalDiv);
 
     let priceItemsTotalCol1 = document.createElement('div');
-    priceItemsTotalCol1.className = 'col-9';
+    priceItemsTotalCol1.className = 'col-8';
     priceItemsTotalCol1.innerHTML = priceDetailsTotalAmountLabel;
     priceItemsTotalDiv.appendChild(priceItemsTotalCol1);
 
     let priceItemsTotalCol2 = document.createElement('div');
-    priceItemsTotalCol2.className = 'col-3 text-right';
+    priceItemsTotalCol2.className = 'col-4 text-right pl-0';
     priceItemsTotalCol2.innerHTML = `₹ ${baUpdateCart.total_price/100}`;
     priceItemsTotalCol2.id = 'ba-price-details-total-value';
     priceItemsTotalDiv.appendChild(priceItemsTotalCol2);
