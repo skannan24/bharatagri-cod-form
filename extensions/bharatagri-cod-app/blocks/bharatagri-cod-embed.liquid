@@ -44,14 +44,36 @@
           <div id="ba-cod-price-details-content" class="mt-3 pb-2"></div>
         </div>
 
+        <!-- bundle comment test -->
+        {% comment %}<div id="baBundleCard454" class="col-9 p-3 ba-cod-bundle-card mr-3">{% endcomment %}
+          {% comment %}<div class="row align-items-center mb-2">{% endcomment %}
+            {% comment %}<div class="col-2">{% endcomment %}
+              {% comment %}<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" style="{% endcomment %}
+               {% comment %}height: 20px;{% endcomment %}
+               {% comment %}width: 20px;{% endcomment %}
+               {% comment %}accent-color: #0A8047;">{% endcomment %}
+            {% comment %}</div>{% endcomment %}
+            {% comment %}<div class="col-2 pl-0"><img alt="product image" src="https://cdn.shopify.com/s/files/1/0549/4564/4684/files/AnandWetGold01_KrushiDukanBharatAgri_Single_1_270d6410-1b76-4a98-af08-b610a54836eb.webp?v=1705928781" width="60" height="60" style="border-radius: 6px;"></div>{% endcomment %}
+            {% comment %}<div class="col-7">{% endcomment %}
+              {% comment %}<div class="ba-cod-bundle-title">आनंद वेट गोल्ड</div>{% endcomment %}
+              {% comment %}<div class="ba-cod-bundle-title mt-1">25 मिली</div>{% endcomment %}
+              {% comment %}<div class="d-flex mt-2">{% endcomment %}
+                {% comment %}<div class="ba-cod-bundle-discount mr-3">25% off</div>{% endcomment %}
+                {% comment %}<div class="ba-cod-bundle-price">₹ 149</div>{% endcomment %}
+              {% comment %}</div>{% endcomment %}
+            {% comment %}</div>{% endcomment %}
+          {% comment %}</div>{% endcomment %}
+        {% comment %}</div>{% endcomment %}
+        <!-- end bundle test -->
+
         <!-- Bundle product card -->
-        <div id="ba-cod-bundle-div" class="pt-2" style="background: #F2F3F4;">
+        <div id="ba-cod-bundle-div" class="pt-2 pb-2" style="background: #F2F3F4;">
           <div id="ba-cod-bundle-cards-div" class="row ba-cod-discount-row mt-2 ml-3">
 
           </div>
         </div>
 
-        <div class="pt-3 ba-cod-separator"></div>
+        {% comment %}<div class="pt-3 ba-cod-separator"></div>{% endcomment %}
 
         <!-- Discount coupon card -->
         <div id="ba-discount-coupon-div" class="p-2 m-2">
@@ -85,7 +107,7 @@
           </div>
         </div>
 
-        <div id="ba-discount-div-separator" class="pt-3 mt-3 mb-3 ba-cod-separator"></div>
+        {% comment %}<div id="ba-discount-div-separator" class="pt-3 mt-3 mb-3 ba-cod-separator"></div>{% endcomment %}
 
         <!-- Delivery address form fields card -->
         <div id="ba-cod-form-div" class="p-2 m-2">
@@ -211,7 +233,7 @@
 
         </div>
 
-        <div class="pt-3 mt-3 mb-3 ba-cod-separator"></div>
+        {% comment %}<div class="pt-3 mt-3 mb-3 ba-cod-separator"></div>{% endcomment %}
 
         <!-- Free Delivery card -->
         <div style="display: none" id="ba-cod-free-delivery-div" class="p-2 m-2">
@@ -226,7 +248,7 @@
           </div>
         </div>
 
-        <div class="pt-3 mt-3 mb-3 ba-cod-separator"></div>
+        {% comment %}<div class="pt-3 mt-3 mb-3 ba-cod-separator"></div>{% endcomment %}
 
         <!-- BA COD button non-sticky -->
         <div class="p-2 mb-2 d-flex justify-content-center">
@@ -333,7 +355,7 @@
   let productHeader = 'कैश ऑन डिलीवरी से खरीदें';
   let discountHeader = 'डिस्काउंट कूपन';
   let applyCouponBtn = 'अप्लाई करें';
-  let deliveryAddressHeader = 'डिलीवरी पता';
+  let deliveryAddressHeader = 'अपना डिलीवरी पता भरें';
   let priceDetailsHeader = 'ऑर्डर की जानकारी';
 
   let nameLabel = 'नाम';
@@ -383,7 +405,7 @@
     productHeader = 'Cash On Delivery';
     discountHeader = 'Discount Coupon';
     applyCouponBtn = 'Apply';
-    deliveryAddressHeader = 'Delivery Address';
+    deliveryAddressHeader = 'Fill your delivery address';
     priceDetailsHeader = 'Price Details';
 
     nameLabel = 'Name';
@@ -562,6 +584,8 @@
       productImage.className = "ba-cod-product-img";
       productImage.src = items[i].image;
       productImage.alt = 'product image';
+      productImage.width = 60;
+      productImage.height = 60;
       // productImage.loading = "lazy";
       productImageColDiv.appendChild(productImage);
 
@@ -572,7 +596,7 @@
       productImageColDiv.appendChild(productImageQuantity);
 
       let productTitleColDiv = document.createElement('div');
-      productTitleColDiv.className = "col-6 pr-0 pl-3";
+      productTitleColDiv.className = "col-6 pr-0 pl-0";
       productRowDiv.appendChild(productTitleColDiv);
 
       let productTitle = document.createElement('div');
@@ -617,7 +641,7 @@
 
       let productQuantityMainDiv = document.createElement('div');
       productQuantityMainDiv.className = "d-flex justify-content-start";
-      productQuantityMainDiv.style.marginLeft = "94px";
+      productQuantityMainDiv.style.marginLeft = "78px";
       document.getElementById('product-info-div').appendChild(productQuantityMainDiv);
 
       let productQuantityDiv = document.createElement('div');
@@ -945,11 +969,13 @@
     productImage.className = "ba-cod-product-img";
     productImage.src = bundleProductImage;
     productImage.alt = 'product image';
+    productImage.width = 60;
+    productImage.height = 60;
     // productImage.loading = "lazy";
     productImageColDiv.appendChild(productImage);
 
     let productTitleColDiv = document.createElement('div');
-    productTitleColDiv.className = "col-6 pr-0 pl-3";
+    productTitleColDiv.className = "col-6 pr-0 pl-0";
     productRowDiv.appendChild(productTitleColDiv);
 
     let productTitle = document.createElement('div');
@@ -982,7 +1008,7 @@
     productRemoveIconImg.src = "https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/ba-cod-remove-icon-2.png";
     productRemoveIconImg.alt = 'remove-icon';
     productRemoveIconImg.style.verticalAlign = 'middle';
-    productRemoveIconImg.style.width = '18px';
+    productRemoveIconImg.style.width = '12px';
     productRemoveIconBtn.appendChild(productRemoveIconImg);
 
     let productRemoveIconText = document.createElement('span');
@@ -1029,7 +1055,7 @@
     bundlePriceItemsMainDiv.appendChild(priceItemsRow);
 
     let priceItemsCol1 = document.createElement('div');
-    priceItemsCol1.className = 'col-8';
+    priceItemsCol1.className = 'col-8 ba-cod-price-details-product-title';
     priceItemsCol1.innerHTML = (bundleProductTitle && bundleProductTitle.length > 34)
       ? bundleProductTitle.slice(0, 34) + '..'
       : (bundleProductTitle !== null && bundleProductTitle !== undefined) ? bundleProductTitle : '';
@@ -1822,7 +1848,7 @@
       priceItemsMainDiv.appendChild(priceItemsRow);
 
       let priceItemsCol1 = document.createElement('div');
-      priceItemsCol1.className = 'col-8';
+      priceItemsCol1.className = 'col-8 ba-cod-price-details-product-title';
       priceItemsCol1.innerHTML = items[i].product_title.length > 34 ? items[i].product_title.slice(0,34) + '..' : items[i].product_title;
       priceItemsRow.appendChild(priceItemsCol1);
 
@@ -1935,6 +1961,14 @@
       document.getElementById('baCodFormClose').click();
     }
   });
+
+  window.onbeforeunload = function(event) {
+    let modalOpen = document.body.classList.contains('modal-open');
+
+    if (modalOpen) {
+      document.getElementById('baCodFormClose').click();
+    }
+  }
 
   window.addEventListener('visibilitychange', () => {
     document.getElementById('ba-cod-form-overlay-loader').style.display = 'none';
