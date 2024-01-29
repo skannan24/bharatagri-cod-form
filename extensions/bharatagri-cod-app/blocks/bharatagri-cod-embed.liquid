@@ -767,7 +767,7 @@
       method: 'GET',
       redirect: 'follow'
     };
-    // let bundleVariant = '43829369078003';
+    // let bundleVariant = '43651301671155';
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
     let items = baUpdateCart.items;
     let bundleVariant = items[0].id;
@@ -836,16 +836,26 @@
       bundleCardImagePriceDiv.className = 'row align-items-center mb-2';
       bundleCardColDiv.appendChild(bundleCardImagePriceDiv);
 
+      let bundleCardSelectDiv = document.createElement('div');
+      bundleCardSelectDiv.className = 'col-2';
+      bundleCardImagePriceDiv.appendChild(bundleCardSelectDiv);
+
+      let bundleCardSelectInput = document.createElement('input');
+      bundleCardSelectInput.className = 'ba-cod-bundle-select-box';
+      bundleCardSelectInput.type = 'checkbox';
+      bundleCardSelectInput.id = 'baBundleCardSelect' + i;
+      bundleCardSelectDiv.appendChild(bundleCardSelectInput);
+
       let bundleCardImageDiv = document.createElement('div');
-      bundleCardImageDiv.className = 'col-4';
+      bundleCardImageDiv.className = 'col-2 pl-0';
       bundleCardImagePriceDiv.appendChild(bundleCardImageDiv);
 
       let bundleCardImage = document.createElement('img');
       bundleCardImage.alt = 'product image';
       bundleCardImage.src = bundleProductImage;
       bundleCardImage.style.borderRadius = '6px';
-      bundleCardImage.width = 70;
-      bundleCardImage.height = 70;
+      bundleCardImage.width = 60;
+      bundleCardImage.height = 60;
       // if (bundleImagePlaceholder === bundleProductImage) {
       //   bundleCardImage.style.width = '65%';
       // } else {
@@ -854,7 +864,7 @@
       bundleCardImageDiv.appendChild(bundleCardImage);
 
       let bundleCardPriceDiv = document.createElement('div');
-      bundleCardPriceDiv.className = 'col-8 pl-0';
+      bundleCardPriceDiv.className = 'col-7';
       bundleCardImagePriceDiv.appendChild(bundleCardPriceDiv);
 
       let bundleCardProductTitle = document.createElement('div');
@@ -889,27 +899,26 @@
       bundleCardPrice.innerHTML = bundleProductDiscountPrice ? `₹ ${bundleProductDiscountPrice}` : '0';
       bundleCardProductPriceDiv.appendChild(bundleCardPrice);
 
-      let bundleCardAddButtonDiv = document.createElement('div');
-      bundleCardAddButtonDiv.className = "mt-3";
-      bundleCardColDiv.appendChild(bundleCardAddButtonDiv);
+      bundleCardColDiv.addEventListener("click", function(){
+        let bundleSelectBtn = document.getElementById(`baBundleCardSelect${i}`);
+        if(bundleSelectBtn.checked) {
+          bundleSelectBtn.checked = false;
+          onBaProductBundleRemoveClick(bundles[i].id)
+        } else {
+          bundleSelectBtn.checked = true;
+          onBaProductBundleClick(bundles[i], i);
+        }
+      });
 
-      let bundleCardAddButton = document.createElement('button');
-      bundleCardAddButton.className = "w-100 p-3 ba-cod-bundle-add-btn";
-      bundleCardAddButton.id = "bundleAddBtn" + i;
-      bundleCardAddButton.innerHTML = addIconLabel;
-      bundleCardAddButton.addEventListener("click", function(){ onBaProductBundleClick(bundles[i], i); });
-      bundleCardAddButtonDiv.appendChild(bundleCardAddButton);
+      let bundleSelectBtnEvent = document.getElementById(`baBundleCardSelect${i}`);
+      bundleSelectBtnEvent.addEventListener("click", function(){
+        bundleSelectBtnEvent.checked = !bundleSelectBtnEvent.checked;
+      });
 
     }
   }
 
   function onBaProductBundleClick(product, productIndex) {
-    let bundleAddBtn = document.getElementById(`bundleAddBtn${productIndex}`);
-    bundleAddBtn.disabled = true;
-    bundleAddBtn.innerHTML = addedBtnLabel;
-    bundleAddBtn.style.color = '#707890';
-    bundleAddBtn.style.border = '1px solid #707890';
-    // let bundleProductPush = structuredClone(product);
     let bundleProductPush = JSON.parse(JSON.stringify(product));
 
     sendBaCodGEvents('BA_bundle_cart_added', {
@@ -953,99 +962,6 @@
       bundleProductImage = product.secondary_product.product.images[0].media_url;
     }
 
-    let productMainDiv = document.createElement('div');
-    productMainDiv.id = 'bundleCartRow' + selectedBundlesIndex;
-    document.getElementById('product-info-div').appendChild(productMainDiv);
-
-    let productRowDiv = document.createElement('div');
-    productRowDiv.className = "row mt-3 align-items-center";
-    productMainDiv.appendChild(productRowDiv);
-
-    let productImageColDiv = document.createElement('div');
-    productImageColDiv.className = "col-3 pr-0";
-    productRowDiv.appendChild(productImageColDiv);
-
-    let productImage = document.createElement('img');
-    productImage.className = "ba-cod-product-img";
-    productImage.src = bundleProductImage;
-    productImage.alt = 'product image';
-    productImage.width = 60;
-    productImage.height = 60;
-    // productImage.loading = "lazy";
-    productImageColDiv.appendChild(productImage);
-
-    let productTitleColDiv = document.createElement('div');
-    productTitleColDiv.className = "col-6 pr-0 pl-0";
-    productRowDiv.appendChild(productTitleColDiv);
-
-    let productTitle = document.createElement('div');
-    productTitle.className = "ba-cod-product-title";
-    productTitle.innerHTML = (bundleProductTitle && bundleProductTitle.length > 50)
-      ? bundleProductTitle.slice(0, 50) + '..'
-      : (bundleProductTitle !== null && bundleProductTitle !== undefined) ? bundleProductTitle : '';
-    productTitleColDiv.appendChild(productTitle);
-
-    let productVariantTitle = document.createElement('div');
-    productVariantTitle.className = "ba-cod-variant-info";
-    productVariantTitle.innerHTML = (bundleProductVariantTitle && bundleProductVariantTitle.length > 25)
-      ? bundleProductVariantTitle.slice(0, 25) + '..'
-      : (bundleProductVariantTitle !== null && bundleProductVariantTitle !== undefined) ? bundleProductVariantTitle : '';
-
-    productTitleColDiv.appendChild(productVariantTitle);
-
-    // Remove icon to delete the product from cart
-    let productRemoveIcon = document.createElement('div');
-    productRemoveIcon.className = "mt-2";
-    productTitleColDiv.appendChild(productRemoveIcon);
-
-    let productRemoveIconBtn = document.createElement('button');
-    productRemoveIconBtn.className = "btn btn-outline-danger";
-    productRemoveIconBtn.addEventListener("click", function(){ onBaProductBundleRemoveClick(selectedBundlesIndex, productIndex); });
-    productRemoveIcon.appendChild(productRemoveIconBtn);
-
-
-    let productRemoveIconImg = document.createElement('img');
-    productRemoveIconImg.src = "https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/ba-cod-remove-icon-2.png";
-    productRemoveIconImg.alt = 'remove-icon';
-    productRemoveIconImg.style.verticalAlign = 'middle';
-    productRemoveIconImg.style.width = '12px';
-    productRemoveIconBtn.appendChild(productRemoveIconImg);
-
-    let productRemoveIconText = document.createElement('span');
-    productRemoveIconText.className = "ba-cod-bundle-remove-btn";
-    productRemoveIconText.innerHTML = ' ' + removeIconLabel;
-    productRemoveIconBtn.appendChild(productRemoveIconText);
-
-
-    let productPriceColDiv = document.createElement('div');
-    productPriceColDiv.className = "col-3 pl-0";
-    productPriceColDiv.style.paddingRight = "16px";
-    productRowDiv.appendChild(productPriceColDiv);
-
-    // Commenting out the discount percent off value
-    if (bundleDiscountPercent > 0) {
-      let productDiscount = document.createElement('div');
-      productDiscount.className = "ba-cod-product-discount";
-      productDiscount.innerHTML = `${bundleDiscountPercent}% off`;
-      productPriceColDiv.appendChild(productDiscount);
-    }
-
-    let productPriceDiv = document.createElement('div');
-    productPriceColDiv.appendChild(productPriceDiv);
-
-    // Commenting out the slash (original) price
-    if (bundleProductPrice > 0) {
-      let productActualPrice = document.createElement('span');
-      productActualPrice.className = "ba-cod-actual-price";
-      productActualPrice.innerHTML = bundleProductPrice ? `₹ ${bundleProductPrice}` : '0';
-      productPriceDiv.appendChild(productActualPrice);
-    }
-
-    let productSellingPrice = document.createElement('span');
-    productSellingPrice.className = "ba-cod-selling-price";
-    productSellingPrice.innerHTML = bundleProductDiscountPrice ? `₹ ${bundleProductDiscountPrice}` : '0';
-    productPriceDiv.appendChild(productSellingPrice);
-
 
     // Adding the product to the price card
     let bundlePriceItemsMainDiv = document.getElementById('ba-cod-price-details-items');
@@ -1076,7 +992,14 @@
     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${bundleOrderTotalValue}`;
   }
 
-  function onBaProductBundleRemoveClick(index, productIndex) {
+  function onBaProductBundleRemoveClick(bundleId) {
+    let index;
+    for (let i=0; i<selectedBundles.length; i++) {
+      if (selectedBundles[i].id === bundleId) {
+        index = i;
+      }
+    }
+    console.log(bundleId, selectedBundles[index]);
     sendBaCodGEvents('BA_bundle_cart_removal', {
       'from_frag': currentUrl1,
       'product_title': (selectedBundles[index] && selectedBundles[index].secondary_product && selectedBundles[index].secondary_product.product)
@@ -1092,15 +1015,8 @@
     });
     selectedBundles[index].selected = false;
 
-    let bundleAddBtn = document.getElementById(`bundleAddBtn${productIndex}`);
-    bundleAddBtn.disabled = false;
-    bundleAddBtn.innerHTML = addIconLabel;
-    bundleAddBtn.style.color = '#0A8047';
-    bundleAddBtn.style.border = '1px solid #0A8047';
-
     let productCountHeader = Number(document.getElementById('product-count-id').innerHTML);
     document.getElementById('product-count-id').innerHTML = String(productCountHeader - 1);
-    document.getElementById(`bundleCartRow${index}`).style.display = 'none';
     document.getElementById(`bundlePriceRow${index}`).style.display = 'none';
 
     // Updating price details card
