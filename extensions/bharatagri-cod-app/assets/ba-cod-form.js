@@ -92,6 +92,13 @@ function resetCodFooter() {
   document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'none';
 }
 
+function resetCodConfirmationModal() {
+  document.getElementById('ba-cod-confirm-no-btn-loader').style.display = 'none';
+  document.getElementById('ba-cod-confirm-yes-btn-loader').style.display = 'none';
+  document.getElementById('ba-cod-confirm-no-btn').disabled = false;
+  document.getElementById('ba-cod-confirm-yes-btn').disabled = false;
+}
+
 function resetCodFormFields() {
   resetLocationFields();
 
@@ -102,6 +109,13 @@ function resetCodFormFields() {
   document.getElementById('baAddress').value = '';
   document.getElementById('baLandmark').value = '';
   document.getElementById('baPostOffice').value = '';
+
+  // reset high risk product modal flag
+  highRiskProductFlag = false;
+
+  // reset cod order url
+  baCodOrderUrl = '';
+  baCodOrderNumber = '';
 
   resetFormFieldsValidation();
 }
@@ -306,4 +320,63 @@ function replaceChildrenAlternative(parentNode) {
   while (parentNode.firstChild) {
     parentNode.removeChild(parentNode.firstChild);
   }
+}
+
+
+function loadHighRiskOrders() {
+  fetch(`https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/high-risk-products/en/products/risk_products.json`)
+    .then(response => {
+      if (response.status === 200) {
+        response.json().then( result => {
+          if (result.data && result.data.high_risk_products) {
+            highRiskProducts = result.data.high_risk_products;
+            checkHighRiskOrder();
+          } else {
+            highRiskProducts = [];
+          }
+        });
+      }
+    }).catch(error => {
+    console.log('Unable to get high risk products: ', error);
+  });
+}
+
+function checkHighRiskOrder() {
+  let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+  let items = baUpdateCart.items;
+  let riskVariantId = items[0].id;
+  console.log('current risk id', riskVariantId, typeof(riskVariantId));
+  if (highRiskProducts && highRiskProducts.indexOf(String(riskVariantId)) > -1) {
+    highRiskProductFlag = true;
+  }
+}
+
+function onConfirmationModalClick(value) {
+  document.getElementById('ba-cod-confirm-no-btn').disabled = true;
+  document.getElementById('ba-cod-confirm-yes-btn').disabled = true;
+  if (value === 'yes') {
+    document.getElementById('ba-cod-confirm-yes-btn-loader').style.display = 'inline-block';
+  } else {
+    document.getElementById('ba-cod-confirm-no-btn-loader').style.display = 'inline-block';
+  }
+
+  fetch(`https://lcrks.leanagri.com/third_parties/shopify/api/v1/shopify_confirmation_pop/?order_id=${baCodOrderNumber}&confirmation=${value}`)
+    .then(response => {
+      if (response.status === 200) {
+        if (value === 'yes') {
+          document.getElementById('ba-confirmation-close').click();
+          document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
+          resetCodConfirmationModal();
+          window.open(baCodOrderUrl, '_self');
+        } else {
+          document.getElementById('ba-confirmation-close').click();
+          document.getElementById('ba-cod-create-order-button').disabled = false;
+          document.getElementById('ba-cod-footer-place-order').style.display = 'block';
+          document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'none';
+          resetCodConfirmationModal();
+        }
+      }
+    }).catch(error => {
+    console.log('Unable to update confirm popup: ', error);
+  });
 }

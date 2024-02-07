@@ -306,12 +306,12 @@
   </div>
 </div>
 
-<!-- Button trigger modal -->
+<!-- Button trigger Smiley discount modal -->
 <button id="ba-party-smiley-btn" style="display: none" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
   Party smiley button
 </button>
 
-<!-- Modal -->
+<!-- Smiley discount Modal -->
 <div class="modal ba-party-smiley-modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" style="border-radius: 13px;">
@@ -337,6 +337,45 @@
   </div>
 </div>
 
+<!-- Button trigger confirmation modal -->
+<button id="ba-confirmation-btn" style="display: none" type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmationModal">
+  Confirmation button
+</button>
+
+<!-- confirmation Modal -->
+<div class="modal ba-cod-confirmation-modal fade" data-backdrop="static" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius: 13px;">
+      <div style="display: none" class="modal-header p-0">
+        <button id="ba-confirmation-close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-5">
+        <div id="ba-cod-confirm-txt-div" class="row d-flex justify-content-center align-items-center ba-cod-confirm-modal-txt">
+          Are you sure you want to place this order?
+        </div>
+        <div class="text-center">
+          <button id="ba-cod-confirm-no-btn" onclick="onConfirmationModalClick('no')" class="btn btn-danger ba-cod-confirm-modal-btn mr-4">
+            <span id="ba-cod-confirm-no-btn-label">No</span>
+            <div id="ba-cod-confirm-no-btn-loader" class="spinner-border text-secondary ml-2"
+                 role="status" style="display: none; color: white!important;">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </button>
+          <button id="ba-cod-confirm-yes-btn" onclick="onConfirmationModalClick('yes')" class="btn btn-success ba-cod-confirm-modal-btn">
+            <span id="ba-cod-confirm-yes-btn-label">Yes</span>
+            <div id="ba-cod-confirm-yes-btn-loader" class="spinner-border text-secondary ml-2"
+                 role="status" style="display: none; color: white!important;">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   let currentUrl1 = window.location.href;
   let lang = 'hi';
@@ -350,6 +389,12 @@
   let selectedBundles = [];
   let serviceablePincodeFlag = true;
   let blacklistedPincodes = [];
+
+  let highRiskProducts = [];
+  let highRiskProductFlag = false;
+
+  let baCodOrderUrl = '';
+  let baCodOrderNumber = '';
 
   // let productHeader = 'प्रोडक्ट';
   let productHeader = 'कैश ऑन डिलीवरी से खरीदें';
@@ -400,6 +445,10 @@
   let smileyModalDiscountLabel = 'डिस्काउंट';
   let smileyModalDiscountAppliedLabel = 'कूपन लागू हुआ';
 
+  let confirmModalTextLabel = 'क्या आप यह ऑर्डर करना चाहते हैं?';
+  let confirmModalYesLabel = 'हाँ';
+  let confirmModalNoLabel = 'नहीं';
+
   if (lang === 'en') {
     // productHeader = 'Product';
     productHeader = 'Cash On Delivery';
@@ -449,6 +498,10 @@
 
     smileyModalDiscountLabel = 'Discount';
     smileyModalDiscountAppliedLabel = 'Coupon Applied';
+
+    confirmModalTextLabel = 'Are you sure you want to place this order?';
+    confirmModalYesLabel = 'Yes';
+    confirmModalNoLabel = 'No';
   }
 
   if (lang === 'mr') {
@@ -500,6 +553,10 @@
 
     smileyModalDiscountLabel = 'डिस्काउंट';
     smileyModalDiscountAppliedLabel = 'कूपन लागू हुआ';
+
+    confirmModalTextLabel = 'तुम्हाला हे ऑर्डर करायचे आहे का?';
+    confirmModalYesLabel = 'होय';
+    confirmModalNoLabel = 'नाही';
   }
   document.getElementById('product-header-id').innerHTML = productHeader;
   document.getElementById('discount-header-id').innerHTML = discountHeader;
@@ -547,6 +604,10 @@
   document.getElementById('baCodStateSelectRequired').innerHTML = stateRequiredLabel;
   document.getElementById('baCodDistrictSelectRequired').innerHTML = districtRequiredLabel;
 
+  document.getElementById('ba-cod-confirm-txt-div').innerHTML = confirmModalTextLabel;
+  document.getElementById('ba-cod-confirm-yes-btn-label').innerHTML = confirmModalYesLabel;
+  document.getElementById('ba-cod-confirm-no-btn-label').innerHTML = confirmModalNoLabel;
+
 </script>
 
 <script src="{{ 'ba-cod-form.js' | asset_url }}" defer="defer"></script>
@@ -556,6 +617,9 @@
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
     let items = baUpdateCart.items;
 
+    baCodOrderUrl = '';
+    baCodOrderNumber = '';
+
     let quantityFb = document.getElementsByClassName('quantity__input')[0].value;
     sendBaFbEvents('AddToCart', {currency: "INR", value: Number(items[0].final_line_price)/100, 'num_items': Number(quantityFb)});
     sendBaFbEvents('InitiateCheckout', {currency: "INR", value: Number(items[0].final_line_price)/100, 'num_items': Number(quantityFb)});
@@ -564,7 +628,7 @@
 
     for (let i = 0; i < items.length; i++) {
       const parentContainer = document.getElementById('product-info-div');
-      replaceChildrenAlternative(parentContainer);
+      replaceChildrenAlternative2(parentContainer);
 
       document.getElementById('ba-product-info-div-loader').style.display = 'none';
 
@@ -675,9 +739,15 @@
     loadCouponCodes(true);
     resetCodFormFields();
     resetCodFooter();
+    resetCodConfirmationModal();
     populatePriceDetailsCard();
     if (!blacklistedPincodes || blacklistedPincodes.length === 0) {
       loadBlackListedPincodes();
+    }
+    if (!highRiskProducts || highRiskProducts.length === 0) {
+      loadHighRiskOrders();
+    } else {
+      checkHighRiskOrder();
     }
   }
 
@@ -728,19 +798,19 @@
 
     // resetting the main product cart values
     const parentContainer = document.getElementById('product-info-div');
-    replaceChildrenAlternative(parentContainer);
+    replaceChildrenAlternative2(parentContainer);
     document.getElementById('ba-product-info-div-loader').style.display = 'block';
 
     // resetting discount div card
     const discountDiv = document.getElementById('ba-cod-discount-div');
     const discountActiveDiv = document.getElementById('ba-active-coupon');
-    replaceChildrenAlternative(discountDiv);
+    replaceChildrenAlternative2(discountDiv);
     discountDiv.appendChild(discountActiveDiv);
     document.getElementById('ba-discount-coupon-div-loader').style.display = 'block';
 
     // resetting bundles values
     const bundlesDiv = document.getElementById('ba-cod-bundle-cards-div');
-    replaceChildrenAlternative(bundlesDiv);
+    replaceChildrenAlternative2(bundlesDiv);
 
     // resetting coupon discount apply loader
     document.getElementById('ba-cod-discount-loader').style.display = 'none';
@@ -794,7 +864,7 @@
 
   function setBaProductBundles(bundles) {
     const bundlesDiv = document.getElementById('ba-cod-bundle-cards-div');
-    replaceChildrenAlternative(bundlesDiv);
+    replaceChildrenAlternative2(bundlesDiv);
 
     if (!bundles || bundles.length === 0) {
       bundles = [];
@@ -1083,7 +1153,7 @@
     const discountDiv = document.getElementById('ba-cod-discount-div');
     const discountActiveDiv = document.getElementById('ba-active-coupon');
 
-    replaceChildrenAlternative(discountDiv);
+    replaceChildrenAlternative2(discountDiv);
     discountDiv.appendChild(discountActiveDiv);
     document.getElementById('ba-discount-coupon-div-loader').style.display = 'none';
 
@@ -1334,7 +1404,7 @@
 
   function setStates() {
     const stateDiv = document.getElementById('baCodStateOptions');
-    replaceChildrenAlternative(stateDiv);
+    replaceChildrenAlternative2(stateDiv);
 
     for (let i=0; i < stateList.length; i++) {
       let stateName = lang === 'en' ? stateList[i].name_en : ( lang === 'mr' ? stateList[i].name_mr : stateList[i].name_hi);
@@ -1463,7 +1533,8 @@
         village: villageValue,
         address: address.value,
         landmark: landmarkValue,
-        postOffice: postOfficeValue
+        postOffice: postOfficeValue,
+        is_confirmation_popup: highRiskProductFlag
       }
 
       let noteAttributesArray = [];
@@ -1579,8 +1650,15 @@
             });
             sendBaFbEvents('Purchase', {currency: "INR", value: createOrderTotalValue, num_items: createOrderLineItems.length});
             localStorage.setItem('BA_COD_FORM_NOTES_ATTRIBUTES', JSON.stringify(noteAttributesArray));
-            document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
-            window.open(result.order.order_status_url, '_self');
+            // window.open(result.order.order_status_url, '_self');
+            baCodOrderUrl = result.order.order_status_url;
+            baCodOrderNumber = result.order.order_number;
+            if (highRiskProductFlag) {
+              document.getElementById('ba-confirmation-btn').click();
+            } else {
+              document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
+              window.open(baCodOrderUrl, '_self');
+            }
           });
         } else {
           document.getElementById('ba-cod-create-order-button').disabled = false;
@@ -1605,8 +1683,15 @@
       // }).then(response => {
       //   if (response.status === 201) {
       //     response.json().then( result => {
-      //       document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
-      //       window.open(result?.order?.order_status_url, '_self');
+      //       // window.open(result.order.order_status_url, '_self');
+      //         baCodOrderUrl = result.order.order_status_url
+      //         baCodOrderNumber = result.order.order_number;
+      //         if (highRiskProductFlag) {
+      //           document.getElementById('ba-confirmation-btn').click();
+      //         } else {
+      //           document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
+      //           window.open(baCodOrderUrl, '_self');
+      //         }
       //     });
       //   } else {
       //     document.getElementById('ba-cod-create-order-button').disabled = false;
@@ -1752,7 +1837,7 @@
     let items = baUpdateCart.items;
 
     const priceParentContainer = document.getElementById('ba-cod-price-details-content');
-    replaceChildrenAlternative(priceParentContainer);
+    replaceChildrenAlternative2(priceParentContainer);
 
     let priceItemsMainDiv = document.createElement('div');
     priceItemsMainDiv.id = 'ba-cod-price-details-items';
@@ -1851,6 +1936,12 @@
           blacklistedPincodes = [];
         }
       });
+  }
+
+  function replaceChildrenAlternative2(parentNode) {
+    while (parentNode.firstChild) {
+      parentNode.removeChild(parentNode.firstChild);
+    }
   }
 </script>
 
