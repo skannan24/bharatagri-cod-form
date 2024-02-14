@@ -155,6 +155,7 @@ function resetFormFieldsValidation() {
   document.getElementById('farmerMobileRequired').style.display = 'none';
   document.getElementById('baCodPincodeRequired').style.display = 'none';
   document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';
+  document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'none';
   document.getElementById('baCodStateSelectRequired').style.display = 'none';
   document.getElementById('baCodDistrictSelectRequired').style.display = 'none';
   document.getElementById('talukaNameRequired').style.display = 'none';
@@ -314,6 +315,31 @@ function checkPincodeServiceability(value) {
     document.getElementById('baCodPincode').classList.add('ba-mandatory-field-border');
     document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
   }
+}
+
+function checkWhiteListedPincodes(value) {
+  let data = getBaCodProductData();
+  if (data.pincode_whitelist && data.pincode_whitelist.length > 0) {
+    if (String(data.pincode_whitelist).indexOf(value) > -1) {
+      console.log('');
+    } else {
+      document.getElementById('baCodPincode').classList.add('ba-mandatory-field-border');
+      document.getElementById('baCodPincodeNotWhitelistRequired').innerHTML = pincodeNotWhitelistRequiredLabel.replace('pincode', value);
+      document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'block';
+    }
+  } else {
+    checkPincodeServiceability(value)
+  }
+}
+
+function validateWhiteListedPincode(value) {
+  let data = getBaCodProductData();
+  return String(data.pincode_whitelist).indexOf(value) > -1;
+}
+
+function getBaCodProductData() {
+  let data = JSON.parse(localStorage.getItem('baCodProductData')) || {};
+  return data.data || {};
 }
 
 function replaceChildrenAlternative(parentNode) {

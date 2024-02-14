@@ -151,6 +151,7 @@
               </div>
               <span id="baCodPincodeRequired" class="ba-mandatory-field-text pl-1">Enter pincode</span>
               <span id="baCodPincodeServiceableRequired" class="ba-mandatory-field-text pl-1">Not a valid pincode</span>
+              <span id="baCodPincodeNotWhitelistRequired" class="ba-mandatory-field-text pl-1">Not serviceable at pincode</span>
             </div>
           </div>
 
@@ -419,6 +420,7 @@
   let mobileRequiredLabel = 'मोबाइल नंबर';
   let pincodeRequiredLabel = 'पिनकोड';
   let pincodeServiceableRequiredLabel = 'डिलीवरी अनुपलब्ध';
+  let pincodeNotWhitelistRequiredLabel = 'pincode पर डिलीवरी अनुपलब्ध';
   let stateRequiredLabel = 'राज्य';
   let districtRequiredLabel = 'जिला';
   let talukaRequiredLabel = 'तहसील';
@@ -473,6 +475,7 @@
     mobileRequiredLabel = 'Enter Mobile Number';
     pincodeRequiredLabel = 'Enter Pincode';
     pincodeServiceableRequiredLabel = 'Non-serviceable pincode';
+    pincodeNotWhitelistRequiredLabel = 'Not serviceable at pincode';
     stateRequiredLabel = 'Enter State';
     districtRequiredLabel = 'Enter District';
     talukaRequiredLabel = 'Enter Taluka';
@@ -528,6 +531,7 @@
     mobileRequiredLabel = 'मोबाइल नंबर';
     pincodeRequiredLabel = 'पिनकोड';
     pincodeServiceableRequiredLabel = 'डिलीवरी अनुपलब्ध';
+    pincodeNotWhitelistRequiredLabel = 'डिलिव्हरी pincode वर उपलब्ध नाही';
     stateRequiredLabel = 'राज्य';
     districtRequiredLabel = 'जिला';
     talukaRequiredLabel = 'तालुका';
@@ -581,6 +585,7 @@
   document.getElementById('baCodPincodeLabel').innerHTML = pincodeLabel;
   document.getElementById('baCodPincodeRequired').innerHTML = pincodeRequiredLabel;
   document.getElementById('baCodPincodeServiceableRequired').innerHTML = pincodeServiceableRequiredLabel;
+  document.getElementById('baCodPincodeNotWhitelistRequired').innerHTML = pincodeNotWhitelistRequiredLabel;
 
   document.getElementById('talukaName').placeholder = talukaLabel;
   document.getElementById('talukaNameLabel').innerHTML = talukaLabel;
@@ -1458,11 +1463,19 @@
       document.getElementById('baCodPincodeRequired').style.display = 'block';
       if (!validationError) {baScrollToId('baCodPincode');}
       validationError = true;
-    } else if (String(blacklistedPincodes).indexOf(pincode.value) > -1) {
-      pincode.classList.add('ba-mandatory-field-border');
-      document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
-      if (!validationError) {baScrollToId('baCodPincode');}
-      validationError = true;
+    } else {
+      let data = getBaCodProductData();
+      if (data.pincode_whitelist && data.pincode_whitelist.length > 0) {
+        if (!validateWhiteListedPincode(pincode.value)) {
+          pincode.classList.add('ba-mandatory-field-border');
+          document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'block';
+        }
+      } else if (String(blacklistedPincodes).indexOf(pincode.value) > -1) {
+        pincode.classList.add('ba-mandatory-field-border');
+        document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
+        if (!validationError) {baScrollToId('baCodPincode');}
+        validationError = true;
+      }
     }
 
     if (!state) {
@@ -1754,9 +1767,19 @@
 
     if (pincode && pincode.value && pincode.value.length === 6 && pincode.value.match(numericalNumberRegex) && pincode.value[0] !== "0") {
       document.getElementById('baCodPincodeRequired').style.display = 'none';
-      if (String(blacklistedPincodes).indexOf(pincode.value) === -1) {
-        pincode.classList.remove('ba-mandatory-field-border');
-        document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';
+      let data = getBaCodProductData();
+      if (data.pincode_whitelist && data.pincode_whitelist.length > 0) {
+        if (validateWhiteListedPincode(pincode.value)) {
+          pincode.classList.remove('ba-mandatory-field-border');
+          document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';
+          document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'none';
+        }
+      } else {
+        if (String(blacklistedPincodes).indexOf(pincode.value) === -1) {
+          pincode.classList.remove('ba-mandatory-field-border');
+          document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';
+          document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'none';
+        }
       }
     }
 
@@ -1915,8 +1938,9 @@
   document.getElementById('baCodPincode').addEventListener('input', function () {
     if (this.value.length === 6) {
       document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';
+      document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'none';
       loadBaLocation(this.value);
-      checkPincodeServiceability(this.value);
+      checkWhiteListedPincodes(this.value);
     }
   });
 </script>
