@@ -338,8 +338,7 @@ function validateWhiteListedPincode(value) {
 }
 
 function getBaCodProductData() {
-  let data = JSON.parse(localStorage.getItem('baCodProductData')) || {};
-  return data.data || {};
+  return JSON.parse(localStorage.getItem('baCodProductData')) || {};
 }
 
 function replaceChildrenAlternative(parentNode) {

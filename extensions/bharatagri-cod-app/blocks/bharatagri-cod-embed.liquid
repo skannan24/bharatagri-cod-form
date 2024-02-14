@@ -1469,6 +1469,8 @@
         if (!validateWhiteListedPincode(pincode.value)) {
           pincode.classList.add('ba-mandatory-field-border');
           document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'block';
+          if (!validationError) {baScrollToId('baCodPincode');}
+          validationError = true;
         }
       } else if (String(blacklistedPincodes).indexOf(pincode.value) > -1) {
         pincode.classList.add('ba-mandatory-field-border');
