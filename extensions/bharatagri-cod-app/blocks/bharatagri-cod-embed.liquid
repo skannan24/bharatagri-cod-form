@@ -1664,6 +1664,16 @@
               'ba_phone_number': mobileValue
             });
             sendBaFbEvents('Purchase', {currency: "INR", value: createOrderTotalValue, num_items: createOrderLineItems.length});
+            try {
+              gtag('event', 'conversion', {
+                'send_to': 'AW-682014322/--74CKG9_dcDEPLsmsUC',
+                'value': createOrderTotalValue,
+                'currency': 'INR',
+                'transaction_id': ''
+              });
+            }  catch (error) {
+              console.log('gtag error');
+            }
             localStorage.setItem('BA_COD_FORM_NOTES_ATTRIBUTES', JSON.stringify(noteAttributesArray));
             // window.open(result.order.order_status_url, '_self');
             baCodOrderUrl = result.order.order_status_url;
