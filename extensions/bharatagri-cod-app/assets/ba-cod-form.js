@@ -405,3 +405,29 @@ function onConfirmationModalClick(value) {
     console.log('Unable to update confirm popup: ', error);
   });
 }
+
+function loadProductBundlesOldFunction() {
+  let requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+
+  fetch(`https://lcrks.leanagri.com/third_parties/shopify_cod_app/api/v1/cod-bundles/?variant_id=${bundleVariant}&lang=${lang}`, requestOptions)
+    .then(response => {
+      if (response.status === 200) {
+        response.json().then(result => {
+          if (result && result.data) {
+            setBaProductBundles(result.data);
+          } else {
+            document.getElementById('ba-cod-bundle-div').style.display = 'none';
+          }
+        });
+      } else {
+        console.log('Unable to fetch web bundle products');
+        document.getElementById('ba-cod-bundle-div').style.display = 'none';
+      }
+    }).catch(error => {
+    console.log('error: ', error);
+    document.getElementById('ba-cod-bundle-div').style.display = 'none';
+  });
+}
