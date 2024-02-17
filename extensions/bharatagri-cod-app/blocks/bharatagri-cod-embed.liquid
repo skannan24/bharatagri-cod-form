@@ -323,7 +323,7 @@
       </div>
       <div class="modal-body p-5">
         <div class="row d-flex justify-content-center align-items-center">
-          <img src="https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/party-smiley.png"
+          <img src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/party-smiley.png"
                width="70" height="auto" class="w-25" alt="ba-coupon-applied-img" loading="lazy"/>
         </div>
         <div id="ba-smiley-modal-amt-id" class="ba-smiley-modal-discount-amount p-3">
@@ -880,7 +880,7 @@
     }
 
 
-    let bundleImagePlaceholder = 'https://leanconnect.s3.ap-south-1.amazonaws.com/shopify-static-images/product-img-placeholder.png';
+    let bundleImagePlaceholder = 'https://shopify-krushidukan.leanagri.com/ba-cod-form-images/product-img-placeholder.png';
 
     for (let i=0; i < bundles.length; i++) {
       const bundle = bundles[i] && bundles[i].secondary_product && bundles[i].secondary_product.product;
@@ -1031,7 +1031,7 @@
     bundleDiscountPercent = Math.floor(bundleDiscountPercent);
     let bundleDiscountedAmount = bundleProductPrice - bundleProductDiscountPrice;
 
-    let bundleProductImage = 'https://leanconnect.s3.ap-south-1.amazonaws.com/shopify-static-images/product-img-placeholder.png';
+    let bundleProductImage = 'https://shopify-krushidukan.leanagri.com/ba-cod-form-images/product-img-placeholder.png';
 
     if (product.secondary_product.product.images[0] && product.secondary_product.product.images[0].media_url) {
       bundleProductImage = product.secondary_product.product.images[0].media_url;
@@ -1134,7 +1134,7 @@
       method: 'GET',
       redirect: 'follow'
     };
-    fetch(`https://s3.ap-south-1.amazonaws.com/shopify-krushidukan-apis/price_rules/en/coupons/price_rule_list.json`, requestOptions)
+    fetch(`https://shopify-krushidukan.leanagri.com/price_rules/en/coupons/price_rule_list.json`, requestOptions)
       .then(response => {
         if (response.status === 200) {
           response.json().then(result => {
@@ -1393,7 +1393,7 @@
 
   let stateList = [];
 
-  fetch('https://cached-bharatagri-apis.s3.ap-south-1.amazonaws.com/location/state_list/en/state/state_list.json', {
+  fetch('https://api-cache.leanagri.com/location/state_list/en/state/state_list.json', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -1960,7 +1960,7 @@
 <script>
   // Blacklisted pincode api - will be called once when page is loaded
   function loadBlackListedPincodes() {
-    fetch(`https://s3.ap-south-1.amazonaws.com/shopify-krushidukan-apis/blacklisted_pincodes/en/pincodes/blacklisted.json`, {
+    fetch(`https://shopify-krushidukan.leanagri.com/blacklisted_pincodes/en/pincodes/blacklisted.json`, {
       method: 'GET',
       headers: {'Content-Type': 'application/json'}
     }).then(res => res.json())
@@ -1986,11 +1986,11 @@
   let imgUrl = ''
   let currentUrlForTrustBadge = window.location.href;
   if (currentUrlForTrustBadge.indexOf('.com/en') > -1) {
-    imgUrl = 'https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/ba_cod_trust_badge_en.png';
+    imgUrl = 'https://shopify-krushidukan.leanagri.com/ba-cod-form-images/ba_cod_trust_badge_en.png';
   } else if (currentUrlForTrustBadge.indexOf('.com/mr') > -1) {
-    imgUrl = 'https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/ba_cod_trust_badge_mr.png';
+    imgUrl = 'https://shopify-krushidukan.leanagri.com/ba-cod-form-images/ba_cod_trust_badge_mr.png';
   } else {
-    imgUrl = 'https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/ba_cod_trust_badge_hi.png';
+    imgUrl = 'https://shopify-krushidukan.leanagri.com/ba-cod-form-images/ba_cod_trust_badge_hi.png';
   }
 
   document.getElementById('ba-cod-trust-badge-img').src = imgUrl;

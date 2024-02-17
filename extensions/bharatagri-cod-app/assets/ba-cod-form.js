@@ -189,7 +189,7 @@ function loadDistricts(stateId) {
     method: 'GET',
     redirect: 'follow'
   };
-  fetch(`https://s3.ap-south-1.amazonaws.com/cached-bharatagri-apis/location/district_list/en/${stateId}/district_list.json`, requestOptions)
+  fetch(`https://api-cache.leanagri.com/location/district_list/en/${stateId}/district_list.json`, requestOptions)
     .then(response => {
       if (response.status === 200) {
         response.json().then(result => {
@@ -271,7 +271,7 @@ function sendBaFbEvents(name, value) {
 
 function loadBaLocation(value) {
   if (value.length === 6) {
-    fetch(`https://s3.ap-south-1.amazonaws.com/shopify-krushidukan-apis/pincode_mapping/en/pincode/${value}/pincode.json`)
+    fetch(`https://shopify-krushidukan.leanagri.com/pincode_mapping/en/pincode/${value}/pincode.json`)
       .then(response => {
         if (response.status === 200) {
           response.json().then( result => {
@@ -349,7 +349,7 @@ function replaceChildrenAlternative(parentNode) {
 
 
 function loadHighRiskOrders() {
-  fetch(`https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/high-risk-products/en/products/risk_products.json`)
+  fetch(`https://shopify-krushidukan.leanagri.com/high-risk-products/en/products/risk_products.json`)
     .then(response => {
       if (response.status === 200) {
         response.json().then( result => {
