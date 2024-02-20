@@ -500,11 +500,19 @@
   }
 }
 
+.ba-cod-bundle-card-full-width {
+  flex: 0 0 95%;
+}
+
+.ba-cod-bundle-card-half-width {
+  flex: 0 0 78%;
+}
+
 .ba-cod-bundle-card {
   border-radius: 10px;
   border: 1px solid #E6E8EB;
-  max-width: 90%;
-  width: 90%;
+  max-width: 95%;
+  width: 95%;
   background: white;
   box-shadow: 0px 1px 4px 0px #00000026;
   /*background-color: rgba(217, 246, 243, 1) !important;*/
