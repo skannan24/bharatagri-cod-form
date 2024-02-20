@@ -74,8 +74,8 @@
 
 .ba-cod-product-title {
   font-family: Noto Sans;
-  font-size: 15px;
-  font-weight: 400;
+  font-size: 16px;
+  font-weight: 600;
   line-height: 18px;
   letter-spacing: 0em;
   text-align: left;
@@ -326,7 +326,7 @@
 
 .ba-cod-select-field {
   font-family: Noto Sans;
-  height: 44px;
+  height: 47px;
   font-size: 16px;
   text-align: left;
   border-color: #ADB2C0;
@@ -336,24 +336,26 @@
 .ba-cod-options-field {
   font-family: Noto Sans;
   width: 100%;
-  font-size: 14px;
-  max-height: 240px;
+  font-size: 15px;
+  max-height: 300px;
   overflow-y: scroll;
+  background: #F8F8F8;
 }
 
 .ba-mandatory-field-text {
   font-family: Noto Sans;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
-  line-height: 18px;
+  line-height: 20px;
   letter-spacing: 0em;
   text-align: left;
   color: #D42216;
+  margin-top: 2px;
   display: none;
 }
 
 .ba-mandatory-field-border {
-  border-color: #D42216;
+  border-color: #D42216!important;
 }
 
 .ba-cod-price-details-main-div {
@@ -363,11 +365,11 @@
 
 .ba-cod-price-details-items {
   font-family: Noto Sans;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
-  line-height: 15px;
+  line-height: 18px;
   letter-spacing: 0em;
-  color: #474D61;
+  color: black;
 }
 
 .ba-cod-price-details-product-title {
@@ -377,13 +379,32 @@
   -webkit-box-orient: vertical!important;
 }
 
+.ba-cod-price-details-product-price {
+  font-weight: 700!important;
+}
+
+.ba-cod-price-details-total-discount {
+  font-weight: 700!important;
+  color: #e41717;
+}
+
+.ba-cod-price-details-free-delivery {
+  font-weight: 700!important;
+}
+
+.ba-cod-price-details-total-price {
+  font-weight: 700!important;
+  font-size: 18px;
+}
+
 .ba-cod-price-details-discount {
   font-family: Noto Sans;
   font-size: 16px;
   font-weight: 500;
   line-height: 18px;
   letter-spacing: 0em;
-  color: #0A8047;
+  color: black;
+  /*color: #0A8047;*/
   display: none;
 }
 
@@ -703,4 +724,34 @@
 .ba-cod-confirm-modal-btn {
   font-size: 15px;
   padding: 10px 35px;
+}
+
+.ba-cod-input-container {
+  position: relative;
+  /*margin: 20px;*/
+}
+
+.ba-cod-input-icon {
+  position: absolute;
+  left: 1px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: black;
+  font-size: 22px;
+  padding: 11px 10px;
+  background: lightgray;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  width: 43px;
+}
+
+.ba-cod-input-box {
+  padding-left: 52px; /* Adjust according to icon size */
+  height: 47px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  font-size: 16px;
+  box-sizing: border-box;
+  width: 100%!important;
 }

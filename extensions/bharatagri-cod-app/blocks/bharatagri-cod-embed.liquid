@@ -95,9 +95,9 @@
 
           <div class="row mt-3 pb-2">
             <div class="col-12">
-              <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('name')" class="form-control ba-cod-input-field" id="farmerName" name="Name" placeholder="Name"/>
-                <label id="farmerNameLabel" for="farmerName">Name</label>
+              <div class="ba-cod-input-container">
+                <img class="ba-cod-input-icon" src="https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/baCodUserIcon.svg" alt="Name" />
+                <input onclick="onInputElementClick('name')" class="ba-cod-input-box form-control ba-cod-input-field" id="farmerName" name="Name" placeholder="Name"/>
               </div>
               <span id="farmerNameRequired" class="ba-mandatory-field-text pl-1">Enter name</span>
             </div>
@@ -106,15 +106,15 @@
           <div class="row mt-3 pb-2">
             <div style="display: none" class="col-6 pr-1">
               <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('alternate mobile')" class="form-control ba-cod-input-field" id="alternateMobile" type="text" maxlength="10" name="Alternate Number" placeholder="Alternate Number"/>
+                <input onclick="onInputElementClick('alternate mobile')" class="ba-cod-input-box form-control ba-cod-input-field" id="alternateMobile" type="text" maxlength="10" name="Alternate Number" placeholder="Alternate Number"/>
                 <label id="alternateMobileLabel" for="alternateMobile">Alternate Number</label>
               </div>
             </div>
             <div class="col-12">
-              <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('mobile')" class="form-control ba-cod-input-field" id="farmerMobile"
+              <div class="ba-cod-input-container">
+                <img class="ba-cod-input-icon" src="https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/baCodCallIcon.svg" alt="Mobile" />
+                <input onclick="onInputElementClick('mobile')" class="ba-cod-input-box form-control ba-cod-input-field" id="farmerMobile"
                        type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="10" name="Mobile Number" placeholder="Mobile Number"/>
-                <label id="farmerMobileLabel" for="farmerMobile">Mobile Number</label>
               </div>
               <span id="farmerMobileRequired" class="ba-mandatory-field-text pl-1">Enter mobile number</span>
             </div>
@@ -122,10 +122,10 @@
 
           <div class="row mt-3 pb-2">
             <div class="col-12">
-              <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('pincode')"  class="form-control ba-cod-input-field" id="baCodPincode"
+              <div class="ba-cod-input-container">
+                <img class="ba-cod-input-icon" src="https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/baCodLocationIcon.svg" alt="Pincode" />
+                <input onclick="onInputElementClick('pincode')" class="ba-cod-input-box form-control ba-cod-input-field" id="baCodPincode"
                        type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="6" name="Pincode" placeholder="Pincode"/>
-                <label id="baCodPincodeLabel" for="baCodPincode">Pincode</label>
               </div>
               <span id="baCodPincodeRequired" class="ba-mandatory-field-text pl-1">Enter pincode</span>
               <span id="baCodPincodeServiceableRequired" class="ba-mandatory-field-text pl-1">Not a valid pincode</span>
@@ -167,14 +167,14 @@
           <div style="display: none" class="row mt-3 pb-2">
             <div class="col-6 pr-1">
               <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('taluka')" class="form-control ba-cod-input-field" id="talukaName" name="Taluka" placeholder="Taluka"/>
+                <input onclick="onInputElementClick('taluka')" class="ba-cod-input-box form-control ba-cod-input-field" id="talukaName" name="Taluka" placeholder="Taluka"/>
                 <label id="talukaNameLabel" for="talukaName">Taluka</label>
               </div>
               <span id="talukaNameRequired" class="ba-mandatory-field-text pl-1">Enter taluka</span>
             </div>
             <div class="col-6 pl-1">
               <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('village')" class="form-control ba-cod-input-field" id="villageName" name="Village" placeholder="Village"/>
+                <input onclick="onInputElementClick('village')" class="ba-cod-input-box form-control ba-cod-input-field" id="villageName" name="Village" placeholder="Village"/>
                 <label id="villageNameLabel" for="villageName">Village</label>
               </div>
               <span id="villageNameRequired" class="ba-mandatory-field-text pl-1">Enter village</span>
@@ -183,9 +183,10 @@
 
           <div class="row mt-3 pb-2">
             <div class="col-12">
-              <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('address')" class="form-control ba-cod-full-width-input-field" id="baAddress" maxlength="150" name="Address" placeholder="Address (ex : plot no, street name, road etc)"/>
-                <label id="baAddressLabel" for="baAddress">Address (ex : plot no, street name, road etc)</label>
+              <div class="ba-cod-input-container">
+                <img class="ba-cod-input-icon" src="https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/baCodLocationIcon.svg" alt="Pincode" />
+                <input onclick="onInputElementClick('address')" class="ba-cod-input-box form-control ba-cod-input-field" id="baAddress"
+                       maxlength="150" name="Address" placeholder="Address (ex : plot no, street name, road etc)"/>
               </div>
               <span id="baAddressRequired" class="ba-mandatory-field-text pl-1">Enter address</span>
             </div>
@@ -193,9 +194,10 @@
 
           <div class="row mt-3 pb-2">
             <div class="col-12">
-              <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('landmark')" class="form-control ba-cod-full-width-input-field" id="baLandmark" maxlength="150" name="Landmark" placeholder="Landmark (ex : near gopal mandir, school etc)"/>
-                <label id="baLandmarkLabel" for="baLandmark">Landmark</label>
+              <div class="ba-cod-input-container">
+                <img class="ba-cod-input-icon" src="https://shopify-krushidukan-apis.s3.ap-south-1.amazonaws.com/ba-cod-form-images/baCodLocationIcon.svg" alt="Pincode" />
+                <input onclick="onInputElementClick('landmark')" class="ba-cod-input-box form-control ba-cod-input-field" id="baLandmark"
+                       maxlength="150" name="Landmark" placeholder="Landmark (ex : near gopal mandir, school etc)"/>
               </div>
               <span id="baLandmarkRequired" class="ba-mandatory-field-text pl-1">Enter landmark</span>
             </div>
@@ -204,7 +206,7 @@
           <div style="display: none" class="row mt-3 pb-2">
             <div class="col-12">
               <div class="form-group has-float-label">
-                <input onclick="onInputElementClick('post office')" class="form-control ba-cod-full-width-input-field" id="baPostOffice" name="Post Office" placeholder="Post Office (Optional)"/>
+                <input onclick="onInputElementClick('post office')" class="ba-cod-input-box form-control ba-cod-input-field" id="baPostOffice" name="Post Office" placeholder="Post Office (Optional)"/>
                 <label id="baPostOfficeLabel" for="baPostOffice">Post Office</label>
               </div>
             </div>
@@ -549,40 +551,31 @@
   document.getElementById('ba-cod-footer-delivery-label').innerHTML = cashOnDeliveryLabel;
 
   document.getElementById('farmerName').placeholder = nameLabel;
-  document.getElementById('farmerNameLabel').innerHTML = nameLabel;
   document.getElementById('farmerNameRequired').innerHTML = nameRequiredLabel;
 
   document.getElementById('farmerMobile').placeholder = mobileLabel;
-  document.getElementById('farmerMobileLabel').innerHTML = mobileLabel;
   document.getElementById('farmerMobileRequired').innerHTML = mobileRequiredLabel;
 
   document.getElementById('alternateMobile').placeholder = alternateMobileLabel;
-  document.getElementById('alternateMobileLabel').innerHTML = alternateMobileLabel;
 
   document.getElementById('baCodPincode').placeholder = pincodeLabel;
-  document.getElementById('baCodPincodeLabel').innerHTML = pincodeLabel;
   document.getElementById('baCodPincodeRequired').innerHTML = pincodeRequiredLabel;
   document.getElementById('baCodPincodeServiceableRequired').innerHTML = pincodeServiceableRequiredLabel;
   document.getElementById('baCodPincodeNotWhitelistRequired').innerHTML = pincodeNotWhitelistRequiredLabel;
 
   document.getElementById('talukaName').placeholder = talukaLabel;
-  document.getElementById('talukaNameLabel').innerHTML = talukaLabel;
   document.getElementById('talukaNameRequired').innerHTML = talukaRequiredLabel;
 
   document.getElementById('villageName').placeholder = villageLabel;
-  document.getElementById('villageNameLabel').innerHTML = villageLabel;
   document.getElementById('villageNameRequired').innerHTML = villageRequiredLabel;
 
   document.getElementById('baAddress').placeholder = addressLabel;
-  document.getElementById('baAddressLabel').innerHTML = addressLabel;
   document.getElementById('baAddressRequired').innerHTML = addressRequiredLabel;
 
   document.getElementById('baLandmark').placeholder = landmarkLabel;
-  document.getElementById('baLandmarkLabel').innerHTML = landmarkLabel;
   document.getElementById('baLandmarkRequired').innerHTML = landmarkRequiredLabel;
 
   document.getElementById('baPostOffice').placeholder = postOfficeLabel;
-  document.getElementById('baPostOfficeLabel').innerHTML = postOfficeLabel;
 
   document.getElementById('baCodStateSelectRequired').innerHTML = stateRequiredLabel;
   document.getElementById('baCodDistrictSelectRequired').innerHTML = districtRequiredLabel;
@@ -1009,14 +1002,14 @@
     bundlePriceItemsMainDiv.appendChild(priceItemsRow);
 
     let priceItemsCol1 = document.createElement('div');
-    priceItemsCol1.className = 'col-8 ba-cod-price-details-product-title';
+    priceItemsCol1.className = 'col-9 ba-cod-price-details-product-title';
     priceItemsCol1.innerHTML = (bundleProductTitle && bundleProductTitle.length > 34)
       ? bundleProductTitle.slice(0, 34) + '..'
       : (bundleProductTitle !== null && bundleProductTitle !== undefined) ? bundleProductTitle : '';
     priceItemsRow.appendChild(priceItemsCol1);
 
     let priceItemsCol2 = document.createElement('div');
-    priceItemsCol2.className = 'col-4 text-right pl-0';
+    priceItemsCol2.className = 'col-3 text-right pl-0 ba-cod-price-details-product-price';
     priceItemsCol2.innerHTML = bundleProductDiscountPrice ? `₹ ${bundleProductDiscountPrice}` : '0';
     priceItemsRow.appendChild(priceItemsCol2);
 
@@ -1142,7 +1135,7 @@
         endDate = new Date(discounts[i].ends_at);
       }
       if ((endDate >= today || endDate === null) && discountCouponsCartItemTotalValue > discounts[i].min_amount_rule
-      && excludedProducts.indexOf('{{ product.id }}') === -1) {
+        && excludedProducts.indexOf('{{ product.id }}') === -1) {
         finalCodes.push(discounts[i]);
       }
     }
@@ -1847,12 +1840,12 @@
       priceItemsMainDiv.appendChild(priceItemsRow);
 
       let priceItemsCol1 = document.createElement('div');
-      priceItemsCol1.className = 'col-8 ba-cod-price-details-product-title';
+      priceItemsCol1.className = 'col-9 ba-cod-price-details-product-title';
       priceItemsCol1.innerHTML = items[i].product_title.length > 34 ? items[i].product_title.slice(0,34) + '..' : items[i].product_title;
       priceItemsRow.appendChild(priceItemsCol1);
 
       let priceItemsCol2 = document.createElement('div');
-      priceItemsCol2.className = 'col-4 text-right pl-0';
+      priceItemsCol2.className = 'col-3 text-right pl-0 ba-cod-price-details-product-price';
       priceItemsCol2.id = 'ba-cod-product-price' + i;
       priceItemsCol2.innerHTML = items[i].final_line_price ? `₹ ${Number(items[i].final_line_price)/100}` : '0';
       priceItemsRow.appendChild(priceItemsCol2);
@@ -1864,12 +1857,12 @@
     document.getElementById('ba-cod-price-details-content').appendChild(priceItemsDiscountDiv);
 
     let priceItemsDiscountCol1 = document.createElement('div');
-    priceItemsDiscountCol1.className = 'col-8';
+    priceItemsDiscountCol1.className = 'col-9';
     priceItemsDiscountCol1.innerHTML = priceDetailsDiscountLabel;
     priceItemsDiscountDiv.appendChild(priceItemsDiscountCol1);
 
     let priceItemsDiscountCol2 = document.createElement('div');
-    priceItemsDiscountCol2.className = 'col-4 text-right pl-0';
+    priceItemsDiscountCol2.className = 'col-3 text-right pl-0 ba-cod-price-details-total-discount';
     priceItemsDiscountCol2.id = 'ba-price-details-discount-value';
     priceItemsDiscountDiv.appendChild(priceItemsDiscountCol2);
 
@@ -1884,7 +1877,7 @@
     priceItemsFreeDeliveryDiv.appendChild(priceItemsFreeDeliveryCol1);
 
     let priceItemsFreeDeliveryCol2 = document.createElement('div');
-    priceItemsFreeDeliveryCol2.className = 'col-4 text-right pl-0';
+    priceItemsFreeDeliveryCol2.className = 'col-4 text-right pl-0 ba-cod-price-details-free-delivery';
     priceItemsFreeDeliveryCol2.innerHTML = priceDetailsFreeDeliveryValueLabel;
     priceItemsFreeDeliveryDiv.appendChild(priceItemsFreeDeliveryCol2);
 
@@ -1899,7 +1892,7 @@
     priceItemsTotalDiv.appendChild(priceItemsTotalCol1);
 
     let priceItemsTotalCol2 = document.createElement('div');
-    priceItemsTotalCol2.className = 'col-4 text-right pl-0';
+    priceItemsTotalCol2.className = 'col-4 text-right pl-0 ba-cod-price-details-total-price';
     priceItemsTotalCol2.innerHTML = `₹ ${baUpdateCart.total_price/100}`;
     priceItemsTotalCol2.id = 'ba-price-details-total-value';
     priceItemsTotalDiv.appendChild(priceItemsTotalCol2);
