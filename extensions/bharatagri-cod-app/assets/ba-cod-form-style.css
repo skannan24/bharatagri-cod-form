@@ -65,6 +65,7 @@
   font-size: 20px;
   font-weight: 600;
   line-height: 25px;
+  color: rgba(31, 154, 0, 1) !important;
 }
 
 .ba-cod-main-divs-spinner {
@@ -156,6 +157,7 @@
   text-align: left;
   color: #181B26;
   padding-bottom: 6px;
+  color: rgba(31, 154, 0, 1) !important;
 }
 
 .ba-cod-discount-row {
@@ -449,10 +451,10 @@
   color: #FFFFFF;
   font-family: Noto Sans;
   font-size: 22px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 27px;
   letter-spacing: 0em;
-  text-align: right;
+  /*text-align: right;*/
   -webkit-mask:linear-gradient(-60deg,#000 30%,#0005,#000 70%) right/300% 100%;
   background-repeat: no-repeat;
   animation: shimmer 2.5s infinite;
@@ -688,13 +690,27 @@
 
 .ba-cod-quantity-div {
   display: inline-flex;
-  padding: 4px 10px;
+  padding: 0px 10px;
   justify-content: center;
   align-items: center;
   gap: 12px;
   border-radius: 4px;
   border: 0.5px solid #ADB2C0;
   background: #FFF;
+}
+
+.ba-cod-minus-symbol {
+  border-right: 1px solid #ADB2C0 !important;
+  padding-right: 8px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.ba-cod-plus-symbol {
+  border-left: 1px solid #ADB2C0 !important;
+  padding-left: 8px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .ba-cod-quantity-symbols {

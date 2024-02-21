@@ -45,7 +45,7 @@
         </div>
 
         <!-- Bundle product card -->
-        <div id="ba-cod-bundle-div" class="pt-2 pb-2" style="background: #F2F3F4;">
+        <div id="ba-cod-bundle-div" class="pt-2 pb-2">
           <div id="ba-cod-bundle-cards-div" class="row ba-cod-discount-row mt-2 mb-2 ml-3">
 
           </div>
@@ -56,12 +56,12 @@
         <!-- Discount coupon card -->
         <div id="ba-discount-coupon-div" class="p-2 m-2">
           <div class="d-flex align-items-center">
-            <span class="ba-cod-card-header" id="discount-header-id"></span>
+            <span class="ba-cod-card-header" id="discount-header-id" style="display: none"></span>
             <div id="ba-cod-discount-loader" style="display: none" class="spinner-border text-secondary ml-2" role="status">
               <span class="sr-only">Loading...</span>
             </div>
           </div>
-          <div id="ba-cod-discount-div" class="row ba-cod-discount-row mt-2 ml-0">
+          <div id="ba-cod-discount-div" class="row ba-cod-discount-row ml-0">
 
             <div id="ba-active-coupon" style="display: none" class="col-auto p-3 ba-cod-discount-card ba-cod-discount-card-active mr-2" onclick="openSmileyModal()">
               <div class="row pt-2 justify-content-between mb-3 ba-cod-discount-title">
@@ -124,12 +124,21 @@
             <div class="col-12">
               <div class="ba-cod-input-container">
                 <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Pincode" />
-                <input onclick="onInputElementClick('pincode')" class="ba-cod-input-box form-control ba-cod-input-field" id="baCodPincode"
-                       type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="6" name="Pincode" placeholder="Pincode"/>
+                <input onclick="onInputElementClick('address')" class="ba-cod-input-box form-control ba-cod-input-field" id="baAddress"
+                       maxlength="150" name="Address" placeholder="Address (ex : plot no, street name, road etc)"/>
               </div>
-              <span id="baCodPincodeRequired" class="ba-mandatory-field-text pl-1">Enter pincode</span>
-              <span id="baCodPincodeServiceableRequired" class="ba-mandatory-field-text pl-1">Not a valid pincode</span>
-              <span id="baCodPincodeNotWhitelistRequired" class="ba-mandatory-field-text pl-1">Not serviceable at pincode</span>
+              <span id="baAddressRequired" class="ba-mandatory-field-text pl-1">Enter address</span>
+            </div>
+          </div>
+
+          <div class="row mt-3 pb-2">
+            <div class="col-12">
+              <div class="ba-cod-input-container">
+                <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Pincode" />
+                <input onclick="onInputElementClick('landmark')" class="ba-cod-input-box form-control ba-cod-input-field" id="baLandmark"
+                       maxlength="150" name="Landmark" placeholder="Landmark (ex : near gopal mandir, school etc)"/>
+              </div>
+              <span id="baLandmarkRequired" class="ba-mandatory-field-text pl-1">Enter landmark</span>
             </div>
           </div>
 
@@ -146,6 +155,20 @@
               <span id="baCodStateSelectRequired" class="ba-mandatory-field-text pl-1">Enter State</span>
             </div>
           </div>
+
+          {% comment %}<div class="row mt-3 pb-2">{% endcomment %}
+          {% comment %}<div class="col-12">{% endcomment %}
+          {% comment %}<div class="form-group has-float-label dropdown mb-0">{% endcomment %}
+          {% comment %}<select class="ba-cod-input-box form-control ba-cod-input-field">{% endcomment %}
+          {% comment %}<option value="">Select state</option>{% endcomment %}
+          {% comment %}<option>State1</option>{% endcomment %}
+          {% comment %}<option>State2</option>{% endcomment %}
+          {% comment %}<option>State3</option>{% endcomment %}
+          {% comment %}</select>{% endcomment %}
+          {% comment %}</div>{% endcomment %}
+          {% comment %}<span id="baCodStateSelectRequired" class="ba-mandatory-field-text pl-1">Enter State</span>{% endcomment %}
+          {% comment %}</div>{% endcomment %}
+          {% comment %}</div>{% endcomment %}
 
           <div class="row mt-3 pb-2">
             <div class="col-12">
@@ -164,6 +187,19 @@
             </div>
           </div>
 
+          <div class="row mt-3 pb-2">
+            <div class="col-12">
+              <div class="ba-cod-input-container">
+                <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Pincode" />
+                <input onclick="onInputElementClick('pincode')" class="ba-cod-input-box form-control ba-cod-input-field" id="baCodPincode"
+                       type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="6" name="Pincode" placeholder="Pincode"/>
+              </div>
+              <span id="baCodPincodeRequired" class="ba-mandatory-field-text pl-1">Enter pincode</span>
+              <span id="baCodPincodeServiceableRequired" class="ba-mandatory-field-text pl-1">Not a valid pincode</span>
+              <span id="baCodPincodeNotWhitelistRequired" class="ba-mandatory-field-text pl-1">Not serviceable at pincode</span>
+            </div>
+          </div>
+
           <div style="display: none" class="row mt-3 pb-2">
             <div class="col-6 pr-1">
               <div class="form-group has-float-label mb-0">
@@ -178,28 +214,6 @@
                 <label id="villageNameLabel" for="villageName">Village</label>
               </div>
               <span id="villageNameRequired" class="ba-mandatory-field-text pl-1">Enter village</span>
-            </div>
-          </div>
-
-          <div class="row mt-3 pb-2">
-            <div class="col-12">
-              <div class="ba-cod-input-container">
-                <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Pincode" />
-                <input onclick="onInputElementClick('address')" class="ba-cod-input-box form-control ba-cod-input-field" id="baAddress"
-                       maxlength="150" name="Address" placeholder="Address (ex : plot no, street name, road etc)"/>
-              </div>
-              <span id="baAddressRequired" class="ba-mandatory-field-text pl-1">Enter address</span>
-            </div>
-          </div>
-
-          <div class="row mt-3 pb-2">
-            <div class="col-12">
-              <div class="ba-cod-input-container">
-                <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Pincode" />
-                <input onclick="onInputElementClick('landmark')" class="ba-cod-input-box form-control ba-cod-input-field" id="baLandmark"
-                       maxlength="150" name="Landmark" placeholder="Landmark (ex : near gopal mandir, school etc)"/>
-              </div>
-              <span id="baLandmarkRequired" class="ba-mandatory-field-text pl-1">Enter landmark</span>
             </div>
           </div>
 
@@ -235,11 +249,11 @@
         <div class="p-2 mb-2 d-flex justify-content-center">
           <button id="ba-cod-create-order-button" class="row p-3 w-100 ba-cod-create-order-non-sticky-button d-flex align-items-center justify-content-between"
                   onclick="createOrderObject()">
-            <div class="col-6 p-0">
+            <div class="col-6 p-0" style="display: none!important;">
               <div id="ba-cod-footer-delivery-label" class="ba-cod-footer-delivery-label"></div>
               <div id="ba-cod-footer-total-amount" class="ba-cod-footer-total"></div>
             </div>
-            <div class="col-6 p-0">
+            <div class="col-12 p-2">
               <div id="ba-cod-footer-place-order" class="ba-cod-footer-place-order"></div>
               <div id="ba-cod-footer-apply-btn-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2"
                    role="status" style="display: none; color: white!important;">
@@ -384,17 +398,17 @@
   let deliveryAddressHeader = 'अपना डिलीवरी पता भरें';
   let priceDetailsHeader = 'ऑर्डर की जानकारी';
 
-  let nameLabel = 'नाम';
-  let mobileLabel = 'मोबाइल नंबर (10 डिजिट)';
-  let alternateMobileLabel = 'कोई दूसरा मोबाइल नंबर';
+  let nameLabel = 'आपका पूरा नाम'
+  let mobileLabel = '10 अंकीय फोन नंबर डालें';
+  let alternateMobileLabel = 'वैकल्पिक फोन नंबर';
   let pincodeLabel = 'पिनकोड';
   let stateLabel = 'राज्य';
-  let districtLabel = 'जिला';
-  let talukaLabel = 'तहसील';
-  let villageLabel = 'गावं';
+  let districtLabel = 'जिल्हा';
+  let talukaLabel = 'Taluka';
+  let villageLabel = 'Village';
   let addressLabel = 'मकान नंबर, रोड, कॉलोनी';
-  let landmarkLabel = 'लैंडमार्क (मंदिर, स्कूल, नहर के पास)';
-  let postOfficeLabel = 'पोस्ट ऑफिस';
+  let landmarkLabel = 'लैंडमार्क (उदाहरण: गोपाल मंदिर के पास)';
+  let postOfficeLabel = 'डाकघर (वैकल्पिक)';
 
   let nameRequiredLabel = 'नाम';
   let mobileRequiredLabel = 'मोबाइल नंबर';
@@ -408,13 +422,13 @@
   let addressRequiredLabel = 'मकान नंबर, रोड, कॉलोनी';
   let landmarkRequiredLabel = 'लैंडमार्क';
 
-  let priceDetailsDiscountLabel = 'प्रोडक्ट डिस्काउंट';
-  let priceDetailsFreeDeliveryLabel = 'डिलीवरी शुल्क';
-  let priceDetailsFreeDeliveryValueLabel = 'फ्री';
-  let priceDetailsTotalAmountLabel = 'कुल बिल';
+  let priceDetailsDiscountLabel = 'कोड से डिस्काउंट';
+  let priceDetailsFreeDeliveryLabel = 'फ्री कॅश ऑन डिलीवरी';
+  let priceDetailsFreeDeliveryValueLabel = '₹0 (फ्री)';
+  let priceDetailsTotalAmountLabel = 'कुल राशि';
 
   let cashOnDeliveryLabel = 'कैश ऑन डिलीवरी';
-  let placeOrderLabel = 'ऑर्डर पूरा करें';
+  let placeOrderLabel = 'आर्डर पूरा करें';
 
   let removeIconLabel = 'हटाए';
   let addIconLabel = 'जोड़ें +';
@@ -431,6 +445,8 @@
   let confirmModalYesLabel = 'हाँ';
   let confirmModalNoLabel = 'नहीं';
 
+  let mainPriceAmountLabel = 'राशि';
+
   if (lang === 'en') {
     // productHeader = 'Product';
     productHeader = 'Cash On Delivery';
@@ -439,16 +455,16 @@
     deliveryAddressHeader = 'Fill your delivery address';
     priceDetailsHeader = 'Price Details';
 
-    nameLabel = 'Name';
-    mobileLabel = 'Mobile Number (10 digits)';
+    nameLabel = 'Your Full Name';
+    mobileLabel = 'Enter 10-digit phone number';
     alternateMobileLabel = 'Alternate Number';
     pincodeLabel = 'Pincode';
     stateLabel = 'State';
     districtLabel = 'District';
     talukaLabel = 'Taluka';
     villageLabel = 'Village';
-    addressLabel = 'Address (ex : plot no, street name, road etc)';
-    landmarkLabel = 'Landmark (ex : near gopal mandir, school etc)';
+    addressLabel = 'House Number, Road, Colony';
+    landmarkLabel = 'Landmark (Example: Near Gopal Mandir)';
     postOfficeLabel = 'Post Office (Optional)';
 
     nameRequiredLabel = 'Enter Name';
@@ -463,13 +479,13 @@
     addressRequiredLabel = 'Enter Address';
     landmarkRequiredLabel = 'Enter Landmark';
 
-    priceDetailsDiscountLabel = 'Items Discount';
-    priceDetailsFreeDeliveryLabel = 'Delivery Charges';
-    priceDetailsFreeDeliveryValueLabel = 'FREE'
+    priceDetailsDiscountLabel = 'Coupon Code Discount';
+    priceDetailsFreeDeliveryLabel = 'Free Cash on Delivery';
+    priceDetailsFreeDeliveryValueLabel = '₹0 (FREE)'
     priceDetailsTotalAmountLabel = 'Total Amount';
 
     cashOnDeliveryLabel = 'Cash On Delivery';
-    placeOrderLabel = 'Place Order';
+    placeOrderLabel = 'Place COD Order';
 
     removeIconLabel = 'Remove';
     addIconLabel = 'Add +';
@@ -485,6 +501,7 @@
     confirmModalTextLabel = 'Are you sure you want to place this order?';
     confirmModalYesLabel = 'Yes';
     confirmModalNoLabel = 'No';
+    mainPriceAmountLabel = 'Amount';
   }
 
   if (lang === 'mr') {
@@ -495,17 +512,17 @@
     deliveryAddressHeader = 'डिलिव्हरी पत्ता';
     priceDetailsHeader = 'ऑर्डरची माहिती';
 
-    nameLabel = 'नाव';
-    mobileLabel = 'मोबाइल नंबर (10 डिजिट)';
-    alternateMobileLabel = 'पर्यायी मोबाइल नंबर';
+    nameLabel = 'तुमचे पुर्ण नाव';
+    mobileLabel = '10 अंकी फोन नंबर प्रविष्ट करा';
+    alternateMobileLabel = 'पर्यायी फोन नंबर';
     pincodeLabel = 'पिनकोड';
     stateLabel = 'राज्य';
-    districtLabel = 'जिला';
-    talukaLabel = 'तालुका';
-    villageLabel = 'गाव';
+    districtLabel = 'जिल्हा';
+    talukaLabel = 'Taluka';
+    villageLabel = 'Village';
     addressLabel = 'घर क्रमांक, रस्ता, कॉलनी';
-    landmarkLabel = 'जवळची खूण ( उदाहरणार्थ : गोपाळ मंदिराजवळ )';
-    postOfficeLabel = 'पोस्ट ऑफिस';
+    landmarkLabel = 'लैंडमार्क (उदाहरण: गोपाळ मंदिराजवळ)';
+    postOfficeLabel = 'पोस्ट ऑफिस (पर्यायी)';
 
     nameRequiredLabel = 'नाव';
     mobileRequiredLabel = 'मोबाइल नंबर';
@@ -519,13 +536,13 @@
     addressRequiredLabel = 'घर क्रमांक, रस्ता, कॉलनी';
     landmarkRequiredLabel = 'जवळची खूण';
 
-    priceDetailsDiscountLabel = 'प्रॉडक्ट डिस्काउंट';
-    priceDetailsFreeDeliveryLabel = 'डिलीवरी शुल्क';
-    priceDetailsFreeDeliveryValueLabel = 'फ्री';
+    priceDetailsDiscountLabel = 'कूपन कोड सवलत';
+    priceDetailsFreeDeliveryLabel = 'फ्री कॅश ऑन डिलीवरी';
+    priceDetailsFreeDeliveryValueLabel = '₹0 (फ्री)';
     priceDetailsTotalAmountLabel = 'एकूण रक्कम';
 
     cashOnDeliveryLabel = 'कैश ऑन डिलिव्हरी';
-    placeOrderLabel = 'खरेदी करा';
+    placeOrderLabel = 'ऑर्डर पूर्ण करा';
 
     removeIconLabel = 'हटाए';
     addIconLabel = 'जोड़ें +';
@@ -541,6 +558,7 @@
     confirmModalTextLabel = 'तुम्हाला हे ऑर्डर करायचे आहे का?';
     confirmModalYesLabel = 'होय';
     confirmModalNoLabel = 'नाही';
+    mainPriceAmountLabel = 'रक्कम';
   }
   document.getElementById('product-header-id').innerHTML = productHeader;
   document.getElementById('discount-header-id').innerHTML = discountHeader;
@@ -689,7 +707,7 @@
       productQuantityMainDiv.appendChild(productQuantityDiv);
 
       let productQuantityMinus = document.createElement('span');
-      productQuantityMinus.className = "ba-cod-quantity-symbols";
+      productQuantityMinus.className = "ba-cod-quantity-symbols ba-cod-minus-symbol";
       productQuantityMinus.innerHTML = '➖';
       productQuantityMinus.addEventListener("click", function(){ decrementQuantity(); });
       productQuantityDiv.appendChild(productQuantityMinus);
@@ -705,7 +723,7 @@
       productQuantityDiv.appendChild(productQuantityInput);
 
       let productQuantityPlus = document.createElement('span');
-      productQuantityPlus.className = "ba-cod-quantity-symbols";
+      productQuantityPlus.className = "ba-cod-quantity-symbols ba-cod-plus-symbol";
       productQuantityPlus.innerHTML = '➕';
       productQuantityPlus.addEventListener("click", function(){ incrementQuantity(); });
       productQuantityDiv.appendChild(productQuantityPlus);
@@ -810,10 +828,10 @@
   function loadBaProductBundles() {
     selectedBundles = [];
 
-    // let bundleVariant = 43521411154163;
+    let bundleVariant = 43521411154163;
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
     let items = baUpdateCart.items;
-    let bundleVariant = items[0].id;
+    // let bundleVariant = items[0].id;
 
     let data = getBaCodProductData();
     if (data.variant_bundles && data.variant_bundles[bundleVariant] && data.variant_bundles[bundleVariant].length > 0) {
@@ -873,7 +891,7 @@
       bundleCardColDiv.appendChild(bundleCardImagePriceDiv);
 
       let bundleCardSelectDiv = document.createElement('div');
-      bundleCardSelectDiv.className = 'col-2';
+      bundleCardSelectDiv.className = 'col-auto pr-1';
       bundleCardImagePriceDiv.appendChild(bundleCardSelectDiv);
 
       let bundleCardSelectInput = document.createElement('input');
@@ -882,25 +900,8 @@
       bundleCardSelectInput.id = 'baBundleCardSelect' + i;
       bundleCardSelectDiv.appendChild(bundleCardSelectInput);
 
-      let bundleCardImageDiv = document.createElement('div');
-      bundleCardImageDiv.className = 'col-2 pl-0';
-      bundleCardImagePriceDiv.appendChild(bundleCardImageDiv);
-
-      let bundleCardImage = document.createElement('img');
-      bundleCardImage.alt = 'product image';
-      bundleCardImage.src = bundleProductImage;
-      bundleCardImage.style.borderRadius = '6px';
-      bundleCardImage.width = 60;
-      bundleCardImage.height = 60;
-      // if (bundleImagePlaceholder === bundleProductImage) {
-      //   bundleCardImage.style.width = '65%';
-      // } else {
-      //   bundleCardImage.className = 'w-100';
-      // }
-      bundleCardImageDiv.appendChild(bundleCardImage);
-
       let bundleCardPriceDiv = document.createElement('div');
-      bundleCardPriceDiv.className = 'col-8';
+      bundleCardPriceDiv.className = 'col-8 pl-0';
       bundleCardImagePriceDiv.appendChild(bundleCardPriceDiv);
 
       let bundleCardProductTitle = document.createElement('div');
@@ -934,6 +935,23 @@
       bundleCardPrice.className = 'ba-cod-bundle-price';
       bundleCardPrice.innerHTML = bundleProductDiscountPrice ? `₹ ${bundleProductDiscountPrice}` : '0';
       bundleCardProductPriceDiv.appendChild(bundleCardPrice);
+
+      let bundleCardImageDiv = document.createElement('div');
+      bundleCardImageDiv.className = 'col-2 pl-0';
+      bundleCardImagePriceDiv.appendChild(bundleCardImageDiv);
+
+      let bundleCardImage = document.createElement('img');
+      bundleCardImage.alt = 'product image';
+      bundleCardImage.src = bundleProductImage;
+      bundleCardImage.style.borderRadius = '6px';
+      bundleCardImage.width = 60;
+      bundleCardImage.height = 60;
+      // if (bundleImagePlaceholder === bundleProductImage) {
+      //   bundleCardImage.style.width = '65%';
+      // } else {
+      //   bundleCardImage.className = 'w-100';
+      // }
+      bundleCardImageDiv.appendChild(bundleCardImage);
 
       bundleCardColDiv.addEventListener("click", function(){
         let bundleSelectBtn = document.getElementById(`baBundleCardSelect${i}`);
@@ -1000,7 +1018,7 @@
 
 
     // Adding the product to the price card
-    let bundlePriceItemsMainDiv = document.getElementById('ba-cod-price-details-items');
+    let bundlePriceItemsMainDiv = document.getElementById('ba-cod-price-details-bundle-items');
     let priceItemsRow = document.createElement('div');
     priceItemsRow.className = 'row mt-2 pb-2 align-items-center ba-cod-price-details-items';
     priceItemsRow.id = 'bundlePriceRow' + selectedBundlesIndex;
@@ -1419,6 +1437,27 @@
       validationError = true;
     }
 
+    if (!(address.value)) {
+      address.classList.add('ba-mandatory-field-border');
+      document.getElementById('baAddressRequired').style.display = 'block';
+      if (!validationError) {baScrollToId('baAddress');}
+      validationError = true;
+    }
+
+    if (!state) {
+      stateField.classList.add('ba-mandatory-field-border');
+      document.getElementById('baCodStateSelectRequired').style.display = 'block';
+      if (!validationError) {baScrollToId('baCodStateSelect');}
+      validationError = true;
+    }
+
+    if (!district) {
+      districtField.classList.add('ba-mandatory-field-border');
+      document.getElementById('baCodDistrictSelectRequired').style.display = 'block';
+      if (!validationError) {baScrollToId('baCodDistrictSelect');}
+      validationError = true;
+    }
+
     if (!pincode || !pincode.value || pincode.value.length !== 6 || !pincode.value.match(numericalNumberRegex) || pincode.value[0] === "0") {
       pincode.classList.add('ba-mandatory-field-border');
       document.getElementById('baCodPincodeRequired').style.display = 'block';
@@ -1441,20 +1480,6 @@
       }
     }
 
-    if (!state) {
-      stateField.classList.add('ba-mandatory-field-border');
-      document.getElementById('baCodStateSelectRequired').style.display = 'block';
-      if (!validationError) {baScrollToId('baCodStateSelect');}
-      validationError = true;
-    }
-
-    if (!district) {
-      districtField.classList.add('ba-mandatory-field-border');
-      document.getElementById('baCodDistrictSelectRequired').style.display = 'block';
-      if (!validationError) {baScrollToId('baCodDistrictSelect');}
-      validationError = true;
-    }
-
     // if (!(taluka.value)) {
     //   taluka.classList.add('ba-mandatory-field-border');
     //   document.getElementById('talukaNameRequired').style.display = 'block';
@@ -1468,13 +1493,6 @@
     // if (!validationError) {baScrollToId('villageName');}
     //   validationError = true;
     // }
-
-    if (!(address.value)) {
-      address.classList.add('ba-mandatory-field-border');
-      document.getElementById('baAddressRequired').style.display = 'block';
-      if (!validationError) {baScrollToId('baAddress');}
-      validationError = true;
-    }
 
     // if (!(landmark.value)) {
     //   landmark.classList.add('ba-mandatory-field-border');
@@ -1846,7 +1864,8 @@
 
       let priceItemsCol1 = document.createElement('div');
       priceItemsCol1.className = 'col-9 ba-cod-price-details-product-title';
-      priceItemsCol1.innerHTML = items[i].product_title.length > 34 ? items[i].product_title.slice(0,34) + '..' : items[i].product_title;
+      // priceItemsCol1.innerHTML = items[i].product_title.length > 34 ? items[i].product_title.slice(0,34) + '..' : items[i].product_title;
+      priceItemsCol1.innerHTML = mainPriceAmountLabel;
       priceItemsRow.appendChild(priceItemsCol1);
 
       let priceItemsCol2 = document.createElement('div');
@@ -1855,6 +1874,21 @@
       priceItemsCol2.innerHTML = items[i].final_line_price ? `₹ ${Number(items[i].final_line_price)/100}` : '0';
       priceItemsRow.appendChild(priceItemsCol2);
     }
+
+    let priceItemsFreeDeliveryDiv = document.createElement('div');
+    priceItemsFreeDeliveryDiv.className = 'row mt-2 pb-2 align-items-center ba-cod-price-details-items';
+    document.getElementById('ba-cod-price-details-content').appendChild(priceItemsFreeDeliveryDiv);
+
+    let priceItemsFreeDeliveryCol1 = document.createElement('div');
+    priceItemsFreeDeliveryCol1.className = 'col-8';
+    priceItemsFreeDeliveryCol1.innerHTML = priceDetailsFreeDeliveryLabel;
+    priceItemsFreeDeliveryDiv.appendChild(priceItemsFreeDeliveryCol1);
+
+    let priceItemsFreeDeliveryCol2 = document.createElement('div');
+    priceItemsFreeDeliveryCol2.className = 'col-4 text-right pl-0 ba-cod-price-details-free-delivery';
+    priceItemsFreeDeliveryCol2.innerHTML = priceDetailsFreeDeliveryValueLabel;
+    priceItemsFreeDeliveryCol2.style.color = '#0A8047';
+    priceItemsFreeDeliveryDiv.appendChild(priceItemsFreeDeliveryCol2);
 
     let priceItemsDiscountDiv = document.createElement('div');
     priceItemsDiscountDiv.id = 'ba-price-details-discount-row';
@@ -1871,20 +1905,9 @@
     priceItemsDiscountCol2.id = 'ba-price-details-discount-value';
     priceItemsDiscountDiv.appendChild(priceItemsDiscountCol2);
 
-    let priceItemsFreeDeliveryDiv = document.createElement('div');
-    priceItemsFreeDeliveryDiv.className = 'row mt-2 pb-2 align-items-center ba-cod-price-details-items';
-    priceItemsFreeDeliveryDiv.style.color = '#0A8047';
-    document.getElementById('ba-cod-price-details-content').appendChild(priceItemsFreeDeliveryDiv);
-
-    let priceItemsFreeDeliveryCol1 = document.createElement('div');
-    priceItemsFreeDeliveryCol1.className = 'col-8';
-    priceItemsFreeDeliveryCol1.innerHTML = priceDetailsFreeDeliveryLabel;
-    priceItemsFreeDeliveryDiv.appendChild(priceItemsFreeDeliveryCol1);
-
-    let priceItemsFreeDeliveryCol2 = document.createElement('div');
-    priceItemsFreeDeliveryCol2.className = 'col-4 text-right pl-0 ba-cod-price-details-free-delivery';
-    priceItemsFreeDeliveryCol2.innerHTML = priceDetailsFreeDeliveryValueLabel;
-    priceItemsFreeDeliveryDiv.appendChild(priceItemsFreeDeliveryCol2);
+    let priceItemsBundlesMainDiv = document.createElement('div');
+    priceItemsBundlesMainDiv.id = 'ba-cod-price-details-bundle-items';
+    document.getElementById('ba-cod-price-details-content').appendChild(priceItemsBundlesMainDiv);
 
     let priceItemsTotalDiv = document.createElement('div');
     priceItemsTotalDiv.id = 'ba-price-details-discount-total';
