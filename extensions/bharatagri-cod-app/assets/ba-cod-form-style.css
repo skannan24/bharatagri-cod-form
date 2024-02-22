@@ -156,7 +156,7 @@
   letter-spacing: 0em;
   text-align: left;
   color: #181B26;
-  padding-bottom: 6px;
+  /*padding-bottom: 6px;*/
   color: rgba(31, 154, 0, 1) !important;
 }
 
@@ -558,11 +558,12 @@
   line-height: 21px;
   letter-spacing: 0em;
   text-align: left;
-  white-space: nowrap;
   width: 100%;
-  overflow: hidden;
-  text-overflow: "...";
   color: #181B26;
+  overflow: hidden!important;
+  display: -webkit-box!important;
+  -webkit-line-clamp: 2!important;
+  -webkit-box-orient: vertical!important;
 }
 
 .ba-cod-bundle-discount {
@@ -606,6 +607,15 @@
   letter-spacing: 0em;
   text-align: center;
   vertical-align: middle;
+}
+
+.ba-cod-bundle-description {
+  color: rgba(237, 21, 21, 1) !important;
+  font-size: 15px;
+  font-family: Noto Sans;
+  font-weight: 400;
+  line-height: 21px;
+  margin-top: 3px;
 }
 
 ::-webkit-scrollbar { display: none; }

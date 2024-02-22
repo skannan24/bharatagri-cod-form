@@ -28,7 +28,7 @@
       </div>
       <div class="modal-body ba-modal-body p-0">
         <!-- Product info card -->
-        <div id="product-info-div" class="p-2 m-2 mb-3">
+        <div id="product-info-div" class="p-2 m-2">
 
         </div>
         {% comment %} Product info div loader {% endcomment %}
@@ -37,7 +37,7 @@
         </div>
 
         <!-- Price details card -->
-        <div id="ba-cod-price-details-div" class="pt-2 pb-2 pl-4 pr-4 m-2 ba-cod-price-details-main-div">
+        <div id="ba-cod-price-details-div" class="pt-2 pb-2 pl-4 pr-4 ml-3 mr-3 ba-cod-price-details-main-div">
           <div class="d-flex align-items-center" style="display: none!important">
             <span class="ba-cod-card-header" id="ba-cod-price-header-id"></span>
           </div>
@@ -45,7 +45,7 @@
         </div>
 
         <!-- Bundle product card -->
-        <div id="ba-cod-bundle-div" class="pt-2 pb-2">
+        <div id="ba-cod-bundle-div" class="pt-2 pb-1">
           <div id="ba-cod-bundle-cards-div" class="row ba-cod-discount-row mt-2 mb-2 ml-3">
 
           </div>
@@ -54,7 +54,7 @@
         {% comment %}<div class="pt-3 ba-cod-separator"></div>{% endcomment %}
 
         <!-- Discount coupon card -->
-        <div id="ba-discount-coupon-div" class="p-2 m-2">
+        <div id="ba-discount-coupon-div" class="pl-2 pr-2 pt-2 pb-1 mt-2 ml-2 mr-2">
           <div class="d-flex align-items-center">
             <span class="ba-cod-card-header" id="discount-header-id" style="display: none"></span>
             <div id="ba-cod-discount-loader" style="display: none" class="spinner-border text-secondary ml-2" role="status">
@@ -88,7 +88,7 @@
         {% comment %}<div id="ba-discount-div-separator" class="pt-3 mt-3 mb-3 ba-cod-separator"></div>{% endcomment %}
 
         <!-- Delivery address form fields card -->
-        <div id="ba-cod-form-div" class="p-2 m-2">
+        <div id="ba-cod-form-div" class="p-2 mt-2 mb-1 ml-2 mr-2">
           <div class="d-flex align-items-center">
             <span class="ba-cod-card-header" id="delivery-address-header-id"></span>
           </div>
@@ -883,37 +883,61 @@
       bundleCardPriceDiv.className = 'col-8 pl-0';
       bundleCardImagePriceDiv.appendChild(bundleCardPriceDiv);
 
-      let bundleCardProductTitle = document.createElement('div');
-      bundleCardProductTitle.className = "ba-cod-bundle-title";
-      bundleCardProductTitle.innerHTML = (bundleProductTitle && bundleProductTitle.length > 30)
-        ? bundleProductTitle.slice(0, 30) + '..'
-        : (bundleProductTitle !== null && bundleProductTitle !== undefined) ? bundleProductTitle : '';
+      let baBundleTitle = '';
 
-      bundleCardPriceDiv.appendChild(bundleCardProductTitle);
-
-      let bundleCardProductVariantTitle = document.createElement('div');
-      bundleCardProductVariantTitle.className = "ba-cod-bundle-title mt-1";
-      bundleCardProductVariantTitle.innerHTML = (bundleProductVariantTitle && bundleProductVariantTitle.length > 30)
-        ? bundleProductVariantTitle.slice(0, 30) + '..'
-        : (bundleProductVariantTitle !== null && bundleProductVariantTitle !== undefined) ? bundleProductVariantTitle : '';
-
-      bundleCardPriceDiv.appendChild(bundleCardProductVariantTitle);
-
-      let bundleCardProductPriceDiv = document.createElement('div');
-      bundleCardProductPriceDiv.className = 'd-flex mt-2';
-      bundleCardPriceDiv.appendChild(bundleCardProductPriceDiv);
-
-      if (bundleDiscountPercent > 0) {
-        let bundleCardDiscountPercent = document.createElement('div');
-        bundleCardDiscountPercent.className = 'ba-cod-bundle-discount mr-3';
-        bundleCardDiscountPercent.innerHTML = `${bundleDiscountPercent}% off`;
-        bundleCardProductPriceDiv.appendChild(bundleCardDiscountPercent);
+      if (bundles[i] && bundles[i].title) {
+        baBundleTitle = bundles[i].title;
+      } else {
+        let title1 = bundleProductTitle ? bundleProductTitle : '';
+        let title2 = bundleProductVariantTitle ? bundleProductVariantTitle : '';
+        let title3Price = bundleProductDiscountPrice ? `₹ ${bundleProductDiscountPrice}` : '0';
+        baBundleTitle = title1 + ' ' + title2 + ' - ' + title3Price;
       }
 
-      let bundleCardPrice = document.createElement('div');
-      bundleCardPrice.className = 'ba-cod-bundle-price';
-      bundleCardPrice.innerHTML = bundleProductDiscountPrice ? `₹ ${bundleProductDiscountPrice}` : '0';
-      bundleCardProductPriceDiv.appendChild(bundleCardPrice);
+      let bundleCardProductTitle = document.createElement('div');
+      bundleCardProductTitle.className = "ba-cod-bundle-title";
+      // bundleCardProductTitle.innerHTML = (bundleProductTitle && bundleProductTitle.length > 30)
+      //   ? bundleProductTitle.slice(0, 30) + '..'
+      //   : (bundleProductTitle !== null && bundleProductTitle !== undefined) ? bundleProductTitle : '';
+      bundleCardProductTitle.innerHTML = baBundleTitle;
+
+      if (bundleDiscountPercent > 0 && bundles[i] && !bundles[i].title) {
+        let bundleCardTitleDiscountPercent = document.createElement('span');
+        bundleCardTitleDiscountPercent.className="ba-cod-bundle-discount ml-2"
+        bundleCardTitleDiscountPercent.innerHTML = `(${bundleDiscountPercent}% off)`;
+        bundleCardProductTitle.appendChild(bundleCardTitleDiscountPercent);
+      }
+      bundleCardPriceDiv.appendChild(bundleCardProductTitle);
+
+      let bundleCardProductDescription = document.createElement('div');
+      bundleCardProductDescription.className = 'ba-cod-bundle-description';
+      bundleCardProductDescription.innerHTML = bundles[i] && bundles[i].desc ? bundles[i].desc : '';
+      bundleCardPriceDiv.appendChild(bundleCardProductDescription);
+
+      // Commented as the variant title and price are moved to title div
+      // let bundleCardProductVariantTitle = document.createElement('div');
+      // bundleCardProductVariantTitle.className = "ba-cod-bundle-title mt-1";
+      // bundleCardProductVariantTitle.innerHTML = (bundleProductVariantTitle && bundleProductVariantTitle.length > 30)
+      //   ? bundleProductVariantTitle.slice(0, 30) + '..'
+      //   : (bundleProductVariantTitle !== null && bundleProductVariantTitle !== undefined) ? bundleProductVariantTitle : '';
+      //
+      // bundleCardPriceDiv.appendChild(bundleCardProductVariantTitle);
+      //
+      // let bundleCardProductPriceDiv = document.createElement('div');
+      // bundleCardProductPriceDiv.className = 'd-flex mt-2';
+      // bundleCardPriceDiv.appendChild(bundleCardProductPriceDiv);
+      //
+      // if (bundleDiscountPercent > 0) {
+      //   let bundleCardDiscountPercent = document.createElement('div');
+      //   bundleCardDiscountPercent.className = 'ba-cod-bundle-discount mr-3';
+      //   bundleCardDiscountPercent.innerHTML = `${bundleDiscountPercent}% off`;
+      //   bundleCardProductPriceDiv.appendChild(bundleCardDiscountPercent);
+      // }
+      //
+      // let bundleCardPrice = document.createElement('div');
+      // bundleCardPrice.className = 'ba-cod-bundle-price';
+      // bundleCardPrice.innerHTML = bundleProductDiscountPrice ? `₹ ${bundleProductDiscountPrice}` : '0';
+      // bundleCardProductPriceDiv.appendChild(bundleCardPrice);
 
       let bundleCardImageDiv = document.createElement('div');
       bundleCardImageDiv.className = 'col-2 pl-0';
