@@ -807,10 +807,10 @@
   function loadBaProductBundles() {
     selectedBundles = [];
 
-    let bundleVariant = 43521411154163;
+    // let bundleVariant = 43521411154163;
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
     let items = baUpdateCart.items;
-    // let bundleVariant = items[0].id;
+    let bundleVariant = items[0].id;
 
     let data = getBaCodProductData();
     if (data.variant_bundles && data.variant_bundles[bundleVariant] && data.variant_bundles[bundleVariant].length > 0) {
