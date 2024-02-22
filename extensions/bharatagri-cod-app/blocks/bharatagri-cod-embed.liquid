@@ -145,43 +145,20 @@
           <div class="row mt-3 pb-2">
             <div class="col-12">
               <div class="form-group has-float-label dropdown mb-0">
-                <button onclick="onInputElementClick('state')" id="baCodStateSelect" class="btn btn-lg btn-block ba-cod-select-field btn-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  State
-                </button>
-                <label id="baCodStateSelectLabel" for="baCodStateSelect">State</label>
-                <div id="baCodStateOptions" class="dropdown-menu ba-cod-options-field" aria-labelledby="baCodStateSelect">
-                </div>
+                <select onclick="onInputElementClick('state')" id="baCodStateSelect" class="ba-cod-select-box form-control ba-form-select ba-cod-input-field">
+                  <option id="baCodStateSelectLabel" value="">Select state</option>
+                </select>
               </div>
               <span id="baCodStateSelectRequired" class="ba-mandatory-field-text pl-1">Enter State</span>
             </div>
           </div>
 
-          {% comment %}<div class="row mt-3 pb-2">{% endcomment %}
-          {% comment %}<div class="col-12">{% endcomment %}
-          {% comment %}<div class="form-group has-float-label dropdown mb-0">{% endcomment %}
-          {% comment %}<select class="ba-cod-input-box form-control ba-cod-input-field">{% endcomment %}
-          {% comment %}<option value="">Select state</option>{% endcomment %}
-          {% comment %}<option>State1</option>{% endcomment %}
-          {% comment %}<option>State2</option>{% endcomment %}
-          {% comment %}<option>State3</option>{% endcomment %}
-          {% comment %}</select>{% endcomment %}
-          {% comment %}</div>{% endcomment %}
-          {% comment %}<span id="baCodStateSelectRequired" class="ba-mandatory-field-text pl-1">Enter State</span>{% endcomment %}
-          {% comment %}</div>{% endcomment %}
-          {% comment %}</div>{% endcomment %}
-
           <div class="row mt-3 pb-2">
             <div class="col-12">
-              <div class="form-group has-float-label dropdown mb-0">
-                <button onclick="onInputElementClick('district')" id="baCodDistrictSelect" class="btn btn-lg btn-block ba-cod-select-field btn-white dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span id="baCodDistrictSelectLabel">District</span>
-                  <div id="ba-cod-district-loader" style="display: none" class="spinner-border text-secondary ml-2" role="status">
-                    <span class="sr-only">Loading...</span>
-                  </div>
-                </button>
-                <label id="baCodDistrictSelectLabel2" for="baCodDistrictSelect">District</label>
-                <div id="baCodDistrictOptions" class="dropdown-menu ba-cod-options-field" aria-labelledby="baCodDistrictSelect">
-                </div>
+              <div class="ba-cod-input-container">
+                <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="District" />
+                <input onclick="onInputElementClick('district')" class="ba-cod-input-box form-control ba-cod-input-field" id="baCodDistrictSelect"
+                       maxlength="150" name="city" placeholder="District"/>
               </div>
               <span id="baCodDistrictSelectRequired" class="ba-mandatory-field-text pl-1">Enter District</span>
             </div>
@@ -595,8 +572,10 @@
 
   document.getElementById('baPostOffice').placeholder = postOfficeLabel;
 
-  document.getElementById('baCodStateSelectRequired').innerHTML = stateRequiredLabel;
+  document.getElementById('baCodDistrictSelect').placeholder = districtRequiredLabel;
   document.getElementById('baCodDistrictSelectRequired').innerHTML = districtRequiredLabel;
+
+  document.getElementById('baCodStateSelectRequired').innerHTML = stateRequiredLabel;
 
   document.getElementById('ba-cod-confirm-txt-div').innerHTML = confirmModalTextLabel;
   document.getElementById('ba-cod-confirm-yes-btn-label').innerHTML = confirmModalYesLabel;
@@ -1387,18 +1366,23 @@
   });
 
   function setStates() {
-    const stateDiv = document.getElementById('baCodStateOptions');
+    const stateDiv = document.getElementById('baCodStateSelect');
+    stateDiv.addEventListener("change", function(){ onSelectBoxStateChange(this); });
+    const stateOptionFirstLabel = document.getElementById('baCodStateSelectLabel');
     replaceChildrenAlternative2(stateDiv);
+    stateOptionFirstLabel.innerHTML = stateLabel;
+    stateDiv.add(stateOptionFirstLabel);
 
     for (let i=0; i < stateList.length; i++) {
-      let stateName = lang === 'en' ? stateList[i].name_en : ( lang === 'mr' ? stateList[i].name_mr : stateList[i].name_hi);
+      // let stateName = lang === 'en' ? stateList[i].name_en : ( lang === 'mr' ? stateList[i].name_mr : stateList[i].name_hi);
+      let stateName = stateList[i].name_en;
 
-      let stateOptionsBtn = document.createElement('button');
-      stateOptionsBtn.className = 'dropdown-item';
-      stateOptionsBtn.type = 'button';
+      let stateOptionsBtn = document.createElement('option');
       stateOptionsBtn.innerHTML = stateName;
-      stateOptionsBtn.addEventListener("click", function(){ onStateClick(stateList[i].id, stateName, stateList[i].name_en); });
-      stateDiv.appendChild(stateOptionsBtn);
+      stateOptionsBtn.value = stateList[i].name_en;
+      // stateOptionsBtn.addEventListener("change", function(){ onStateClick(stateList[i].id, stateName, stateList[i].name_en); });
+      // stateDiv.appendChild(stateOptionsBtn);
+      stateDiv.add(stateOptionsBtn);
     }
   }
 
@@ -1410,9 +1394,8 @@
     let alternateMobile = document.getElementById('alternateMobile');
     let pincode = document.getElementById('baCodPincode');
     let stateField = document.getElementById('baCodStateSelect');
-    let districtField = document.getElementById('baCodDistrictSelect');
     let state = stateNameEn;
-    let district = districtNameEn;
+    let district = document.getElementById('baCodDistrictSelect');
     let taluka = document.getElementById('talukaName');
     let village = document.getElementById('villageName');
     let address = document.getElementById('baAddress');
@@ -1451,8 +1434,8 @@
       validationError = true;
     }
 
-    if (!district) {
-      districtField.classList.add('ba-mandatory-field-border');
+    if (!district.value) {
+      district.classList.add('ba-mandatory-field-border');
       document.getElementById('baCodDistrictSelectRequired').style.display = 'block';
       if (!validationError) {baScrollToId('baCodDistrictSelect');}
       validationError = true;
@@ -1509,7 +1492,7 @@
       let alternateMobileValue = alternateMobile.value ? alternateMobile.value : '';
       let  pincodeValue = pincode.value;
       let stateValue = state;
-      let districtValue = district;
+      let districtValue = district.value;
       let talukaValue = taluka.value ? taluka.value : '';
       let villageValue = village.value ? village.value : '';
       let addressValue = address.value;
@@ -1522,7 +1505,7 @@
         alternateMobile: alternateMobile.value ? alternateMobile.value : '',
         pincode: pincode.value,
         state: state,
-        district: district,
+        district: district.value,
         taluka: talukaValue,
         village: villageValue,
         address: address.value,
@@ -1737,9 +1720,8 @@
     let mobile = document.getElementById('farmerMobile');
     let pincode = document.getElementById('baCodPincode');
     let stateField = document.getElementById('baCodStateSelect');
-    let districtField = document.getElementById('baCodDistrictSelect');
+    let district = document.getElementById('baCodDistrictSelect');
     let state = stateName;
-    let district = districtName;
     let taluka = document.getElementById('talukaName');
     let village = document.getElementById('villageName');
     let address = document.getElementById('baAddress');
@@ -1779,8 +1761,8 @@
       document.getElementById('baCodStateSelectRequired').style.display = 'none';
     }
 
-    if (district) {
-      districtField.classList.remove('ba-mandatory-field-border');
+    if (district.value) {
+      district.classList.remove('ba-mandatory-field-border');
       document.getElementById('baCodDistrictSelectRequired').style.display = 'none';
     }
 

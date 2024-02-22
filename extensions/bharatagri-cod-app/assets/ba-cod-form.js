@@ -127,10 +127,11 @@ function resetLocationFields() {
   stateNameEn = '';
   districtName = '';
   districtNameEn = '';
-  document.getElementById('baCodStateSelect').innerHTML = stateLabel;
-  document.getElementById('baCodStateSelectLabel').innerHTML = stateLabel;
-  document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
-  document.getElementById('baCodDistrictSelectLabel2').innerHTML = districtLabel;
+  document.getElementById('baCodStateSelect').value = '';
+  document.getElementById('baCodDistrictSelect').value = '';
+  // document.getElementById('baCodStateSelectLabel').innerHTML = stateLabel;
+  // document.getElementById('baCodDistrictSelect').innerHTML = districtLabel;
+  // document.getElementById('baCodDistrictSelectLabel2').innerHTML = districtLabel;
 
   resetTalukaAndVillage();
 }
@@ -164,9 +165,30 @@ function resetFormFieldsValidation() {
   document.getElementById('baLandmarkRequired').style.display = 'none';
 }
 
+function onSelectBoxStateChange(selectValue) {
+  stateName = selectValue.options[selectValue.selectedIndex].text;
+  stateNameEn = selectValue.options[selectValue.selectedIndex].value;
+  console.log(stateName, stateNameEn);
+}
+
+function setStateFromPincode(id, name, nameEn) {
+  document.getElementById('baCodStateSelect').value = nameEn;
+  stateName = name;
+  stateNameEn = nameEn;
+  console.log(stateName, stateNameEn);
+}
+
+function setDistrictFromPincode(id, name, nameEn) {
+  districtName = name;
+  districtNameEn = nameEn;
+  document.getElementById('baCodDistrictSelect').value = nameEn;
+  console.log(districtName, districtNameEn);
+}
+
 function onStateClick(id, name, nameEn) {
-  document.getElementById('baCodStateSelect').innerHTML = name.length > 18 ? name.slice(0,18) + '..' : name;
-  document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
+  console.log('district set here');
+  // document.getElementById('baCodStateSelect').innerHTML = name.length > 18 ? name.slice(0,18) + '..' : name;
+  // document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
   stateId = id;
   stateName = name;
   stateNameEn = nameEn;
@@ -180,7 +202,7 @@ function onDistrictClick(id, name, nameEn) {
   districtId = id;
   districtName = name;
   districtNameEn = nameEn;
-  document.getElementById('baCodDistrictSelectLabel').innerHTML = name.length > 18 ? name.slice(0,18) + '..' : name;
+  // document.getElementById('baCodDistrictSelectLabel').innerHTML = name.length > 18 ? name.slice(0,18) + '..' : name;
 }
 
 function loadDistricts(stateId) {
@@ -207,26 +229,26 @@ function loadDistricts(stateId) {
 }
 
 function setDistricts(districts) {
-  const districtDiv = document.getElementById('baCodDistrictOptions');
-  replaceChildrenAlternative(districtDiv);
-
-  for (let i=0; i < districts.length; i++) {
-    let districtName;
-    if (lang === 'en') {
-      districtName = districts[i] ? districts[i].name_en : undefined;
-    } else if (lang === 'mr') {
-      districtName = districts[i] ? districts[i].name_mr : undefined;
-    } else {
-      districtName = districts[i] ? districts[i].name_hi : undefined;
-    }
-
-    let districtOptionsBtn = document.createElement('button');
-    districtOptionsBtn.className = 'dropdown-item';
-    districtOptionsBtn.type = 'button';
-    districtOptionsBtn.innerHTML = districtName;
-    districtOptionsBtn.addEventListener("click", function(){ onDistrictClick(stateList[i].id, districtName, districts[i].name_en); });
-    districtDiv.appendChild(districtOptionsBtn);
-  }
+  // const districtDiv = document.getElementById('baCodDistrictOptions');
+  // replaceChildrenAlternative(districtDiv);
+  //
+  // for (let i=0; i < districts.length; i++) {
+  //   let districtName;
+  //   if (lang === 'en') {
+  //     districtName = districts[i] ? districts[i].name_en : undefined;
+  //   } else if (lang === 'mr') {
+  //     districtName = districts[i] ? districts[i].name_mr : undefined;
+  //   } else {
+  //     districtName = districts[i] ? districts[i].name_hi : undefined;
+  //   }
+  //
+  //   let districtOptionsBtn = document.createElement('button');
+  //   districtOptionsBtn.className = 'dropdown-item';
+  //   districtOptionsBtn.type = 'button';
+  //   districtOptionsBtn.innerHTML = districtName;
+  //   districtOptionsBtn.addEventListener("click", function(){ onDistrictClick(stateList[i].id, districtName, districts[i].name_en); });
+  //   districtDiv.appendChild(districtOptionsBtn);
+  // }
 }
 
 function onInputElementClick(fieldName) {
@@ -304,8 +326,8 @@ function setPincodeLocation(data) {
     if (dataItem) {
       let name = dataItem[langKey] || dataItem.name;
       type === 'state'
-        ? onStateClick(dataItem.id, name, dataItem.name_en)
-        : onDistrictClick(dataItem.id, name, dataItem.name_en);
+        ? setStateFromPincode(dataItem.id, name, dataItem.name_en)
+        : setDistrictFromPincode(dataItem.id, name, dataItem.name_en);
     }
   });
 }
