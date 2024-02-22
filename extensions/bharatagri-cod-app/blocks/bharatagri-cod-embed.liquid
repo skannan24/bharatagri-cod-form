@@ -1452,12 +1452,14 @@
         if (!validateWhiteListedPincode(pincode.value)) {
           pincode.classList.add('ba-mandatory-field-border');
           document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'block';
+          sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': pincode.value });
           if (!validationError) {baScrollToId('baCodPincode');}
           validationError = true;
         }
       } else if (String(blacklistedPincodes).indexOf(pincode.value) > -1) {
         pincode.classList.add('ba-mandatory-field-border');
         document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
+        sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': pincode.value });
         if (!validationError) {baScrollToId('baCodPincode');}
         validationError = true;
       }

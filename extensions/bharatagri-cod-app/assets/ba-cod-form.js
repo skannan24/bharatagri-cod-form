@@ -168,21 +168,18 @@ function resetFormFieldsValidation() {
 function onSelectBoxStateChange(selectValue) {
   stateName = selectValue.options[selectValue.selectedIndex].text;
   stateNameEn = selectValue.options[selectValue.selectedIndex].value;
-  console.log(stateName, stateNameEn);
 }
 
 function setStateFromPincode(id, name, nameEn) {
   document.getElementById('baCodStateSelect').value = nameEn;
   stateName = name;
   stateNameEn = nameEn;
-  console.log(stateName, stateNameEn);
 }
 
 function setDistrictFromPincode(id, name, nameEn) {
   districtName = name;
   districtNameEn = nameEn;
   document.getElementById('baCodDistrictSelect').value = nameEn;
-  console.log(districtName, districtNameEn);
 }
 
 function onStateClick(id, name, nameEn) {
@@ -336,6 +333,7 @@ function checkPincodeServiceability(value) {
   if (String(blacklistedPincodes).indexOf(value) > -1) {
     document.getElementById('baCodPincode').classList.add('ba-mandatory-field-border');
     document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
+    sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': value });
   }
 }
 
@@ -348,6 +346,7 @@ function checkWhiteListedPincodes(value) {
       document.getElementById('baCodPincode').classList.add('ba-mandatory-field-border');
       document.getElementById('baCodPincodeNotWhitelistRequired').innerHTML = pincodeNotWhitelistRequiredLabel.replace('pincode', value);
       document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'block';
+      sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': value });
     }
   } else {
     checkPincodeServiceability(value)
