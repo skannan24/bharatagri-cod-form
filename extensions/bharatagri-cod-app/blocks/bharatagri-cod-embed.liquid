@@ -406,6 +406,7 @@
 
   let cashOnDeliveryLabel = 'कैश ऑन डिलीवरी';
   let placeOrderLabel = 'आर्डर पूरा करें';
+  let placeOnlinePaymentOrderLabel = 'Online पेमेंट से खरीदें';
 
   let removeIconLabel = 'हटाए';
   let addIconLabel = 'जोड़ें +';
@@ -463,6 +464,7 @@
 
     cashOnDeliveryLabel = 'Cash On Delivery';
     placeOrderLabel = 'Place COD Order';
+    placeOnlinePaymentOrderLabel = 'Online payment';
 
     removeIconLabel = 'Remove';
     addIconLabel = 'Add +';
@@ -520,6 +522,7 @@
 
     cashOnDeliveryLabel = 'कैश ऑन डिलिव्हरी';
     placeOrderLabel = 'ऑर्डर पूर्ण करा';
+    placeOnlinePaymentOrderLabel = 'Online पेमेंट से खरीदें';
 
     removeIconLabel = 'हटाए';
     addIconLabel = 'जोड़ें +';
@@ -722,6 +725,13 @@
     } else {
       checkHighRiskOrder();
     }
+
+    // Commenting online payment button title
+    // let baCodProductData = JSON.parse(localStorage.getItem('baCodProductData')) || {};
+    //
+    // if (baCodProductData && !baCodProductData.is_cod_enabled) {
+    //   document.getElementById('ba-cod-footer-place-order').innerHTML = placeOnlinePaymentOrderLabel;
+    // }
   }
 
   function clearCartEmbed() {
