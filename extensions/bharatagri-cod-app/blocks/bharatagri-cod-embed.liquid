@@ -32,12 +32,12 @@
 
         </div>
         {% comment %} Product info div loader {% endcomment %}
-        <div id="ba-product-info-div-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-3" role="status">
+        <div id="ba-product-info-div-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary mt-2 mb-2" style="margin-left: 50%" role="status">
           <span class="sr-only">Loading...</span>
         </div>
 
         <!-- Price details card -->
-        <div id="ba-cod-price-details-div" class="pt-2 pb-2 pl-4 pr-4 ml-3 mr-3 ba-cod-price-details-main-div">
+        <div id="ba-cod-price-details-div" class="pt-2 pb-2 pl-4 pr-4 ml-3 mr-3 ba-cod-price-details-main-div" style="display: none">
           <div class="d-flex align-items-center" style="display: none!important">
             <span class="ba-cod-card-header" id="ba-cod-price-header-id"></span>
           </div>
@@ -80,7 +80,7 @@
 
           </div>
           {% comment %} Discount coupon div loader {% endcomment %}
-          <div id="ba-discount-coupon-div-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2" role="status">
+          <div id="ba-discount-coupon-div-loader" style="display: none" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2" role="status">
             <span class="sr-only">Loading...</span>
           </div>
         </div>
@@ -712,18 +712,18 @@
     }
 
     loadBaProductBundles();
-    loadCouponCodes(true);
     resetCodFormFields();
     resetCodFooter();
     resetCodConfirmationModal();
     populatePriceDetailsCard();
+    loadCouponCodes(true);
     if (!blacklistedPincodes || blacklistedPincodes.length === 0) {
-      loadBlackListedPincodes();
+      // loadBlackListedPincodes();
     }
     if (!highRiskProducts || highRiskProducts.length === 0) {
-      loadHighRiskOrders();
+      // loadHighRiskOrders();
     } else {
-      checkHighRiskOrder();
+      // checkHighRiskOrder();
     }
   }
 
@@ -777,12 +777,15 @@
     replaceChildrenAlternative2(parentContainer);
     document.getElementById('ba-product-info-div-loader').style.display = 'block';
 
+    // resetting price details card
+    document.getElementById('ba-cod-price-details-div').style.display = 'none';
+
     // resetting discount div card
     const discountDiv = document.getElementById('ba-cod-discount-div');
     const discountActiveDiv = document.getElementById('ba-active-coupon');
     replaceChildrenAlternative2(discountDiv);
     discountDiv.appendChild(discountActiveDiv);
-    document.getElementById('ba-discount-coupon-div-loader').style.display = 'block';
+    // document.getElementById('ba-discount-coupon-div-loader').style.display = 'block';
 
     // resetting bundles values
     const bundlesDiv = document.getElementById('ba-cod-bundle-cards-div');
@@ -916,31 +919,6 @@
       bundleCardProductDescription.className = 'ba-cod-bundle-description';
       bundleCardProductDescription.innerHTML = bundles[i] && bundles[i].desc ? bundles[i].desc : '';
       bundleCardPriceDiv.appendChild(bundleCardProductDescription);
-
-      // Commented as the variant title and price are moved to title div
-      // let bundleCardProductVariantTitle = document.createElement('div');
-      // bundleCardProductVariantTitle.className = "ba-cod-bundle-title mt-1";
-      // bundleCardProductVariantTitle.innerHTML = (bundleProductVariantTitle && bundleProductVariantTitle.length > 30)
-      //   ? bundleProductVariantTitle.slice(0, 30) + '..'
-      //   : (bundleProductVariantTitle !== null && bundleProductVariantTitle !== undefined) ? bundleProductVariantTitle : '';
-      //
-      // bundleCardPriceDiv.appendChild(bundleCardProductVariantTitle);
-      //
-      // let bundleCardProductPriceDiv = document.createElement('div');
-      // bundleCardProductPriceDiv.className = 'd-flex mt-2';
-      // bundleCardPriceDiv.appendChild(bundleCardProductPriceDiv);
-      //
-      // if (bundleDiscountPercent > 0) {
-      //   let bundleCardDiscountPercent = document.createElement('div');
-      //   bundleCardDiscountPercent.className = 'ba-cod-bundle-discount mr-3';
-      //   bundleCardDiscountPercent.innerHTML = `${bundleDiscountPercent}% off`;
-      //   bundleCardProductPriceDiv.appendChild(bundleCardDiscountPercent);
-      // }
-      //
-      // let bundleCardPrice = document.createElement('div');
-      // bundleCardPrice.className = 'ba-cod-bundle-price';
-      // bundleCardPrice.innerHTML = bundleProductDiscountPrice ? `₹ ${bundleProductDiscountPrice}` : '0';
-      // bundleCardProductPriceDiv.appendChild(bundleCardPrice);
 
       let bundleCardImageDiv = document.createElement('div');
       bundleCardImageDiv.className = 'col-2 pl-0';
@@ -1115,28 +1093,13 @@
 
 
   function loadCouponCodes(showPopup) {
-    let requestOptions = {
-      method: 'GET',
-      redirect: 'follow'
-    };
-    fetch(`https://shopify-krushidukan.leanagri.com/price_rules/en/coupons/price_rule_list.json`, requestOptions)
-      .then(response => {
-        if (response.status === 200) {
-          response.json().then(result => {
-            if (result.data) {
-              setDiscountCoupons(result.data, showPopup);
-            }
-          });
-        } else {
-          console.log('Unable to fetch discount coupons');
-          document.getElementById('ba-discount-coupon-div').style.display = 'none';
-          // document.getElementById('ba-discount-div-separator').setAttribute('style', 'display:none !important');
-        }
-      }).catch(error => {
-      console.log('error: ', error);
+    let couponResults = JSON.parse(localStorage.getItem('baCodCoupons')) || [];
+
+    if (couponResults.length > 0) {
+      setDiscountCoupons(couponResults, showPopup);
+    } else {
       document.getElementById('ba-discount-coupon-div').style.display = 'none';
-      // document.getElementById('ba-discount-div-separator').setAttribute('style', 'display:none !important');
-    });
+    }
   }
 
   function setDiscountCoupons(discounts, showPopup) {
@@ -1936,6 +1899,8 @@
     priceItemsTotalCol2.innerHTML = `₹ ${baUpdateCart.total_price/100}`;
     priceItemsTotalCol2.id = 'ba-price-details-total-value';
     priceItemsTotalDiv.appendChild(priceItemsTotalCol2);
+
+    document.getElementById('ba-cod-price-details-div').style.display = 'block';
 
     // Setting price value on the BA COD place order button
     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${baUpdateCart.total_price/100}`;

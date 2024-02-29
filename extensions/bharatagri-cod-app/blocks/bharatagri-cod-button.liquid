@@ -111,6 +111,21 @@
         .then(res => console.log(res));
     }
   }
+
+  fetch(`https://shopify-krushidukan.leanagri.com/price_rules/en/coupons/price_rule_list.json`)
+    .then(response => {
+      if (response.status === 200) {
+        response.json().then(result => {
+          if (result.data) {
+            localStorage.setItem('baCodCoupons', JSON.stringify(result.data));
+          }
+        });
+      } else {
+        localStorage.setItem('baCodCoupons', JSON.stringify([]));
+      }
+    }).catch(error => {
+        localStorage.setItem('baCodCoupons', JSON.stringify([]));
+  });
 </script>
 
 {% schema %}
