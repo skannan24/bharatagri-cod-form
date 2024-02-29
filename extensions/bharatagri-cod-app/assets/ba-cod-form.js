@@ -49,7 +49,6 @@ function createUpdateBaCartApiCaller() {
 
     // Set a new timeout for making the API call
     this.timeout = setTimeout(() => {
-      console.log("API call for number:", latestNumber);
       updateBaCart(operation, quantityValue);
     }, 500);
   };
@@ -75,10 +74,10 @@ function updateBaCart(operation, quantityValue) {
           let priceDetailsTotalValueWithoutBundle = Number(res.total_price/100);
           let priceDetailsTotalValue = Number(res.total_price/100);
           priceDetailsTotalValue = priceDetailsTotalValue + bundleCartOrderTotalValue;
-          document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsTotalValue}`;
+          document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsTotalValue.toFixed(2)}`;
           document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue}`;
           document.getElementById('ba-cod-main-product-price0').innerHTML = `₹ ${priceDetailsTotalValueWithoutBundle}`;
-          document.getElementById('ba-cod-product-price0').innerHTML = `₹ ${priceDetailsTotalValueWithoutBundle}`;
+          document.getElementById('ba-cod-product-price0').innerHTML = `₹ ${priceDetailsTotalValueWithoutBundle.toFixed(2)}`;
           document.getElementById('ba-cod-main-product-quantity0').innerHTML = quantityValue;
           loadCouponCodes(false);
         }

@@ -81,7 +81,7 @@
             <div id="ba-active-coupon" style="display: none" class="col-auto p-3 ba-cod-discount-card ba-cod-discount-card-active mr-2" onclick="openSmileyModal()">
               <div class="row pt-2 justify-content-between mb-3 ba-cod-discount-title">
                 <div class="col-10 pr-0">
-                  <div id="ba-cod-saved-amount" class="ba-cod-discount-title1"></div>
+                  <div id="ba-cod-saved-amount" class="ba-cod-discount-title1" style="font-weight: 700; font-size: 18px;"></div>
                   <div id="ba-cod-saved-amount-line2" class="ba-cod-discount-title2"></div>
                 </div>
                 <div class="col-2 pl-0">
@@ -395,7 +395,7 @@
   let alternateMobileLabel = 'वैकल्पिक फोन नंबर';
   let pincodeLabel = 'पिनकोड';
   let stateLabel = 'राज्य';
-  let districtLabel = 'जिल्हा';
+  let districtLabel = 'ज़िला';
   let talukaLabel = 'Taluka';
   let villageLabel = 'Village';
   let addressLabel = 'मकान नंबर, रोड, कॉलोनी';
@@ -408,7 +408,7 @@
   let pincodeServiceableRequiredLabel = 'इस पिनकोड पर COD उपलब्ध नहीं है';
   let pincodeNotWhitelistRequiredLabel = 'pincode पर डिलीवरी अनुपलब्ध';
   let stateRequiredLabel = 'राज्य';
-  let districtRequiredLabel = 'जिला';
+  let districtRequiredLabel = 'ज़िला';
   let talukaRequiredLabel = 'तहसील';
   let villageRequiredLabel = 'गावं';
   let addressRequiredLabel = 'मकान नंबर, रोड, कॉलोनी';
@@ -511,7 +511,7 @@
     alternateMobileLabel = 'पर्यायी फोन नंबर';
     pincodeLabel = 'पिनकोड';
     stateLabel = 'राज्य';
-    districtLabel = 'जिल्हा';
+    districtLabel = 'ज़िला';
     talukaLabel = 'Taluka';
     villageLabel = 'Village';
     addressLabel = 'घर क्रमांक, रस्ता, कॉलनी';
@@ -524,7 +524,7 @@
     pincodeServiceableRequiredLabel = 'या पिनकोडवर COD उपलब्ध नाही';
     pincodeNotWhitelistRequiredLabel = 'डिलिव्हरी pincode वर उपलब्ध नाही';
     stateRequiredLabel = 'राज्य';
-    districtRequiredLabel = 'जिला';
+    districtRequiredLabel = 'ज़िला';
     talukaRequiredLabel = 'तालुका';
     villageRequiredLabel = 'गाव';
     addressRequiredLabel = 'घर क्रमांक, रस्ता, कॉलनी';
@@ -1041,7 +1041,7 @@
 
     bundleOrderTotalValue = Number(bundleOrderTotalValue) + bundleProductDiscountPrice;
     bundleOrderTotalValue = Number.isInteger(bundleOrderTotalValue) ? Number(bundleOrderTotalValue) : bundleOrderTotalValue.toFixed(2);
-    document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${bundleOrderTotalValue}`;
+    document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${bundleOrderTotalValue.toFixed(2)}`;
     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${bundleOrderTotalValue}`;
   }
 
@@ -1078,7 +1078,7 @@
 
     bundleOrderTotalValue = Number(bundleOrderTotalValue) - selectedBundles[index].price;
     bundleOrderTotalValue = Number.isInteger(bundleOrderTotalValue) ? Number(bundleOrderTotalValue) : bundleOrderTotalValue.toFixed(2);
-    document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${bundleOrderTotalValue}`;
+    document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${bundleOrderTotalValue.toFixed(2)}`;
     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${bundleOrderTotalValue}`;
   }
 
@@ -1170,9 +1170,6 @@
         coupon_sub_title_translation = finalCodes[i].coupon_sub_title_hi;
       }
 
-      console.log(coupon_title_translation);
-      console.log(coupon_sub_title_translation);
-
       let discountCardColDiv = document.createElement('div');
       discountCardColDiv.id = finalCodes[i].title;
       discountCardColDiv.className = 'col-auto p-3 ba-cod-discount-card mr-2';
@@ -1256,7 +1253,7 @@
       'order_value': priceDetailsTotalValueWithoutBundle,
     });
 
-    document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsTotalValue}`;
+    document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsTotalValue.toFixed(2)}`;
     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue}`;
 
     if (previousCouponCode) {
@@ -1308,7 +1305,7 @@
             let priceDetailsWalletTotalValue = Number(result.checkout.total_price.replace('.00', ''));
             priceDetailsWalletTotalValue = priceDetailsWalletTotalValue + bundleCartOrderTotalValue;
 
-            document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsWalletTotalValue}`;
+            document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsWalletTotalValue.toFixed(2)}`;
             document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsWalletTotalValue}`;
             document.getElementById('ba-price-details-discount-row').style.display = 'flex';
 
@@ -1861,7 +1858,7 @@
       let priceItemsCol2 = document.createElement('div');
       priceItemsCol2.className = 'col-3 text-right pl-0 ba-cod-price-details-product-price';
       priceItemsCol2.id = 'ba-cod-product-price' + i;
-      priceItemsCol2.innerHTML = items[i].final_line_price ? `₹ ${Number(items[i].final_line_price)/100}` : '0';
+      priceItemsCol2.innerHTML = items[i].final_line_price ? `₹ ${(Number(items[i].final_line_price)/100).toFixed(2)}` : '0';
       priceItemsRow.appendChild(priceItemsCol2);
     }
 
@@ -1911,7 +1908,7 @@
 
     let priceItemsTotalCol2 = document.createElement('div');
     priceItemsTotalCol2.className = 'col-4 text-right pl-0 ba-cod-price-details-total-price';
-    priceItemsTotalCol2.innerHTML = `₹ ${baUpdateCart.total_price/100}`;
+    priceItemsTotalCol2.innerHTML = `₹ ${(baUpdateCart.total_price/100).toFixed(2)}`;
     priceItemsTotalCol2.id = 'ba-price-details-total-value';
     priceItemsTotalDiv.appendChild(priceItemsTotalCol2);
 
