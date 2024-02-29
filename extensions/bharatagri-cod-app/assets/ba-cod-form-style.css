@@ -30,7 +30,7 @@
 
 .ba-smiley-modal-discount-amount {
   text-align: center;
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 26px;
   font-style: normal;
   font-weight: 700;
@@ -40,7 +40,7 @@
 .ba-smiley-modal-discount-content {
   color: #FFF;
   text-align: center;
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
@@ -53,7 +53,7 @@
 
 .ba-smiley-modal-discount-applied {
   text-align: center;
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -61,7 +61,7 @@
 }
 
 .ba-cod-product-header {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 20px;
   font-weight: 600;
   line-height: 25px;
@@ -74,7 +74,7 @@
 }
 
 .ba-cod-product-title {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 16px;
   font-weight: 600;
   line-height: 18px;
@@ -88,7 +88,7 @@
 }
 
 .ba-cod-variant-info {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
@@ -98,7 +98,7 @@
 }
 
 .ba-cod-product-discount {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 16px;
   font-weight: 600;
   line-height: 20px;
@@ -108,7 +108,7 @@
 }
 
 .ba-cod-actual-price {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 16px;
   font-weight: 400;
   line-height: 20px;
@@ -121,7 +121,7 @@
 }
 
 .ba-cod-selling-price {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 18px;
   font-weight: 600;
   line-height: 20px;
@@ -149,7 +149,7 @@
 }
 
 .ba-cod-card-header {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 18px;
   font-weight: 600;
   line-height: 25px;
@@ -182,7 +182,7 @@
 }
 
 .ba-cod-discount-title1 {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 16px;
   font-weight: 500;
   line-height: 22px;
@@ -192,7 +192,7 @@
 }
 
 .ba-cod-discount-title2 {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 14px;
   font-weight: 400;
   line-height: 18px;
@@ -224,7 +224,7 @@
 }
 
 .ba-discount-applied-name {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 14px;
   font-weight: 600;
   text-align: left;
@@ -237,7 +237,7 @@
 }
 
 .ba-cod-input-field {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   height: 44px;
   font-size: 16px;
   border-color: #ADB2C0;
@@ -245,7 +245,7 @@
 }
 
 .ba-cod-full-width-input-field {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   height: 44px;
   font-size: 16px;
   border-color: #ADB2C0;
@@ -258,7 +258,7 @@
 }
 
 .has-float-label label,.has-float-label>span {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   position: absolute;
   cursor: text;
   font-size: 11px;
@@ -275,7 +275,7 @@
 }
 
 .has-float-label label::after,.has-float-label>span::after {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   content: " ";
   display: block;
   position: absolute;
@@ -298,7 +298,7 @@
 }
 
 .has-float-label .form-control:placeholder-shown:not(:focus)+* {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 14px;
   /*opacity: .5;*/
   top: 1em;
@@ -327,7 +327,7 @@
 }
 
 .ba-cod-select-field {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   height: 47px;
   font-size: 16px;
   text-align: left;
@@ -336,7 +336,7 @@
 }
 
 .ba-cod-options-field {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   width: 100%;
   font-size: 15px;
   max-height: 300px;
@@ -345,7 +345,7 @@
 }
 
 .ba-mandatory-field-text {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 15px;
   font-weight: 400;
   line-height: 20px;
@@ -366,7 +366,7 @@
 }
 
 .ba-cod-price-details-items {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 16px;
   font-weight: 400;
   line-height: 18px;
@@ -400,7 +400,7 @@
 }
 
 .ba-cod-price-details-discount {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 16px;
   font-weight: 500;
   line-height: 18px;
@@ -411,7 +411,7 @@
 }
 
 .ba-cod-price-details-total-amount {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 16px;
   font-weight: 600;
   line-height: 18px;
@@ -429,7 +429,7 @@
 
 .ba-cod-footer-delivery-label {
   color: #FFFFFF;
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 16px;
   font-weight: 100;
   line-height: 18px;
@@ -439,7 +439,7 @@
 
 .ba-cod-footer-total {
   color: #FFFFFF;
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 22px;
   font-weight: 600;
   line-height: 27px;
@@ -449,7 +449,7 @@
 
 .ba-cod-footer-place-order {
   color: #FFFFFF;
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 22px;
   font-weight: 600;
   line-height: 27px;
@@ -465,7 +465,7 @@
 }
 
 .ba-cod-footer-line-separator {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 44px;
   font-weight: 100;
   line-height: 27px;
@@ -552,7 +552,7 @@
 }
 
 .ba-cod-bundle-title {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 16px;
   font-weight: 400;
   line-height: 21px;
@@ -567,7 +567,7 @@
 }
 
 .ba-cod-bundle-discount {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 16px;
   font-weight: 600;
   line-height: 20px;
@@ -577,7 +577,7 @@
 }
 
 .ba-cod-bundle-price {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 18px;
   font-weight: 600;
   line-height: 20px;
@@ -587,7 +587,7 @@
 }
 
 .ba-cod-bundle-add-btn {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 16px;
   font-weight: 600;
   line-height: 18px;
@@ -600,7 +600,7 @@
 }
 
 .ba-cod-bundle-remove-btn {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 13px;
   font-weight: 500;
   line-height: 18px;
@@ -612,7 +612,7 @@
 .ba-cod-bundle-description {
   color: rgba(237, 21, 21, 1) !important;
   font-size: 15px;
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-weight: 400;
   line-height: 21px;
   margin-top: 3px;
@@ -728,7 +728,7 @@
 }
 
 .ba-cod-quantity-number {
-  font-family: Noto Sans;
+  /*font-family: Noto Sans;*/
   font-size: 14px;
   font-weight: 600;
   line-height: 18px;
