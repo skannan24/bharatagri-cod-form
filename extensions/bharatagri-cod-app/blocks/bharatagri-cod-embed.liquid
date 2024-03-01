@@ -1389,6 +1389,7 @@
   }
 
   function createOrderObject() {
+    sendBaCodGEvents('ba_cod_order_submit_click', {});
     document.getElementById('ba-cod-create-order-button').disabled = true;
 
     let name = document.getElementById('farmerName');
@@ -1420,6 +1421,9 @@
       document.getElementById('farmerMobileRequired').style.display = 'block';
       if (!validationError) {baScrollToId('farmerMobile');}
       validationError = true;
+      if (mobile.value) {
+        sendBaCodGEvents('ba_cod_order_validate_error_mobile', { 'mobile': mobile.value });
+      }
     }
 
     if (!(address.value)) {
@@ -1490,6 +1494,7 @@
     // }
 
     if (!validationError) {
+      sendBaCodGEvents('ba_cod_order_creation', { 'mobile': mobile.value });
       document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'inline-block';
       document.getElementById('ba-cod-footer-place-order').style.display = 'none';
       let nameValue = name.value;
@@ -1649,7 +1654,7 @@
               document.getElementById('ba-confirmation-btn').click();
             } else {
               document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
-              window.open(baCodOrderUrl, '_self');
+              baAuthenticateOrderPageUrlAndRoute();
             }
           });
         } else {
@@ -1665,7 +1670,7 @@
       });
 
       // dev store api call to create order
-      // fetch('/admin/api/2021-10/orders.json', {
+      // fetch('/admin/api/2023-07/orders.json', {
       //   method: 'POST',
       //   headers: {
       //     'Content-Type': 'application/json',
@@ -1682,7 +1687,7 @@
       //           document.getElementById('ba-confirmation-btn').click();
       //         } else {
       //           document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
-      //           window.open(baCodOrderUrl, '_self');
+      //           baAuthenticateOrderPageUrlAndRoute();
       //         }
       //     });
       //   } else {
@@ -1695,24 +1700,9 @@
 
     } else {
       document.getElementById('ba-cod-create-order-button').disabled = false;
+      sendBaCodGEvents('ba_cod_order_validate_error', { 'field': 'addressFields' });
     }
   }
-
-  // Interval to reset values and mobile validation
-
-  // let mobile = document.getElementById('farmerMobile');
-  // mobile.addEventListener('keydown', (event) => {
-  //   let arr = [];
-  //   let kk = event.which;
-  //
-  //   for (let i = 48; i < 58; i++)
-  //     arr.push(i);
-  //
-  //   arr.push(8);
-  //
-  //   if (!(arr.indexOf(kk)>=0))
-  //     event.preventDefault();
-  // });
 
   function baScrollToId(id) {
     document.getElementById(id).scrollIntoView({

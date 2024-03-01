@@ -412,7 +412,8 @@ function onConfirmationModalClick(value) {
           document.getElementById('ba-confirmation-close').click();
           document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
           resetCodConfirmationModal();
-          window.open(baCodOrderUrl, '_self');
+          // window.open(baCodOrderUrl, '_self');
+          baAuthenticateOrderPageUrlAndRoute();
         } else {
           document.getElementById('ba-confirmation-close').click();
           document.getElementById('ba-cod-create-order-button').disabled = false;
@@ -449,5 +450,28 @@ function loadProductBundlesOldFunction() {
     }).catch(error => {
     console.log('error: ', error);
     document.getElementById('ba-cod-bundle-div').style.display = 'none';
+  });
+}
+
+function baAuthenticateOrderPageUrlAndRoute() {
+  let mobileAuthValue = document.getElementById('farmerMobile').value;
+  let ospAuthBody = `phone=${mobileAuthValue}&order_number=${baCodOrderNumber}`
+
+  fetch(baCodOrderUrl, {
+    "headers": {
+      "content-type": "application/x-www-form-urlencoded",
+      "sec-fetch-dest": "empty",
+      "sec-fetch-mode": "cors",
+      "sec-fetch-site": "same-origin"
+    },
+    "referrerPolicy": "strict-origin-when-cross-origin",
+    "body": ospAuthBody.toString(),
+    "method": "POST",
+    "mode": "cors",
+    "credentials": "include"
+  }).then(response => {
+    console.log(response)
+    let baCodOrderFinalUrl = baCodOrderUrl.split('/authenticate')[0];
+    window.open(baCodOrderFinalUrl, '_self');
   });
 }
