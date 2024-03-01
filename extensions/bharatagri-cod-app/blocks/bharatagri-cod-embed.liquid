@@ -1024,14 +1024,14 @@
     bundlePriceItemsMainDiv.appendChild(priceItemsRow);
 
     let priceItemsCol1 = document.createElement('div');
-    priceItemsCol1.className = 'col-9 ba-cod-price-details-product-title';
+    priceItemsCol1.className = 'col-7 ba-cod-price-details-product-title';
     priceItemsCol1.innerHTML = (bundleProductTitle && bundleProductTitle.length > 34)
       ? bundleProductTitle.slice(0, 34) + '..'
       : (bundleProductTitle !== null && bundleProductTitle !== undefined) ? bundleProductTitle : '';
     priceItemsRow.appendChild(priceItemsCol1);
 
     let priceItemsCol2 = document.createElement('div');
-    priceItemsCol2.className = 'col-3 text-right pl-0 ba-cod-price-details-product-price';
+    priceItemsCol2.className = 'col-5 text-right pl-0 ba-cod-price-details-product-price';
     priceItemsCol2.innerHTML = bundleProductDiscountPrice ? `₹ ${bundleProductDiscountPrice}` : '0';
     priceItemsRow.appendChild(priceItemsCol2);
 
@@ -1840,13 +1840,13 @@
       priceItemsMainDiv.appendChild(priceItemsRow);
 
       let priceItemsCol1 = document.createElement('div');
-      priceItemsCol1.className = 'col-9 ba-cod-price-details-product-title';
+      priceItemsCol1.className = 'col-7 ba-cod-price-details-product-title';
       // priceItemsCol1.innerHTML = items[i].product_title.length > 34 ? items[i].product_title.slice(0,34) + '..' : items[i].product_title;
       priceItemsCol1.innerHTML = mainPriceAmountLabel;
       priceItemsRow.appendChild(priceItemsCol1);
 
       let priceItemsCol2 = document.createElement('div');
-      priceItemsCol2.className = 'col-3 text-right pl-0 ba-cod-price-details-product-price';
+      priceItemsCol2.className = 'col-5 text-right pl-0 ba-cod-price-details-product-price';
       priceItemsCol2.id = 'ba-cod-product-price' + i;
       priceItemsCol2.innerHTML = items[i].final_line_price ? `₹ ${(Number(items[i].final_line_price)/100).toFixed(2)}` : '0';
       priceItemsRow.appendChild(priceItemsCol2);
@@ -1857,12 +1857,12 @@
     document.getElementById('ba-cod-price-details-content').appendChild(priceItemsFreeDeliveryDiv);
 
     let priceItemsFreeDeliveryCol1 = document.createElement('div');
-    priceItemsFreeDeliveryCol1.className = 'col-8';
+    priceItemsFreeDeliveryCol1.className = 'col-7';
     priceItemsFreeDeliveryCol1.innerHTML = priceDetailsFreeDeliveryLabel;
     priceItemsFreeDeliveryDiv.appendChild(priceItemsFreeDeliveryCol1);
 
     let priceItemsFreeDeliveryCol2 = document.createElement('div');
-    priceItemsFreeDeliveryCol2.className = 'col-4 text-right pl-0 ba-cod-price-details-free-delivery';
+    priceItemsFreeDeliveryCol2.className = 'col-5 text-right pl-0 ba-cod-price-details-free-delivery';
     priceItemsFreeDeliveryCol2.innerHTML = priceDetailsFreeDeliveryValueLabel;
     // priceItemsFreeDeliveryCol2.style.color = '#0A8047';
     priceItemsFreeDeliveryDiv.appendChild(priceItemsFreeDeliveryCol2);
@@ -1873,12 +1873,12 @@
     document.getElementById('ba-cod-price-details-content').appendChild(priceItemsDiscountDiv);
 
     let priceItemsDiscountCol1 = document.createElement('div');
-    priceItemsDiscountCol1.className = 'col-9';
+    priceItemsDiscountCol1.className = 'col-7';
     priceItemsDiscountCol1.innerHTML = priceDetailsDiscountLabel;
     priceItemsDiscountDiv.appendChild(priceItemsDiscountCol1);
 
     let priceItemsDiscountCol2 = document.createElement('div');
-    priceItemsDiscountCol2.className = 'col-3 text-right pl-0 ba-cod-price-details-total-discount';
+    priceItemsDiscountCol2.className = 'col-5 text-right pl-0 ba-cod-price-details-total-discount';
     priceItemsDiscountCol2.id = 'ba-price-details-discount-value';
     priceItemsDiscountDiv.appendChild(priceItemsDiscountCol2);
 
@@ -1892,12 +1892,12 @@
     document.getElementById('ba-cod-price-details-content').appendChild(priceItemsTotalDiv);
 
     let priceItemsTotalCol1 = document.createElement('div');
-    priceItemsTotalCol1.className = 'col-8';
+    priceItemsTotalCol1.className = 'col-7';
     priceItemsTotalCol1.innerHTML = priceDetailsTotalAmountLabel;
     priceItemsTotalDiv.appendChild(priceItemsTotalCol1);
 
     let priceItemsTotalCol2 = document.createElement('div');
-    priceItemsTotalCol2.className = 'col-4 text-right pl-0 ba-cod-price-details-total-price';
+    priceItemsTotalCol2.className = 'col-5 text-right pl-0 ba-cod-price-details-total-price';
     priceItemsTotalCol2.innerHTML = `₹ ${(baUpdateCart.total_price/100).toFixed(2)}`;
     priceItemsTotalCol2.id = 'ba-price-details-total-value';
     priceItemsTotalDiv.appendChild(priceItemsTotalCol2);
