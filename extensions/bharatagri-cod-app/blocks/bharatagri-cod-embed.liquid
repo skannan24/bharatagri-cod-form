@@ -12,19 +12,7 @@
   <div class="modal-dialog ba-modal-dialog modal-dialog-scrollable">
     <div class="modal-content ba-modal-content">
       {% comment %}<div class="modal-header row align-items-center p-4">{% endcomment %}
-        {% comment %}<div class="col-10">{% endcomment %}
-          {% comment %}<h5 class="modal-title" id="staticBackdropLabel">{% endcomment %}
-            {% comment %}<div>{% endcomment %}
-              {% comment %}<span class="ba-cod-product-header" id="product-header-id"></span>{% endcomment %}
-              {% comment %}<span class="ba-cod-product-header" style="display: none"> (<span id="product-count-id"></span>) </span>{% endcomment %}
-            {% comment %}</div>{% endcomment %}
-          {% comment %}</h5>{% endcomment %}
-        {% comment %}</div>{% endcomment %}
-        {% comment %}<div class="col-2">{% endcomment %}
-          {% comment %}<button style="font-size: 30px; font-weight: 100" id="baCodFormClose" onclick="clearCartEmbed()" type="button" class="close" data-dismiss="modal" aria-label="Close">{% endcomment %}
-            {% comment %}<span aria-hidden="true">&times;</span>{% endcomment %}
-          {% comment %}</button>{% endcomment %}
-        {% comment %}</div>{% endcomment %}
+        {% comment %}{% endcomment %}
       {% comment %}</div>{% endcomment %}
       <div class="modal-body ba-modal-body p-0">
         <div class="modal-header row align-items-center p-4">
@@ -37,7 +25,10 @@
             </h5>
           </div>
           <div class="col-2">
-            <button style="font-size: 30px; font-weight: 100" id="baCodFormClose" onclick="clearCartEmbed()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button style="display: none" id="baCodFormClose" onclick="clearCartEmbed()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <button style="font-size: 30px; font-weight: 100" id="baCodTriggerRecovery" onclick="displayBaRecoveryDiscount()" type="button" class="close" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -119,12 +110,6 @@
           </div>
 
           <div class="row mt-3 pb-2">
-            <div style="display: none" class="col-6 pr-1">
-              <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('alternate mobile')" class="ba-cod-input-box form-control ba-cod-input-field" id="alternateMobile" type="text" maxlength="10" name="Alternate Number" placeholder="Alternate Number"/>
-                <label id="alternateMobileLabel" for="alternateMobile">Alternate Number</label>
-              </div>
-            </div>
             <div class="col-12">
               <div class="ba-cod-input-container">
                 <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodCallIcon.svg" width="43" height="45" alt="Mobile" />
@@ -263,24 +248,6 @@
       </div>
       {% comment %}
       <div class="modal-footer ba-cod-footer">
-        <button id="ba-cod-create-order-button" class="row w-100 ba-cod-create-order-button d-flex align-items-center justify-content-between"
-                onclick="createOrderObject()">
-          <div class="col-6 p-0">
-            <div id="ba-cod-footer-delivery-label" class="ba-cod-footer-delivery-label"></div>
-            <div id="ba-cod-footer-total-amount" class="ba-cod-footer-total"></div>
-          </div>
-          {% comment %}<div class="col-4">{% endcomment %}
-          {% comment %}<div class="ba-cod-footer-line-separator"> | </div>{% endcomment %}
-          {% comment %}</div>{% endcomment %}
-          <div class="col-6 p-0">
-            <div id="ba-cod-footer-place-order" class="ba-cod-footer-place-order"></div>
-            <div id="ba-cod-footer-apply-btn-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2"
-                 role="status" style="display: none; color: white!important;">
-              <span class="sr-only">Loading...</span>
-            </div>
-          </div>
-        </button>
-        {% comment %}<button type="button" onclick="createOrderObject()" class="btn btn-primary">Understood</button>{% endcomment %}
       </div>
       {% endcomment %}
     </div>
@@ -363,6 +330,48 @@
   </div>
 </div>
 
+<!-- Button trigger recovery discount modal -->
+<button id="ba-cod-recovery-discount-btn" style="display: none" type="button" class="btn btn-primary" data-toggle="modal" data-target="#baRecoveryDiscountModal">
+  Recovery discount button
+</button>
+
+<!-- recovery discount Modal -->
+<div class="modal ba-cod-recovery-discount-modal fade" data-backdrop="static" id="baRecoveryDiscountModal" tabindex="-1" aria-labelledby="baRecoveryDiscountModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius: 13px;">
+      <div style="display: none" class="modal-header p-0">
+        <button id="baRecoveryClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body pl-4 pr-4 pt-4 pb-5">
+        <div id="baSpecialDiscount" class="text-center ba-cod-special-discount-txt">
+          🌱 स्पेशल डिस्काउंट 🌱
+        </div>
+        <div id="baSpecialOffer" class="text-center ba-cod-special-offer-txt">
+          सिमित समय के लिए एक खास ऑफर
+        </div>
+        <div id="baOffer5Percent" class="text-center ba-cod-offer-5-percent">
+          5%
+        </div>
+        <div id="baRecoveryOrderNow" class="text-center ba-cod-recovery-order-now">
+          अभी ऑर्डर करें और 5% डिस्काउंट पाएं
+        </div>
+        <div class="text-center">
+          <button id="baRecoveryOrderBtn" onclick="applyBaRecoveryDiscount(true)" class="w-100 ba-cod-recovery-order-btn">
+            <span id="baRecoveryOrderBtnLabel">स्पेशल डिस्काउंट पर आर्डर करें</span>
+          </button>
+        </div>
+        <div class="text-center mt-4">
+          <button id="baRecoveryCancelBtn" onclick="closeBaRecoveryDiscountAndForm()" class="w-100 ba-cod-recovery-cancel-btn">
+            <span id="baRecoveryCancelBtnLabel">मुझे डिस्काउंट नहीं चाहिए</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   let currentUrl1 = window.location.href;
   let lang = 'hi';
@@ -383,6 +392,9 @@
   let baCodOrderUrl = '';
   let baCodOrderNumber = '';
 
+  let baRecoveryOrder = true;
+  let baRecoveryApplied = false;
+
   // let productHeader = 'प्रोडक्ट';
   let productHeader = 'कैश ऑन डिलीवरी से खरीदें';
   let discountHeader = 'डिस्काउंट कूपन';
@@ -392,7 +404,6 @@
 
   let nameLabel = 'आपका पूरा नाम'
   let mobileLabel = '10 अंकीय फोन नंबर डालें';
-  let alternateMobileLabel = 'वैकल्पिक फोन नंबर';
   let pincodeLabel = 'पिनकोड';
   let stateLabel = 'राज्य';
   let districtLabel = 'ज़िला';
@@ -440,6 +451,12 @@
 
   let mainPriceAmountLabel = 'राशि';
 
+  let baSpecialDiscount = '🌱 स्पेशल डिस्काउंट 🌱';
+  let baSpecialOffer = 'सीमित समय के लिए एक ख़ास ऑफर';
+  let baRecoveryOrderNow = 'अभी आर्डर करें और 5% डिस्काउंट पाएं';
+  let baRecoveryOrderBtnLabel = 'स्पेशल डिस्काउंट पर आर्डर करें';
+  let baRecoveryCancelBtnLabel = 'मुझे डिस्काउंट नहीं चाहिए';
+
   if (lang === 'en') {
     // productHeader = 'Product';
     productHeader = 'Cash On Delivery';
@@ -450,7 +467,6 @@
 
     nameLabel = 'Your Full Name';
     mobileLabel = 'Enter 10-digit phone number';
-    alternateMobileLabel = 'Alternate Number';
     pincodeLabel = 'Pincode';
     stateLabel = 'State';
     districtLabel = 'District';
@@ -496,6 +512,12 @@
     confirmModalYesLabel = 'Yes';
     confirmModalNoLabel = 'No';
     mainPriceAmountLabel = 'Amount';
+
+    baSpecialDiscount = '🌱 Special Discount 🌱';
+    baSpecialOffer = 'Special offer for a limited time';
+    baRecoveryOrderNow = 'Order now and get 5% discount';
+    baRecoveryOrderBtnLabel = 'Order with a special discount';
+    baRecoveryCancelBtnLabel = "I don't want a discount";
   }
 
   if (lang === 'mr') {
@@ -508,7 +530,6 @@
 
     nameLabel = 'तुमचे पुर्ण नाव';
     mobileLabel = '10 अंकी फोन नंबर प्रविष्ट करा';
-    alternateMobileLabel = 'पर्यायी फोन नंबर';
     pincodeLabel = 'पिनकोड';
     stateLabel = 'राज्य';
     districtLabel = 'ज़िला';
@@ -554,6 +575,12 @@
     confirmModalYesLabel = 'होय';
     confirmModalNoLabel = 'नाही';
     mainPriceAmountLabel = 'रक्कम';
+
+    baSpecialDiscount = '🌱 स्पेशल डिस्काउंट 🌱';
+    baSpecialOffer = 'सीमित समय के लिए एक ख़ास ऑफर';
+    baRecoveryOrderNow = 'अभी आर्डर करें और 5% डिस्काउंट पाएं';
+    baRecoveryOrderBtnLabel = 'स्पेशल डिस्काउंट पर आर्डर करें';
+    baRecoveryCancelBtnLabel = 'मुझे डिस्काउंट नहीं चाहिए';
   }
   document.getElementById('product-header-id').innerHTML = productHeader;
   document.getElementById('discount-header-id').innerHTML = discountHeader;
@@ -568,8 +595,6 @@
 
   document.getElementById('farmerMobile').placeholder = mobileLabel;
   document.getElementById('farmerMobileRequired').innerHTML = mobileRequiredLabel;
-
-  document.getElementById('alternateMobile').placeholder = alternateMobileLabel;
 
   document.getElementById('baCodPincode').placeholder = pincodeLabel;
   document.getElementById('baCodPincodeRequired').innerHTML = pincodeRequiredLabel;
@@ -598,6 +623,12 @@
   document.getElementById('ba-cod-confirm-txt-div').innerHTML = confirmModalTextLabel;
   document.getElementById('ba-cod-confirm-yes-btn-label').innerHTML = confirmModalYesLabel;
   document.getElementById('ba-cod-confirm-no-btn-label').innerHTML = confirmModalNoLabel;
+
+  document.getElementById('baSpecialDiscount').innerHTML = baSpecialDiscount;
+  document.getElementById('baSpecialOffer').innerHTML = baSpecialOffer;
+  document.getElementById('baRecoveryOrderNow').innerHTML = baRecoveryOrderNow;
+  document.getElementById('baRecoveryOrderBtnLabel').innerHTML = baRecoveryOrderBtnLabel;
+  document.getElementById('baRecoveryCancelBtnLabel').innerHTML = baRecoveryCancelBtnLabel;
 
 </script>
 
@@ -672,20 +703,8 @@
       productPriceColDiv.style.paddingRight = "16px";
       productRowDiv.appendChild(productPriceColDiv);
 
-      // Commenting out the discount percent off value
-      // let productDiscount = document.createElement('div');
-      // productDiscount.className = "ba-cod-product-discount";
-      // productDiscount.innerHTML = '3% off';
-      // productPriceColDiv.appendChild(productDiscount);
-
       let productPriceDiv = document.createElement('div');
       productPriceColDiv.appendChild(productPriceDiv);
-
-      // Commenting out the slash (original) price
-      // let productActualPrice = document.createElement('span');
-      // productActualPrice.className = "ba-cod-actual-price";
-      // productActualPrice.innerHTML = items[i]?.original_price ? `₹ ${Number(items[i]?.original_price)/100}` : '0';
-      // productPriceDiv.appendChild(productActualPrice);
 
       let productSellingPrice = document.createElement('span');
       productSellingPrice.className = "ba-cod-selling-price";
@@ -732,6 +751,10 @@
     resetCodConfirmationModal();
     populatePriceDetailsCard();
     loadCouponCodes(true);
+    sendBaCodGEvents('ba_cod_order_begin_checkout', { 'productId': items[0].id });
+    if (baRecoveryApplied) {
+      applyBaRecoveryDiscount(false);
+    }
     if (!blacklistedPincodes || blacklistedPincodes.length === 0) {
       // loadBlackListedPincodes();
     }
@@ -917,9 +940,6 @@
 
       let bundleCardProductTitle = document.createElement('div');
       bundleCardProductTitle.className = "ba-cod-bundle-title";
-      // bundleCardProductTitle.innerHTML = (bundleProductTitle && bundleProductTitle.length > 30)
-      //   ? bundleProductTitle.slice(0, 30) + '..'
-      //   : (bundleProductTitle !== null && bundleProductTitle !== undefined) ? bundleProductTitle : '';
       bundleCardProductTitle.innerHTML = baBundleTitle;
 
       if (bundleDiscountPercent > 0 && bundles[i] && !bundles[i].title) {
@@ -945,11 +965,6 @@
       bundleCardImage.style.borderRadius = '6px';
       bundleCardImage.width = 60;
       bundleCardImage.height = 60;
-      // if (bundleImagePlaceholder === bundleProductImage) {
-      //   bundleCardImage.style.width = '65%';
-      // } else {
-      //   bundleCardImage.className = 'w-100';
-      // }
       bundleCardImageDiv.appendChild(bundleCardImage);
 
       bundleCardColDiv.addEventListener("click", function(){
@@ -998,23 +1013,7 @@
     let bundleProductTitle = (product && product.secondary_product && product.secondary_product.product)
       ? product.secondary_product.product.title
       : undefined;
-    let bundleProductVariantTitle = (product && product.secondary_product && product.secondary_product.product)
-      ? product.secondary_product.product.variant_title
-      : undefined;
-    let bundleProductPrice = (product && product.secondary_product && product.secondary_product.product)
-      ? product.secondary_product.product.selling_price
-      : undefined;
     let bundleProductDiscountPrice = product ? product.price : undefined;
-    let bundleDiscountPercent = ((bundleProductPrice - bundleProductDiscountPrice)/bundleProductPrice) * 100;
-    bundleDiscountPercent = Math.floor(bundleDiscountPercent);
-    let bundleDiscountedAmount = bundleProductPrice - bundleProductDiscountPrice;
-
-    let bundleProductImage = 'https://shopify-krushidukan.leanagri.com/ba-cod-form-images/product-img-placeholder.png';
-
-    if (product.secondary_product.product.images[0] && product.secondary_product.product.images[0].media_url) {
-      bundleProductImage = product.secondary_product.product.images[0].media_url;
-    }
-
 
     // Adding the product to the price card
     let bundlePriceItemsMainDiv = document.getElementById('ba-cod-price-details-bundle-items');
@@ -1201,7 +1200,7 @@
       let discountApplyBtn = document.createElement('div');
       discountApplyBtn.className = 'col-auto ba-cod-discount-apply-btn';
       discountApplyBtn.innerHTML = applyCouponBtn;
-      discountApplyBtn.addEventListener("click", function(){ applyCouponCodes(finalCodes[i].title, true); });
+      // discountApplyBtn.addEventListener("click", function(){ applyCouponCodes(finalCodes[i].title, true); });
       discountInfoApplyDiv.appendChild(discountApplyBtn);
 
       // Discount coupon card click at card level
@@ -1209,13 +1208,15 @@
     }
 
     // applying first discount code
-    if (finalCodes.length > 0) {
-      applyCouponCodes(finalCodes[0].title, false, showPopup);
-    } else {
-      // Resetting price details card discount amount and ba coupon code
-      document.getElementById('ba-price-details-discount-value').innerHTML = `0`;
-      document.getElementById('ba-price-details-discount-row').style.display = 'none';
-      localStorage.removeItem('BA_COD_Coupon_code');
+    if (!baRecoveryApplied) {
+      if (finalCodes.length > 0) {
+        applyCouponCodes(finalCodes[0].title, false, showPopup);
+      } else {
+        // Resetting price details card discount amount and ba coupon code
+        document.getElementById('ba-price-details-discount-value').innerHTML = `0`;
+        document.getElementById('ba-price-details-discount-row').style.display = 'none';
+        localStorage.removeItem('BA_COD_Coupon_code');
+      }
     }
   }
 </script>
@@ -1319,6 +1320,8 @@
             }
 
             localStorage.setItem('BA_COD_Coupon_code', couponCode);
+            // setting recovery discount applied to false / reset value
+            baRecoveryApplied = false;
 
             if (showPopup) {
               // openSmileyModal();
@@ -1382,8 +1385,6 @@
       let stateOptionsBtn = document.createElement('option');
       stateOptionsBtn.innerHTML = stateName;
       stateOptionsBtn.value = stateList[i].name_en;
-      // stateOptionsBtn.addEventListener("change", function(){ onStateClick(stateList[i].id, stateName, stateList[i].name_en); });
-      // stateDiv.appendChild(stateOptionsBtn);
       stateDiv.add(stateOptionsBtn);
     }
   }
@@ -1394,7 +1395,6 @@
 
     let name = document.getElementById('farmerName');
     let mobile = document.getElementById('farmerMobile');
-    let alternateMobile = document.getElementById('alternateMobile');
     let pincode = document.getElementById('baCodPincode');
     let stateField = document.getElementById('baCodStateSelect');
     let state = stateNameEn;
@@ -1472,34 +1472,12 @@
       // }
     }
 
-    // if (!(taluka.value)) {
-    //   taluka.classList.add('ba-mandatory-field-border');
-    //   document.getElementById('talukaNameRequired').style.display = 'block';
-    // if (!validationError) {baScrollToId('talukaName');}
-    //   validationError = true;
-    // }
-
-    // if (!(village.value)) {
-    //   village.classList.add('ba-mandatory-field-border');
-    //   document.getElementById('villageNameRequired').style.display = 'block';
-    // if (!validationError) {baScrollToId('villageName');}
-    //   validationError = true;
-    // }
-
-    // if (!(landmark.value)) {
-    //   landmark.classList.add('ba-mandatory-field-border');
-    //   document.getElementById('baLandmarkRequired').style.display = 'block';
-    // if (!validationError) {baScrollToId('baLandmark');}
-    //   validationError = true;
-    // }
-
     if (!validationError) {
       sendBaCodGEvents('ba_cod_order_creation', { 'mobile': mobile.value });
       document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'inline-block';
       document.getElementById('ba-cod-footer-place-order').style.display = 'none';
       let nameValue = name.value;
       let mobileValue = mobile.value;
-      let alternateMobileValue = alternateMobile.value ? alternateMobile.value : '';
       let  pincodeValue = pincode.value;
       let stateValue = state;
       let districtValue = district.value;
@@ -1512,7 +1490,6 @@
       let baOrder = {
         name: name.value,
         mobile: mobile.value,
-        alternateMobile: alternateMobile.value ? alternateMobile.value : '',
         pincode: pincode.value,
         state: state,
         district: district.value,
@@ -1621,6 +1598,8 @@
         ]
       }
 
+      document.getElementById('baCodTriggerRecovery').disabled = true;
+
       fetch('https://lcrks.leanagri.com/third_parties/shopify_cod_app/api/v1/create-order/', {
         method: 'POST',
         headers: {
@@ -1635,6 +1614,7 @@
               'order_value': createOrderTotalValue,
               'ba_phone_number': mobileValue
             });
+            document.getElementById('baCodTriggerRecovery').disabled = false;
             sendBaFbEvents('Purchase', {currency: "INR", value: createOrderTotalValue, num_items: createOrderLineItems.length});
             try {
               gtag('event', 'conversion', {
@@ -1661,12 +1641,14 @@
           document.getElementById('ba-cod-create-order-button').disabled = false;
           document.getElementById('ba-cod-footer-place-order').style.display = 'block';
           document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'none';
+          document.getElementById('baCodTriggerRecovery').disabled = false;
         }
       }).catch(error => {
         console.log('error: ', error);
         document.getElementById('ba-cod-create-order-button').disabled = false;
         document.getElementById('ba-cod-footer-place-order').style.display = 'block';
         document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'none';
+        document.getElementById('baCodTriggerRecovery').disabled = false;
       });
 
       // dev store api call to create order
@@ -1680,6 +1662,7 @@
       // }).then(response => {
       //   if (response.status === 201) {
       //     response.json().then( result => {
+      //         document.getElementById('baCodTriggerRecovery').disabled = false;
       //       // window.open(result.order.order_status_url, '_self');
       //         baCodOrderUrl = result.order.order_status_url
       //         baCodOrderNumber = result.order.order_number;
@@ -1692,10 +1675,12 @@
       //     });
       //   } else {
       //     document.getElementById('ba-cod-create-order-button').disabled = false;
+      //     document.getElementById('baCodTriggerRecovery').disabled = false;
       //   }
       // }).catch(error => {
       //   console.log('error: ', error);
       //   document.getElementById('ba-cod-create-order-button').disabled = false;
+      //   document.getElementById('baCodTriggerRecovery').disabled = false;
       // });
 
     } else {
@@ -1781,45 +1766,6 @@
       document.getElementById('baLandmarkRequired').style.display = 'none';
     }
   }, 2500);
-</script>
-
-<script>
-  calculateBaCodDeliveryDates();
-  function calculateBaCodDeliveryDates() {
-    let someDate = new Date();
-    let numberOfDaysToAdd = 4;
-    let result = someDate.setDate(someDate.getDate() + numberOfDaysToAdd);
-    result = new Date(result);
-    getBaCodDeliveryFormatDate(result);
-  }
-
-  function getBaCodDeliveryFormatDate(dDate) {
-    dDate = new Date(dDate);
-    let weekEn = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
-    let weekHi = new Array('रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार');
-    let weekMr = new Array('रविवार', 'सोमवार', 'मंगळवार', 'बुधवार', 'गुरुवारी', 'शुक्रवार', 'शनिवार');
-    let monthEn = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    let monthHi = ['जनवरी', 'फरवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितम्बर', 'अक्टूबर', 'नवम्बर', 'दिसम्बर'];
-    let monthMr = ['जानेवारी', 'फेब्रुवारी', 'मार्च', 'एप्रिल', 'मे', 'जून', 'जुलै', 'ऑगस्ट', 'सप्टेंबर', 'ऑक्टोबर', 'नोव्हेंबर', 'डिसेंबर'];
-    let day = '';
-    let month = '';
-    let currentUrl = window.location.href;
-    currentUrl = currentUrl.toString();
-    if (currentUrl.indexOf('.com/en') > -1) {
-      day = weekEn[dDate.getDay()];
-      month = monthEn[dDate.getMonth()];
-      document.getElementById('ba-cod-delivery-days-label').innerHTML = ' FREE Delivery';
-    } else if (currentUrl.indexOf('.com/mr') > -1) {
-      day = weekMr[dDate.getDay()];
-      month = monthMr[dDate.getMonth()];
-      document.getElementById('ba-cod-delivery-days-label').innerHTML = ' फ्री डिलिव्हरी';
-    } else {
-      day = weekHi[dDate.getDay()];
-      month = monthHi[dDate.getMonth()];
-      document.getElementById('ba-cod-delivery-days-label').innerHTML = ' फ्री डिलीवरी';
-    }
-    document.getElementById('ba-cod-delivery-date').innerHTML = day + ', ' + dDate.getDate() + ' ' + month;
-  }
 </script>
 
 <script>

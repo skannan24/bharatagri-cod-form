@@ -812,3 +812,130 @@
   -moz-appearance: none;
   appearance: none;
 }
+
+.ba-cod-recovery-discount-modal {
+  z-index: 2147484610;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding-top: 18vh;
+  padding-left: 7%!important;
+  padding-right: 7%!important;
+}
+
+.ba-cod-special-discount-txt {
+  font-size: 21px;
+  text-align: center;
+  font-weight: 600;
+  margin: 8px 14px 10px;
+  line-height: 1.2;
+  color: black;
+}
+
+.ba-cod-special-offer-txt {
+  font-size: 18px;
+  text-align: center;
+  font-weight: 600;
+  margin: 0 14px;
+  line-height: 1.2;
+  color: black;
+}
+
+.ba-cod-offer-5-percent {
+  position: relative;
+  margin: 12px auto 16px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  font-size: 31px;
+  line-height: 1.2;
+  font-weight: 600;
+  text-align: center;
+
+  width: calc(135px * 0.8);
+  height: calc(135px * 0.8);
+  clip-path: polygon(50% 0%, 58.64% 9.34%, 70.34% 4.32%, 74.43% 16.37%, 87.16% 16.54%, 86% 29.21%, 97.55% 34.55%, 91.34% 45.65%, 99.73% 55.23%, 89.54% 62.85%, 93.30% 75%, 80.89% 77.82%, 79.39% 90.45%, 66.91% 87.98%, 60.40% 98.91%, 50% 91.57%, 39.60% 98.91%, 33.09% 87.98%, 20.61% 90.45%, 19.11% 77.82%, 6.70% 75%, 10.46% 62.85%, 0.27% 55.23%, 8.66% 45.65%, 2.45% 34.55%, 14% 29.21%, 12.84% 16.54%, 25.57% 16.37%, 29.66% 4.32%, 41.36% 9.34%);
+  background: rgba(29, 158, 6, 1);
+  color: rgba(255,255,255,1);
+}
+
+.ba-cod-recovery-order-now {
+  font-size: 15px;
+  line-height: 1.2;
+  font-weight: 400;
+  margin: 6px 14px 10px;
+  color: black;
+}
+
+.ba-cod-recovery-order-btn {
+  background: rgba(18, 122, 0, 1) !important;
+  color: rgba(255,255,255,1) !important;
+  border-radius: 24px !important;
+  border: 0px solid rgba(0,0,0,1) !important;
+  box-shadow: 0 2px 7px 0px rgba(0, 0, 0, 0.1) !important;
+  font-size: 17px !important;
+  margin-top: 24px !important;
+  font-weight: 700;
+  padding: 10px;
+  -webkit-animation: 2.5s cubic-bezier(.35,.06,.2,.98) both baCodShaker1 infinite;
+  animation: 2.5s cubic-bezier(.35,.06,.2,.98) both baCodShaker1 infinite;
+}
+
+.ba-cod-recovery-cancel-btn {
+  background: rgba(255,255,255,1) !important;
+  color: rgba(0,0,0,1) !important;
+  border-radius: 24px !important;
+  border: 2px solid rgba(0,0,0,1) !important;
+  box-shadow: 0 2px 7px 0px rgba(0, 0, 0, 0) !important;
+  font-size: 16px !important;
+  font-weight: 700;
+  padding: 9px;
+}
+
+@-webkit-keyframes baCodShaker1 {
+  0%,to {
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1)
+  }
+
+  10%,20% {
+    -webkit-transform: scale3d(.97,.97,.97) rotate(-1deg);
+    transform: scale3d(.97,.97,.97) rotate(-1deg)
+  }
+
+  30%,50%,70%,90% {
+    -webkit-transform: scale3d(1.03,1.03,1.03) rotate(1deg);
+    transform: scale3d(1.03,1.03,1.03) rotate(1deg)
+  }
+
+  40%,60%,80% {
+    -webkit-transform: scale3d(1.03,1.03,1.03) rotate(-1deg);
+    transform: scale3d(1.03,1.03,1.03) rotate(-1deg)
+  }
+}
+
+@keyframes baCodShaker1 {
+  0%,to {
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1)
+  }
+
+  10%,20% {
+    -webkit-transform: scale3d(.97,.97,.97) rotate(-1deg);
+    transform: scale3d(.97,.97,.97) rotate(-1deg)
+  }
+
+  30%,50%,70%,90% {
+    -webkit-transform: scale3d(1.03,1.03,1.03) rotate(1deg);
+    transform: scale3d(1.03,1.03,1.03) rotate(1deg)
+  }
+
+  40%,60%,80% {
+    -webkit-transform: scale3d(1.03,1.03,1.03) rotate(-1deg);
+    transform: scale3d(1.03,1.03,1.03) rotate(-1deg)
+  }
+}

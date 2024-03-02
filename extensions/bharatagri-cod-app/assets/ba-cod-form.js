@@ -79,6 +79,9 @@ function updateBaCart(operation, quantityValue) {
           document.getElementById('ba-cod-main-product-price0').innerHTML = `₹ ${priceDetailsTotalValueWithoutBundle}`;
           document.getElementById('ba-cod-product-price0').innerHTML = `₹ ${priceDetailsTotalValueWithoutBundle.toFixed(2)}`;
           document.getElementById('ba-cod-main-product-quantity0').innerHTML = quantityValue;
+          if (baRecoveryApplied) {
+            applyBaRecoveryDiscount(false);
+          }
           loadCouponCodes(false);
         }
       );
@@ -103,7 +106,6 @@ function resetCodFormFields() {
 
   document.getElementById('farmerName').value = '';
   document.getElementById('farmerMobile').value = '';
-  document.getElementById('alternateMobile').value = '';
   document.getElementById('baCodPincode').value = '';
   document.getElementById('baAddress').value = '';
   document.getElementById('baLandmark').value = '';
@@ -361,12 +363,55 @@ function getBaCodProductData() {
   return JSON.parse(localStorage.getItem('baCodProductData')) || {};
 }
 
+function displayBaRecoveryDiscount() {
+  let createOrderDiscount = document.getElementById('ba-price-details-discount-value').innerHTML;
+  createOrderDiscount = createOrderDiscount.replace('-₹ ', '');
+  if (baRecoveryOrder && !Number(createOrderDiscount) > 0) {
+    document.getElementById('ba-cod-recovery-discount-btn').click();
+  } else {
+    document.getElementById('baCodFormClose').click();
+  }
+}
+
+function applyBaRecoveryDiscount(closeModal) {
+  let mainItem = getBaCartMainItemDetails();
+  let fivePercentAmt = Number(mainItem.final_line_price)/100;
+  fivePercentAmt = ((fivePercentAmt * 0.05).toFixed(2)).toString();
+  baRecoveryApplied = true;
+  localStorage.setItem('BA_COD_Coupon_code', 'BA Recovery Discount');
+
+  let bundleCartOrderTotalValue = getBundlesTotalPrice();
+  let mainItemPrice = Number(mainItem.final_line_price)/100;
+  mainItemPrice = mainItemPrice + bundleCartOrderTotalValue - fivePercentAmt;
+
+  document.getElementById('ba-price-details-discount-value').innerHTML = `-₹ ${fivePercentAmt.replace('.00', '')}`;
+  document.getElementById('ba-price-details-discount-row').style.display = 'flex';
+
+  document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
+  if (closeModal) {
+    document.getElementById('baRecoveryClose').click();
+    sendBaCodGEvents('ba_cod_order_recovery_apply', { 'amount': fivePercentAmt });
+  }
+}
+
+function closeBaRecoveryDiscountAndForm() {
+  baRecoveryOrder = false;
+  document.getElementById('baCodFormClose').click();
+  document.getElementById('baRecoveryClose').click();
+  sendBaCodGEvents('ba_cod_order_recovery_cancel', {});
+}
+
+function getBaCartMainItemDetails() {
+  let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+  let items = baUpdateCart.items;
+  return items[0];
+}
+
 function replaceChildrenAlternative(parentNode) {
   while (parentNode.firstChild) {
     parentNode.removeChild(parentNode.firstChild);
   }
 }
-
 
 function loadHighRiskOrders() {
   fetch(`https://shopify-krushidukan.leanagri.com/high-risk-products/en/products/risk_products.json`)
@@ -475,3 +520,94 @@ function baAuthenticateOrderPageUrlAndRoute() {
     window.open(baCodOrderFinalUrl, '_self');
   });
 }
+
+
+// not used functions
+
+calculateBaCodDeliveryDates();
+function calculateBaCodDeliveryDates() {
+  let someDate = new Date();
+  let numberOfDaysToAdd = 4;
+  let result = someDate.setDate(someDate.getDate() + numberOfDaysToAdd);
+  result = new Date(result);
+  getBaCodDeliveryFormatDate(result);
+}
+
+function getBaCodDeliveryFormatDate(dDate) {
+  dDate = new Date(dDate);
+  let weekEn = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+  let weekHi = new Array('रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार');
+  let weekMr = new Array('रविवार', 'सोमवार', 'मंगळवार', 'बुधवार', 'गुरुवारी', 'शुक्रवार', 'शनिवार');
+  let monthEn = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  let monthHi = ['जनवरी', 'फरवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितम्बर', 'अक्टूबर', 'नवम्बर', 'दिसम्बर'];
+  let monthMr = ['जानेवारी', 'फेब्रुवारी', 'मार्च', 'एप्रिल', 'मे', 'जून', 'जुलै', 'ऑगस्ट', 'सप्टेंबर', 'ऑक्टोबर', 'नोव्हेंबर', 'डिसेंबर'];
+  let day = '';
+  let month = '';
+  let currentUrl = window.location.href;
+  currentUrl = currentUrl.toString();
+  if (currentUrl.indexOf('.com/en') > -1) {
+    day = weekEn[dDate.getDay()];
+    month = monthEn[dDate.getMonth()];
+    document.getElementById('ba-cod-delivery-days-label').innerHTML = ' FREE Delivery';
+  } else if (currentUrl.indexOf('.com/mr') > -1) {
+    day = weekMr[dDate.getDay()];
+    month = monthMr[dDate.getMonth()];
+    document.getElementById('ba-cod-delivery-days-label').innerHTML = ' फ्री डिलिव्हरी';
+  } else {
+    day = weekHi[dDate.getDay()];
+    month = monthHi[dDate.getMonth()];
+    document.getElementById('ba-cod-delivery-days-label').innerHTML = ' फ्री डिलीवरी';
+  }
+  document.getElementById('ba-cod-delivery-date').innerHTML = day + ', ' + dDate.getDate() + ' ' + month;
+}
+
+
+
+// if (!(taluka.value)) {
+//   taluka.classList.add('ba-mandatory-field-border');
+//   document.getElementById('talukaNameRequired').style.display = 'block';
+// if (!validationError) {baScrollToId('talukaName');}
+//   validationError = true;
+// }
+
+// if (!(village.value)) {
+//   village.classList.add('ba-mandatory-field-border');
+//   document.getElementById('villageNameRequired').style.display = 'block';
+// if (!validationError) {baScrollToId('villageName');}
+//   validationError = true;
+// }
+
+// if (!(landmark.value)) {
+//   landmark.classList.add('ba-mandatory-field-border');
+//   document.getElementById('baLandmarkRequired').style.display = 'block';
+// if (!validationError) {baScrollToId('baLandmark');}
+//   validationError = true;
+// }
+
+// <div className="modal-footer ba-cod-footer">
+//   <button id="ba-cod-create-order-button"
+//           className="row w-100 ba-cod-create-order-button d-flex align-items-center justify-content-between"
+//           onClick="createOrderObject()">
+//     <div className="col-6 p-0">
+//       <div id="ba-cod-footer-delivery-label" className="ba-cod-footer-delivery-label"></div>
+//       <div id="ba-cod-footer-total-amount" className="ba-cod-footer-total"></div>
+//     </div>
+//     {% comment %}
+//     <div className="col-4">{% endcomment %}
+//       {% comment %}
+//       <div className="ba-cod-footer-line-separator"> |</div>
+//       {% endcomment %}
+//       {% comment %}</div>
+//     {% endcomment %}
+//     <div className="col-6 p-0">
+//       <div id="ba-cod-footer-place-order" className="ba-cod-footer-place-order"></div>
+//       <div id="ba-cod-footer-apply-btn-loader" className="spinner-border ba-cod-main-divs-spinner text-secondary ml-2"
+//            role="status" style="display: none; color: white!important;">
+//         <span className="sr-only">Loading...</span>
+//       </div>
+//     </div>
+//   </button>
+//   {% comment %}
+//   <button type="button" onClick="createOrderObject()" className="btn btn-primary">Understood</button>
+//   {% endcomment %}
+// </div>
