@@ -1039,8 +1039,8 @@
     bundleOrderTotalValue = bundleOrderTotalValue && bundleOrderTotalValue.replace('₹ ', '');
 
     bundleOrderTotalValue = Number(bundleOrderTotalValue) + bundleProductDiscountPrice;
-    bundleOrderTotalValue = Number.isInteger(bundleOrderTotalValue) ? Number(bundleOrderTotalValue) : bundleOrderTotalValue.toFixed(2);
-    document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${bundleOrderTotalValue.toFixed(2)}`;
+    bundleOrderTotalValue = Number(bundleOrderTotalValue).toFixed(2);
+    document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${bundleOrderTotalValue}`;
     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${bundleOrderTotalValue}`;
   }
 
@@ -1076,8 +1076,8 @@
     bundleOrderTotalValue = bundleOrderTotalValue && bundleOrderTotalValue.replace('₹ ', '');
 
     bundleOrderTotalValue = Number(bundleOrderTotalValue) - selectedBundles[index].price;
-    bundleOrderTotalValue = Number.isInteger(bundleOrderTotalValue) ? Number(bundleOrderTotalValue) : bundleOrderTotalValue.toFixed(2);
-    document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${bundleOrderTotalValue.toFixed(2)}`;
+    bundleOrderTotalValue = Number(bundleOrderTotalValue).toFixed(2);
+    document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${bundleOrderTotalValue}`;
     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${bundleOrderTotalValue}`;
   }
 

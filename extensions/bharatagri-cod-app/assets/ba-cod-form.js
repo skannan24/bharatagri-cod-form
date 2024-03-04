@@ -383,6 +383,7 @@ function applyBaRecoveryDiscount(closeModal) {
   let bundleCartOrderTotalValue = getBundlesTotalPrice();
   let mainItemPrice = Number(mainItem.final_line_price)/100;
   mainItemPrice = mainItemPrice + bundleCartOrderTotalValue - fivePercentAmt;
+  mainItemPrice = Number(mainItemPrice);
 
   document.getElementById('ba-price-details-discount-value').innerHTML = `-₹ ${fivePercentAmt.replace('.00', '')}`;
   document.getElementById('ba-price-details-discount-row').style.display = 'flex';
