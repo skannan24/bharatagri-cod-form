@@ -856,7 +856,7 @@
   function loadBaProductBundles() {
     selectedBundles = [];
 
-    // let bundleVariant = 43521411154163;
+    // let bundleVariant = 44093057958131;
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
     let items = baUpdateCart.items;
     let bundleVariant = items[0].id;
@@ -1209,13 +1209,13 @@
       discountInfoApplyDiv.appendChild(discountApplyBtn);
 
       // Discount coupon card click at card level
-      discountCardColDiv.addEventListener("click", function(){ applyCouponCodes(finalCodes[i].title, true); });
+      discountCardColDiv.addEventListener("click", function(){ applyCouponCodes(finalCodes[i].title, finalCodes[i], true); });
     }
 
     // applying first discount code
     if (!baRecoveryApplied) {
       if (finalCodes.length > 0) {
-        applyCouponCodes(finalCodes[0].title, false, showPopup);
+        applyCouponCodes(finalCodes[0].title, finalCodes[0], false, showPopup);
       } else {
         // Resetting price details card discount amount and ba coupon code
         document.getElementById('ba-price-details-discount-value').innerHTML = `0`;
@@ -1228,19 +1228,13 @@
 
 <script>
   let previousCouponCode = '';
-  function applyCouponCodes(couponCode, scrollFlag, showPopup) {
+  function applyCouponCodes(couponCode, couponObj, scrollFlag, showPopup) {
     document.getElementById('ba-cod-discount-loader').style.display = 'block';
     if (!previousCouponCode) {
       previousCouponCode = couponCode;
     }
-    let shopify_features_script = document.querySelector("script[id='shopify-features']");
-    let shopify_features_json = JSON.parse(shopify_features_script.innerHTML);
-
-    // console.log(shopify_features_json);
 
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
-    let items = baUpdateCart.items;
-    let lineItems = [];
 
     // Resetting price details card discount and total amount
     document.getElementById('ba-price-details-discount-value').innerHTML = `0`;
@@ -1274,79 +1268,61 @@
       activeCouponCardEl.style.display = 'none';
     }
 
-    for (let i = 0; i < items.length; i++) {
-      let variant = {'variant_id': items[i].variant_id, 'quantity': items[i].quantity, 'properties': {}};
-      lineItems.push(variant);
+    document.getElementById(couponCode).style.display = 'none';
+    document.getElementById('ba-active-coupon').style.display = 'block';
+
+    let mainItem = getBaCartMainItemDetails();
+
+    let baDiscountAmt = 0;
+
+    if (couponObj.value_type && couponObj.value_type === 'percentage') {
+      let percentValue = Math.abs(couponObj.value)/100;
+      baDiscountAmt = Number(mainItem.final_line_price)/100;
+      baDiscountAmt = ((baDiscountAmt * percentValue).toFixed(2)).toString();
+      if (Number(baDiscountAmt) > Number(couponObj.max_discount_rule)) {
+        baDiscountAmt = couponObj.max_discount_rule.toString();
+      }
+    } else if (couponObj.value_type) {
+      baDiscountAmt = Number(mainItem.final_line_price)/100;
+      let fixedValue = Math.abs(couponObj.value);
+      baDiscountAmt = (baDiscountAmt - fixedValue).toFixed(2);
+      baDiscountAmt = baDiscountAmt.toString();
     }
 
-    let payload = {
-      "checkout": {
-        "discount_code": couponCode,
-        "line_items": lineItems,
-        "presentment_currency": "INR"
-      }
+    let bundleCartOrderTotalValue2 = getBundlesTotalPrice();
+    let mainItemPrice = Number(mainItem.final_line_price)/100;
+    mainItemPrice = mainItemPrice + bundleCartOrderTotalValue2 - baDiscountAmt;
+    mainItemPrice = Number(mainItemPrice);
+
+    document.getElementById('ba-price-details-discount-value').innerHTML = `-₹ ${baDiscountAmt.replace('.00', '')}`;
+    document.getElementById('ba-price-details-discount-row').style.display = 'flex';
+
+    document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
+    document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
+
+    document.getElementById('ba-cod-saved-amount').innerHTML = `${couponSavedLabel} ₹${baDiscountAmt.replace('.00', '')}`;
+    document.getElementById('ba-cod-saved-amount-line2').innerHTML = couponWithDiscountLabel;
+    document.getElementById('ba-cod-applied-coupon-content').innerHTML = `${couponCode} ${couponAppliedLabel}`;
+
+
+    previousCouponCode = couponCode;
+    document.getElementById('ba-cod-discount-loader').style.display = 'none';
+
+    if (scrollFlag) {
+      document.getElementById('ba-active-coupon').scrollIntoView({
+        behavior: 'smooth'
+      });
     }
 
-    fetch('/wallets/checkouts/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': 'Basic ' + btoa(shopify_features_json.accessToken)
-      },
-      body: JSON.stringify(payload)
-    }).then(response => {
-      if (response.status === 201) {
-        response.json().then(result => {
-          if (result.checkout.applied_discount.applicable) {
-            // console.log('Wallet values: ', result);
-            document.getElementById(couponCode).style.display = 'none';
-            document.getElementById('ba-active-coupon').style.display = 'block';
-            document.getElementById('ba-cod-saved-amount').innerHTML = `${couponSavedLabel} ₹${result.checkout.total_discount_amount.replace('.00', '')}`;
-            document.getElementById('ba-cod-saved-amount-line2').innerHTML = couponWithDiscountLabel;
-            document.getElementById('ba-cod-applied-coupon-content').innerHTML = `${couponCode} ${couponAppliedLabel}`;
+    localStorage.setItem('BA_COD_Coupon_code', `BA_${couponCode}`);
 
-            document.getElementById('ba-price-details-discount-value').innerHTML = `-₹ ${result.checkout.total_discount_amount.replace('.00', '')}`;
+    // setting recovery discount applied to false / reset value
+    baRecoveryApplied = false;
 
-            bundleCartOrderTotalValue = getBundlesTotalPrice();
-            let priceDetailsWalletTotalValue = Number(result.checkout.total_price.replace('.00', ''));
-            priceDetailsWalletTotalValue = priceDetailsWalletTotalValue + bundleCartOrderTotalValue;
+    if (showPopup) {
+      // openSmileyModal();
+    }
 
-            document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsWalletTotalValue.toFixed(2)}`;
-            document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsWalletTotalValue}`;
-            document.getElementById('ba-price-details-discount-row').style.display = 'flex';
-
-            previousCouponCode = couponCode;
-            document.getElementById('ba-cod-discount-loader').style.display = 'none';
-
-            if (scrollFlag) {
-              document.getElementById('ba-active-coupon').scrollIntoView({
-                behavior: 'smooth'
-              });
-            }
-
-            localStorage.setItem('BA_COD_Coupon_code', couponCode);
-            // setting recovery discount applied to false / reset value
-            baRecoveryApplied = false;
-
-            if (showPopup) {
-              // openSmileyModal();
-            }
-          } else {
-            console.log('Coupon not applicable');
-            document.getElementById('ba-cod-discount-loader').style.display = 'none';
-            localStorage.removeItem('BA_COD_Coupon_code');
-          }
-        });
-      } else {
-        console.log('Unable to fetch wallet');
-        document.getElementById('ba-cod-discount-loader').style.display = 'none';
-        localStorage.removeItem('BA_COD_Coupon_code');
-      }
-    }).catch(error => {
-      console.log('error: ', error);
-      document.getElementById('ba-cod-discount-loader').style.display = 'none';
-      localStorage.removeItem('BA_COD_Coupon_code');
-    });
   }
 </script>
 
@@ -1687,6 +1663,7 @@
       //   document.getElementById('ba-cod-create-order-button').disabled = false;
       //   document.getElementById('baCodTriggerRecovery').disabled = false;
       // });
+      // dev store api ends here
 
     } else {
       document.getElementById('ba-cod-create-order-button').disabled = false;

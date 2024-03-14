@@ -562,6 +562,127 @@ function getBaCodDeliveryFormatDate(dDate) {
   document.getElementById('ba-cod-delivery-date').innerHTML = day + ', ' + dDate.getDate() + ' ' + month;
 }
 
+function applyCouponCodes_OLDFunction(couponCode, couponObj, scrollFlag, showPopup) {
+  document.getElementById('ba-cod-discount-loader').style.display = 'block';
+  if (!previousCouponCode) {
+    previousCouponCode = couponCode;
+  }
+  let shopify_features_script = document.querySelector("script[id='shopify-features']");
+  let shopify_features_json = JSON.parse(shopify_features_script.innerHTML);
+
+  // console.log(shopify_features_json);
+
+  let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+  let items = baUpdateCart.items;
+  let lineItems = [];
+
+  // Resetting price details card discount and total amount
+  document.getElementById('ba-price-details-discount-value').innerHTML = `0`;
+  document.getElementById('ba-price-details-discount-row').style.display = 'none';
+
+
+  // Resetting total amount with the cart and bundles
+  let bundleCartOrderTotalValue = getBundlesTotalPrice();
+  let priceDetailsTotalValueWithoutBundle = Number(baUpdateCart.total_price/100);
+  let priceDetailsTotalValue = Number(baUpdateCart.total_price/100);
+  priceDetailsTotalValue = priceDetailsTotalValue + bundleCartOrderTotalValue;
+
+  sendBaCodGEvents('BA_cart_cc_clk', {
+    'from_frag': currentUrl1,
+    'discount_coupon': couponCode,
+    'order_value': priceDetailsTotalValueWithoutBundle,
+  });
+
+  document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsTotalValue.toFixed(2)}`;
+  document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue}`;
+
+  if (previousCouponCode) {
+    let activeCouponEl = document.getElementById(previousCouponCode);
+    if (activeCouponEl) {
+      activeCouponEl.style.display = 'block';
+    }
+  }
+
+  let activeCouponCardEl = document.getElementById('ba-active-coupon');
+  if (activeCouponCardEl) {
+    activeCouponCardEl.style.display = 'none';
+  }
+
+  for (let i = 0; i < items.length; i++) {
+    let variant = {'variant_id': items[i].variant_id, 'quantity': items[i].quantity, 'properties': {}};
+    lineItems.push(variant);
+  }
+
+  let payload = {
+    "checkout": {
+      "discount_code": couponCode,
+      "line_items": lineItems,
+      "presentment_currency": "INR"
+    }
+  }
+
+  fetch('/wallets/checkouts/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': 'Basic ' + btoa(shopify_features_json.accessToken)
+    },
+    body: JSON.stringify(payload)
+  }).then(response => {
+    if (response.status === 201) {
+      response.json().then(result => {
+        if (result.checkout.applied_discount.applicable) {
+          // console.log('Wallet values: ', result);
+          document.getElementById(couponCode).style.display = 'none';
+          document.getElementById('ba-active-coupon').style.display = 'block';
+          document.getElementById('ba-cod-saved-amount').innerHTML = `${couponSavedLabel} ₹${result.checkout.total_discount_amount.replace('.00', '')}`;
+          document.getElementById('ba-cod-saved-amount-line2').innerHTML = couponWithDiscountLabel;
+          document.getElementById('ba-cod-applied-coupon-content').innerHTML = `${couponCode} ${couponAppliedLabel}`;
+
+          document.getElementById('ba-price-details-discount-value').innerHTML = `-₹ ${result.checkout.total_discount_amount.replace('.00', '')}`;
+
+          bundleCartOrderTotalValue = getBundlesTotalPrice();
+          let priceDetailsWalletTotalValue = Number(result.checkout.total_price.replace('.00', ''));
+          priceDetailsWalletTotalValue = priceDetailsWalletTotalValue + bundleCartOrderTotalValue;
+
+          document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsWalletTotalValue.toFixed(2)}`;
+          document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsWalletTotalValue}`;
+          document.getElementById('ba-price-details-discount-row').style.display = 'flex';
+
+          previousCouponCode = couponCode;
+          document.getElementById('ba-cod-discount-loader').style.display = 'none';
+
+          if (scrollFlag) {
+            document.getElementById('ba-active-coupon').scrollIntoView({
+              behavior: 'smooth'
+            });
+          }
+
+          localStorage.setItem('BA_COD_Coupon_code', couponCode);
+          // setting recovery discount applied to false / reset value
+          baRecoveryApplied = false;
+
+          if (showPopup) {
+            // openSmileyModal();
+          }
+        } else {
+          console.log('Coupon not applicable');
+          document.getElementById('ba-cod-discount-loader').style.display = 'none';
+          localStorage.removeItem('BA_COD_Coupon_code');
+        }
+      });
+    } else {
+      console.log('Unable to fetch wallet');
+      document.getElementById('ba-cod-discount-loader').style.display = 'none';
+      localStorage.removeItem('BA_COD_Coupon_code');
+    }
+  }).catch(error => {
+    console.log('error: ', error);
+    document.getElementById('ba-cod-discount-loader').style.display = 'none';
+    localStorage.removeItem('BA_COD_Coupon_code');
+  });
+}
+
 
 
 // if (!(taluka.value)) {
