@@ -436,7 +436,13 @@ function checkHighRiskOrder() {
   let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
   let items = baUpdateCart.items;
   let riskVariantId = items[0].id;
-  console.log('current risk id', riskVariantId, typeof(riskVariantId));
+
+  highRiskProducts = [];
+
+  let data = getBaCodProductData();
+  if (data.verification_popup_variants && data.verification_popup_variants.length > 0) {
+    highRiskProducts = data.verification_popup_variants;
+  }
   if (highRiskProducts && highRiskProducts.indexOf(String(riskVariantId)) > -1) {
     highRiskProductFlag = true;
   }

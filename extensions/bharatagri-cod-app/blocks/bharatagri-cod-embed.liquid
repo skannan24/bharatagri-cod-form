@@ -759,11 +759,9 @@
     if (!blacklistedPincodes || blacklistedPincodes.length === 0) {
       // loadBlackListedPincodes();
     }
-    if (!highRiskProducts || highRiskProducts.length === 0) {
-      // loadHighRiskOrders();
-    } else {
-      // checkHighRiskOrder();
-    }
+
+    // checking high risk variant
+    checkHighRiskOrder();
   }
 
   function clearCartEmbed() {
