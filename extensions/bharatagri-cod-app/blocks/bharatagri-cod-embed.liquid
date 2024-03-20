@@ -757,7 +757,7 @@
       applyBaRecoveryDiscount(false);
     }
     if (!blacklistedPincodes || blacklistedPincodes.length === 0) {
-      // loadBlackListedPincodes();
+      loadBlackListedPincodes();
     }
 
     // checking high risk variant
@@ -1433,22 +1433,22 @@
       validationError = true;
     } else {
       // Commented pincode validation for blacklist and whitelist pincodes
-      // let data = getBaCodProductData();
-      // if (data.pincode_whitelist && data.pincode_whitelist.length > 0) {
-      //   if (!validateWhiteListedPincode(pincode.value)) {
-      //     pincode.classList.add('ba-mandatory-field-border');
-      //     document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'block';
-      //     sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': pincode.value });
-      //     if (!validationError) {baScrollToId('baCodPincode');}
-      //     validationError = true;
-      //   }
-      // } else if (String(blacklistedPincodes).indexOf(pincode.value) > -1) {
-      //   pincode.classList.add('ba-mandatory-field-border');
-      //   document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
-      //   sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': pincode.value });
-      //   if (!validationError) {baScrollToId('baCodPincode');}
-      //   validationError = true;
-      // }
+      let data = getBaCodProductData();
+      if (data.pincode_whitelist && data.pincode_whitelist.length > 0) {
+        if (!validateWhiteListedPincode(pincode.value)) {
+          pincode.classList.add('ba-mandatory-field-border');
+          document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'block';
+          sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': pincode.value });
+          if (!validationError) {baScrollToId('baCodPincode');}
+          validationError = true;
+        }
+      } else if (String(blacklistedPincodes).indexOf(pincode.value) > -1) {
+        pincode.classList.add('ba-mandatory-field-border');
+        document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
+        sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': pincode.value });
+        if (!validationError) {baScrollToId('baCodPincode');}
+        validationError = true;
+      }
     }
 
     if (!validationError) {
@@ -1841,7 +1841,7 @@
       document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';
       document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'none';
       loadBaLocation(this.value);
-      // checkWhiteListedPincodes(this.value);
+      checkWhiteListedPincodes(this.value);
     }
   });
 </script>
