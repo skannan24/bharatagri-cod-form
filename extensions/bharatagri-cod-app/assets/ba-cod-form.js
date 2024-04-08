@@ -15,8 +15,31 @@ function openSmileyModal() {
 
 }
 
+function getBaOnlineDiscountCodeObject(codes) {
+  if (codes.length > 0) {
+    let baDiscountCodes = codes[0];
+    return [
+      {
+        "code": baDiscountCodes.code + ', BA Online Pay Discount',
+        "amount": Number(baDiscountCodes.amount) + getOnlinePayDiscountAmount()
+      }
+    ];
+  } else {
+    return [
+      {
+        "code": 'ba_online_pay',
+        "amount": getOnlinePayDiscountAmount()
+      }
+    ];
+  }
+}
+
+function getOnlinePayDiscountAmount() {
+  return 30;
+}
+
 function updateOnlinePaymentPrice(price) {
-  let baOnlineDiscount = 30;
+  let baOnlineDiscount = getOnlinePayDiscountAmount();
   let baOnlineAmount = Number(price)- baOnlineDiscount;
   if (price.toString().includes('.')) {
     baOnlineAmount = baOnlineAmount.toFixed(2);

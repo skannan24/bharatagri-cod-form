@@ -1651,6 +1651,8 @@
               sendBaCodGEvents(event.data, { 'value': mobileValue });
               baO2["order"]["financial_status"] = 'paid';
               baO2["order"]["payment_gateway_names"] = ["Razorpay Secure"];
+              let baDiscountCodes = baO2["order"]["discount_codes"] || [];
+              baO2["order"]["discount_codes"] = getBaOnlineDiscountCodeObject(baDiscountCodes);
               noteAttributesArray.push({"name": "order_id", "value": event.data.orderId});
               noteAttributesArray.push({"name": "payment_id", "value": event.data.paymentId ? event.data.paymentId : ''});
               baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, noteAttributesArray, type);
