@@ -1648,6 +1648,7 @@
           // Handle the message
           if (!baOnlinePaySuccess) {
             if (event.data.message === 'ba_payment_success' && Number(event.data.amount) === Number(onlineAmount)) {
+              baOnlinePaySuccess = true;
               sendBaCodGEvents(event.data, { 'value': mobileValue });
               baO2["order"]["financial_status"] = 'paid';
               baO2["order"]["payment_gateway_names"] = ["Razorpay Secure"];
