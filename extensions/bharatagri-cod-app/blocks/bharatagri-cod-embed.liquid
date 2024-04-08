@@ -225,19 +225,46 @@
         <!-- BA COD button non-sticky -->
         <div class="p-2 mb-2 d-flex justify-content-center">
           <button id="ba-cod-create-order-button" class="row p-3 w-100 ba-cod-create-order-non-sticky-button d-flex align-items-center justify-content-between"
-                  onclick="createOrderObject()">
-            <div class="col-6 p-0" style="display: none!important;">
-              <div id="ba-cod-footer-delivery-label" class="ba-cod-footer-delivery-label"></div>
-              <div id="ba-cod-footer-total-amount" class="ba-cod-footer-total"></div>
-            </div>
-            <div class="col-12 p-2">
+                  onclick="createOrderObject('cod')">
+            <div class="col-8 p-2">
               <div id="ba-cod-footer-place-order" class="ba-cod-footer-place-order"></div>
+            </div>
+            <div class="col-4 p-2">
+              <div style="display: none!important;" id="ba-cod-footer-delivery-label" class="ba-cod-footer-delivery-label"></div>
+              <div id="ba-cod-footer-total-amount" class="ba-cod-footer-total"></div>
               <div id="ba-cod-footer-apply-btn-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2"
                    role="status" style="display: none; color: white!important;">
                 <span class="sr-only">Loading...</span>
               </div>
             </div>
           </button>
+        </div>
+
+        <!-- BA Online button non-sticky -->
+        <div id="ba-online-pay-main-div">
+          <div class="p-2 mb-2 d-flex justify-content-center">
+            <button id="ba-cod-create-order-online-button" class="row p-3 w-100 ba-cod-create-order-online-button d-flex align-items-center justify-content-between"
+                    onclick="createOrderObject('online')">
+              <div class="col-8 p-2">
+                <div id="baCodFooterOnlineLabel" class="ba-cod-footer-online-payment-label"></div>
+                <div class="text-left">
+                  <span id="baCodFooterOnlineDiscount" class="ba-cod-footer-online-discount-label"></span>
+                </div>
+              </div>
+              <div class="col-4 p-2">
+                <div id="ba-cod-footer-online-amount" class="ba-cod-footer-online-amount"></div>
+                <div id="ba-cod-footer-online-btn-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2"
+                     role="status" style="display: none; color: white!important;">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+            </button>
+          </div>
+          <!-- upi apps -->
+          <div class="pb-2 mb-2 d-flex justify-content-center">
+            <img src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/ba-payment-apps.png"
+                 width="270" height="21" class="w-75" alt="ba-coupon-applied-img" loading="lazy"/>
+          </div>
         </div>
 
         <!-- Trust badge card -->
@@ -395,8 +422,10 @@
   let baRecoveryOrder = true;
   let baRecoveryApplied = false;
 
+  let baOnlinePaySuccess = false;
+
   // let productHeader = 'प्रोडक्ट';
-  let productHeader = 'कैश ऑन डिलीवरी से खरीदें';
+  let productHeader = 'अपना आर्डर दें';
   let discountHeader = 'डिस्काउंट कूपन';
   let applyCouponBtn = 'अप्लाई करें';
   let deliveryAddressHeader = 'अपना डिलीवरी पता भरें';
@@ -426,12 +455,12 @@
   let landmarkRequiredLabel = 'लैंडमार्क';
 
   let priceDetailsDiscountLabel = 'कोड से डिस्काउंट';
-  let priceDetailsFreeDeliveryLabel = 'फ्री कॅश ऑन डिलीवरी';
+  let priceDetailsFreeDeliveryLabel = 'फ्री डिलीवरी';
   let priceDetailsFreeDeliveryValueLabel = '₹0 (फ्री)';
   let priceDetailsTotalAmountLabel = 'कुल राशि';
 
   let cashOnDeliveryLabel = 'कैश ऑन डिलीवरी';
-  let placeOrderLabel = 'आर्डर पूरा करें';
+  let placeOrderLabel = 'कॅश ऑन डिलीवरी (COD)';
   let placeOnlinePaymentOrderLabel = 'Online पेमेंट से खरीदें';
 
   let removeIconLabel = 'हटाए';
@@ -457,9 +486,12 @@
   let baRecoveryOrderBtnLabel = 'स्पेशल डिस्काउंट पर आर्डर करें';
   let baRecoveryCancelBtnLabel = 'मुझे डिस्काउंट नहीं चाहिए';
 
+  let baOnlinePaymentLabel = 'Online पेमेंट करें';
+  let baOnlinePaymentDiscountLabel = 'डिस्काउंट पाएं';
+
   if (lang === 'en') {
     // productHeader = 'Product';
-    productHeader = 'Cash On Delivery';
+    productHeader = 'Place your order';
     discountHeader = 'Discount Coupon';
     applyCouponBtn = 'Apply';
     deliveryAddressHeader = 'Fill your delivery address';
@@ -489,12 +521,12 @@
     landmarkRequiredLabel = 'Enter Landmark';
 
     priceDetailsDiscountLabel = 'Coupon Code Discount';
-    priceDetailsFreeDeliveryLabel = 'Free Cash on Delivery';
+    priceDetailsFreeDeliveryLabel = 'FREE Delivery';
     priceDetailsFreeDeliveryValueLabel = '₹0 (FREE)'
     priceDetailsTotalAmountLabel = 'Total Amount';
 
     cashOnDeliveryLabel = 'Cash On Delivery';
-    placeOrderLabel = 'Place COD Order';
+    placeOrderLabel = 'Cash on Delivery (COD)';
     placeOnlinePaymentOrderLabel = 'Online payment';
 
     removeIconLabel = 'Remove';
@@ -518,11 +550,14 @@
     baRecoveryOrderNow = 'Order now and get 5% discount';
     baRecoveryOrderBtnLabel = 'Order with a special discount';
     baRecoveryCancelBtnLabel = "I don't want a discount";
+
+    baOnlinePaymentLabel = 'Pay Online';
+    baOnlinePaymentDiscountLabel = 'Discount';
   }
 
   if (lang === 'mr') {
     // productHeader = 'प्रॉडक्ट';
-    productHeader = 'कैश ऑन डिलीवरी से खरीदें';
+    productHeader = 'आपला ऑर्डर करा';
     discountHeader = 'डिस्काउंट कूपन';
     applyCouponBtn = 'लागू करा';
     deliveryAddressHeader = 'डिलिव्हरी पत्ता';
@@ -552,12 +587,12 @@
     landmarkRequiredLabel = 'जवळची खूण';
 
     priceDetailsDiscountLabel = 'कूपन कोड सवलत';
-    priceDetailsFreeDeliveryLabel = 'फ्री कॅश ऑन डिलीवरी';
+    priceDetailsFreeDeliveryLabel = 'फ्री डिलीवरी';
     priceDetailsFreeDeliveryValueLabel = '₹0 (फ्री)';
     priceDetailsTotalAmountLabel = 'एकूण रक्कम';
 
     cashOnDeliveryLabel = 'कैश ऑन डिलिव्हरी';
-    placeOrderLabel = 'ऑर्डर पूर्ण करा';
+    placeOrderLabel = 'कॅश ऑन डिलिव्हरी (COD)';
     placeOnlinePaymentOrderLabel = 'Online पेमेंट से खरीदें';
 
     removeIconLabel = 'हटाए';
@@ -581,6 +616,9 @@
     baRecoveryOrderNow = 'अभी आर्डर करें और 5% डिस्काउंट पाएं';
     baRecoveryOrderBtnLabel = 'स्पेशल डिस्काउंट पर आर्डर करें';
     baRecoveryCancelBtnLabel = 'मुझे डिस्काउंट नहीं चाहिए';
+
+    baOnlinePaymentLabel = 'Online पेमेंट करा';
+    baOnlinePaymentDiscountLabel = 'चा डिस्काउंट';
   }
   document.getElementById('product-header-id').innerHTML = productHeader;
   document.getElementById('discount-header-id').innerHTML = discountHeader;
@@ -630,6 +668,8 @@
   document.getElementById('baRecoveryOrderBtnLabel').innerHTML = baRecoveryOrderBtnLabel;
   document.getElementById('baRecoveryCancelBtnLabel').innerHTML = baRecoveryCancelBtnLabel;
 
+  document.getElementById('baCodFooterOnlineLabel').innerHTML = baOnlinePaymentLabel;
+
 </script>
 
 <script src="{{ 'ba-cod-form.js' | asset_url }}" defer="defer"></script>
@@ -641,6 +681,7 @@
 
     baCodOrderUrl = '';
     baCodOrderNumber = '';
+    baOnlinePaySuccess = false;
 
     let quantityFb = document.getElementsByClassName('quantity__input')[0].value;
     sendBaFbEvents('AddToCart', {currency: "INR", value: Number(items[0].final_line_price)/100, 'num_items': Number(quantityFb)});
@@ -1043,8 +1084,10 @@
 
     bundleOrderTotalValue = Number(bundleOrderTotalValue) + bundleProductDiscountPrice;
     bundleOrderTotalValue = Number(bundleOrderTotalValue).toFixed(2);
+
     document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${bundleOrderTotalValue}`;
     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${bundleOrderTotalValue}`;
+    updateOnlinePaymentPrice(bundleOrderTotalValue);
   }
 
   function onBaProductBundleRemoveClick(bundleId) {
@@ -1082,6 +1125,7 @@
     bundleOrderTotalValue = Number(bundleOrderTotalValue).toFixed(2);
     document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${bundleOrderTotalValue}`;
     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${bundleOrderTotalValue}`;
+    updateOnlinePaymentPrice(bundleOrderTotalValue);
   }
 
   function getBundlesTotalPrice() {
@@ -1255,7 +1299,8 @@
     });
 
     document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsTotalValue.toFixed(2)}`;
-    document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue}`;
+    document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue.toFixed(2)}`;
+    updateOnlinePaymentPrice(priceDetailsTotalValue.toFixed(2));
 
     if (previousCouponCode) {
       let activeCouponEl = document.getElementById(previousCouponCode);
@@ -1300,6 +1345,7 @@
 
     document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
+    updateOnlinePaymentPrice(mainItemPrice.toFixed(2));
 
     document.getElementById('ba-cod-saved-amount').innerHTML = `${couponSavedLabel} ₹${baDiscountAmt.replace('.00', '')}`;
     document.getElementById('ba-cod-saved-amount-line2').innerHTML = couponWithDiscountLabel;
@@ -1371,9 +1417,10 @@
     }
   }
 
-  function createOrderObject() {
+  function createOrderObject(type) {
     sendBaCodGEvents('ba_cod_order_submit_click', {});
     document.getElementById('ba-cod-create-order-button').disabled = true;
+    document.getElementById('ba-cod-create-order-online-button').disabled = true;
 
     let name = document.getElementById('farmerName');
     let mobile = document.getElementById('farmerMobile');
@@ -1456,8 +1503,6 @@
 
     if (!validationError) {
       sendBaCodGEvents('ba_cod_order_creation', { 'mobile': mobile.value });
-      document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'inline-block';
-      document.getElementById('ba-cod-footer-place-order').style.display = 'none';
       let nameValue = name.value;
       let mobileValue = mobile.value;
       let  pincodeValue = pincode.value;
@@ -1526,6 +1571,7 @@
         }
       }
 
+
       let baO2 = {
         "order": {
           "line_items":createOrderLineItems,
@@ -1582,94 +1628,137 @@
 
       document.getElementById('baCodTriggerRecovery').disabled = true;
 
-      fetch('https://lcrks.leanagri.com/third_parties/shopify_cod_app/api/v1/create-order/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(baO2)
-      }).then(response => {
-        if (response.status === 201) {
-          response.json().then( result => {
-            sendBaCodGEvents('BA_cod_ordered', {
-              'from_frag': currentUrl1,
-              'order_value': createOrderTotalValue,
-              'ba_phone_number': mobileValue
-            });
-            document.getElementById('baCodTriggerRecovery').disabled = false;
-            sendBaFbEvents('Purchase', {currency: "INR", value: createOrderTotalValue, num_items: createOrderLineItems.length});
-            try {
-              gtag('event', 'conversion', {
-                'send_to': 'AW-682014322/--74CKG9_dcDEPLsmsUC',
-                'value': createOrderTotalValue,
-                'currency': 'INR',
-                'transaction_id': ''
-              });
-            }  catch (error) {
-              console.log('gtag error');
-            }
-            localStorage.setItem('BA_COD_FORM_NOTES_ATTRIBUTES', JSON.stringify(noteAttributesArray));
-            // window.open(result.order.order_status_url, '_self');
-            baCodOrderUrl = result.order.order_status_url;
-            baCodOrderNumber = result.order.order_number;
-            if (highRiskProductFlag) {
-              document.getElementById('ba-confirmation-btn').click();
+      if (type === 'cod') {
+        sendBaCodGEvents('ba_cod_order_submit_cod', {});
+        document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'inline-block';
+        document.getElementById('ba-cod-footer-total-amount').style.display = 'none';
+        baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, noteAttributesArray, type);
+      } else {
+        sendBaCodGEvents('ba_cod_order_submit_online_pay', {});
+        document.getElementById('ba-cod-footer-online-btn-loader').style.display = 'inline-block';
+        document.getElementById('ba-cod-footer-online-amount').style.display = 'none';
+        let onlineAmount = getOnlinePaymentPrice();
+        let paymentWindow = window.open(`https://app.bharatagri.com/online-payments?mobile=${mobileValue}&amount=${onlineAmount}&name=${nameValue}`);
+        window.addEventListener('message', function(event) {
+          console.log(event);
+          if (event.origin !== 'https://app.bharatagri.com') {
+            console.log('Not your domain: ', event.data);
+            return;
+          }
+          // Handle the message
+          if (!baOnlinePaySuccess) {
+            if (event.data.message === 'ba_payment_success' && Number(event.data.amount) === Number(onlineAmount)) {
+              sendBaCodGEvents(event.data, { 'value': mobileValue });
+              baO2["order"]["financial_status"] = 'paid';
+              baO2["order"]["payment_gateway_names"] = ["Razorpay Secure"];
+              noteAttributesArray.push({"name": "order_id", "value": event.data.orderId});
+              noteAttributesArray.push({"name": "payment_id", "value": event.data.paymentId ? event.data.paymentId : ''});
+              baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, noteAttributesArray, type);
+            } else if (event.data.message === 'ba payment success' && Number(event.data.amount) !== Number(onlineAmount)) {
+              sendBaCodGEvents('ba_payment_success_wrong_amount', { 'value': mobileValue });
             } else {
-              document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
-              baAuthenticateOrderPageUrlAndRoute();
+              document.getElementById('baCodTriggerRecovery').disabled = false;
+              resetCodFooter();
+              sendBaCodGEvents(event.data, { 'value': mobileValue });
             }
-          });
-        } else {
-          document.getElementById('ba-cod-create-order-button').disabled = false;
-          document.getElementById('ba-cod-footer-place-order').style.display = 'block';
-          document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'none';
-          document.getElementById('baCodTriggerRecovery').disabled = false;
-        }
-      }).catch(error => {
-        console.log('error: ', error);
-        document.getElementById('ba-cod-create-order-button').disabled = false;
-        document.getElementById('ba-cod-footer-place-order').style.display = 'block';
-        document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'none';
-        document.getElementById('baCodTriggerRecovery').disabled = false;
-      });
-
-      // dev store api call to create order
-      // fetch('/admin/api/2023-07/orders.json', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'X-Shopify-Access-Token': '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'
-      //   },
-      //   body: JSON.stringify(baO2)
-      // }).then(response => {
-      //   if (response.status === 201) {
-      //     response.json().then( result => {
-      //         document.getElementById('baCodTriggerRecovery').disabled = false;
-      //       // window.open(result.order.order_status_url, '_self');
-      //         baCodOrderUrl = result.order.order_status_url
-      //         baCodOrderNumber = result.order.order_number;
-      //         if (highRiskProductFlag) {
-      //           document.getElementById('ba-confirmation-btn').click();
-      //         } else {
-      //           document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
-      //           baAuthenticateOrderPageUrlAndRoute();
-      //         }
-      //     });
-      //   } else {
-      //     document.getElementById('ba-cod-create-order-button').disabled = false;
-      //     document.getElementById('baCodTriggerRecovery').disabled = false;
-      //   }
-      // }).catch(error => {
-      //   console.log('error: ', error);
-      //   document.getElementById('ba-cod-create-order-button').disabled = false;
-      //   document.getElementById('baCodTriggerRecovery').disabled = false;
-      // });
-      // dev store api ends here
-
+          }
+        }, false);
+      }
     } else {
       document.getElementById('ba-cod-create-order-button').disabled = false;
+      document.getElementById('ba-cod-create-order-online-button').disabled = false;
       sendBaCodGEvents('ba_cod_order_validate_error', { 'field': 'addressFields' });
     }
+  }
+
+  function baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, noteAttributesArray, type) {
+    fetch('https://lcrks.leanagri.com/third_parties/shopify_cod_app/api/v1/create-order/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(baO2)
+    }).then(response => {
+      if (response.status === 201) {
+        response.json().then( result => {
+          sendBaCodGEvents('BA_cod_ordered', {
+            'from_frag': currentUrl1,
+            'order_value': createOrderTotalValue,
+            'ba_phone_number': mobileValue
+          });
+          if (type === 'cod') {
+            sendBaCodGEvents('ba_cod_ordered_cod', {});
+          } else {
+            sendBaCodGEvents('ba_cod_ordered_online', {});
+          }
+          document.getElementById('baCodTriggerRecovery').disabled = false;
+          sendBaFbEvents('Purchase', {currency: "INR", value: createOrderTotalValue, num_items: createOrderLineItems.length});
+          try {
+            gtag('event', 'conversion', {
+              'send_to': 'AW-682014322/--74CKG9_dcDEPLsmsUC',
+              'value': createOrderTotalValue,
+              'currency': 'INR',
+              'transaction_id': ''
+            });
+          }  catch (error) {
+            console.log('gtag error');
+          }
+          localStorage.setItem('BA_COD_FORM_NOTES_ATTRIBUTES', JSON.stringify(noteAttributesArray));
+          // window.open(result.order.order_status_url, '_self');
+          baCodOrderUrl = result.order.order_status_url;
+          baCodOrderNumber = result.order.order_number;
+          if (highRiskProductFlag) {
+            document.getElementById('ba-confirmation-btn').click();
+          } else {
+            document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
+            baAuthenticateOrderPageUrlAndRoute();
+          }
+        });
+      } else {
+        resetCodFooter();
+        document.getElementById('baCodTriggerRecovery').disabled = false;
+      }
+    }).catch(error => {
+      console.log('error: ', error);
+      resetCodFooter();
+      document.getElementById('baCodTriggerRecovery').disabled = false;
+    });
+
+    // dev store api call to create order
+    // fetch('/admin/api/2023-07/orders.json', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'X-Shopify-Access-Token': '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'
+    //   },
+    //   body: JSON.stringify(baO2)
+    // }).then(response => {
+    //   if (response.status === 201) {
+    //     response.json().then( result => {
+    //         document.getElementById('baCodTriggerRecovery').disabled = false;
+    //       // window.open(result.order.order_status_url, '_self');
+    //         baCodOrderUrl = result.order.order_status_url
+    //         baCodOrderNumber = result.order.order_number;
+    //         baOnlinePaySuccess = false;
+    //         if (highRiskProductFlag) {
+    //           document.getElementById('ba-confirmation-btn').click();
+    //         } else {
+    //           document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
+    //           baAuthenticateOrderPageUrlAndRoute();
+    //         }
+    //     });
+    //   } else {
+    //     document.getElementById('ba-cod-create-order-button').disabled = false;
+    //     document.getElementById('ba-cod-create-order-online-button').disabled = false;
+    //     document.getElementById('baCodTriggerRecovery').disabled = false;
+    //   }
+    // }).catch(error => {
+    //   console.log('error: ', error);
+    //   document.getElementById('ba-cod-create-order-button').disabled = false;
+    //   document.getElementById('ba-cod-create-order-online-button').disabled = false;
+    //   document.getElementById('baCodTriggerRecovery').disabled = false;
+    // });
+    // dev store api ends here
   }
 
   function baScrollToId(id) {
@@ -1835,6 +1924,7 @@
 
     // Setting price value on the BA COD place order button
     document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${baUpdateCart.total_price/100}`;
+    updateOnlinePaymentPrice(baUpdateCart.total_price/100);
   }
 </script>
 

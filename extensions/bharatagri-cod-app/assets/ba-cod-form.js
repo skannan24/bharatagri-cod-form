@@ -15,6 +15,22 @@ function openSmileyModal() {
 
 }
 
+function updateOnlinePaymentPrice(price) {
+  let baOnlineDiscount = 30;
+  let baOnlineAmount = Number(price)- baOnlineDiscount;
+  if (price.toString().includes('.')) {
+    baOnlineAmount = baOnlineAmount.toFixed(2);
+  }
+  document.getElementById('ba-cod-footer-online-amount').innerHTML = `₹ ${baOnlineAmount}`;
+  document.getElementById('baCodFooterOnlineDiscount').innerHTML = `₹${baOnlineDiscount} ${baOnlinePaymentDiscountLabel}`;
+}
+
+function getOnlinePaymentPrice() {
+  let onlinePrice = document.getElementById('ba-cod-footer-online-amount').innerHTML;
+  onlinePrice = onlinePrice.replace('₹ ', '');
+  return onlinePrice.replace('.00', '');
+}
+
 const updateBaCartApiCaller = createUpdateBaCartApiCaller();
 function incrementQuantity() {
   let quantityInput = document.getElementById('ba-cod-quantity');
@@ -75,7 +91,8 @@ function updateBaCart(operation, quantityValue) {
           let priceDetailsTotalValue = Number(res.total_price/100);
           priceDetailsTotalValue = priceDetailsTotalValue + bundleCartOrderTotalValue;
           document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsTotalValue.toFixed(2)}`;
-          document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue}`;
+          document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue.toFixed(2)}`;
+          updateOnlinePaymentPrice(priceDetailsTotalValue.toFixed(2));
           document.getElementById('ba-cod-main-product-price0').innerHTML = `₹ ${priceDetailsTotalValueWithoutBundle}`;
           document.getElementById('ba-cod-product-price0').innerHTML = `₹ ${priceDetailsTotalValueWithoutBundle.toFixed(2)}`;
           document.getElementById('ba-cod-main-product-quantity0').innerHTML = quantityValue;
@@ -90,8 +107,11 @@ function updateBaCart(operation, quantityValue) {
 
 function resetCodFooter() {
   document.getElementById('ba-cod-create-order-button').disabled = false;
-  document.getElementById('ba-cod-footer-place-order').style.display = 'block';
+  document.getElementById('ba-cod-create-order-online-button').disabled = false;
+  document.getElementById('ba-cod-footer-total-amount').style.display = 'block';
   document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'none';
+  document.getElementById('ba-cod-footer-online-amount').style.display = 'block';
+  document.getElementById('ba-cod-footer-online-btn-loader').style.display = 'none';
 }
 
 function resetCodConfirmationModal() {
@@ -117,6 +137,7 @@ function resetCodFormFields() {
   // reset cod order url
   baCodOrderUrl = '';
   baCodOrderNumber = '';
+  baOnlinePaySuccess = false;
 
   resetFormFieldsValidation();
 }
@@ -389,6 +410,8 @@ function applyBaRecoveryDiscount(closeModal) {
   document.getElementById('ba-price-details-discount-row').style.display = 'flex';
 
   document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
+  document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
+  updateOnlinePaymentPrice(mainItemPrice.toFixed(2));
   if (closeModal) {
     document.getElementById('baRecoveryClose').click();
     sendBaCodGEvents('ba_cod_order_recovery_apply', { 'amount': fivePercentAmt });
@@ -468,9 +491,7 @@ function onConfirmationModalClick(value) {
           baAuthenticateOrderPageUrlAndRoute();
         } else {
           document.getElementById('ba-confirmation-close').click();
-          document.getElementById('ba-cod-create-order-button').disabled = false;
-          document.getElementById('ba-cod-footer-place-order').style.display = 'block';
-          document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'none';
+          resetCodFooter();
           resetCodConfirmationModal();
         }
       }
@@ -600,7 +621,8 @@ function applyCouponCodes_OLDFunction(couponCode, couponObj, scrollFlag, showPop
   });
 
   document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsTotalValue.toFixed(2)}`;
-  document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue}`;
+  document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue.toFixed(2)}`;
+  updateOnlinePaymentPrice(priceDetailsTotalValue.toFixed(2));
 
   if (previousCouponCode) {
     let activeCouponEl = document.getElementById(previousCouponCode);
@@ -652,7 +674,8 @@ function applyCouponCodes_OLDFunction(couponCode, couponObj, scrollFlag, showPop
           priceDetailsWalletTotalValue = priceDetailsWalletTotalValue + bundleCartOrderTotalValue;
 
           document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsWalletTotalValue.toFixed(2)}`;
-          document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsWalletTotalValue}`;
+          document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsWalletTotalValue.toFixed(2)}`;
+          updateOnlinePaymentPrice(priceDetailsWalletTotalValue.toFixed(2));
           document.getElementById('ba-price-details-discount-row').style.display = 'flex';
 
           previousCouponCode = couponCode;
