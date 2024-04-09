@@ -226,10 +226,10 @@
         <div class="p-2 mb-2 d-flex justify-content-center">
           <button id="ba-cod-create-order-button" class="row p-3 w-100 ba-cod-create-order-non-sticky-button d-flex align-items-center justify-content-between"
                   onclick="createOrderObject('cod')">
-            <div class="col-8 p-2">
+            <div class="col-7 p-2">
               <div id="ba-cod-footer-place-order" class="ba-cod-footer-place-order"></div>
             </div>
-            <div class="col-4 p-2">
+            <div class="col-5 p-2">
               <div style="display: none!important;" id="ba-cod-footer-delivery-label" class="ba-cod-footer-delivery-label"></div>
               <div id="ba-cod-footer-total-amount" class="ba-cod-footer-total"></div>
               <div id="ba-cod-footer-apply-btn-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2"
@@ -245,13 +245,13 @@
           <div class="p-2 mb-2 d-flex justify-content-center">
             <button id="ba-cod-create-order-online-button" class="row p-3 w-100 ba-cod-create-order-online-button d-flex align-items-center justify-content-between"
                     onclick="createOrderObject('online')">
-              <div class="col-8 p-2">
+              <div class="col-7 p-2">
                 <div id="baCodFooterOnlineLabel" class="ba-cod-footer-online-payment-label"></div>
                 <div class="text-left">
                   <span id="baCodFooterOnlineDiscount" class="ba-cod-footer-online-discount-label"></span>
                 </div>
               </div>
-              <div class="col-4 p-2">
+              <div class="col-5 p-2">
                 <div id="ba-cod-footer-online-amount" class="ba-cod-footer-online-amount"></div>
                 <div id="ba-cod-footer-online-btn-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2"
                      role="status" style="display: none; color: white!important;">
@@ -1661,7 +1661,7 @@
               noteAttributesArray.push({"name": "order_id", "value": event.data.orderId});
               noteAttributesArray.push({"name": "payment_id", "value": event.data.paymentId ? event.data.paymentId : ''});
               baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, noteAttributesArray, type);
-            } else if (event.data.message === 'ba payment success' && Number(event.data.amount) !== Number(onlineAmount)) {
+            } else if (event.data.message === 'ba_payment_success' && Number(event.data.amount) !== Number(onlineAmount)) {
               sendBaCodGEvents('ba_payment_success_wrong_amount', { 'value': mobileValue });
             } else {
               document.getElementById('baCodTriggerRecovery').disabled = false;

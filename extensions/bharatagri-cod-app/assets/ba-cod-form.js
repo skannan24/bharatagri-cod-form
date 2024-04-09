@@ -135,6 +135,7 @@ function autoFillUserDetails() {
       document.getElementById('farmerName').value = info.value;
     }
     if (info.name === 'mobile') {
+      sendBaCodGEvents('ba_cod_auto_address', {'ba_phone_number': info.value});
       document.getElementById('farmerMobile').value = info.value;
     }
     if (info.name === 'state') {
