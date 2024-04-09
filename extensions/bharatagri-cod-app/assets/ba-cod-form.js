@@ -128,6 +128,35 @@ function updateBaCart(operation, quantityValue) {
   }
 }
 
+function autoFillUserDetails() {
+  let infos = JSON.parse(localStorage.getItem('BA_COD_FORM_NOTES_ATTRIBUTES')) || [];
+  infos.forEach( info => {
+    if (info.name === 'name') {
+      document.getElementById('farmerName').value = info.value;
+    }
+    if (info.name === 'mobile') {
+      document.getElementById('farmerMobile').value = info.value;
+    }
+    if (info.name === 'state') {
+      document.getElementById('baCodStateSelect').value = info.value;
+      stateName = info.value;
+      stateNameEn = info.value;
+    }
+    if (info.name === 'district') {
+      document.getElementById('baCodDistrictSelect').value = info.value;
+    }
+    if (info.name === 'address') {
+      document.getElementById('baAddress').value = info.value;
+    }
+    if (info.name === 'landmark') {
+      document.getElementById('baLandmark').value = info.value;
+    }
+    if (info.name === 'pincode') {
+      document.getElementById('baCodPincode').value = info.value;
+    }
+  } );
+}
+
 function resetCodFooter() {
   document.getElementById('ba-cod-create-order-button').disabled = false;
   document.getElementById('ba-cod-create-order-online-button').disabled = false;

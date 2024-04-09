@@ -803,6 +803,9 @@
 
     // checking high risk variant
     checkHighRiskOrder();
+
+    // auto populate value
+    autoFillUserDetails();
   }
 
   function clearCartEmbed() {
@@ -1176,10 +1179,11 @@
 
     let finalCodes = [];
 
+    let couponVariant = getBaCartMainItemDetails();
     for (let i = 0; i < discounts.length; i++) {
       let excludedProducts = '';
-      if (discounts[i].excluded_product_ids) {
-        excludedProducts = discounts[i].excluded_product_ids;
+      if (discounts[i].excluded_variant_ids) {
+        excludedProducts = discounts[i].excluded_variant_ids;
       }
       let today = new Date();
       today.setHours(0,0,0);
@@ -1188,10 +1192,10 @@
         endDate = new Date(discounts[i].ends_at);
       }
       if ((endDate >= today || endDate === null) && discountCouponsCartItemTotalValue > discounts[i].min_amount_rule
-        && excludedProducts.indexOf('{{ product.id }}') === -1) {
+        && excludedProducts.indexOf(couponVariant.id.toString()) === -1) {
         finalCodes.push(discounts[i]);
       }
-      if (excludedProducts.indexOf('{{ product.id }}') > -1) {
+      if (excludedProducts.indexOf(couponVariant.id.toString()) > -1) {
         baRecoveryOrder = false;
       }
     }
@@ -1743,6 +1747,7 @@
     //         baCodOrderUrl = result.order.order_status_url
     //         baCodOrderNumber = result.order.order_number;
     //         baOnlinePaySuccess = false;
+    //         localStorage.setItem('BA_COD_FORM_NOTES_ATTRIBUTES', JSON.stringify(noteAttributesArray));
     //         if (highRiskProductFlag) {
     //           document.getElementById('ba-confirmation-btn').click();
     //         } else {
