@@ -223,7 +223,7 @@
         {% comment %}<div class="pt-3 mt-3 mb-3 ba-cod-separator"></div>{% endcomment %}
 
         <!-- BA COD button non-sticky -->
-        <div class="p-2 mb-2 d-flex justify-content-center">
+        <div id="ba-cod-place-btn" class="p-2 mb-2 d-flex justify-content-center">
           <button id="ba-cod-create-order-button" class="row p-3 w-100 ba-cod-create-order-non-sticky-button d-flex align-items-center justify-content-between"
                   onclick="createOrderObject('cod')">
             <div class="col-7 p-2">
@@ -787,6 +787,7 @@
     }
 
     loadBaProductBundles();
+    resetPlaceOrderButton();
     resetCodFormFields();
     resetCodFooter();
     resetCodConfirmationModal();
@@ -1439,13 +1440,14 @@
     let postOffice = document.getElementById('baPostOffice');
 
     let validationError = false;
+    let prePaidError = false;
 
     resetFormFieldsValidation();
 
     if (!(name.value)) {
       name.classList.add('ba-mandatory-field-border');
       document.getElementById('farmerNameRequired').style.display = 'block';
-      validationError = true;
+      prePaidError = validationError = true;
       baScrollToId('farmerName');
     }
 
@@ -1453,7 +1455,7 @@
       mobile.classList.add('ba-mandatory-field-border');
       document.getElementById('farmerMobileRequired').style.display = 'block';
       if (!validationError) {baScrollToId('farmerMobile');}
-      validationError = true;
+      prePaidError = validationError = true;
       if (mobile.value) {
         sendBaCodGEvents('ba_cod_order_validate_error_mobile', { 'mobile': mobile.value });
       }
@@ -1463,28 +1465,28 @@
       address.classList.add('ba-mandatory-field-border');
       document.getElementById('baAddressRequired').style.display = 'block';
       if (!validationError) {baScrollToId('baAddress');}
-      validationError = true;
+      prePaidError = validationError = true;
     }
 
     if (!state) {
       stateField.classList.add('ba-mandatory-field-border');
       document.getElementById('baCodStateSelectRequired').style.display = 'block';
       if (!validationError) {baScrollToId('baCodStateSelect');}
-      validationError = true;
+      prePaidError = validationError = true;
     }
 
     if (!district.value) {
       district.classList.add('ba-mandatory-field-border');
       document.getElementById('baCodDistrictSelectRequired').style.display = 'block';
       if (!validationError) {baScrollToId('baCodDistrictSelect');}
-      validationError = true;
+      prePaidError = validationError = true;
     }
 
     if (!pincode || !pincode.value || pincode.value.length !== 6 || !pincode.value.match(numericalNumberRegex) || pincode.value[0] === "0") {
       pincode.classList.add('ba-mandatory-field-border');
       document.getElementById('baCodPincodeRequired').style.display = 'block';
       if (!validationError) {baScrollToId('baCodPincode');}
-      validationError = true;
+      prePaidError = validationError = true;
     } else {
       // Commented pincode validation for blacklist and whitelist pincodes
       let data = getBaCodProductData();
@@ -1494,18 +1496,20 @@
           document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'block';
           sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': pincode.value });
           if (!validationError) {baScrollToId('baCodPincode');}
+          prePaidError = validationError = true;
+        } else if (String(blacklistedPincodes).indexOf(pincode.value) > -1) {
+          displayPincodeError(pincode);
+          if (!validationError) {baScrollToId('baCodPincode');}
           validationError = true;
         }
       } else if (String(blacklistedPincodes).indexOf(pincode.value) > -1) {
-        pincode.classList.add('ba-mandatory-field-border');
-        document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
-        sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': pincode.value });
+        displayPincodeError(pincode);
         if (!validationError) {baScrollToId('baCodPincode');}
         validationError = true;
       }
     }
 
-    if (!validationError) {
+    if (!validationError || !prePaidError) {
       sendBaCodGEvents('ba_cod_order_creation', { 'mobile': mobile.value });
       let nameValue = name.value;
       let mobileValue = mobile.value;
@@ -1632,12 +1636,12 @@
 
       document.getElementById('baCodTriggerRecovery').disabled = true;
 
-      if (type === 'cod') {
+      if (type === 'cod' && !validationError) {
         sendBaCodGEvents('ba_cod_order_submit_cod', {});
         document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'inline-block';
         document.getElementById('ba-cod-footer-total-amount').style.display = 'none';
         baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, noteAttributesArray, type);
-      } else {
+      } else if (type === 'online' && !prePaidError) {
         sendBaCodGEvents('ba_cod_order_submit_online_pay', {});
         document.getElementById('ba-cod-footer-online-btn-loader').style.display = 'inline-block';
         document.getElementById('ba-cod-footer-online-amount').style.display = 'none';
@@ -1653,7 +1657,7 @@
           if (!baOnlinePaySuccess) {
             if (event.data.message === 'ba_payment_success' && Number(event.data.amount) === Number(onlineAmount)) {
               baOnlinePaySuccess = true;
-              sendBaCodGEvents(event.data, { 'value': mobileValue });
+              sendBaCodGEvents(event.data.message, { 'value': mobileValue });
               baO2["order"]["financial_status"] = 'paid';
               baO2["order"]["payment_gateway_names"] = ["Razorpay Secure"];
               let baDiscountCodes = baO2["order"]["discount_codes"] || [];
@@ -1664,17 +1668,17 @@
             } else if (event.data.message === 'ba_payment_success' && Number(event.data.amount) !== Number(onlineAmount)) {
               sendBaCodGEvents('ba_payment_success_wrong_amount', { 'value': mobileValue });
             } else {
+              sendBaCodGEvents(event.data.message, { 'value': mobileValue });
               document.getElementById('baCodTriggerRecovery').disabled = false;
               resetCodFooter();
-              sendBaCodGEvents(event.data, { 'value': mobileValue });
             }
           }
         }, false);
+      } else {
+        baFormValidationErrorRest();
       }
     } else {
-      document.getElementById('ba-cod-create-order-button').disabled = false;
-      document.getElementById('ba-cod-create-order-online-button').disabled = false;
-      sendBaCodGEvents('ba_cod_order_validate_error', { 'field': 'addressFields' });
+      baFormValidationErrorRest();
     }
   }
 
@@ -1804,15 +1808,12 @@
       if (data.pincode_whitelist && data.pincode_whitelist.length > 0) {
         if (validateWhiteListedPincode(pincode.value)) {
           pincode.classList.remove('ba-mandatory-field-border');
-          document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';
           document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'none';
+        } else {
+          checkAndRemovePincodeError(pincode);
         }
       } else {
-        if (String(blacklistedPincodes).indexOf(pincode.value) === -1) {
-          pincode.classList.remove('ba-mandatory-field-border');
-          document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';
-          document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'none';
-        }
+        checkAndRemovePincodeError(pincode);
       }
     }
 

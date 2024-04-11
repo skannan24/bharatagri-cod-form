@@ -158,6 +158,10 @@ function autoFillUserDetails() {
   } );
 }
 
+function resetPlaceOrderButton() {
+  document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:flex !important');
+}
+
 function resetCodFooter() {
   document.getElementById('ba-cod-create-order-button').disabled = false;
   document.getElementById('ba-cod-create-order-online-button').disabled = false;
@@ -406,9 +410,12 @@ function setPincodeLocation(data) {
 
 function checkPincodeServiceability(value) {
   if (String(blacklistedPincodes).indexOf(value) > -1) {
+    document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:none !important');
     document.getElementById('baCodPincode').classList.add('ba-mandatory-field-border');
     document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
     sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': value });
+  } else {
+    document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:flex !important');
   }
 }
 
@@ -417,6 +424,7 @@ function checkWhiteListedPincodes(value) {
   if (data.pincode_whitelist && data.pincode_whitelist.length > 0) {
     if (String(data.pincode_whitelist).indexOf(value) > -1) {
       console.log('');
+      checkPincodeServiceability(value);
     } else {
       document.getElementById('baCodPincode').classList.add('ba-mandatory-field-border');
       document.getElementById('baCodPincodeNotWhitelistRequired').innerHTML = pincodeNotWhitelistRequiredLabel.replace('pincode', value);
@@ -424,13 +432,35 @@ function checkWhiteListedPincodes(value) {
       sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': value });
     }
   } else {
-    checkPincodeServiceability(value)
+    checkPincodeServiceability(value);
   }
 }
 
 function validateWhiteListedPincode(value) {
   let data = getBaCodProductData();
   return String(data.pincode_whitelist).indexOf(value) > -1;
+}
+
+function displayPincodeError(pincode) {
+  document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:none !important');
+  pincode.classList.add('ba-mandatory-field-border');
+  document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
+  sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': pincode.value });
+}
+
+function checkAndRemovePincodeError(pincode) {
+  if (String(blacklistedPincodes).indexOf(pincode.value) === -1) {
+    document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:flex !important');
+    pincode.classList.remove('ba-mandatory-field-border');
+    document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';
+  }
+}
+
+function baFormValidationErrorRest() {
+  document.getElementById('baCodTriggerRecovery').disabled = false;
+  document.getElementById('ba-cod-create-order-button').disabled = false;
+  document.getElementById('ba-cod-create-order-online-button').disabled = false;
+  sendBaCodGEvents('ba_cod_order_validate_error', { 'field': 'addressFields' });
 }
 
 function getBaCodProductData() {
