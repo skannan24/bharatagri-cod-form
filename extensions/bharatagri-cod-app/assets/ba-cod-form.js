@@ -238,7 +238,6 @@ function sendMessage(message) {
 }
 
 function generateBaRazorpayOrder(mobileValue, onlineAmount, nameValue) {
-  onlineAmount = 1;
   fetch(`https://pre-prod.leanagri.com/third_parties/shopify/api/v1/generate_order/?phone_number=${mobileValue}&cart_amount=${onlineAmount}`)
     .then(response => response.json())
     .then(result => {
