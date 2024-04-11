@@ -1,4 +1,5 @@
 {{ 'ba-cod-form-style.css' | asset_url | stylesheet_tag }}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <!-- Button trigger modal -->
 <div class="d-flex justify-content-end">
@@ -419,6 +420,10 @@
   let baCodOrderUrl = '';
   let baCodOrderNumber = '';
 
+  let baRazorpayOrderId = '';
+  let baRazorpayPaymentId = '';
+  let baRazorpayReferenceId = '';
+
   let baRecoveryOrder = true;
   let baRecoveryApplied = false;
 
@@ -682,6 +687,9 @@
     baCodOrderUrl = '';
     baCodOrderNumber = '';
     baOnlinePaySuccess = false;
+    baRazorpayOrderId = '';
+    baRazorpayPaymentId = '';
+    baRazorpayReferenceId = '';
 
     let quantityFb = document.getElementsByClassName('quantity__input')[0].value;
     sendBaFbEvents('AddToCart', {currency: "INR", value: Number(items[0].final_line_price)/100, 'num_items': Number(quantityFb)});
@@ -1511,169 +1519,52 @@
 
     if (!validationError || !prePaidError) {
       sendBaCodGEvents('ba_cod_order_creation', { 'mobile': mobile.value });
-      let nameValue = name.value;
-      let mobileValue = mobile.value;
-      let  pincodeValue = pincode.value;
-      let stateValue = state;
-      let districtValue = district.value;
-      let talukaValue = taluka.value ? taluka.value : '';
-      let villageValue = village.value ? village.value : '';
-      let addressValue = address.value;
-      let landmarkValue = landmark.value ? landmark.value : '';
-      let postOfficeValue = postOffice.value ? postOffice.value : '';
-
-      let baOrder = {
-        name: name.value,
-        mobile: mobile.value,
-        pincode: pincode.value,
-        state: state,
-        district: district.value,
-        taluka: talukaValue,
-        village: villageValue,
-        address: address.value,
-        landmark: landmarkValue,
-        postOffice: postOfficeValue,
-        is_confirmation_popup: highRiskProductFlag
-      }
-
-      let noteAttributesArray = [];
-
-      for (let [key, value] of Object.entries(baOrder)) {
-        let noteAttributesObject = {"name": key, "value": value};
-        noteAttributesArray.push(noteAttributesObject);
-      }
-
-      let createOrderDiscount = document.getElementById('ba-price-details-discount-value').innerHTML;
-      createOrderDiscount = createOrderDiscount.replace('-₹ ', '');
-
-      // Calculating total amount with the cart and bundles for create order
-      let createCartBundleOrderTotalValue = getBundlesActualTotalPriceWithoutDiscount();
-      let createCartBundleOrderTotalDiscountedValue = getBundlesTotalPrice();
-      let createCartFinalTotalValue = 0;
-      let createCartBundleTotalDiscount = 0;
-
-      let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
-      let createOrderCartItemTotalValue = Number(baUpdateCart.total_price/100);
-      createCartFinalTotalValue = createCartBundleOrderTotalValue + createOrderCartItemTotalValue;
-      let createOrderTotalValue = createCartFinalTotalValue;
-      createCartBundleTotalDiscount = createCartBundleOrderTotalValue - createCartBundleOrderTotalDiscountedValue;
-
-      let createOrderDiscountCode = '';
-      if (Number(createOrderDiscount) > 0) {
-        createOrderDiscountCode = localStorage.getItem('BA_COD_Coupon_code');
-      }
-
-      let baUpdateCartCreateOrder = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
-      let createOrderItems = baUpdateCartCreateOrder.items;
-      let createOrderLineItems = [];
-
-      for (let i = 0; i < createOrderItems.length; i++) {
-        let variant = {'variant_id': createOrderItems[i].variant_id, 'quantity': createOrderItems[i].quantity, 'properties': {}};
-        createOrderLineItems.push(variant);
-      }
-
-      for (let i = 0; i < selectedBundles.length; i++) {
-        if (selectedBundles[i].enabled && selectedBundles[i].selected) {
-          let variant = {'variant_id': selectedBundles[i].secondary_product.variant_id, 'quantity': 1, 'properties': {}};
-          createOrderLineItems.push(variant);
-        }
-      }
-
-
-      let baO2 = {
-        "order": {
-          "line_items":createOrderLineItems,
-          "customer": {
-            "first_name": nameValue,
-          },
-          "phone": `+91${mobileValue}`,
-          "shipping_address": {
-            "first_name": nameValue,
-            "last_name": '-',
-            "address1": addressValue,
-            "phone": `+91${mobileValue}`,
-            "city": districtValue,
-            "province": stateValue,
-            "country": "India",
-            "zip": pincodeValue
-          },
-          "billing_address": {
-            "first_name": nameValue,
-            "last_name": '-',
-            "address1": addressValue,
-            "phone": `+91${mobileValue}`,
-            "city": districtValue,
-            "province": stateValue,
-            "country": "India",
-            "zip": pincodeValue
-          },
-          "financial_status": "pending",
-          "payment_gateway_names": [
-            "Cash on Delivery (COD)"
-          ],
-          "tags": "BharatAgri COD Form",
-          "note_attributes": noteAttributesArray
-        }
-      }
-
-      if (Number(createOrderDiscount) > 0 || createCartBundleTotalDiscount > 0) {
-        // Bundle Discounts logic
-        let couponText = createOrderDiscountCode ? createOrderDiscountCode : '';
-        if (createCartBundleTotalDiscount > 0) {
-          couponText = couponText ? couponText + ', BA Custom Bundles Discount' : 'BA Custom Bundles Discount';
-        }
-
-        let couponDiscount = Number(createOrderDiscount) > 0 ? Number(createOrderDiscount) : 0;
-        couponDiscount = couponDiscount + createCartBundleTotalDiscount;
-
-        baO2["order"]["discount_codes"] = [
-          {
-            "code": couponText,
-            "amount": couponDiscount
-          }
-        ]
-      }
+      let baO2 = getBaOrderObject();
 
       document.getElementById('baCodTriggerRecovery').disabled = true;
+
+      let createOrderLineItems = getLineItemsObject();
+      let createOrderTotalValue = getBaTotalOrderAmount();
 
       if (type === 'cod' && !validationError) {
         sendBaCodGEvents('ba_cod_order_submit_cod', {});
         document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'inline-block';
         document.getElementById('ba-cod-footer-total-amount').style.display = 'none';
-        baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, noteAttributesArray, type);
+        baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobile.value, type);
       } else if (type === 'online' && !prePaidError) {
         sendBaCodGEvents('ba_cod_order_submit_online_pay', {});
         document.getElementById('ba-cod-footer-online-btn-loader').style.display = 'inline-block';
         document.getElementById('ba-cod-footer-online-amount').style.display = 'none';
         let onlineAmount = getOnlinePaymentPrice();
-        let paymentWindow = window.open(`https://app.bharatagri.com/online-payments?mobile=${mobileValue}&amount=${onlineAmount}&name=${nameValue}`);
-        window.addEventListener('message', function(event) {
-          console.log(event);
-          if (event.origin !== 'https://app.bharatagri.com') {
-            console.log('Not your domain: ', event.data);
-            return;
-          }
-          // Handle the message
-          if (!baOnlinePaySuccess) {
-            if (event.data.message === 'ba_payment_success' && Number(event.data.amount) === Number(onlineAmount)) {
-              baOnlinePaySuccess = true;
-              sendBaCodGEvents(event.data.message, { 'value': mobileValue });
-              baO2["order"]["financial_status"] = 'paid';
-              baO2["order"]["payment_gateway_names"] = ["Razorpay Secure"];
-              let baDiscountCodes = baO2["order"]["discount_codes"] || [];
-              baO2["order"]["discount_codes"] = getBaOnlineDiscountCodeObject(baDiscountCodes);
-              noteAttributesArray.push({"name": "order_id", "value": event.data.orderId});
-              noteAttributesArray.push({"name": "payment_id", "value": event.data.paymentId ? event.data.paymentId : ''});
-              baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, noteAttributesArray, type);
-            } else if (event.data.message === 'ba_payment_success' && Number(event.data.amount) !== Number(onlineAmount)) {
-              sendBaCodGEvents('ba_payment_success_wrong_amount', { 'value': mobileValue });
-            } else {
-              sendBaCodGEvents(event.data.message, { 'value': mobileValue });
-              document.getElementById('baCodTriggerRecovery').disabled = false;
-              resetCodFooter();
-            }
-          }
-        }, false);
+        generateBaRazorpayOrder(mobile.value, onlineAmount, name.value);
+        // let paymentWindow = window.open(`https://app.bharatagri.com/online-payments?mobile=${mobileValue}&amount=${onlineAmount}&name=${nameValue}`);
+        // window.addEventListener('message', function(event) {
+        //   console.log(event);
+        //   if (event.origin !== 'https://app.bharatagri.com') {
+        //     console.log('Not your domain: ', event.data);
+        //     return;
+        //   }
+        //   // Handle the message
+        //   if (!baOnlinePaySuccess) {
+        //     if (event.data.message === 'ba_payment_success' && Number(event.data.amount) === Number(onlineAmount)) {
+        //       baOnlinePaySuccess = true;
+        //       sendBaCodGEvents(event.data.message, { 'value': mobileValue });
+        //       baO2["order"]["financial_status"] = 'paid';
+        //       baO2["order"]["payment_gateway_names"] = ["Razorpay Secure"];
+        //       let baDiscountCodes = baO2["order"]["discount_codes"] || [];
+        //       baO2["order"]["discount_codes"] = getBaOnlineDiscountCodeObject(baDiscountCodes);
+        //       noteAttributesArray.push({"name": "order_id", "value": event.data.orderId});
+        //       noteAttributesArray.push({"name": "payment_id", "value": event.data.paymentId ? event.data.paymentId : ''});
+        //       baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, noteAttributesArray, type);
+        //     } else if (event.data.message === 'ba_payment_success' && Number(event.data.amount) !== Number(onlineAmount)) {
+        //       sendBaCodGEvents('ba_payment_success_wrong_amount', { 'value': mobileValue });
+        //     } else {
+        //       sendBaCodGEvents(event.data.message, { 'value': mobileValue });
+        //       document.getElementById('baCodTriggerRecovery').disabled = false;
+        //       resetCodFooter();
+        //     }
+        //   }
+        // }, false);
       } else {
         baFormValidationErrorRest();
       }
@@ -1682,7 +1573,7 @@
     }
   }
 
-  function baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, noteAttributesArray, type) {
+  function baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, type) {
     fetch('https://lcrks.leanagri.com/third_parties/shopify_cod_app/api/v1/create-order/', {
       method: 'POST',
       headers: {
@@ -1714,7 +1605,7 @@
           }  catch (error) {
             console.log('gtag error');
           }
-          localStorage.setItem('BA_COD_FORM_NOTES_ATTRIBUTES', JSON.stringify(noteAttributesArray));
+          localStorage.setItem('BA_COD_FORM_NOTES_ATTRIBUTES', JSON.stringify(baO2["order"]["note_attributes"]));
           // window.open(result.order.order_status_url, '_self');
           baCodOrderUrl = result.order.order_status_url;
           baCodOrderNumber = result.order.order_number;
@@ -1751,7 +1642,7 @@
     //         baCodOrderUrl = result.order.order_status_url
     //         baCodOrderNumber = result.order.order_number;
     //         baOnlinePaySuccess = false;
-    //         localStorage.setItem('BA_COD_FORM_NOTES_ATTRIBUTES', JSON.stringify(noteAttributesArray));
+    //         localStorage.setItem('BA_COD_FORM_NOTES_ATTRIBUTES', JSON.stringify(baO2["order"]["note_attributes"]));
     //         if (highRiskProductFlag) {
     //           document.getElementById('ba-confirmation-btn').click();
     //         } else {

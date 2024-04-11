@@ -1,4 +1,271 @@
 // @ts-nocheck
+
+let options = {
+  "key": "rzp_live_884X1cDEIdcCxd", // Enter the Key ID generated from the Dashboard
+  "currency": "INR",
+  "name": "BharatAgri", //your business name
+  "description": "BA Payment",
+  "order_id": "",
+  "handler": function (response){
+    baPaymentHandler(response)
+  },
+  "prefill": {
+    "name": "",
+    "email": "",
+    "contact": ""
+  },
+  "notes": {},
+  "theme": {
+    "color": "#009688"
+  },
+  "modal": {
+    "ondismiss": function(){
+      updatePaymentStatus(false, 'ba_payment_modal_close');
+    }
+  }
+};
+
+function getMobileValue() {
+  return document.getElementById('farmerMobile').value;
+}
+
+function getLineItemsObject() {
+  let baUpdateCartCreateOrder = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+  let createOrderItems = baUpdateCartCreateOrder.items;
+  let createOrderLineItems = [];
+
+  for (let i = 0; i < createOrderItems.length; i++) {
+    let variant = {'variant_id': createOrderItems[i].variant_id, 'quantity': createOrderItems[i].quantity, 'properties': {}};
+    createOrderLineItems.push(variant);
+  }
+
+  return createOrderLineItems;
+}
+
+function getBaTotalOrderAmount() {
+  let createCartBundleOrderTotalValue = getBundlesActualTotalPriceWithoutDiscount();
+  let createCartBundleOrderTotalDiscountedValue = getBundlesTotalPrice();
+  let createCartFinalTotalValue = 0;
+  let createCartBundleTotalDiscount = 0;
+
+  let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+  let createOrderCartItemTotalValue = Number(baUpdateCart.total_price/100);
+  createCartFinalTotalValue = createCartBundleOrderTotalValue + createOrderCartItemTotalValue;
+  let createOrderTotalValue = createCartFinalTotalValue;
+
+  return createOrderTotalValue;
+}
+
+function getBaOrderObject() {
+  let name = document.getElementById('farmerName');
+  let mobile = document.getElementById('farmerMobile');
+  let pincode = document.getElementById('baCodPincode');
+  let stateField = document.getElementById('baCodStateSelect');
+  let state = stateNameEn;
+  let district = document.getElementById('baCodDistrictSelect');
+  let taluka = document.getElementById('talukaName');
+  let village = document.getElementById('villageName');
+  let address = document.getElementById('baAddress');
+  let landmark = document.getElementById('baLandmark');
+  let postOffice = document.getElementById('baPostOffice');
+
+  let nameValue = name.value;
+  let mobileValue = mobile.value;
+  let  pincodeValue = pincode.value;
+  let stateValue = state;
+  let districtValue = district.value;
+  let talukaValue = taluka.value ? taluka.value : '';
+  let villageValue = village.value ? village.value : '';
+  let addressValue = address.value;
+  let landmarkValue = landmark.value ? landmark.value : '';
+  let postOfficeValue = postOffice.value ? postOffice.value : '';
+
+  let baOrder = {
+    name: name.value,
+    mobile: mobile.value,
+    pincode: pincode.value,
+    state: state,
+    district: district.value,
+    taluka: talukaValue,
+    village: villageValue,
+    address: address.value,
+    landmark: landmarkValue,
+    postOffice: postOfficeValue,
+    is_confirmation_popup: highRiskProductFlag
+  }
+
+  let noteAttributesArray = [];
+
+  for (let [key, value] of Object.entries(baOrder)) {
+    let noteAttributesObject = {"name": key, "value": value};
+    noteAttributesArray.push(noteAttributesObject);
+  }
+
+  let createOrderDiscount = document.getElementById('ba-price-details-discount-value').innerHTML;
+  createOrderDiscount = createOrderDiscount.replace('-₹ ', '');
+
+  // Calculating total amount with the cart and bundles for create order
+  let createCartBundleOrderTotalValue = getBundlesActualTotalPriceWithoutDiscount();
+  let createCartBundleOrderTotalDiscountedValue = getBundlesTotalPrice();
+  let createCartFinalTotalValue = 0;
+  let createCartBundleTotalDiscount = 0;
+
+  let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+  let createOrderCartItemTotalValue = Number(baUpdateCart.total_price/100);
+  createCartFinalTotalValue = createCartBundleOrderTotalValue + createOrderCartItemTotalValue;
+  let createOrderTotalValue = createCartFinalTotalValue;
+  createCartBundleTotalDiscount = createCartBundleOrderTotalValue - createCartBundleOrderTotalDiscountedValue;
+
+  let createOrderDiscountCode = '';
+  if (Number(createOrderDiscount) > 0) {
+    createOrderDiscountCode = localStorage.getItem('BA_COD_Coupon_code');
+  }
+
+  let createOrderLineItems = getLineItemsObject();
+
+  for (let i = 0; i < selectedBundles.length; i++) {
+    if (selectedBundles[i].enabled && selectedBundles[i].selected) {
+      let variant = {'variant_id': selectedBundles[i].secondary_product.variant_id, 'quantity': 1, 'properties': {}};
+      createOrderLineItems.push(variant);
+    }
+  }
+
+
+  let baO2 = {
+    "order": {
+      "line_items":createOrderLineItems,
+      "customer": {
+        "first_name": nameValue,
+      },
+      "phone": `+91${mobileValue}`,
+      "shipping_address": {
+        "first_name": nameValue,
+        "last_name": '-',
+        "address1": addressValue,
+        "phone": `+91${mobileValue}`,
+        "city": districtValue,
+        "province": stateValue,
+        "country": "India",
+        "zip": pincodeValue
+      },
+      "billing_address": {
+        "first_name": nameValue,
+        "last_name": '-',
+        "address1": addressValue,
+        "phone": `+91${mobileValue}`,
+        "city": districtValue,
+        "province": stateValue,
+        "country": "India",
+        "zip": pincodeValue
+      },
+      "financial_status": "pending",
+      "payment_gateway_names": [
+        "Cash on Delivery (COD)"
+      ],
+      "tags": "BharatAgri COD Form",
+      "note_attributes": noteAttributesArray
+    }
+  }
+
+  if (Number(createOrderDiscount) > 0 || createCartBundleTotalDiscount > 0) {
+    // Bundle Discounts logic
+    let couponText = createOrderDiscountCode ? createOrderDiscountCode : '';
+    if (createCartBundleTotalDiscount > 0) {
+      couponText = couponText ? couponText + ', BA Custom Bundles Discount' : 'BA Custom Bundles Discount';
+    }
+
+    let couponDiscount = Number(createOrderDiscount) > 0 ? Number(createOrderDiscount) : 0;
+    couponDiscount = couponDiscount + createCartBundleTotalDiscount;
+
+    baO2["order"]["discount_codes"] = [
+      {
+        "code": couponText,
+        "amount": couponDiscount
+      }
+    ]
+  }
+
+  return baO2;
+}
+
+function baPaymentHandler(res) {
+  if (res && res.razorpay_payment_id) {
+    baRazorpayPaymentId = res.razorpay_payment_id;
+    let mobileValue = getMobileValue();
+    sendBaCodGEvents('ba_payment_razorpay_success', { 'value': mobileValue });
+    updatePaymentStatus(true, 'ba_payment_success');
+  } else {
+    updatePaymentStatus(false, 'ba_payment_failed');
+  }
+}
+
+function updatePaymentStatus(status, message) {
+  fetch(`https://pre-prod.leanagri.com/third_parties/shopify/api/v1/update_order_status/?ref_id=${baRazorpayReferenceId}&payment_id=${baRazorpayPaymentId}&order_id=${baRazorpayOrderId}&status=${status}`)
+    .then(response => response.json())
+    .then(result => {
+      sendMessage(message);
+      if (status) {
+        triggerOnlineOrderCreation();
+      } else {
+        onOnlinePaymentFail();
+      }
+    })
+    .catch(error => {
+      if (status) {
+        triggerOnlineOrderCreation();
+      } else {
+        onOnlinePaymentFail();
+      }
+    });
+}
+
+function triggerOnlineOrderCreation() {
+  let mobileValue = getMobileValue();
+  let baO2 = getBaOrderObject();
+  baO2["order"]["financial_status"] = 'paid';
+  baO2["order"]["payment_gateway_names"] = ["Razorpay Secure"];
+  let baDiscountCodes = baO2["order"]["discount_codes"] || [];
+  baO2["order"]["discount_codes"] = getBaOnlineDiscountCodeObject(baDiscountCodes);
+  baO2["order"]["note_attributes"].push({"name": "order_id", "value": baRazorpayOrderId});
+  baO2["order"]["note_attributes"].push({"name": "payment_id", "value": baRazorpayPaymentId});
+  let createOrderLineItems = getLineItemsObject();
+  let createOrderTotalValue = getBaTotalOrderAmount();
+  baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, 'online');
+}
+
+function sendMessage(message) {
+  sendBaCodGEvents(message, {value: baRazorpayOrderId});
+}
+
+function generateBaRazorpayOrder(mobileValue, onlineAmount, nameValue) {
+  onlineAmount = 1;
+  fetch(`https://pre-prod.leanagri.com/third_parties/shopify/api/v1/generate_order/?phone_number=${mobileValue}&cart_amount=${onlineAmount}`)
+    .then(response => response.json())
+    .then(result => {
+      baRazorpayOrderId = result.order_id;
+      baRazorpayReferenceId = result.reference_id;
+      options.order_id = result.order_id;
+      // options.amount = 22;
+      options.prefill.contact = '+91' + mobileValue.toString();
+      options.prefill.email = mobileValue.toString() + '@bharatagri.com';
+      let rzp = new Razorpay(options);
+      rzp.open();
+      rzp.on('payment.error', (resp) => {
+        sendMessage('ba_payment_error');
+        onOnlinePaymentFail();
+      });
+      rzp.on('payment.failed', (resp) => {
+        updatePaymentStatus(false, 'ba_payment_failed');
+      });
+    })
+    .catch(error => console.log('error', error));
+}
+
+function onOnlinePaymentFail() {
+  document.getElementById('baCodTriggerRecovery').disabled = false;
+  resetCodFooter();
+}
+
 function openSmileyModal() {
   let smileyDiscountAmt = document.getElementById('ba-cod-saved-amount').innerHTML;
   smileyDiscountAmt = smileyDiscountAmt.split('₹')[1];
@@ -195,6 +462,9 @@ function resetCodFormFields() {
   baCodOrderUrl = '';
   baCodOrderNumber = '';
   baOnlinePaySuccess = false;
+  baRazorpayOrderId = '';
+  baRazorpayPaymentId = '';
+  baRazorpayReferenceId = '';
 
   resetFormFieldsValidation();
 }
@@ -262,7 +532,6 @@ function setDistrictFromPincode(id, name, nameEn) {
 }
 
 function onStateClick(id, name, nameEn) {
-  console.log('district set here');
   // document.getElementById('baCodStateSelect').innerHTML = name.length > 18 ? name.slice(0,18) + '..' : name;
   // document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
   stateId = id;
