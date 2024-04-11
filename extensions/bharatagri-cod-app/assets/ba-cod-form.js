@@ -200,7 +200,7 @@ function baPaymentHandler(res) {
 }
 
 function updatePaymentStatus(status, message) {
-  fetch(`https://pre-prod.leanagri.com/third_parties/shopify/api/v1/update_order_status/?ref_id=${baRazorpayReferenceId}&payment_id=${baRazorpayPaymentId}&order_id=${baRazorpayOrderId}&status=${status}`)
+  fetch(`https://lcrks.leanagri.com/third_parties/shopify/api/v1/update_order_status/?ref_id=${baRazorpayReferenceId}&payment_id=${baRazorpayPaymentId}&order_id=${baRazorpayOrderId}&status=${status}`)
     .then(response => response.json())
     .then(result => {
       sendMessage(message);
@@ -238,7 +238,7 @@ function sendMessage(message) {
 }
 
 function generateBaRazorpayOrder(mobileValue, onlineAmount, nameValue) {
-  fetch(`https://pre-prod.leanagri.com/third_parties/shopify/api/v1/generate_order/?phone_number=${mobileValue}&cart_amount=${onlineAmount}`)
+  fetch(`https://lcrks.leanagri.com/third_parties/shopify/api/v1/generate_order/?phone_number=${mobileValue}&cart_amount=${onlineAmount}`)
     .then(response => response.json())
     .then(result => {
       baRazorpayOrderId = result.order_id;
