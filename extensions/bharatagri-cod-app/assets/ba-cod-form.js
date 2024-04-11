@@ -211,6 +211,7 @@ function updatePaymentStatus(status, message) {
       }
     })
     .catch(error => {
+      sendMessage(message);
       if (status) {
         triggerOnlineOrderCreation();
       } else {
