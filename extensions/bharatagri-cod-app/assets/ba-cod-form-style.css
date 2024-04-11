@@ -356,6 +356,10 @@
   display: none;
 }
 
+.ba-cod-pincode-restrict {
+  color: orange;
+}
+
 .ba-mandatory-field-border {
   border-color: #D42216!important;
 }
