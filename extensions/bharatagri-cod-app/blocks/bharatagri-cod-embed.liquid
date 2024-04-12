@@ -224,21 +224,23 @@
         {% comment %}<div class="pt-3 mt-3 mb-3 ba-cod-separator"></div>{% endcomment %}
 
         <!-- BA COD button non-sticky -->
-        <div id="ba-cod-place-btn" class="p-2 mb-2 d-flex justify-content-center">
-          <button id="ba-cod-create-order-button" class="row p-3 w-100 ba-cod-create-order-non-sticky-button d-flex align-items-center justify-content-between"
-                  onclick="createOrderObject('cod')">
-            <div class="col-7 p-2">
-              <div id="ba-cod-footer-place-order" class="ba-cod-footer-place-order"></div>
-            </div>
-            <div class="col-5 p-2">
-              <div style="display: none!important;" id="ba-cod-footer-delivery-label" class="ba-cod-footer-delivery-label"></div>
-              <div id="ba-cod-footer-total-amount" class="ba-cod-footer-total"></div>
-              <div id="ba-cod-footer-apply-btn-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2"
-                   role="status" style="display: none; color: white!important;">
-                <span class="sr-only">Loading...</span>
+        <div id="ba-cod-place-btn-div" style="display: none">
+          <div id="ba-cod-place-btn" class="p-2 mb-2 d-flex justify-content-center">
+            <button id="ba-cod-create-order-button" class="row p-3 w-100 ba-cod-create-order-non-sticky-button d-flex align-items-center justify-content-between"
+                    onclick="createOrderObject('cod')">
+              <div class="col-7 p-2">
+                <div id="ba-cod-footer-place-order" class="ba-cod-footer-place-order"></div>
               </div>
-            </div>
-          </button>
+              <div class="col-5 p-2">
+                <div style="display: none!important;" id="ba-cod-footer-delivery-label" class="ba-cod-footer-delivery-label"></div>
+                <div id="ba-cod-footer-total-amount" class="ba-cod-footer-total"></div>
+                <div id="ba-cod-footer-apply-btn-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2"
+                     role="status" style="display: none; color: white!important;">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+            </button>
+          </div>
         </div>
 
         <!-- BA Online button non-sticky -->
@@ -253,6 +255,7 @@
                 </div>
               </div>
               <div class="col-5 p-2">
+                <div id="ba-cod-footer-online-original-amount" class="ba-cod-footer-online-original-amount"></div>
                 <div id="ba-cod-footer-online-amount" class="ba-cod-footer-online-amount"></div>
                 <div id="ba-cod-footer-online-btn-loader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2"
                      role="status" style="display: none; color: white!important;">
@@ -794,6 +797,7 @@
       productQuantityDiv.appendChild(productQuantityPlus);
     }
 
+    checkCodEligibility();
     loadBaProductBundles();
     resetPlaceOrderButton();
     resetCodFormFields();

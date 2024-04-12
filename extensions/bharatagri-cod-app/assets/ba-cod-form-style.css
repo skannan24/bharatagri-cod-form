@@ -495,7 +495,7 @@
 .ba-cod-create-order-online-button {
   background: linear-gradient(180deg, #FFD809 0%, #F7A80B 100%);;
   border: none;
-  animation: baFooterShakeAnimation 1.5s cubic-bezier(.36, .07, .19, .97) both infinite;
+  animation: baFooterShakeAnimation 2.5s cubic-bezier(.36, .07, .19, .97) both infinite;
   border-radius: 8px;
   color: #000000;
 
@@ -954,6 +954,18 @@
   letter-spacing: 0em;
   animation: shimmer 2.5s infinite;
   text-align: right;
+}
+
+.ba-cod-footer-online-original-amount {
+  font-size: 16px;
+  color: #7B5506;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: 0em;
+  animation: shimmer 2.5s infinite;
+  text-align: right;
+  display: block;
+  text-decoration: line-through;
 }
 
 .ba-flex-direction-column {

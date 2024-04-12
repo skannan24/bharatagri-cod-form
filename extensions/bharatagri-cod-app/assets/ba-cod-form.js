@@ -25,6 +25,15 @@ let options = {
   }
 };
 
+function checkCodEligibility() {
+  let data = getBaCodProductData();
+  if (data.is_cod_enabled) {
+    document.getElementById('ba-cod-place-btn-div').style.display = 'block';
+  } else {
+    document.getElementById('ba-cod-place-btn-div').style.display = 'none';
+  }
+}
+
 function getMobileValue() {
   return document.getElementById('farmerMobile').value;
 }
@@ -306,11 +315,14 @@ function getOnlinePayDiscountAmount() {
 }
 
 function updateOnlinePaymentPrice(price) {
+  let baCodAmount = Number(price);
   let baOnlineDiscount = getOnlinePayDiscountAmount();
   let baOnlineAmount = Number(price)- baOnlineDiscount;
   if (price.toString().includes('.')) {
     baOnlineAmount = baOnlineAmount.toFixed(2);
+    baCodAmount = baCodAmount.toFixed(2);
   }
+  document.getElementById('ba-cod-footer-online-original-amount').innerHTML = `₹ ${baCodAmount}`;
   document.getElementById('ba-cod-footer-online-amount').innerHTML = `₹ ${baOnlineAmount}`;
   document.getElementById('baCodFooterOnlineDiscount').innerHTML = `₹${baOnlineDiscount} ${baOnlinePaymentDiscountLabel}`;
 }
