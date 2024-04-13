@@ -230,6 +230,7 @@ function updatePaymentStatus(status, message) {
 }
 
 function triggerOnlineOrderCreation() {
+  sendBaCodGEvents('ba_payment_success_trigger_order', {value: baRazorpayOrderId});
   let mobileValue = getMobileValue();
   let baO2 = getBaOrderObject();
   baO2["order"]["financial_status"] = 'paid';

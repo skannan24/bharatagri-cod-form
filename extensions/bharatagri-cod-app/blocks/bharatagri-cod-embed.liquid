@@ -1578,6 +1578,9 @@
   }
 
   function baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, type) {
+    if (type === 'online') {
+      sendBaCodGEvents('ba_payment_success_order_creation', {});
+    }
     fetch('https://lcrks.leanagri.com/third_parties/shopify_cod_app/api/v1/create-order/', {
       method: 'POST',
       headers: {
