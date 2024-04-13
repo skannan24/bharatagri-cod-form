@@ -248,8 +248,21 @@ function sendMessage(message) {
 }
 
 function generateBaRazorpayOrder(mobileValue, onlineAmount, nameValue) {
-  fetch(`https://lcrks.leanagri.com/third_parties/shopify/api/v1/generate_order/?phone_number=${mobileValue}&cart_amount=${onlineAmount}`)
-    .then(response => response.json())
+  let baO2 = getBaOrderObject();
+  let baDiscountCodes = baO2["order"]["discount_codes"] || [];
+  baO2["order"]["discount_codes"] = getBaOnlineDiscountCodeObject(baDiscountCodes);
+  let generateOrderObj = {
+    "phone_number": mobileValue,
+    "cart_amount": onlineAmount,
+    "order_details": baO2
+  }
+  fetch(`https://lcrks.leanagri.com/third_parties/shopify/api/v1/generate_order/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(generateOrderObj)
+  }).then(response => response.json())
     .then(result => {
       baRazorpayOrderId = result.order_id;
       baRazorpayReferenceId = result.reference_id;
