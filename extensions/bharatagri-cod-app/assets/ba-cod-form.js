@@ -325,7 +325,7 @@ function getBaOnlineDiscountCodeObject(codes) {
 }
 
 function getOnlinePayDiscountAmount() {
-  return 30;
+  return 40;
 }
 
 function updateOnlinePaymentPrice(price) {
