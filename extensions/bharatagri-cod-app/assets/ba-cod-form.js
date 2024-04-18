@@ -1,4 +1,294 @@
 // @ts-nocheck
+
+let options = {
+  "key": "rzp_live_884X1cDEIdcCxd", // Enter the Key ID generated from the Dashboard
+  "currency": "INR",
+  "name": "BharatAgri", //your business name
+  "description": "BA Payment",
+  "order_id": "",
+  "handler": function (response){
+    baPaymentHandler(response)
+  },
+  "prefill": {
+    "name": "",
+    "email": "",
+    "contact": ""
+  },
+  "notes": {},
+  "theme": {
+    "color": "#009688"
+  },
+  "modal": {
+    "ondismiss": function(){
+      updatePaymentStatus(false, 'ba_payment_modal_close');
+    }
+  }
+};
+
+function checkCodEligibility() {
+  let data = getBaCodProductData();
+  if (data.is_cod_enabled) {
+    document.getElementById('ba-cod-place-btn-div').style.display = 'block';
+  } else {
+    document.getElementById('ba-cod-place-btn-div').style.display = 'none';
+  }
+}
+
+function getMobileValue() {
+  return document.getElementById('farmerMobile').value;
+}
+
+function getLineItemsObject() {
+  let baUpdateCartCreateOrder = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+  let createOrderItems = baUpdateCartCreateOrder.items;
+  let createOrderLineItems = [];
+
+  for (let i = 0; i < createOrderItems.length; i++) {
+    let variant = {'variant_id': createOrderItems[i].variant_id, 'quantity': createOrderItems[i].quantity, 'properties': {}};
+    createOrderLineItems.push(variant);
+  }
+
+  return createOrderLineItems;
+}
+
+function getBaTotalOrderAmount() {
+  let createCartBundleOrderTotalValue = getBundlesActualTotalPriceWithoutDiscount();
+  let createCartBundleOrderTotalDiscountedValue = getBundlesTotalPrice();
+  let createCartFinalTotalValue = 0;
+  let createCartBundleTotalDiscount = 0;
+
+  let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+  let createOrderCartItemTotalValue = Number(baUpdateCart.total_price/100);
+  createCartFinalTotalValue = createCartBundleOrderTotalValue + createOrderCartItemTotalValue;
+  let createOrderTotalValue = createCartFinalTotalValue;
+
+  return createOrderTotalValue;
+}
+
+function getBaOrderObject() {
+  let name = document.getElementById('farmerName');
+  let mobile = document.getElementById('farmerMobile');
+  let pincode = document.getElementById('baCodPincode');
+  let stateField = document.getElementById('baCodStateSelect');
+  let state = stateNameEn;
+  let district = document.getElementById('baCodDistrictSelect');
+  let taluka = document.getElementById('talukaName');
+  let village = document.getElementById('villageName');
+  let address = document.getElementById('baAddress');
+  let landmark = document.getElementById('baLandmark');
+  let postOffice = document.getElementById('baPostOffice');
+
+  let nameValue = name.value;
+  let mobileValue = mobile.value;
+  let  pincodeValue = pincode.value;
+  let stateValue = state;
+  let districtValue = district.value;
+  let talukaValue = taluka.value ? taluka.value : '';
+  let villageValue = village.value ? village.value : '';
+  let addressValue = address.value;
+  let landmarkValue = landmark.value ? landmark.value : '';
+  let postOfficeValue = postOffice.value ? postOffice.value : '';
+
+  let baOrder = {
+    name: name.value,
+    mobile: mobile.value,
+    pincode: pincode.value,
+    state: state,
+    district: district.value,
+    taluka: talukaValue,
+    village: villageValue,
+    address: address.value,
+    landmark: landmarkValue,
+    postOffice: postOfficeValue,
+    is_confirmation_popup: highRiskProductFlag
+  }
+
+  let noteAttributesArray = [];
+
+  for (let [key, value] of Object.entries(baOrder)) {
+    let noteAttributesObject = {"name": key, "value": value};
+    noteAttributesArray.push(noteAttributesObject);
+  }
+
+  let createOrderDiscount = document.getElementById('ba-price-details-discount-value').innerHTML;
+  createOrderDiscount = createOrderDiscount.replace('-₹ ', '');
+
+  // Calculating total amount with the cart and bundles for create order
+  let createCartBundleOrderTotalValue = getBundlesActualTotalPriceWithoutDiscount();
+  let createCartBundleOrderTotalDiscountedValue = getBundlesTotalPrice();
+  let createCartFinalTotalValue = 0;
+  let createCartBundleTotalDiscount = 0;
+
+  let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
+  let createOrderCartItemTotalValue = Number(baUpdateCart.total_price/100);
+  createCartFinalTotalValue = createCartBundleOrderTotalValue + createOrderCartItemTotalValue;
+  let createOrderTotalValue = createCartFinalTotalValue;
+  createCartBundleTotalDiscount = createCartBundleOrderTotalValue - createCartBundleOrderTotalDiscountedValue;
+
+  let createOrderDiscountCode = '';
+  if (Number(createOrderDiscount) > 0) {
+    createOrderDiscountCode = localStorage.getItem('BA_COD_Coupon_code');
+  }
+
+  let createOrderLineItems = getLineItemsObject();
+
+  for (let i = 0; i < selectedBundles.length; i++) {
+    if (selectedBundles[i].enabled && selectedBundles[i].selected) {
+      let variant = {'variant_id': selectedBundles[i].secondary_product.variant_id, 'quantity': 1, 'properties': {}};
+      createOrderLineItems.push(variant);
+    }
+  }
+
+
+  let baO2 = {
+    "order": {
+      "line_items":createOrderLineItems,
+      "customer": {
+        "first_name": nameValue,
+      },
+      "phone": `+91${mobileValue}`,
+      "shipping_address": {
+        "first_name": nameValue,
+        "last_name": '-',
+        "address1": addressValue,
+        "phone": `+91${mobileValue}`,
+        "city": districtValue,
+        "province": stateValue,
+        "country": "India",
+        "zip": pincodeValue
+      },
+      "billing_address": {
+        "first_name": nameValue,
+        "last_name": '-',
+        "address1": addressValue,
+        "phone": `+91${mobileValue}`,
+        "city": districtValue,
+        "province": stateValue,
+        "country": "India",
+        "zip": pincodeValue
+      },
+      "financial_status": "pending",
+      "payment_gateway_names": [
+        "Cash on Delivery (COD)"
+      ],
+      "tags": "BharatAgri COD Form",
+      "note_attributes": noteAttributesArray
+    }
+  }
+
+  if (Number(createOrderDiscount) > 0 || createCartBundleTotalDiscount > 0) {
+    // Bundle Discounts logic
+    let couponText = createOrderDiscountCode ? createOrderDiscountCode : '';
+    if (createCartBundleTotalDiscount > 0) {
+      couponText = couponText ? couponText + ', BA Custom Bundles Discount' : 'BA Custom Bundles Discount';
+    }
+
+    let couponDiscount = Number(createOrderDiscount) > 0 ? Number(createOrderDiscount) : 0;
+    couponDiscount = couponDiscount + createCartBundleTotalDiscount;
+
+    baO2["order"]["discount_codes"] = [
+      {
+        "code": couponText,
+        "amount": couponDiscount
+      }
+    ]
+  }
+
+  return baO2;
+}
+
+function baPaymentHandler(res) {
+  if (res && res.razorpay_payment_id) {
+    baRazorpayPaymentId = res.razorpay_payment_id;
+    let mobileValue = getMobileValue();
+    sendBaCodGEvents('ba_payment_razorpay_success', { 'value': mobileValue });
+    updatePaymentStatus(true, 'ba_payment_success');
+  } else {
+    updatePaymentStatus(false, 'ba_payment_failed');
+  }
+}
+
+function updatePaymentStatus(status, message) {
+  fetch(`https://lcrks.leanagri.com/third_parties/shopify/api/v1/update_order_status/?ref_id=${baRazorpayReferenceId}&payment_id=${baRazorpayPaymentId}&order_id=${baRazorpayOrderId}&status=${status}`)
+    .then(response => response.json())
+    .then(result => {
+      sendMessage(message);
+      if (status) {
+        triggerOnlineOrderCreation();
+      } else {
+        onOnlinePaymentFail();
+      }
+    })
+    .catch(error => {
+      sendMessage(message);
+      if (status) {
+        triggerOnlineOrderCreation();
+      } else {
+        onOnlinePaymentFail();
+      }
+    });
+}
+
+function triggerOnlineOrderCreation() {
+  sendBaCodGEvents('ba_payment_success_trigger_order', {value: baRazorpayOrderId});
+  let mobileValue = getMobileValue();
+  let baO2 = getBaOrderObject();
+  baO2["order"]["financial_status"] = 'paid';
+  baO2["order"]["payment_gateway_names"] = ["Razorpay Secure"];
+  let baDiscountCodes = baO2["order"]["discount_codes"] || [];
+  baO2["order"]["discount_codes"] = getBaOnlineDiscountCodeObject(baDiscountCodes);
+  baO2["order"]["note_attributes"].push({"name": "order_id", "value": baRazorpayOrderId});
+  baO2["order"]["note_attributes"].push({"name": "payment_id", "value": baRazorpayPaymentId});
+  let createOrderLineItems = getLineItemsObject();
+  let createOrderTotalValue = getBaTotalOrderAmount();
+  baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, 'online');
+}
+
+function sendMessage(message) {
+  sendBaCodGEvents(message, {value: baRazorpayOrderId});
+}
+
+function generateBaRazorpayOrder(mobileValue, onlineAmount, nameValue) {
+  let baO2 = getBaOrderObject();
+  let baDiscountCodes = baO2["order"]["discount_codes"] || [];
+  baO2["order"]["discount_codes"] = getBaOnlineDiscountCodeObject(baDiscountCodes);
+  let generateOrderObj = {
+    "phone_number": mobileValue,
+    "cart_amount": onlineAmount,
+    "order_details": baO2
+  }
+  fetch(`https://lcrks.leanagri.com/third_parties/shopify/api/v1/generate_order/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(generateOrderObj)
+  }).then(response => response.json())
+    .then(result => {
+      baRazorpayOrderId = result.order_id;
+      baRazorpayReferenceId = result.reference_id;
+      options.order_id = result.order_id;
+      // options.amount = 22;
+      options.prefill.contact = '+91' + mobileValue.toString();
+      options.prefill.email = mobileValue.toString() + '@bharatagri.com';
+      let rzp = new Razorpay(options);
+      rzp.open();
+      rzp.on('payment.error', (resp) => {
+        sendMessage('ba_payment_error');
+        onOnlinePaymentFail();
+      });
+      rzp.on('payment.failed', (resp) => {
+        updatePaymentStatus(false, 'ba_payment_failed');
+      });
+    })
+    .catch(error => console.log('error', error));
+}
+
+function onOnlinePaymentFail() {
+  document.getElementById('baCodTriggerRecovery').disabled = false;
+  resetCodFooter();
+}
+
 function openSmileyModal() {
   let smileyDiscountAmt = document.getElementById('ba-cod-saved-amount').innerHTML;
   smileyDiscountAmt = smileyDiscountAmt.split('₹')[1];
@@ -13,6 +303,48 @@ function openSmileyModal() {
     document.getElementById('ba-party-smiley-close').click();
   }, 4000);
 
+}
+
+function getBaOnlineDiscountCodeObject(codes) {
+  if (codes.length > 0) {
+    let baDiscountCodes = codes[0];
+    return [
+      {
+        "code": baDiscountCodes.code + ', BA Online Pay Discount',
+        "amount": Number(baDiscountCodes.amount) + getOnlinePayDiscountAmount()
+      }
+    ];
+  } else {
+    return [
+      {
+        "code": 'ba_online_pay',
+        "amount": getOnlinePayDiscountAmount()
+      }
+    ];
+  }
+}
+
+function getOnlinePayDiscountAmount() {
+  return 40;
+}
+
+function updateOnlinePaymentPrice(price) {
+  let baCodAmount = Number(price);
+  let baOnlineDiscount = getOnlinePayDiscountAmount();
+  let baOnlineAmount = Number(price)- baOnlineDiscount;
+  if (price.toString().includes('.')) {
+    baOnlineAmount = baOnlineAmount.toFixed(2);
+    baCodAmount = baCodAmount.toFixed(2);
+  }
+  document.getElementById('ba-cod-footer-online-original-amount').innerHTML = `₹ ${baCodAmount}`;
+  document.getElementById('ba-cod-footer-online-amount').innerHTML = `₹ ${baOnlineAmount}`;
+  document.getElementById('baCodFooterOnlineDiscount').innerHTML = `₹${baOnlineDiscount} ${baOnlinePaymentDiscountLabel}`;
+}
+
+function getOnlinePaymentPrice() {
+  let onlinePrice = document.getElementById('ba-cod-footer-online-amount').innerHTML;
+  onlinePrice = onlinePrice.replace('₹ ', '');
+  return onlinePrice.replace('.00', '');
 }
 
 const updateBaCartApiCaller = createUpdateBaCartApiCaller();
@@ -75,7 +407,8 @@ function updateBaCart(operation, quantityValue) {
           let priceDetailsTotalValue = Number(res.total_price/100);
           priceDetailsTotalValue = priceDetailsTotalValue + bundleCartOrderTotalValue;
           document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsTotalValue.toFixed(2)}`;
-          document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue}`;
+          document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue.toFixed(2)}`;
+          updateOnlinePaymentPrice(priceDetailsTotalValue.toFixed(2));
           document.getElementById('ba-cod-main-product-price0').innerHTML = `₹ ${priceDetailsTotalValueWithoutBundle}`;
           document.getElementById('ba-cod-product-price0').innerHTML = `₹ ${priceDetailsTotalValueWithoutBundle.toFixed(2)}`;
           document.getElementById('ba-cod-main-product-quantity0').innerHTML = quantityValue;
@@ -88,10 +421,47 @@ function updateBaCart(operation, quantityValue) {
   }
 }
 
+function autoFillUserDetails() {
+  let infos = JSON.parse(localStorage.getItem('BA_COD_FORM_NOTES_ATTRIBUTES')) || [];
+  infos.forEach( info => {
+    if (info.name === 'name') {
+      document.getElementById('farmerName').value = info.value;
+    }
+    if (info.name === 'mobile') {
+      sendBaCodGEvents('ba_cod_auto_address', {'ba_phone_number': info.value});
+      document.getElementById('farmerMobile').value = info.value;
+    }
+    if (info.name === 'state') {
+      document.getElementById('baCodStateSelect').value = info.value;
+      stateName = info.value;
+      stateNameEn = info.value;
+    }
+    if (info.name === 'district') {
+      document.getElementById('baCodDistrictSelect').value = info.value;
+    }
+    if (info.name === 'address') {
+      document.getElementById('baAddress').value = info.value;
+    }
+    if (info.name === 'landmark') {
+      document.getElementById('baLandmark').value = info.value;
+    }
+    if (info.name === 'pincode') {
+      document.getElementById('baCodPincode').value = info.value;
+    }
+  } );
+}
+
+function resetPlaceOrderButton() {
+  document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:flex !important');
+}
+
 function resetCodFooter() {
   document.getElementById('ba-cod-create-order-button').disabled = false;
-  document.getElementById('ba-cod-footer-place-order').style.display = 'block';
+  document.getElementById('ba-cod-create-order-online-button').disabled = false;
+  document.getElementById('ba-cod-footer-total-amount').style.display = 'block';
   document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'none';
+  document.getElementById('ba-cod-footer-online-amount').style.display = 'block';
+  document.getElementById('ba-cod-footer-online-btn-loader').style.display = 'none';
 }
 
 function resetCodConfirmationModal() {
@@ -117,6 +487,10 @@ function resetCodFormFields() {
   // reset cod order url
   baCodOrderUrl = '';
   baCodOrderNumber = '';
+  baOnlinePaySuccess = false;
+  baRazorpayOrderId = '';
+  baRazorpayPaymentId = '';
+  baRazorpayReferenceId = '';
 
   resetFormFieldsValidation();
 }
@@ -184,7 +558,6 @@ function setDistrictFromPincode(id, name, nameEn) {
 }
 
 function onStateClick(id, name, nameEn) {
-  console.log('district set here');
   // document.getElementById('baCodStateSelect').innerHTML = name.length > 18 ? name.slice(0,18) + '..' : name;
   // document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
   stateId = id;
@@ -332,17 +705,20 @@ function setPincodeLocation(data) {
 
 function checkPincodeServiceability(value) {
   if (String(blacklistedPincodes).indexOf(value) > -1) {
+    document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:none !important');
     document.getElementById('baCodPincode').classList.add('ba-mandatory-field-border');
     document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
     sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': value });
+  } else {
+    document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:flex !important');
   }
 }
 
 function checkWhiteListedPincodes(value) {
-  let data = getBaCodProductData();
-  if (data.pincode_whitelist && data.pincode_whitelist.length > 0) {
-    if (String(data.pincode_whitelist).indexOf(value) > -1) {
+  if (whitelistedPincodes.length > 0) {
+    if (String(whitelistedPincodes).indexOf(value) > -1) {
       console.log('');
+      checkPincodeServiceability(value);
     } else {
       document.getElementById('baCodPincode').classList.add('ba-mandatory-field-border');
       document.getElementById('baCodPincodeNotWhitelistRequired').innerHTML = pincodeNotWhitelistRequiredLabel.replace('pincode', value);
@@ -350,13 +726,34 @@ function checkWhiteListedPincodes(value) {
       sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': value });
     }
   } else {
-    checkPincodeServiceability(value)
+    checkPincodeServiceability(value);
   }
 }
 
 function validateWhiteListedPincode(value) {
-  let data = getBaCodProductData();
-  return String(data.pincode_whitelist).indexOf(value) > -1;
+  return String(whitelistedPincodes).indexOf(value) > -1;
+}
+
+function displayPincodeError(pincode) {
+  document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:none !important');
+  pincode.classList.add('ba-mandatory-field-border');
+  document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
+  sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': pincode.value });
+}
+
+function checkAndRemovePincodeError(pincode) {
+  if (String(blacklistedPincodes).indexOf(pincode.value) === -1) {
+    document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:flex !important');
+    pincode.classList.remove('ba-mandatory-field-border');
+    document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';
+  }
+}
+
+function baFormValidationErrorRest() {
+  document.getElementById('baCodTriggerRecovery').disabled = false;
+  document.getElementById('ba-cod-create-order-button').disabled = false;
+  document.getElementById('ba-cod-create-order-online-button').disabled = false;
+  sendBaCodGEvents('ba_cod_order_validate_error', { 'field': 'addressFields' });
 }
 
 function getBaCodProductData() {
@@ -389,6 +786,8 @@ function applyBaRecoveryDiscount(closeModal) {
   document.getElementById('ba-price-details-discount-row').style.display = 'flex';
 
   document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
+  document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
+  updateOnlinePaymentPrice(mainItemPrice.toFixed(2));
   if (closeModal) {
     document.getElementById('baRecoveryClose').click();
     sendBaCodGEvents('ba_cod_order_recovery_apply', { 'amount': fivePercentAmt });
@@ -468,9 +867,7 @@ function onConfirmationModalClick(value) {
           baAuthenticateOrderPageUrlAndRoute();
         } else {
           document.getElementById('ba-confirmation-close').click();
-          document.getElementById('ba-cod-create-order-button').disabled = false;
-          document.getElementById('ba-cod-footer-place-order').style.display = 'block';
-          document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'none';
+          resetCodFooter();
           resetCodConfirmationModal();
         }
       }
@@ -600,7 +997,8 @@ function applyCouponCodes_OLDFunction(couponCode, couponObj, scrollFlag, showPop
   });
 
   document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsTotalValue.toFixed(2)}`;
-  document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue}`;
+  document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsTotalValue.toFixed(2)}`;
+  updateOnlinePaymentPrice(priceDetailsTotalValue.toFixed(2));
 
   if (previousCouponCode) {
     let activeCouponEl = document.getElementById(previousCouponCode);
@@ -652,7 +1050,8 @@ function applyCouponCodes_OLDFunction(couponCode, couponObj, scrollFlag, showPop
           priceDetailsWalletTotalValue = priceDetailsWalletTotalValue + bundleCartOrderTotalValue;
 
           document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${priceDetailsWalletTotalValue.toFixed(2)}`;
-          document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsWalletTotalValue}`;
+          document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${priceDetailsWalletTotalValue.toFixed(2)}`;
+          updateOnlinePaymentPrice(priceDetailsWalletTotalValue.toFixed(2));
           document.getElementById('ba-price-details-discount-row').style.display = 'flex';
 
           previousCouponCode = couponCode;
