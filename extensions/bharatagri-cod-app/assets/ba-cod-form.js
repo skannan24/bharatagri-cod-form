@@ -715,9 +715,8 @@ function checkPincodeServiceability(value) {
 }
 
 function checkWhiteListedPincodes(value) {
-  let data = getBaCodProductData();
-  if (data.pincode_whitelist && data.pincode_whitelist.length > 0) {
-    if (String(data.pincode_whitelist).indexOf(value) > -1) {
+  if (whitelistedPincodes.length > 0) {
+    if (String(whitelistedPincodes).indexOf(value) > -1) {
       console.log('');
       checkPincodeServiceability(value);
     } else {
@@ -732,8 +731,7 @@ function checkWhiteListedPincodes(value) {
 }
 
 function validateWhiteListedPincode(value) {
-  let data = getBaCodProductData();
-  return String(data.pincode_whitelist).indexOf(value) > -1;
+  return String(whitelistedPincodes).indexOf(value) > -1;
 }
 
 function displayPincodeError(pincode) {
