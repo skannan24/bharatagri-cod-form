@@ -27,11 +27,14 @@ let options = {
 
 function checkCodEligibility() {
   let data = getBaCodProductData();
-  if (data.is_cod_enabled) {
-    document.getElementById('ba-cod-place-btn-div').style.display = 'block';
-  } else {
-    document.getElementById('ba-cod-place-btn-div').style.display = 'none';
-  }
+  // Enabling COD for all products for now (might remove this later)
+  document.getElementById('ba-cod-place-btn-div').style.display = 'block';
+  // Bring back cod and online checks
+  // if (data.is_cod_enabled) {
+  //   document.getElementById('ba-cod-place-btn-div').style.display = 'block';
+  // } else {
+  //   document.getElementById('ba-cod-place-btn-div').style.display = 'none';
+  // }
 }
 
 function getMobileValue() {
@@ -704,14 +707,15 @@ function setPincodeLocation(data) {
 }
 
 function checkPincodeServiceability(value) {
-  if (String(blacklistedPincodes).indexOf(value) > -1) {
-    document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:none !important');
-    document.getElementById('baCodPincode').classList.add('ba-mandatory-field-border');
-    document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
-    sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': value });
-  } else {
-    document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:flex !important');
-  }
+  // Bring back cod pincodes blacklist commented
+  // if (String(blacklistedPincodes).indexOf(value) > -1) {
+  //   // document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:none !important');
+  //   document.getElementById('baCodPincode').classList.add('ba-mandatory-field-border');
+  //   document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
+  //   sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': value });
+  // } else {
+  //   // document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:flex !important');
+  // }
 }
 
 function checkWhiteListedPincodes(value) {
@@ -735,18 +739,19 @@ function validateWhiteListedPincode(value) {
 }
 
 function displayPincodeError(pincode) {
-  document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:none !important');
+  // document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:none !important');
   pincode.classList.add('ba-mandatory-field-border');
   document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
   sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': pincode.value });
 }
 
 function checkAndRemovePincodeError(pincode) {
-  if (String(blacklistedPincodes).indexOf(pincode.value) === -1) {
-    document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:flex !important');
-    pincode.classList.remove('ba-mandatory-field-border');
-    document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';
-  }
+  // Bring back cod pincodes blacklist commented
+  // if (String(blacklistedPincodes).indexOf(pincode.value) === -1) {
+  //   // document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:flex !important');
+  //   pincode.classList.remove('ba-mandatory-field-border');
+  //   document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';
+  // }
 }
 
 function baFormValidationErrorRest() {

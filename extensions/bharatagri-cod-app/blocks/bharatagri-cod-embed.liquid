@@ -244,7 +244,7 @@
         </div>
 
         <!-- BA Online button non-sticky -->
-        <div id="ba-online-pay-main-div">
+        <div id="ba-online-pay-main-div" style="display: none">
           <div class="p-2 mb-2 d-flex justify-content-center">
             <button id="ba-cod-create-order-online-button" class="row p-3 w-100 ba-cod-create-order-online-button d-flex align-items-center justify-content-between"
                     onclick="createOrderObject('online')">
@@ -1510,14 +1510,16 @@
           if (!validationError) {baScrollToId('baCodPincode');}
           prePaidError = validationError = true;
         } else if (String(blacklistedPincodes).indexOf(pincode.value) > -1) {
-          displayPincodeError(pincode);
-          if (!validationError) {baScrollToId('baCodPincode');}
-          validationError = true;
+          // Bring back cod pincodes blacklist commented
+          // displayPincodeError(pincode);
+          // if (!validationError) {baScrollToId('baCodPincode');}
+          // validationError = true;
         }
       } else if (String(blacklistedPincodes).indexOf(pincode.value) > -1) {
-        displayPincodeError(pincode);
-        if (!validationError) {baScrollToId('baCodPincode');}
-        validationError = true;
+        // Bring back cod pincodes blacklist commented
+        // displayPincodeError(pincode);
+        // if (!validationError) {baScrollToId('baCodPincode');}
+        // validationError = true;
       }
     }
 
