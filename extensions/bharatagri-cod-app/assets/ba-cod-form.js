@@ -27,8 +27,6 @@ let options = {
 
 function checkCodEligibility() {
   let data = getBaCodProductData();
-  // Enabling COD for all products for now (might remove this later)
-  document.getElementById('ba-cod-place-btn-div').style.display = 'block';
   // Bring back cod and online checks
   // if (data.is_cod_enabled) {
   //   document.getElementById('ba-cod-place-btn-div').style.display = 'block';
