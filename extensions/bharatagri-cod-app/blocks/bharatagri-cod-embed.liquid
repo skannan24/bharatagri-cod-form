@@ -798,12 +798,12 @@
       productQuantityDiv.appendChild(productQuantityPlus);
     }
 
-    checkCodEligibility();
     loadBaProductBundles();
     resetPlaceOrderButton();
     resetCodFormFields();
     resetCodFooter();
     resetCodConfirmationModal();
+    checkCodEligibility();
     populatePriceDetailsCard();
     loadCouponCodes(true);
     sendBaCodGEvents('ba_cod_order_begin_checkout', { 'productId': items[0].id });
@@ -904,6 +904,7 @@
 
     resetCodFooter();
     resetCodFormFields();
+    resetPlaceOrderButton();
 
     selectedBundles = [];
     serviceablePincodeFlag = true;
@@ -1510,16 +1511,14 @@
           if (!validationError) {baScrollToId('baCodPincode');}
           prePaidError = validationError = true;
         } else if (String(blacklistedPincodes).indexOf(pincode.value) > -1) {
-          // Bring back cod pincodes blacklist commented
-          // displayPincodeError(pincode);
-          // if (!validationError) {baScrollToId('baCodPincode');}
-          // validationError = true;
+          displayPincodeError(pincode);
+          if (!validationError) {baScrollToId('baCodPincode');}
+          validationError = true;
         }
       } else if (String(blacklistedPincodes).indexOf(pincode.value) > -1) {
-        // Bring back cod pincodes blacklist commented
-        // displayPincodeError(pincode);
-        // if (!validationError) {baScrollToId('baCodPincode');}
-        // validationError = true;
+        displayPincodeError(pincode);
+        if (!validationError) {baScrollToId('baCodPincode');}
+        validationError = true;
       }
     }
 
