@@ -190,6 +190,8 @@ function getBaOrderObject() {
     let couponText = createOrderDiscountCode ? createOrderDiscountCode : '';
     if (createCartBundleTotalDiscount > 0) {
       couponText = couponText ? couponText + ', BA Custom Bundles Discount' : 'BA Custom Bundles Discount';
+      noteAttributesArray.push({"name": "bundle_product_added", "value": "yes"});
+      baO2["order"]["note_attributes"] = noteAttributesArray;
     }
 
     let couponDiscount = Number(createOrderDiscount) > 0 ? Number(createOrderDiscount) : 0;
