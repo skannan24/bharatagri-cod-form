@@ -27,10 +27,23 @@ let options = {
 
 function checkCodEligibility() {
   let data = getBaCodProductData();
-  if (data.is_cod_enabled) {
+  let finalVariantId = getBaCartMainItemDetails();
+  finalVariantId = finalVariantId.id;
+  if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
     document.getElementById('ba-cod-place-btn-div').style.display = 'block';
+    document.getElementById('ba-online-pay-main-div').style.display = 'none';
   } else {
     document.getElementById('ba-cod-place-btn-div').style.display = 'none';
+    document.getElementById('ba-online-pay-main-div').style.display = 'block';
+  }
+}
+
+function displayBaCodOnlinePayButton(displayStyle) {
+  let data = getBaCodProductData();
+  let finalVariantId = getBaCartMainItemDetails();
+  finalVariantId = finalVariantId.id;
+  if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
+    document.getElementById('ba-online-pay-main-div').style.display = displayStyle;
   }
 }
 
@@ -181,6 +194,8 @@ function getBaOrderObject() {
     let couponText = createOrderDiscountCode ? createOrderDiscountCode : '';
     if (createCartBundleTotalDiscount > 0) {
       couponText = couponText ? couponText + ', BA Custom Bundles Discount' : 'BA Custom Bundles Discount';
+      noteAttributesArray.push({"name": "bundle_product_added", "value": "yes"});
+      baO2["order"]["note_attributes"] = noteAttributesArray;
     }
 
     let couponDiscount = Number(createOrderDiscount) > 0 ? Number(createOrderDiscount) : 0;
@@ -453,6 +468,7 @@ function autoFillUserDetails() {
 
 function resetPlaceOrderButton() {
   document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:flex !important');
+  displayBaCodOnlinePayButton('none');
 }
 
 function resetCodFooter() {
@@ -706,10 +722,12 @@ function setPincodeLocation(data) {
 function checkPincodeServiceability(value) {
   if (String(blacklistedPincodes).indexOf(value) > -1) {
     document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:none !important');
+    displayBaCodOnlinePayButton('block');
     document.getElementById('baCodPincode').classList.add('ba-mandatory-field-border');
     document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
     sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': value });
   } else {
+    displayBaCodOnlinePayButton('none');
     document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:flex !important');
   }
 }
@@ -736,6 +754,7 @@ function validateWhiteListedPincode(value) {
 
 function displayPincodeError(pincode) {
   document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:none !important');
+  displayBaCodOnlinePayButton('block');
   pincode.classList.add('ba-mandatory-field-border');
   document.getElementById('baCodPincodeServiceableRequired').style.display = 'block';
   sendBaCodGEvents('ba_cod_pincode_error', { 'pincode': pincode.value });
@@ -743,6 +762,7 @@ function displayPincodeError(pincode) {
 
 function checkAndRemovePincodeError(pincode) {
   if (String(blacklistedPincodes).indexOf(pincode.value) === -1) {
+    displayBaCodOnlinePayButton('none');
     document.getElementById('ba-cod-place-btn').setAttribute('style', 'display:flex !important');
     pincode.classList.remove('ba-mandatory-field-border');
     document.getElementById('baCodPincodeServiceableRequired').style.display = 'none';

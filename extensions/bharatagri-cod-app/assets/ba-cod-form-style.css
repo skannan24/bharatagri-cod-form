@@ -488,7 +488,7 @@
 .ba-cod-create-order-non-sticky-button {
   background: linear-gradient(180deg, #03B369 0%, #0A8047 100%);
   border: none;
-  /*animation: baFooterShakeAnimation 1.5s cubic-bezier(.36, .07, .19, .97) both infinite;*/
+  animation: baFooterShakeAnimation 1.5s cubic-bezier(.36, .07, .19, .97) both infinite;
   border-radius: 8px;
 }
 
