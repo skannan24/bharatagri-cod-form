@@ -27,8 +27,7 @@ let options = {
 
 function checkCodEligibility() {
   let data = getBaCodProductData();
-  let finalVariantId = getBaCartMainItemDetails();
-  finalVariantId = finalVariantId.id;
+  let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
   if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
     document.getElementById('ba-cod-place-btn-div').style.display = 'block';
     document.getElementById('ba-online-pay-main-div').style.display = 'none';
@@ -40,8 +39,7 @@ function checkCodEligibility() {
 
 function displayBaCodOnlinePayButton(displayStyle) {
   let data = getBaCodProductData();
-  let finalVariantId = getBaCartMainItemDetails();
-  finalVariantId = finalVariantId.id;
+  let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
   if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
     document.getElementById('ba-online-pay-main-div').style.display = displayStyle;
   }
@@ -667,10 +665,11 @@ function sendBaCodGEvents(name, value) {
 }
 
 function sendBaFbEvents(name, value) {
+  let mainItem = getBaCartMainItemDetails();
   try {
     // fbq('track', 'Purchase', {currency: "INR", value: createOrderTotalValue});
-    value['content_ids'] = ['{{ product.id }}'];
-    value['content_name'] = "{{ product.title }}";
+    value['content_ids'] = [mainItem.id];
+    value['content_name'] = mainItem.title;
     value['content_type'] = 'product_group';
     fbq('track', name, value);
   } catch (error) {
