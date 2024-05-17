@@ -27,7 +27,9 @@ let options = {
 
 function checkCodEligibility() {
   let data = getBaCodProductData();
-  if (data.is_cod_enabled) {
+  let finalVariantId = getBaCartMainItemDetails();
+  finalVariantId = finalVariantId.id;
+  if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
     document.getElementById('ba-cod-place-btn-div').style.display = 'block';
     document.getElementById('ba-online-pay-main-div').style.display = 'none';
   } else {
@@ -38,7 +40,9 @@ function checkCodEligibility() {
 
 function displayBaCodOnlinePayButton(displayStyle) {
   let data = getBaCodProductData();
-  if (data.is_cod_enabled) {
+  let finalVariantId = getBaCartMainItemDetails();
+  finalVariantId = finalVariantId.id;
+  if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
     document.getElementById('ba-online-pay-main-div').style.display = displayStyle;
   }
 }
