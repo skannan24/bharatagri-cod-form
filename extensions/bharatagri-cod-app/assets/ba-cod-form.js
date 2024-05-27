@@ -31,9 +31,11 @@ function checkCodEligibility() {
   if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
     document.getElementById('ba-cod-place-btn-div').style.display = 'block';
     document.getElementById('ba-online-pay-main-div').style.display = 'none';
+    // document.getElementById('ba-online-pay-main-emi-div').style.display = 'none';
   } else {
     document.getElementById('ba-cod-place-btn-div').style.display = 'none';
     document.getElementById('ba-online-pay-main-div').style.display = 'block';
+    // document.getElementById('ba-online-pay-main-emi-div').style.display = 'block';
   }
 }
 
@@ -42,6 +44,7 @@ function displayBaCodOnlinePayButton(displayStyle) {
   let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
   if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
     document.getElementById('ba-online-pay-main-div').style.display = displayStyle;
+    // document.getElementById('ba-online-pay-main-emi-div').style.display = displayStyle;
   }
 }
 
@@ -257,6 +260,21 @@ function triggerOnlineOrderCreation() {
   baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, 'online');
 }
 
+function triggerEmiOrderCreation() {
+  sendBaCodGEvents('ba_payment_emi_success_trigger_order', {value: baRazorpayOrderId});
+  let mobileValue = getMobileValue();
+  let baO2 = getBaOrderObject();
+  baO2["order"]["financial_status"] = 'paid';
+  baO2["order"]["payment_gateway_names"] = ["Razorpay Secure"];
+  let baDiscountCodes = baO2["order"]["discount_codes"] || [];
+  // baO2["order"]["discount_codes"] = getBaOnlineDiscountCodeObject(baDiscountCodes);
+  baO2["order"]["note_attributes"].push({"name": "order_id", "value": bharatxTransactionId});
+  baO2["order"]["note_attributes"].push({"name": "bharatx_payment", "value": "yes"});
+  let createOrderLineItems = getLineItemsObject();
+  let createOrderTotalValue = getBaTotalOrderAmount();
+  baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, 'emi');
+}
+
 function sendMessage(message) {
   sendBaCodGEvents(message, {value: baRazorpayOrderId});
 }
@@ -298,6 +316,82 @@ function generateBaRazorpayOrder(mobileValue, onlineAmount, nameValue) {
 }
 
 function onOnlinePaymentFail() {
+  document.getElementById('baCodTriggerRecovery').disabled = false;
+  resetCodFooter();
+}
+
+function generateBaBharatxOrder(mobileValue, emiAmount, nameValue) {
+  let baO2 = getBaOrderObject();
+  emiAmount = Number(emiAmount) * 100;
+  baO2["order"]["tags"] = "BharatAgri COD Form, BA Bharatx";
+  let bharatxObj = {
+    "transaction": {
+      "amount": emiAmount,
+      // "mode": "TEST",
+      "notes": {}
+    },
+    "user": {
+      "name": nameValue,
+      "phoneNumber": "+91" + mobileValue
+    },
+    "createConfiguration": {
+      "successRedirectUrl": "https://app.bharatagri.com/bharatx-success",
+      "failureRedirectUrl": "https://app.bharatagri.com/bharatx-failed",
+      "cancelRedirectUrl": "https://app.bharatagri.com/bharatx-failed"
+    }
+  };
+  let generateOrderObj = {
+    "bharatx": bharatxObj,
+    "ba_order": baO2
+  };
+
+  console.log(generateOrderObj);
+
+  fetch(`https://pre-prod.leanagri.com/payments/vendors/bharatx/api/v1/external_payment/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(generateOrderObj)
+  }).then(response => response.json())
+    .then(result => {
+      if (result.transaction) {
+        bharatxTransactionId = result.transaction.id;
+        let bharatxUrl = window.open(result.transaction.url);
+        triggerBharatxStatus();
+      } else {
+        onEmiPaymentFail();
+      }
+    }).catch(error => {
+      onEmiPaymentFail();
+      console.log("error", error);
+    });
+}
+
+function triggerBharatxStatus() {
+  setInterval(() => {
+    console.log('trying to fetch bharatx status');
+    let requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    // fetch(`https://s3.ap-south-1.amazonaws.com/shopify-krushidukan-apis/bharatx_payment/en/payments/${bharatxTransactionId}.json`, requestOptions)
+    fetch(`https://s3.ap-south-1.amazonaws.com/tanmay-21/bharatx_payment/en/payments/${bharatxTransactionId}.json`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        if (result.status) {
+          triggerEmiOrderCreation();
+        } else {
+          onEmiPaymentFail();
+        }
+      }).catch(error => {
+      // onEmiPaymentFail();
+      console.log("error", error);
+    });
+  }, 5000)
+}
+
+function onEmiPaymentFail() {
   document.getElementById('baCodTriggerRecovery').disabled = false;
   resetCodFooter();
 }
@@ -351,11 +445,25 @@ function updateOnlinePaymentPrice(price) {
   }
   document.getElementById('ba-cod-footer-online-original-amount').innerHTML = `₹ ${baCodAmount}`;
   document.getElementById('ba-cod-footer-online-amount').innerHTML = `₹ ${baOnlineAmount}`;
-  document.getElementById('baCodFooterOnlineDiscount').innerHTML = `₹${baOnlineDiscount} ${baOnlinePaymentDiscountLabel}`;
+  document.getElementById('baCodFooterOnlineDiscount').innerHTML = `₹${baOnlineAmount} ${baOnlinePaymentDiscountLabel}`;
+
+  // No discount and online pay difference amount for BharatX
+  // document.getElementById('ba-cod-footer-online-original-emi-amount').innerHTML = `₹ ${baCodAmount}`;
+  // document.getElementById('ba-cod-footer-online-emi-amount').innerHTML = `₹ ${baCodAmount}`;
+
+  document.getElementById('ba-cod-footer-online-original-emi-amount').style.display = 'none';
+  document.getElementById('ba-cod-footer-online-emi-amount').innerHTML = `₹ ${baCodAmount}`;
+  document.getElementById('baCodFooterOnlineEmiDiscount').innerHTML = `${baOnlinePaymentDiscountEmiLabel}`;
 }
 
 function getOnlinePaymentPrice() {
   let onlinePrice = document.getElementById('ba-cod-footer-online-amount').innerHTML;
+  onlinePrice = onlinePrice.replace('₹ ', '');
+  return onlinePrice.replace('.00', '');
+}
+
+function getOnlineEmiPaymentPrice() {
+  let onlinePrice = document.getElementById('ba-cod-footer-online-emi-amount').innerHTML;
   onlinePrice = onlinePrice.replace('₹ ', '');
   return onlinePrice.replace('.00', '');
 }
@@ -472,10 +580,13 @@ function resetPlaceOrderButton() {
 function resetCodFooter() {
   document.getElementById('ba-cod-create-order-button').disabled = false;
   document.getElementById('ba-cod-create-order-online-button').disabled = false;
+  document.getElementById('ba-cod-create-order-online-emi-button').disabled = false;
   document.getElementById('ba-cod-footer-total-amount').style.display = 'block';
   document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'none';
   document.getElementById('ba-cod-footer-online-amount').style.display = 'block';
   document.getElementById('ba-cod-footer-online-btn-loader').style.display = 'none';
+  document.getElementById('ba-cod-footer-online-emi-amount').style.display = 'block';
+  document.getElementById('ba-cod-footer-online-btn-emi-loader').style.display = 'none';
 }
 
 function resetCodConfirmationModal() {
@@ -505,6 +616,7 @@ function resetCodFormFields() {
   baRazorpayOrderId = '';
   baRazorpayPaymentId = '';
   baRazorpayReferenceId = '';
+  bharatxTransactionId = '';
 
   resetFormFieldsValidation();
 }
@@ -772,6 +884,7 @@ function baFormValidationErrorRest() {
   document.getElementById('baCodTriggerRecovery').disabled = false;
   document.getElementById('ba-cod-create-order-button').disabled = false;
   document.getElementById('ba-cod-create-order-online-button').disabled = false;
+  document.getElementById('ba-cod-create-order-online-emi-button').disabled = false;
   sendBaCodGEvents('ba_cod_order_validate_error', { 'field': 'addressFields' });
 }
 
