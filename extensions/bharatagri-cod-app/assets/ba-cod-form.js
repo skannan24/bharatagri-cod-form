@@ -336,9 +336,9 @@ function generateBaBharatxOrder(mobileValue, emiAmount, nameValue) {
       "phoneNumber": "+91" + mobileValue
     },
     "createConfiguration": {
-      "successRedirectUrl": "https://app.bharatagri.com/bharatx-success",
-      "failureRedirectUrl": "https://app.bharatagri.com/bharatx-failed",
-      "cancelRedirectUrl": "https://app.bharatagri.com/bharatx-failed"
+      "successRedirectUrl": `https://app.bharatagri.com/bharatx-success?lang=${lang}`,
+      "failureRedirectUrl": `https://app.bharatagri.com/bharatx-failed?lang=${lang}`,
+      "cancelRedirectUrl": `https://app.bharatagri.com/bharatx-failed?lang=${lang}`
     }
   };
   let generateOrderObj = {
