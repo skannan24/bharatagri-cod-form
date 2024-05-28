@@ -492,13 +492,20 @@
   border-radius: 8px;
 }
 
+.ba-cod-create-order-online-emi-button {
+  background: linear-gradient(180deg, #FFD809 0%, #F7A80B 100%);
+  border: none;
+  /*animation: baFooterShakeAnimation 2.5s cubic-bezier(.36, .07, .19, .97) both infinite;*/
+  border-radius: 8px;
+  color: #000000;
+}
+
 .ba-cod-create-order-online-button {
   background: linear-gradient(180deg, #FFD809 0%, #F7A80B 100%);;
   border: none;
   animation: baFooterShakeAnimation 2.5s cubic-bezier(.36, .07, .19, .97) both infinite;
   border-radius: 8px;
   color: #000000;
-
 }
 
 @keyframes baFooterShakeAnimation {

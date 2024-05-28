@@ -245,12 +245,17 @@
 
         <!-- BA Online button EMI -->
         <div id="ba-online-pay-main-emi-div" style="display: none">
+          <!-- BA credit banner -->
+          <div class="d-flex justify-content-center">
+            <img id="baCreditBanner" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/ba_credit_hi.webp"
+                 width="1000" height="100" alt="ba-coupon-applied-img" loading="lazy"/>
+          </div>
           <div class="p-2 mb-2 d-flex justify-content-center">
-            <button id="ba-cod-create-order-online-emi-button" class="row p-3 w-100 ba-cod-create-order-online-button d-flex align-items-center justify-content-between"
+            <button id="ba-cod-create-order-online-emi-button" class="row p-4 w-100 ba-cod-create-order-online-emi-button d-flex align-items-center justify-content-between"
                     onclick="createOrderObject('emi')">
               <div class="col-7 p-2">
                 <div id="baCodFooterOnlineEmiLabel" class="ba-cod-footer-online-payment-label"></div>
-                <div class="text-left">
+                <div class="text-left" style="display: none!important;">
                   <span id="baCodFooterOnlineEmiDiscount" class="ba-cod-footer-online-discount-label"></span>
                 </div>
               </div>
@@ -263,11 +268,6 @@
                 </div>
               </div>
             </button>
-          </div>
-          <!-- upi apps -->
-          <div class="pb-2 mb-2 d-flex justify-content-center" style="display: none!important;">
-            <img src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/ba-payment-apps.png"
-                 width="270" height="21" class="w-75" alt="ba-coupon-applied-img" loading="lazy"/>
           </div>
         </div>
 
@@ -525,10 +525,10 @@
   let baRecoveryOrderBtnLabel = 'स्पेशल डिस्काउंट पर आर्डर करें';
   let baRecoveryCancelBtnLabel = 'मुझे डिस्काउंट नहीं चाहिए';
 
-  let baOnlinePaymentLabel = 'Online पेमेंट करें';
+  let baOnlinePaymentLabel = 'UPI से पेमेंट करें';
   let baOnlinePaymentDiscountLabel = 'डिस्काउंट पाएं';
 
-  let baOnlinePaymentEmiLabel = 'भारतएग्री क्रेडिटं';
+  let baOnlinePaymentEmiLabel = 'EMI से पेमेंट करें';
   let baOnlinePaymentDiscountEmiLabel = '(ब्याज-मुक्त किश्तें)';
 
   if (lang === 'en') {
@@ -593,10 +593,10 @@
     baRecoveryOrderBtnLabel = 'Order with a special discount';
     baRecoveryCancelBtnLabel = "I don't want a discount";
 
-    baOnlinePaymentLabel = 'Pay Online';
+    baOnlinePaymentLabel = 'Pay via UPI ';
     baOnlinePaymentDiscountLabel = 'Discount';
 
-    baOnlinePaymentEmiLabel = 'BharatAgri Credit';
+    baOnlinePaymentEmiLabel = 'Pay via EMI';
     baOnlinePaymentDiscountEmiLabel = '(No Interest EMI)';
   }
 
@@ -662,10 +662,10 @@
     baRecoveryOrderBtnLabel = 'स्पेशल डिस्काउंट पर आर्डर करें';
     baRecoveryCancelBtnLabel = 'मुझे डिस्काउंट नहीं चाहिए';
 
-    baOnlinePaymentLabel = 'Online पेमेंट करा';
+    baOnlinePaymentLabel = 'UPI से पेमेंट करें';
     baOnlinePaymentDiscountLabel = 'चा डिस्काउंट';
 
-    baOnlinePaymentEmiLabel = 'भारतएग्री क्रेडिट';
+    baOnlinePaymentEmiLabel = 'EMI से पेमेंट करें';
     baOnlinePaymentDiscountEmiLabel = '(ब्याज-मुक्त किश्तें)';
   }
   document.getElementById('product-header-id').innerHTML = productHeader;
@@ -718,6 +718,9 @@
 
   document.getElementById('baCodFooterOnlineLabel').innerHTML = baOnlinePaymentLabel;
   document.getElementById('baCodFooterOnlineEmiLabel').innerHTML = baOnlinePaymentEmiLabel;
+
+
+  document.getElementById('baCreditBanner').src = `https://shopify-krushidukan.leanagri.com/ba-cod-form-images/ba_credit_${lang}.webp`;
 
 </script>
 
