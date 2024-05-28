@@ -261,12 +261,12 @@ function triggerOnlineOrderCreation() {
 }
 
 function triggerEmiOrderCreation() {
-  sendBaCodGEvents('ba_payment_emi_success_trigger_order', {value: baRazorpayOrderId});
+  sendBaCodGEvents('ba_payment_emi_success_trigger_order', {value: bharatxTransactionId});
   let mobileValue = getMobileValue();
   let baO2 = getBaOrderObject();
   baO2["order"]["financial_status"] = 'paid';
   baO2["order"]["payment_gateway_names"] = ["Razorpay Secure"];
-  let baDiscountCodes = baO2["order"]["discount_codes"] || [];
+  // let baDiscountCodes = baO2["order"]["discount_codes"] || [];
   // baO2["order"]["discount_codes"] = getBaOnlineDiscountCodeObject(baDiscountCodes);
   baO2["order"]["note_attributes"].push({"name": "order_id", "value": bharatxTransactionId});
   baO2["order"]["note_attributes"].push({"name": "bharatx_payment", "value": "yes"});
@@ -322,8 +322,9 @@ function onOnlinePaymentFail() {
 
 function generateBaBharatxOrder(mobileValue, emiAmount, nameValue) {
   let baO2 = getBaOrderObject();
-  emiAmount = Number(emiAmount) * 100;
-  baO2["order"]["tags"] = "BharatAgri COD Form, BA Bharatx";
+  emiAmount = (Number(emiAmount) * 100).toFixed(0);
+  emiAmount = Number(emiAmount);
+  baO2["order"]["note_attributes"].push({"name": "bharatx_payment", "value": "yes"});
   let bharatxObj = {
     "transaction": {
       "amount": emiAmount,
@@ -347,10 +348,11 @@ function generateBaBharatxOrder(mobileValue, emiAmount, nameValue) {
 
   console.log(generateOrderObj);
 
-  fetch(`https://pre-prod.leanagri.com/payments/vendors/bharatx/api/v1/external_payment/`, {
+  fetch(`https://lcrks.leanagri.com/payments/vendors/bharatx/api/v1/external_payment/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Extra-Auth': 'YmhhcmF0eGF1dGg='
     },
     body: JSON.stringify(generateOrderObj)
   }).then(response => response.json())
@@ -369,16 +371,15 @@ function generateBaBharatxOrder(mobileValue, emiAmount, nameValue) {
 }
 
 function triggerBharatxStatus() {
-  setInterval(() => {
-    console.log('trying to fetch bharatx status');
+  let bharatxInterval = setInterval(() => {
     let requestOptions = {
       method: 'GET',
       redirect: 'follow'
     };
-    // fetch(`https://s3.ap-south-1.amazonaws.com/shopify-krushidukan-apis/bharatx_payment/en/payments/${bharatxTransactionId}.json`, requestOptions)
-    fetch(`https://s3.ap-south-1.amazonaws.com/tanmay-21/bharatx_payment/en/payments/${bharatxTransactionId}.json`, requestOptions)
+    fetch(`https://shopify-krushidukan.leanagri.com/bharatx_payment/en/payments/${bharatxTransactionId}.json`, requestOptions)
       .then(response => response.json())
       .then(result => {
+        clearInterval(bharatxInterval);
         if (result.status) {
           triggerEmiOrderCreation();
         } else {
@@ -392,6 +393,7 @@ function triggerBharatxStatus() {
 }
 
 function onEmiPaymentFail() {
+  sendBaCodGEvents('ba_payment_emi_failed', {value: bharatxTransactionId});
   document.getElementById('baCodTriggerRecovery').disabled = false;
   resetCodFooter();
 }
