@@ -369,14 +369,14 @@
           Are you sure you want to place this order?
         </div>
         <div class="text-center">
-          <button id="ba-cod-confirm-no-btn" onclick="onConfirmationModalClick('no')" class="btn btn-danger ba-cod-confirm-modal-btn mr-4">
+          <button id="ba-cod-confirm-no-btn" onclick="onBaConfirmationModalNo()" class="btn btn-danger ba-cod-confirm-modal-btn mr-4">
             <span id="ba-cod-confirm-no-btn-label">No</span>
             <div id="ba-cod-confirm-no-btn-loader" class="spinner-border text-secondary ml-2"
                  role="status" style="display: none; color: white!important;">
               <span class="sr-only">Loading...</span>
             </div>
           </button>
-          <button id="ba-cod-confirm-yes-btn" onclick="onConfirmationModalClick('yes')" class="btn btn-success ba-cod-confirm-modal-btn">
+          <button id="ba-cod-confirm-yes-btn" onclick="onBaConfirmationModalYes()" class="btn btn-success ba-cod-confirm-modal-btn">
             <span id="ba-cod-confirm-yes-btn-label">Yes</span>
             <div id="ba-cod-confirm-yes-btn-loader" class="spinner-border text-secondary ml-2"
                  role="status" style="display: none; color: white!important;">
@@ -1608,6 +1608,21 @@
     if (type === 'emi') {
       sendBaCodGEvents('ba_payment_emi_success_order_creation', {});
     }
+
+    let processOrderObj = {
+      baO2, createOrderTotalValue, createOrderLineItems, mobileValue, type
+    }
+
+    localStorage.setItem('baProcessOrder', JSON.stringify(processOrderObj));
+
+    if (highRiskProductFlag && type === 'cod') {
+      displayConfirmationModal();
+    } else {
+      baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, type);
+    }
+  }
+
+  function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, type) {
     fetch('https://lcrks.leanagri.com/third_parties/shopify_cod_app/api/v1/create-order/', {
       method: 'POST',
       headers: {
@@ -1645,12 +1660,8 @@
           // window.open(result.order.order_status_url, '_self');
           baCodOrderUrl = result.order.order_status_url;
           baCodOrderNumber = result.order.order_number;
-          if (highRiskProductFlag) {
-            document.getElementById('ba-confirmation-btn').click();
-          } else {
-            document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
-            baAuthenticateOrderPageUrlAndRoute();
-          }
+          document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
+          baAuthenticateOrderPageUrlAndRoute();
         });
       } else {
         resetCodFooter();
@@ -1679,12 +1690,8 @@
     //         baCodOrderNumber = result.order.order_number;
     //         baOnlinePaySuccess = false;
     //         localStorage.setItem('BA_COD_FORM_NOTES_ATTRIBUTES', JSON.stringify(baO2["order"]["note_attributes"]));
-    //         if (highRiskProductFlag) {
-    //           document.getElementById('ba-confirmation-btn').click();
-    //         } else {
-    //           document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
-    //           baAuthenticateOrderPageUrlAndRoute();
-    //         }
+    //         document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
+    //         baAuthenticateOrderPageUrlAndRoute();
     //     });
     //   } else {
     //     document.getElementById('ba-cod-create-order-button').disabled = false;

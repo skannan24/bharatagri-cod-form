@@ -114,7 +114,8 @@ function getBaOrderObject() {
     address: address.value,
     landmark: landmarkValue,
     postOffice: postOfficeValue,
-    is_confirmation_popup: highRiskProductFlag
+    // is_confirmation_popup: highRiskProductFlag,
+    is_confirmation_popup: false
   }
 
   let noteAttributesArray = [];
@@ -981,33 +982,56 @@ function checkHighRiskOrder() {
   }
 }
 
-function onConfirmationModalClick(value) {
+function displayConfirmationModal() {
+  document.getElementById('ba-confirmation-btn').click();
+}
+
+function onBaConfirmationModalYes() {
+  let obj = JSON.parse(localStorage.getItem('baProcessOrder'));
   document.getElementById('ba-cod-confirm-no-btn').disabled = true;
   document.getElementById('ba-cod-confirm-yes-btn').disabled = true;
-  if (value === 'yes') {
-    document.getElementById('ba-cod-confirm-yes-btn-loader').style.display = 'inline-block';
-  } else {
-    document.getElementById('ba-cod-confirm-no-btn-loader').style.display = 'inline-block';
-  }
+  document.getElementById('ba-cod-confirm-yes-btn-loader').style.display = 'inline-block';
+  document.getElementById('ba-confirmation-close').click();
+  resetCodConfirmationModal();
+  baProcessOrder(obj.baO2, obj.createOrderTotalValue, obj.createOrderLineItems, obj.mobileValue, obj.type);
+}
 
-  fetch(`https://lcrks.leanagri.com/third_parties/shopify/api/v1/shopify_confirmation_pop/?order_id=${baCodOrderNumber}&confirmation=${value}`)
-    .then(response => {
-      if (response.status === 200) {
-        if (value === 'yes') {
-          document.getElementById('ba-confirmation-close').click();
-          document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
-          resetCodConfirmationModal();
-          // window.open(baCodOrderUrl, '_self');
-          baAuthenticateOrderPageUrlAndRoute();
-        } else {
-          document.getElementById('ba-confirmation-close').click();
-          resetCodFooter();
-          resetCodConfirmationModal();
-        }
-      }
-    }).catch(error => {
-    console.log('Unable to update confirm popup: ', error);
-  });
+function onBaConfirmationModalNo() {
+  document.getElementById('ba-cod-confirm-no-btn').disabled = true;
+  document.getElementById('ba-cod-confirm-yes-btn').disabled = true;
+  document.getElementById('ba-cod-confirm-no-btn-loader').style.display = 'inline-block';
+  document.getElementById('ba-confirmation-close').click();
+  resetCodFooter();
+  resetCodConfirmationModal();
+}
+
+function onConfirmationModalClick(value) {
+  // document.getElementById('ba-cod-confirm-no-btn').disabled = true;
+  // document.getElementById('ba-cod-confirm-yes-btn').disabled = true;
+  // if (value === 'yes') {
+  //   document.getElementById('ba-cod-confirm-yes-btn-loader').style.display = 'inline-block';
+  // } else {
+  //   document.getElementById('ba-cod-confirm-no-btn-loader').style.display = 'inline-block';
+  // }
+  //
+  // fetch(`https://lcrks.leanagri.com/third_parties/shopify/api/v1/shopify_confirmation_pop/?order_id=${baCodOrderNumber}&confirmation=${value}`)
+  //   .then(response => {
+  //     if (response.status === 200) {
+  //       if (value === 'yes') {
+  //         document.getElementById('ba-confirmation-close').click();
+  //         document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
+  //         resetCodConfirmationModal();
+  //         // window.open(baCodOrderUrl, '_self');
+  //         baAuthenticateOrderPageUrlAndRoute();
+  //       } else {
+  //         document.getElementById('ba-confirmation-close').click();
+  //         resetCodFooter();
+  //         resetCodConfirmationModal();
+  //       }
+  //     }
+  //   }).catch(error => {
+  //   console.log('Unable to update confirm popup: ', error);
+  // });
 }
 
 function loadProductBundlesOldFunction() {
