@@ -597,6 +597,7 @@ function resetCodConfirmationModal() {
   document.getElementById('ba-cod-confirm-yes-btn-loader').style.display = 'none';
   document.getElementById('ba-cod-confirm-no-btn').disabled = false;
   document.getElementById('ba-cod-confirm-yes-btn').disabled = false;
+  document.getElementById('baCodTriggerRecovery').disabled = false;
 }
 
 function resetCodFormFields() {

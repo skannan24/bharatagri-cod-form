@@ -1926,16 +1926,26 @@
 <script type="application/javascript">
   window.addEventListener('beforeunload', () => {
     let modalOpen = document.body.classList.contains('modal-open');
+    let baStaticDropModal = document.getElementById('staticBackdrop');
 
     if (modalOpen) {
+      document.getElementById('baCodFormClose').click();
+    }
+
+    if (baStaticDropModal && baStaticDropModal.classList.contains('show')) {
       document.getElementById('baCodFormClose').click();
     }
   });
 
   let baClosing = function () {
     let modalOpen = document.body.classList.contains('modal-open');
+    let baStaticDropModal = document.getElementById('staticBackdrop');
 
     if (modalOpen) {
+      document.getElementById('baCodFormClose').click();
+    }
+
+    if (baStaticDropModal && baStaticDropModal.classList.contains('show')) {
       document.getElementById('baCodFormClose').click();
     }
   }
