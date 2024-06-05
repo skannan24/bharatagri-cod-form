@@ -31,9 +31,11 @@ function checkCodEligibility() {
   if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
     document.getElementById('ba-cod-place-btn-div').style.display = 'block';
     document.getElementById('ba-online-pay-main-div').style.display = 'none';
+    document.getElementById('ba-online-pay-main-emi-div').style.display = 'none';
   } else {
     document.getElementById('ba-cod-place-btn-div').style.display = 'none';
     document.getElementById('ba-online-pay-main-div').style.display = 'block';
+    document.getElementById('ba-online-pay-main-emi-div').style.display = 'block';
   }
 }
 
@@ -42,6 +44,7 @@ function displayBaCodOnlinePayButton(displayStyle) {
   let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
   if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
     document.getElementById('ba-online-pay-main-div').style.display = displayStyle;
+    document.getElementById('ba-online-pay-main-emi-div').style.display = displayStyle;
   }
 }
 
@@ -111,7 +114,8 @@ function getBaOrderObject() {
     address: address.value,
     landmark: landmarkValue,
     postOffice: postOfficeValue,
-    is_confirmation_popup: highRiskProductFlag
+    // is_confirmation_popup: highRiskProductFlag,
+    is_confirmation_popup: false
   }
 
   let noteAttributesArray = [];
@@ -257,6 +261,21 @@ function triggerOnlineOrderCreation() {
   baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, 'online');
 }
 
+function triggerEmiOrderCreation() {
+  sendBaCodGEvents('ba_payment_emi_success_trigger_order', {value: bharatxTransactionId});
+  let mobileValue = getMobileValue();
+  let baO2 = getBaOrderObject();
+  baO2["order"]["financial_status"] = 'paid';
+  baO2["order"]["payment_gateway_names"] = ["Razorpay Secure"];
+  // let baDiscountCodes = baO2["order"]["discount_codes"] || [];
+  // baO2["order"]["discount_codes"] = getBaOnlineDiscountCodeObject(baDiscountCodes);
+  baO2["order"]["note_attributes"].push({"name": "order_id", "value": bharatxTransactionId});
+  baO2["order"]["note_attributes"].push({"name": "bharatx_payment", "value": "yes"});
+  let createOrderLineItems = getLineItemsObject();
+  let createOrderTotalValue = getBaTotalOrderAmount();
+  baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, 'emi');
+}
+
 function sendMessage(message) {
   sendBaCodGEvents(message, {value: baRazorpayOrderId});
 }
@@ -298,6 +317,84 @@ function generateBaRazorpayOrder(mobileValue, onlineAmount, nameValue) {
 }
 
 function onOnlinePaymentFail() {
+  document.getElementById('baCodTriggerRecovery').disabled = false;
+  resetCodFooter();
+}
+
+function generateBaBharatxOrder(mobileValue, emiAmount, nameValue) {
+  let baO2 = getBaOrderObject();
+  emiAmount = (Number(emiAmount) * 100).toFixed(0);
+  emiAmount = Number(emiAmount);
+  baO2["order"]["note_attributes"].push({"name": "bharatx_payment", "value": "yes"});
+  let bharatxObj = {
+    "transaction": {
+      "amount": emiAmount,
+      // "mode": "TEST",
+      "notes": {}
+    },
+    "user": {
+      "name": nameValue,
+      "phoneNumber": "+91" + mobileValue
+    },
+    "createConfiguration": {
+      "successRedirectUrl": `https://app.bharatagri.com/bharatx-success?lang=${lang}`,
+      "failureRedirectUrl": `https://app.bharatagri.com/bharatx-failed?lang=${lang}`,
+      "cancelRedirectUrl": `https://app.bharatagri.com/bharatx-failed?lang=${lang}`
+    }
+  };
+  let generateOrderObj = {
+    "bharatx": bharatxObj,
+    "ba_order": baO2
+  };
+
+  console.log(generateOrderObj);
+
+  fetch(`https://lcrks.leanagri.com/payments/vendors/bharatx/api/v1/external_payment/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Extra-Auth': 'YmhhcmF0eGF1dGg='
+    },
+    body: JSON.stringify(generateOrderObj)
+  }).then(response => response.json())
+    .then(result => {
+      if (result.transaction) {
+        bharatxTransactionId = result.transaction.id;
+        let bharatxUrl = window.open(result.transaction.url);
+        triggerBharatxStatus();
+      } else {
+        onEmiPaymentFail();
+      }
+    }).catch(error => {
+      onEmiPaymentFail();
+      console.log("error", error);
+    });
+}
+
+function triggerBharatxStatus() {
+  let bharatxInterval = setInterval(() => {
+    let requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    fetch(`https://shopify-krushidukan.leanagri.com/bharatx_payment/en/payments/${bharatxTransactionId}.json`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        clearInterval(bharatxInterval);
+        if (result.status) {
+          triggerEmiOrderCreation();
+        } else {
+          onEmiPaymentFail();
+        }
+      }).catch(error => {
+      // onEmiPaymentFail();
+      console.log("error", error);
+    });
+  }, 5000)
+}
+
+function onEmiPaymentFail() {
+  sendBaCodGEvents('ba_payment_emi_failed', {value: bharatxTransactionId});
   document.getElementById('baCodTriggerRecovery').disabled = false;
   resetCodFooter();
 }
@@ -351,11 +448,25 @@ function updateOnlinePaymentPrice(price) {
   }
   document.getElementById('ba-cod-footer-online-original-amount').innerHTML = `₹ ${baCodAmount}`;
   document.getElementById('ba-cod-footer-online-amount').innerHTML = `₹ ${baOnlineAmount}`;
-  document.getElementById('baCodFooterOnlineDiscount').innerHTML = `₹${baOnlineDiscount} ${baOnlinePaymentDiscountLabel}`;
+  document.getElementById('baCodFooterOnlineDiscount').innerHTML = `₹${baOnlineAmount} ${baOnlinePaymentDiscountLabel}`;
+
+  // No discount and online pay difference amount for BharatX
+  // document.getElementById('ba-cod-footer-online-original-emi-amount').innerHTML = `₹ ${baCodAmount}`;
+  // document.getElementById('ba-cod-footer-online-emi-amount').innerHTML = `₹ ${baCodAmount}`;
+
+  document.getElementById('ba-cod-footer-online-original-emi-amount').style.display = 'none';
+  document.getElementById('ba-cod-footer-online-emi-amount').innerHTML = `₹ ${baCodAmount}`;
+  document.getElementById('baCodFooterOnlineEmiDiscount').innerHTML = `${baOnlinePaymentDiscountEmiLabel}`;
 }
 
 function getOnlinePaymentPrice() {
   let onlinePrice = document.getElementById('ba-cod-footer-online-amount').innerHTML;
+  onlinePrice = onlinePrice.replace('₹ ', '');
+  return onlinePrice.replace('.00', '');
+}
+
+function getOnlineEmiPaymentPrice() {
+  let onlinePrice = document.getElementById('ba-cod-footer-online-emi-amount').innerHTML;
   onlinePrice = onlinePrice.replace('₹ ', '');
   return onlinePrice.replace('.00', '');
 }
@@ -472,10 +583,13 @@ function resetPlaceOrderButton() {
 function resetCodFooter() {
   document.getElementById('ba-cod-create-order-button').disabled = false;
   document.getElementById('ba-cod-create-order-online-button').disabled = false;
+  document.getElementById('ba-cod-create-order-online-emi-button').disabled = false;
   document.getElementById('ba-cod-footer-total-amount').style.display = 'block';
   document.getElementById('ba-cod-footer-apply-btn-loader').style.display = 'none';
   document.getElementById('ba-cod-footer-online-amount').style.display = 'block';
   document.getElementById('ba-cod-footer-online-btn-loader').style.display = 'none';
+  document.getElementById('ba-cod-footer-online-emi-amount').style.display = 'block';
+  document.getElementById('ba-cod-footer-online-btn-emi-loader').style.display = 'none';
 }
 
 function resetCodConfirmationModal() {
@@ -483,6 +597,7 @@ function resetCodConfirmationModal() {
   document.getElementById('ba-cod-confirm-yes-btn-loader').style.display = 'none';
   document.getElementById('ba-cod-confirm-no-btn').disabled = false;
   document.getElementById('ba-cod-confirm-yes-btn').disabled = false;
+  document.getElementById('baCodTriggerRecovery').disabled = false;
 }
 
 function resetCodFormFields() {
@@ -505,6 +620,7 @@ function resetCodFormFields() {
   baRazorpayOrderId = '';
   baRazorpayPaymentId = '';
   baRazorpayReferenceId = '';
+  bharatxTransactionId = '';
 
   resetFormFieldsValidation();
 }
@@ -772,6 +888,7 @@ function baFormValidationErrorRest() {
   document.getElementById('baCodTriggerRecovery').disabled = false;
   document.getElementById('ba-cod-create-order-button').disabled = false;
   document.getElementById('ba-cod-create-order-online-button').disabled = false;
+  document.getElementById('ba-cod-create-order-online-emi-button').disabled = false;
   sendBaCodGEvents('ba_cod_order_validate_error', { 'field': 'addressFields' });
 }
 
@@ -866,33 +983,56 @@ function checkHighRiskOrder() {
   }
 }
 
-function onConfirmationModalClick(value) {
+function displayConfirmationModal() {
+  document.getElementById('ba-confirmation-btn').click();
+}
+
+function onBaConfirmationModalYes() {
+  let obj = JSON.parse(localStorage.getItem('baProcessOrder'));
   document.getElementById('ba-cod-confirm-no-btn').disabled = true;
   document.getElementById('ba-cod-confirm-yes-btn').disabled = true;
-  if (value === 'yes') {
-    document.getElementById('ba-cod-confirm-yes-btn-loader').style.display = 'inline-block';
-  } else {
-    document.getElementById('ba-cod-confirm-no-btn-loader').style.display = 'inline-block';
-  }
+  document.getElementById('ba-cod-confirm-yes-btn-loader').style.display = 'inline-block';
+  document.getElementById('ba-confirmation-close').click();
+  resetCodConfirmationModal();
+  baProcessOrder(obj.baO2, obj.createOrderTotalValue, obj.createOrderLineItems, obj.mobileValue, obj.type);
+}
 
-  fetch(`https://lcrks.leanagri.com/third_parties/shopify/api/v1/shopify_confirmation_pop/?order_id=${baCodOrderNumber}&confirmation=${value}`)
-    .then(response => {
-      if (response.status === 200) {
-        if (value === 'yes') {
-          document.getElementById('ba-confirmation-close').click();
-          document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
-          resetCodConfirmationModal();
-          // window.open(baCodOrderUrl, '_self');
-          baAuthenticateOrderPageUrlAndRoute();
-        } else {
-          document.getElementById('ba-confirmation-close').click();
-          resetCodFooter();
-          resetCodConfirmationModal();
-        }
-      }
-    }).catch(error => {
-    console.log('Unable to update confirm popup: ', error);
-  });
+function onBaConfirmationModalNo() {
+  document.getElementById('ba-cod-confirm-no-btn').disabled = true;
+  document.getElementById('ba-cod-confirm-yes-btn').disabled = true;
+  document.getElementById('ba-cod-confirm-no-btn-loader').style.display = 'inline-block';
+  document.getElementById('ba-confirmation-close').click();
+  resetCodFooter();
+  resetCodConfirmationModal();
+}
+
+function onConfirmationModalClick(value) {
+  // document.getElementById('ba-cod-confirm-no-btn').disabled = true;
+  // document.getElementById('ba-cod-confirm-yes-btn').disabled = true;
+  // if (value === 'yes') {
+  //   document.getElementById('ba-cod-confirm-yes-btn-loader').style.display = 'inline-block';
+  // } else {
+  //   document.getElementById('ba-cod-confirm-no-btn-loader').style.display = 'inline-block';
+  // }
+  //
+  // fetch(`https://lcrks.leanagri.com/third_parties/shopify/api/v1/shopify_confirmation_pop/?order_id=${baCodOrderNumber}&confirmation=${value}`)
+  //   .then(response => {
+  //     if (response.status === 200) {
+  //       if (value === 'yes') {
+  //         document.getElementById('ba-confirmation-close').click();
+  //         document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
+  //         resetCodConfirmationModal();
+  //         // window.open(baCodOrderUrl, '_self');
+  //         baAuthenticateOrderPageUrlAndRoute();
+  //       } else {
+  //         document.getElementById('ba-confirmation-close').click();
+  //         resetCodFooter();
+  //         resetCodConfirmationModal();
+  //       }
+  //     }
+  //   }).catch(error => {
+  //   console.log('Unable to update confirm popup: ', error);
+  // });
 }
 
 function loadProductBundlesOldFunction() {
