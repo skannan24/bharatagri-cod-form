@@ -909,7 +909,8 @@ function displayBaRecoveryDiscount() {
 function applyBaRecoveryDiscount(closeModal) {
   let mainItem = getBaCartMainItemDetails();
   let fivePercentAmt = Number(mainItem.final_line_price)/100;
-  fivePercentAmt = ((fivePercentAmt * 0.05).toFixed(2)).toString();
+  // changed 5 % to 2 %
+  fivePercentAmt = ((fivePercentAmt * 0.02).toFixed(2)).toString();
   baRecoveryApplied = true;
   localStorage.setItem('BA_COD_Coupon_code', 'BA Recovery Discount');
 
