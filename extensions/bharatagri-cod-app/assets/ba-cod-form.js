@@ -848,9 +848,9 @@ function checkPincodeServiceability(value) {
 }
 
 function checkWhiteListedPincodes(value) {
+  let whitelistedPincodes = getWhitelistedPincodes();
   if (whitelistedPincodes.length > 0) {
     if (String(whitelistedPincodes).indexOf(value) > -1) {
-      console.log('');
       checkPincodeServiceability(value);
     } else {
       document.getElementById('baCodPincode').classList.add('ba-mandatory-field-border');
@@ -864,6 +864,7 @@ function checkWhiteListedPincodes(value) {
 }
 
 function validateWhiteListedPincode(value) {
+  let whitelistedPincodes = getWhitelistedPincodes();
   return String(whitelistedPincodes).indexOf(value) > -1;
 }
 
@@ -894,6 +895,11 @@ function baFormValidationErrorRest() {
 
 function getBaCodProductData() {
   return JSON.parse(localStorage.getItem('baCodProductData')) || {};
+}
+
+function getWhitelistedPincodes() {
+  let data = getBaCodProductData();
+  return data.pincode_whitelist || [];
 }
 
 function displayBaRecoveryDiscount() {

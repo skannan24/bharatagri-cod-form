@@ -448,7 +448,7 @@
   let selectedBundles = [];
   let serviceablePincodeFlag = true;
   let blacklistedPincodes = [];
-  let whitelistedPincodes = [];
+  // let whitelistedPincodes = [];
 
   let highRiskProducts = [];
   let highRiskProductFlag = false;
@@ -859,7 +859,10 @@
     if (baRecoveryApplied) {
       applyBaRecoveryDiscount(false);
     }
-    if (!blacklistedPincodes || blacklistedPincodes.length === 0 || !whitelistedPincodes || whitelistedPincodes.length === 0) {
+    // if (!blacklistedPincodes || blacklistedPincodes.length === 0 || !whitelistedPincodes || whitelistedPincodes.length === 0) {
+    //   loadBlackListedPincodes();
+    // }
+    if (!blacklistedPincodes || blacklistedPincodes.length === 0) {
       loadBlackListedPincodes();
     }
 
@@ -1552,6 +1555,7 @@
       prePaidError = validationError = true;
     } else {
       // Commented pincode validation for blacklist and whitelist pincodes
+      let whitelistedPincodes = getWhitelistedPincodes();
       if (whitelistedPincodes.length > 0) {
         if (!validateWhiteListedPincode(pincode.value)) {
           pincode.classList.add('ba-mandatory-field-border');
@@ -1744,6 +1748,7 @@
 
     if (pincode && pincode.value && pincode.value.length === 6 && pincode.value.match(numericalNumberRegex) && pincode.value[0] !== "0") {
       document.getElementById('baCodPincodeRequired').style.display = 'none';
+      let whitelistedPincodes = getWhitelistedPincodes();
       if (whitelistedPincodes.length > 0) {
         if (validateWhiteListedPincode(pincode.value)) {
           pincode.classList.remove('ba-mandatory-field-border');
@@ -1897,10 +1902,10 @@
       .then(res => {
         if (res.data) {
           blacklistedPincodes = res.data.cod_blacklist || [];
-          whitelistedPincodes = res.data.pincode_whitelist || [];
+          // whitelistedPincodes = res.data.pincode_whitelist || [];
         } else {
           blacklistedPincodes = [];
-          whitelistedPincodes = [];
+          // whitelistedPincodes = [];
         }
       });
   }
