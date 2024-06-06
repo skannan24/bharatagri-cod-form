@@ -985,6 +985,10 @@ function checkHighRiskOrder() {
 }
 
 function displayConfirmationModal() {
+  let codAmount = document.getElementById('ba-price-details-total-value').innerHTML;
+  codAmount = codAmount.replace('₹ ', '');
+  codAmount = Number(codAmount).toFixed(2);
+  document.getElementById('ba-cod-confirm-txt-div').innerHTML = confirmModalTextLabel.replace('###', codAmount);
   document.getElementById('ba-confirmation-btn').click();
 }
 
