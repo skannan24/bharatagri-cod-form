@@ -780,22 +780,32 @@
 .ba-cod-confirmation-modal {
   z-index: 2147484610;
   background-color: rgba(0, 0, 0, 0.7);
-  padding-top: 48%;
+  padding-top: 22vh;
   padding-left: 7%!important;
   padding-right: 7%!important;
 }
 
 .ba-cod-confirm-modal-txt {
-  font-size: 16px;
+  font-size: 18px;
   margin-bottom: 26px;
   text-align: center;
   font-weight: 500;
   color: black;
+  letter-spacing: 0;
 }
 
 .ba-cod-confirm-modal-btn {
-  font-size: 15px;
-  padding: 10px 35px;
+  font-size: 16px;
+  padding: 10px 40px;
+  border-radius: 6px;
+}
+
+.ba-cod-yes-confirm-btn{
+background: linear-gradient(180deg, #03B369 0%, #0A8047 100%);
+}
+
+.ba-cod-yes-confirm-btn {
+  background: #D42216;
 }
 
 .ba-cod-input-container {
