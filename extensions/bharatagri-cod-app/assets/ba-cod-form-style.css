@@ -801,10 +801,10 @@
 }
 
 .ba-cod-yes-confirm-btn{
-background: linear-gradient(180deg, #03B369 0%, #0A8047 100%);
+  background: linear-gradient(180deg, #03B369 0%, #0A8047 100%);
 }
 
-.ba-cod-yes-confirm-btn {
+.ba-cod-no-confirm-btn {
   background: #D42216;
 }
 
