@@ -535,6 +535,8 @@
   let baOnlinePaymentEmiLabel = 'EMI से पेमेंट करें';
   let baOnlinePaymentDiscountEmiLabel = '(ब्याज-मुक्त किश्तें)';
 
+  let baCheckoutType = 'cod';
+
   if (lang === 'en') {
     // productHeader = 'Product';
     productHeader = 'Place your order';
@@ -731,9 +733,11 @@
 <script src="{{ 'ba-cod-form.js' | asset_url }}" defer="defer"></script>
 
 <script>
-  function setBaItems() {
+  function setBaItems(type='cod') {
     let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
     let items = baUpdateCart.items;
+
+    baCheckoutType = type;
 
     baCodOrderUrl = '';
     baCodOrderNumber = '';
@@ -851,7 +855,7 @@
     resetCodFormFields();
     resetCodFooter();
     resetCodConfirmationModal();
-    checkCodEligibility();
+    checkCodEligibility(baCheckoutType);
     populatePriceDetailsCard();
     loadCouponCodes(true);
     checkFreeDelivery();

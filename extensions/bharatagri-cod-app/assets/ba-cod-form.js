@@ -36,13 +36,19 @@ function checkFreeDelivery() {
   }
 }
 
-function checkCodEligibility() {
+function checkCodEligibility(type) {
   let data = getBaCodProductData();
   let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
-  if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
-    document.getElementById('ba-cod-place-btn-div').style.display = 'block';
-    document.getElementById('ba-online-pay-main-div').style.display = 'none';
-    document.getElementById('ba-online-pay-main-emi-div').style.display = 'none';
+  if (type === 'cod') {
+    if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
+      document.getElementById('ba-cod-place-btn-div').style.display = 'block';
+      document.getElementById('ba-online-pay-main-div').style.display = 'none';
+      document.getElementById('ba-online-pay-main-emi-div').style.display = 'none';
+    } else {
+      document.getElementById('ba-cod-place-btn-div').style.display = 'none';
+      document.getElementById('ba-online-pay-main-div').style.display = 'block';
+      document.getElementById('ba-online-pay-main-emi-div').style.display = 'block';
+    }
   } else {
     document.getElementById('ba-cod-place-btn-div').style.display = 'none';
     document.getElementById('ba-online-pay-main-div').style.display = 'block';
@@ -53,7 +59,7 @@ function checkCodEligibility() {
 function displayBaCodOnlinePayButton(displayStyle) {
   let data = getBaCodProductData();
   let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
-  if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
+  if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled && baCheckoutType === 'cod') {
     document.getElementById('ba-online-pay-main-div').style.display = displayStyle;
     document.getElementById('ba-online-pay-main-emi-div').style.display = displayStyle;
   }
