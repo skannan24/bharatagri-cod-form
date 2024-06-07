@@ -25,6 +25,17 @@ let options = {
   }
 };
 
+function checkFreeDelivery() {
+  let data = getBaCodProductData();
+  let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
+  let freeDeliveryDiv = document.getElementById('ba-free-delivery-div');
+  if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].show_free_delivery) {
+    freeDeliveryDiv.style.display = 'flex';
+  } else {
+    freeDeliveryDiv.style.display = 'none';
+  }
+}
+
 function checkCodEligibility() {
   let data = getBaCodProductData();
   let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;

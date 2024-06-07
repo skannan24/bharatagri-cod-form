@@ -854,6 +854,7 @@
     checkCodEligibility();
     populatePriceDetailsCard();
     loadCouponCodes(true);
+    checkFreeDelivery();
     sendBaCodGEvents('ba_cod_order_begin_checkout', { 'productId': items[0].id });
     document.getElementById('baCodTriggerRecovery').disabled = false;
     if (baRecoveryApplied) {
@@ -1824,7 +1825,9 @@
     }
 
     let priceItemsFreeDeliveryDiv = document.createElement('div');
+    priceItemsFreeDeliveryDiv.id = 'ba-free-delivery-div';
     priceItemsFreeDeliveryDiv.className = 'row mt-2 pb-2 align-items-center ba-cod-price-details-items';
+    priceItemsFreeDeliveryDiv.style.display = 'none';
     document.getElementById('ba-cod-price-details-content').appendChild(priceItemsFreeDeliveryDiv);
 
     let priceItemsFreeDeliveryCol1 = document.createElement('div');
