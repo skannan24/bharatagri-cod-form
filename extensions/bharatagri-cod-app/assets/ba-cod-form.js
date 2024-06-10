@@ -465,7 +465,7 @@ function updateOnlinePaymentPrice(price) {
   }
   document.getElementById('ba-cod-footer-online-original-amount').innerHTML = `₹ ${baCodAmount}`;
   document.getElementById('ba-cod-footer-online-amount').innerHTML = `₹ ${baOnlineAmount}`;
-  document.getElementById('baCodFooterOnlineDiscount').innerHTML = `₹${baOnlineAmount} ${baOnlinePaymentDiscountLabel}`;
+  document.getElementById('baCodFooterOnlineDiscount').innerHTML = `₹${baOnlineDiscount} ${baOnlinePaymentDiscountLabel}`;
 
   // No discount and online pay difference amount for BharatX
   // document.getElementById('ba-cod-footer-online-original-emi-amount').innerHTML = `₹ ${baCodAmount}`;
