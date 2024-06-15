@@ -43,6 +43,8 @@ function checkCodEligibility(type) {
     if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
       document.getElementById('ba-cod-place-btn-div').style.display = 'block';
       document.getElementById('ba-online-pay-main-div').style.display = 'none';
+      // remove above line and uncomment below for displaying cod and razorpay
+      // document.getElementById('ba-online-pay-main-div').style.display = 'block';
       document.getElementById('ba-online-pay-main-emi-div').style.display = 'none';
     } else {
       document.getElementById('ba-cod-place-btn-div').style.display = 'none';
@@ -61,6 +63,9 @@ function displayBaCodOnlinePayButton(displayStyle) {
   let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
   if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled && baCheckoutType === 'cod') {
     document.getElementById('ba-online-pay-main-div').style.display = displayStyle;
+    // will display online button always
+    // remove above line and uncomment below for displaying cod and razorpay
+    // document.getElementById('ba-online-pay-main-div').style.display = 'block';
     document.getElementById('ba-online-pay-main-emi-div').style.display = displayStyle;
   }
 }

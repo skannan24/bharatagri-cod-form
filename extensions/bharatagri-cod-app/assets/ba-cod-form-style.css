@@ -493,18 +493,18 @@
 }
 
 .ba-cod-create-order-online-emi-button {
-  background: linear-gradient(180deg, #FFD809 0%, #F7A80B 100%);
+  background: linear-gradient(180deg, #03B369 0%, #0A8047 100%);
   border: none;
   -webkit-mask: linear-gradient(-60deg,#000 30%,#0005,#000 70%) right/300% 100%;
   background-repeat: no-repeat;
   animation: shimmer 2.5s infinite;
   border-radius: 8px;
-  color: #000000;
+  color: white;
 }
 
 .ba-cod-create-order-online-button {
-  background: linear-gradient(180deg, #03B369 0%, #0A8047 100%);
-  color: white;
+  background: linear-gradient(180deg, #FFD809 0%, #F7A80B 100%);
+  color: black;
   border: none;
   animation: baFooterShakeAnimation 2.5s cubic-bezier(.36, .07, .19, .97) both infinite;
   border-radius: 8px;
@@ -946,7 +946,7 @@
 }
 
 .ba-cod-footer-online-payment-emi-label {
-  color: #000000;
+  color: white;
   font-size: 18px;
   font-weight: 500;
   line-height: 24px;
@@ -955,7 +955,7 @@
 }
 
 .ba-cod-footer-online-payment-label {
-  color: white;
+  color: black;
   font-size: 18px;
   font-weight: 500;
   line-height: 24px;
@@ -983,12 +983,12 @@
   letter-spacing: 0em;
   text-align: left;
   padding: 3px 9px 3px 9px;
-  background: #CCF5E4;
+  background: linear-gradient(188.78deg, #FFFADB -8.88%, #FFF0A0 114.37%);
   border-radius: 36px;
 }
 
 .ba-cod-footer-online-emi-amount {
-  color: #000000;
+  color: white;
   font-size: 18px;
   font-weight: 600;
   line-height: 24px;
@@ -998,7 +998,7 @@
 }
 
 .ba-cod-footer-online-amount {
-  color: white;
+  color: black;
   font-size: 18px;
   font-weight: 600;
   line-height: 24px;
@@ -1009,7 +1009,7 @@
 
 .ba-cod-footer-online-original-amount {
   font-size: 16px;
-  color: white;
+  color: black;
   font-weight: 500;
   line-height: 21px;
   letter-spacing: 0em;
