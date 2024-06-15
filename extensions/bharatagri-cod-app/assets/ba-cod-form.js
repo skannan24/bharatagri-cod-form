@@ -585,6 +585,9 @@ function autoFillUserDetails() {
     if (info.name === 'district') {
       document.getElementById('baCodDistrictSelect').value = info.value;
     }
+    if (info.name === 'taluka') {
+      document.getElementById('talukaName').value = info.value;
+    }
     if (info.name === 'address') {
       document.getElementById('baAddress').value = info.value;
     }
@@ -654,6 +657,8 @@ function resetLocationFields() {
   stateNameEn = '';
   districtName = '';
   districtNameEn = '';
+  talukaName = '';
+  talukaNameEn = '';
   document.getElementById('baCodStateSelect').value = '';
   document.getElementById('baCodDistrictSelect').value = '';
   // document.getElementById('baCodStateSelectLabel').innerHTML = stateLabel;
@@ -707,6 +712,12 @@ function setDistrictFromPincode(id, name, nameEn) {
   districtName = name;
   districtNameEn = nameEn;
   document.getElementById('baCodDistrictSelect').value = nameEn;
+}
+
+function setTalukaFromPincode(id, name, nameEn) {
+  talukaName = name;
+  talukaNameEn = nameEn;
+  document.getElementById('talukaName').value = nameEn;
 }
 
 function onStateClick(id, name, nameEn) {
@@ -845,13 +856,17 @@ function setPincodeLocation(data) {
   // updateElement('talukaName', data?.taluka);
   // updateElement('villageName', data?.village);
 
-  ['state', 'district'].forEach((type) => {
+  ['state', 'district', 'taluka'].forEach((type) => {
     const dataItem = data[type];
     if (dataItem) {
       let name = dataItem[langKey] || dataItem.name;
-      type === 'state'
-        ? setStateFromPincode(dataItem.id, name, dataItem.name_en)
-        : setDistrictFromPincode(dataItem.id, name, dataItem.name_en);
+      if (type === 'state') {
+        setStateFromPincode(dataItem.id, name, dataItem.name_en)
+      } else if (type === 'district') {
+        setDistrictFromPincode(dataItem.id, name, dataItem.name_en);
+      } else {
+        setTalukaFromPincode(dataItem.id, name, dataItem.name_en);
+      }
     }
   });
 }

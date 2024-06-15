@@ -168,6 +168,17 @@
           <div class="row mt-3 pb-2">
             <div class="col-12">
               <div class="ba-cod-input-container">
+                <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Taluka" />
+                <input onclick="onInputElementClick('taluka')" class="ba-cod-input-box form-control ba-cod-input-field" id="talukaName"
+                       maxlength="180" name="Taluka" placeholder="Taluka"/>
+              </div>
+              <span id="talukaNameRequired" class="ba-mandatory-field-text pl-1">Enter taluka</span>
+            </div>
+          </div>
+
+          <div class="row mt-3 pb-2">
+            <div class="col-12">
+              <div class="ba-cod-input-container">
                 <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Pincode" />
                 <input onclick="onInputElementClick('pincode')" class="ba-cod-input-box form-control ba-cod-input-field" id="baCodPincode"
                        type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="6" name="Pincode" placeholder="Pincode"/>
@@ -179,13 +190,6 @@
           </div>
 
           <div style="display: none" class="row mt-3 pb-2">
-            <div class="col-6 pr-1">
-              <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('taluka')" class="ba-cod-input-box form-control ba-cod-input-field" id="talukaName" name="Taluka" placeholder="Taluka"/>
-                <label id="talukaNameLabel" for="talukaName">Taluka</label>
-              </div>
-              <span id="talukaNameRequired" class="ba-mandatory-field-text pl-1">Enter taluka</span>
-            </div>
             <div class="col-6 pl-1">
               <div class="form-group has-float-label mb-0">
                 <input onclick="onInputElementClick('village')" class="ba-cod-input-box form-control ba-cod-input-field" id="villageName" name="Village" placeholder="Village"/>
@@ -479,7 +483,7 @@
   let pincodeLabel = 'पिनकोड';
   let stateLabel = 'राज्य';
   let districtLabel = 'ज़िला';
-  let talukaLabel = 'Taluka';
+  let talukaLabel = 'तहसील';
   let villageLabel = 'Village';
   let addressLabel = 'मकान नंबर, रोड, कॉलोनी';
   let landmarkLabel = 'लैंडमार्क (उदाहरण: गोपाल मंदिर के पास)';
@@ -619,7 +623,7 @@
     pincodeLabel = 'पिनकोड';
     stateLabel = 'राज्य';
     districtLabel = 'ज़िला';
-    talukaLabel = 'Taluka';
+    talukaLabel = 'तहसील';
     villageLabel = 'Village';
     addressLabel = 'घर क्रमांक, रस्ता, कॉलनी';
     landmarkLabel = 'लैंडमार्क (उदाहरण: गोपाळ मंदिराजवळ)';
@@ -632,7 +636,7 @@
     pincodeNotWhitelistRequiredLabel = 'डिलिव्हरी pincode वर उपलब्ध नाही';
     stateRequiredLabel = 'राज्य';
     districtRequiredLabel = 'ज़िला';
-    talukaRequiredLabel = 'तालुका';
+    talukaRequiredLabel = 'तहसील';
     villageRequiredLabel = 'गाव';
     addressRequiredLabel = 'घर क्रमांक, रस्ता, कॉलनी';
     landmarkRequiredLabel = 'जवळची खूण';
@@ -693,7 +697,7 @@
   document.getElementById('baCodPincodeServiceableRequired').innerHTML = pincodeServiceableRequiredLabel;
   document.getElementById('baCodPincodeNotWhitelistRequired').innerHTML = pincodeNotWhitelistRequiredLabel;
 
-  document.getElementById('talukaName').placeholder = talukaLabel;
+  document.getElementById('talukaName').placeholder = talukaRequiredLabel;
   document.getElementById('talukaNameRequired').innerHTML = talukaRequiredLabel;
 
   document.getElementById('villageName').placeholder = villageLabel;
@@ -1453,8 +1457,10 @@
   let districtId = '';
   let stateName = '';
   let districtName = '';
+  let talukaName = '';
   let stateNameEn = '';
   let districtNameEn = '';
+  let talukaNameEn = '';
   let numericalNumberRegex = /^[0-9]+$/;
 
   let stateList = [];
@@ -1550,6 +1556,13 @@
       district.classList.add('ba-mandatory-field-border');
       document.getElementById('baCodDistrictSelectRequired').style.display = 'block';
       if (!validationError) {baScrollToId('baCodDistrictSelect');}
+      prePaidError = validationError = true;
+    }
+
+    if (!taluka.value) {
+      taluka.classList.add('ba-mandatory-field-border');
+      document.getElementById('talukaNameRequired').style.display = 'block';
+      if (!validationError) {baScrollToId('talukaName');}
       prePaidError = validationError = true;
     }
 
