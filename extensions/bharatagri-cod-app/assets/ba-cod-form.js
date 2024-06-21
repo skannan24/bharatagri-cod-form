@@ -473,8 +473,8 @@ function setBaItems(type = 'cod') {
   sendBaCodGEvents('ba_cod_order_begin_checkout', {
     'productId': items[0].id
   });
-  sendBaCodGAConversionEvents('add_to_cart');
-  sendBaCodGAConversionEvents('begin_checkout');
+  triggerBaCodConversionEvents();
+
   document.getElementById('baCodTriggerRecovery').disabled = false;
   if (baRecoveryApplied) {
     applyBaRecoveryDiscount(false);
@@ -2404,6 +2404,13 @@ function sendBaCodGEvents(name, value) {
   }
 }
 
+function triggerBaCodConversionEvents() {
+  sendBaCodGAConversionEvents('add_to_cart');
+  sendBaCodGAConversionEvents('begin_checkout');
+  sendBaCodShopifyAnalyticsEvents('Added to Cart', '', '');
+  sendBaCodShopifyAnalyticsEvents('Checkout Started', '', '');
+}
+
 function sendBaCodGAConversionEvents(name) {
   let mainItem = getBaCartMainItemDetails();
   let price = (mainItem.final_line_price/100);
@@ -2415,7 +2422,7 @@ function sendBaCodGAConversionEvents(name) {
         {
           item_id: mainItem.id,
           item_name: mainItem.title,
-          quantity: document.getElementsByClassName('quantity__input')[0].value,
+          quantity: mainItem.quantity,
           price: price
         }
       ]
@@ -2430,20 +2437,67 @@ function sendBaCodGAConversionOrderedEvents(totalAmount, orderId) {
   let price = (mainItem.final_line_price/100);
   try {
     gtag('event', 'purchase', {
-      transaction_id: orderId,
-      value: totalAmount,
-      currency: 'INR',
-      items: [
-        {
-          item_id: mainItem.id,
-          item_name: mainItem.title,
-          quantity: document.getElementsByClassName('quantity__input')[0].value,
-          price: price
-        }
-      ]
-  });
+        transaction_id: orderId,
+        value: totalAmount,
+        currency: 'INR',
+        items: [
+          {
+            item_id: mainItem.id,
+            item_name: mainItem.title,
+            quantity: mainItem.quantity,
+            price: price
+          }
+        ]
+    });
+    sendBaCodShopifyAnalyticsEvents('Purchase', totalAmount, orderId);
   } catch (error) {
     console.log('gtag error');
+  }
+}
+
+function sendBaCodShopifyAnalyticsEvents(name, totalAmount, orderId) {
+  let mainItem = getBaCartMainItemDetails();
+  let price = (mainItem.final_line_price/100);
+  try {
+    let analyticsObj = {};
+    if (name === 'Added to Cart') {
+      analyticsObj = {
+        id: mainItem.id,
+        name: mainItem.title,
+        price: price,
+        quantity: mainItem.quantity
+      }
+    }
+    if (name === 'Checkout Started') {
+      analyticsObj = {
+        cart_total: price,
+        items: [
+          {
+            id: mainItem.id,
+            name: mainItem.title,
+            price: price,
+            quantity: mainItem.quantity
+          }
+        ]}
+    }
+    if (name === 'Purchase') {
+      analyticsObj = {
+        order_number: orderId,
+        total_price: totalAmount,
+        items: [
+          {
+            id: mainItem.id,
+            name: mainItem.title,
+            price: price,
+            quantity: mainItem.quantity
+          }
+        ]
+      }
+    }
+    ShopifyAnalytics.lib.track(name, analyticsObj);
+    // console.log(ShopifyAnalytics.lib.track(name, analyticsObj));
+  } catch (error) {
+    console.log('shopify analytics error');
   }
 }
 
