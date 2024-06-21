@@ -473,6 +473,8 @@ function setBaItems(type = 'cod') {
   sendBaCodGEvents('ba_cod_order_begin_checkout', {
     'productId': items[0].id
   });
+  sendBaCodGAConversionEvents('add_to_cart');
+  sendBaCodGAConversionEvents('begin_checkout');
   document.getElementById('baCodTriggerRecovery').disabled = false;
   if (baRecoveryApplied) {
     applyBaRecoveryDiscount(false);
@@ -1313,6 +1315,7 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
           value: createOrderTotalValue,
           num_items: createOrderLineItems.length
         });
+        sendBaCodGAConversionOrderedEvents(createOrderTotalValue, result.order.order_number);
         try {
           gtag('event', 'conversion', {
             'send_to': 'AW-682014322/--74CKG9_dcDEPLsmsUC',
@@ -2396,6 +2399,49 @@ function onInputElementClick(fieldName) {
 function sendBaCodGEvents(name, value) {
   try {
     gtag('event', name, value);
+  } catch (error) {
+    console.log('gtag error');
+  }
+}
+
+function sendBaCodGAConversionEvents(name) {
+  let mainItem = getBaCartMainItemDetails();
+  let price = (mainItem.final_line_price/100);
+  try {
+    gtag('event', name, {
+      currency: 'INR',
+      value: price,
+      items: [
+        {
+          item_id: mainItem.id,
+          item_name: mainItem.title,
+          quantity: document.getElementsByClassName('quantity__input')[0].value,
+          price: price
+        }
+      ]
+    });
+  } catch (error) {
+    console.log('gtag error');
+  }
+}
+
+function sendBaCodGAConversionOrderedEvents(totalAmount, orderId) {
+  let mainItem = getBaCartMainItemDetails();
+  let price = (mainItem.final_line_price/100);
+  try {
+    gtag('event', 'purchase', {
+      transaction_id: orderId,
+      value: totalAmount,
+      currency: 'INR',
+      items: [
+        {
+          item_id: mainItem.id,
+          item_name: mainItem.title,
+          quantity: document.getElementsByClassName('quantity__input')[0].value,
+          price: price
+        }
+      ]
+  });
   } catch (error) {
     console.log('gtag error');
   }
