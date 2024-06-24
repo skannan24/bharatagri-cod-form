@@ -1066,22 +1066,29 @@
   font-size: 24px;
   font-weight: 600;
   padding: 0 10px;
+  color: black;
 }
 
 .ba-cod-otp-input {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
   padding: 5px 10px;
 }
 
 .ba-cod-otp-input input {
-  width: 40px;
-  height: 40px;
+  width: 64px;
+  height: 54px;
   text-align: center;
   font-size: 18px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+.ba-cod-otp-invalid {
+  padding: 2px 12px;
+  color: #D42216;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 .ba-cod-resend-otp {
@@ -1089,7 +1096,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  padding: 0 10px;
+  padding: 5px 8px;
 }
 
 #baCodResendOtpBtn {

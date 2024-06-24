@@ -36,6 +36,8 @@ let baRecoveryApplied = false;
 
 let baOnlinePaySuccess = false;
 
+let baOtpCountdown = '';
+
 // let productHeader = 'प्रोडक्ट';
 let productHeader = 'अपना आर्डर दें';
 let discountHeader = 'डिस्काउंट कूपन';
@@ -111,6 +113,7 @@ let baCodOtpResendLabel = 'पुन: OTP भेजें';
 let baCodOtpSubmitLabel = 'OTP सबमिट करके ऑर्डर प्लेस करें';
 let baCodOtpCancelLabel = 'ऑर्डर कैंसिल करें';
 let baCodOtpFooterLabel = '*इस ऑर्डर की पुष्टि के लिए भारतअ‍ॅग्री से कॉल किया जाएगा।';
+let baCodOtpInvalidLabel = 'अमान्य OTP';
 
 let baCheckoutType = 'cod';
 
@@ -189,6 +192,7 @@ if (lang === 'en') {
   baCodOtpSubmitLabel = 'Submit OTP & Place Order';
   baCodOtpCancelLabel = 'Cancel Order';
   baCodOtpFooterLabel = '*You will receive a call from BharatAgri to confirm this order.';
+  baCodOtpInvalidLabel = 'Invalid OTP';
 }
 
 if (lang === 'mr') {
@@ -266,6 +270,7 @@ if (lang === 'mr') {
   baCodOtpSubmitLabel = 'OTP सबमिट करके ऑर्डर प्लेस करें';
   baCodOtpCancelLabel = 'ऑर्डर कैंसिल करें';
   baCodOtpFooterLabel = '*इस ऑर्डर की पुष्टि के लिए भारतअ‍ॅग्री से कॉल किया जाएगा।';
+  baCodOtpInvalidLabel = 'अमान्य OTP';
 }
 document.getElementById('product-header-id').innerHTML = productHeader;
 document.getElementById('discount-header-id').innerHTML = discountHeader;
@@ -322,9 +327,10 @@ document.getElementById('ba-cod-otp-header').innerHTML = baCodOtpHeaderLabel;
 document.getElementById('ba-cod-otp-instructions').innerHTML = baCodOtpInstructionsLabel;
 document.getElementById('baCodEnterOTP').innerHTML = baCodOtpEnterLabel;
 document.getElementById('baCodResendOtpBtn').innerHTML = baCodOtpResendLabel;
-document.getElementById('baCodOtpSubmitBtn').innerHTML = baCodOtpSubmitLabel;
+document.getElementById('baCodOtpSubmitBtnLabel').innerHTML = baCodOtpSubmitLabel;
 document.getElementById('baCodOtpCancelBtn').innerHTML = baCodOtpCancelLabel;
 document.getElementById('baCodOtpFooter').innerHTML = baCodOtpFooterLabel;
+document.getElementById('baCodOtpInvalid').innerHTML = baCodOtpInvalidLabel;
 
 
 document.getElementById('baCreditBanner').src = `https://shopify-krushidukan.leanagri.com/ba-cod-form-images/ba_credit_${lang}.webp`;
@@ -345,6 +351,7 @@ function setBaItems(type = 'cod') {
   baRazorpayPaymentId = '';
   baRazorpayReferenceId = '';
   bharatxTransactionId = '';
+  baOtpCountdown = '';
 
   let quantityFb = document.getElementsByClassName('quantity__input')[0].value;
   sendBaFbEvents('AddToCart', {
@@ -1309,6 +1316,10 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
         } else if (type === 'emi') {
           sendBaCodGEvents('ba_cod_ordered_emi', {});
         }
+        // Resetting if otp modal is displayed
+        if (baO2['otp']) {
+          baCloseConfirmationModalAndReset();
+        }
         document.getElementById('baCodTriggerRecovery').disabled = false;
         sendBaFbEvents('Purchase', {
           currency: "INR",
@@ -1334,13 +1345,22 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
         baAuthenticateOrderPageUrlAndRoute();
       });
     } else {
-      resetCodFooter();
-      document.getElementById('baCodTriggerRecovery').disabled = false;
+      if (response.status === 400) {
+        response.json().then(result => {
+          if (result.error && result.error === 'Invalid OTP') {
+            baOtpInvalidSetAndReset('block', '1px solid #EC463B');
+            resetCodConfirmationModal();
+          } else {
+            onBaOrderCreationError();
+          }
+        });
+      } else {
+        onBaOrderCreationError();
+      }
     }
   }).catch(error => {
     console.log('error: ', error);
-    resetCodFooter();
-    document.getElementById('baCodTriggerRecovery').disabled = false;
+    onBaOrderCreationError();
   });
 
   // dev store api call to create order
@@ -1359,6 +1379,7 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
   //         baCodOrderUrl = result.order.order_status_url
   //         baCodOrderNumber = result.order.order_number;
   //         baOnlinePaySuccess = false;
+  //         baOtpCountdown = false;
   //         localStorage.setItem('BA_COD_FORM_NOTES_ATTRIBUTES', JSON.stringify(baO2["order"]["note_attributes"]));
   //         document.getElementById('ba-cod-form-overlay-loader').style.display = 'block';
   //         baAuthenticateOrderPageUrlAndRoute();
@@ -1377,6 +1398,11 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
   //   document.getElementById('baCodTriggerRecovery').disabled = false;
   // });
   // dev store api ends here
+}
+
+function onBaOrderCreationError() {
+  resetCodFooter();
+  document.getElementById('baCodTriggerRecovery').disabled = false;
 }
 
 function baScrollToId(id) {
@@ -2211,8 +2237,10 @@ function resetCodConfirmationModal() {
   document.getElementById('ba-cod-confirm-yes-btn').disabled = false;
   document.getElementById('baCodTriggerRecovery').disabled = false;
 
+  document.getElementById('ba-cod-otp-submit-btn-loader').style.display = 'none';
   document.getElementById('baCodOtpSubmitBtn').disabled = false;
   document.getElementById('baCodOtpCancelBtn').disabled = false;
+
 }
 
 function resetCodFormFields() {
@@ -2237,6 +2265,7 @@ function resetCodFormFields() {
   baRazorpayPaymentId = '';
   baRazorpayReferenceId = '';
   bharatxTransactionId = '';
+  baOtpCountdown = '';
 
   resetFormFieldsValidation();
 }
@@ -2727,7 +2756,12 @@ function displayConfirmationModal() {
   let codAmount = document.getElementById('ba-price-details-total-value').innerHTML;
   codAmount = codAmount.replace('₹ ', '');
   codAmount = Number(codAmount).toFixed(2);
+  codAmount = codAmount.replace('.00', '');
   document.getElementById('ba-cod-confirm-txt-div').innerHTML = confirmModalTextLabel.replace('###', codAmount);
+
+  document.getElementById('ba-cod-otp-header').innerHTML = baCodOtpHeaderLabel.replace('###', codAmount);
+  let mobile = document.getElementById('farmerMobile').value;
+  document.getElementById('ba-cod-otp-instructions').innerHTML = baCodOtpInstructionsLabel.replace('###', mobile);
 
   let confirmationModal = document.getElementById('ba-confirmation-modal-div');
   let otpModal = document.getElementById('ba-confirmation-otp-div');
@@ -2770,6 +2804,45 @@ function onBaOTPModalCancel() {
   resetCodFooter();
   resetCodConfirmationModal();
 }
+
+function onBaOTPModalSubmit() {
+  if (baOtpNumberValidation()) {
+    baOtpInvalidSetAndReset('none', '1px solid #ccc');
+    let obj = JSON.parse(localStorage.getItem('baProcessOrder'));
+    document.getElementById('baCodOtpSubmitBtn').disabled = true;
+    document.getElementById('baCodOtpCancelBtn').disabled = true;
+    document.getElementById('ba-cod-otp-submit-btn-loader').style.display = 'inline-block';
+    obj.baO2['otp'] = {'phone': getBaMobileValueWithFormat(), 'otp': getBaOtpEnteredValue()}
+    baProcessOrder(obj.baO2, obj.createOrderTotalValue, obj.createOrderLineItems, obj.mobileValue, obj.type);
+  } else {
+    console.log('not valid otp');
+  }
+}
+
+function baOtpNumberValidation() {
+  const otpInputs = document.querySelectorAll('.ba-cod-otp');
+  return otpInputs[0].value.match(numericalNumberRegex) && otpInputs[1].value.match(numericalNumberRegex)
+    && otpInputs[2].value.match(numericalNumberRegex) && otpInputs[3].value.match(numericalNumberRegex);
+}
+
+function getBaOtpEnteredValue() {
+  const otpInputs = document.querySelectorAll('.ba-cod-otp');
+  return String(otpInputs[0].value) + String(otpInputs[1].value) + String(otpInputs[2].value) +String(otpInputs[3].value);
+}
+function baCloseConfirmationModalAndReset() {
+  document.getElementById('ba-confirmation-close').click();
+  resetCodConfirmationModal();
+}
+
+function baOtpInvalidSetAndReset(displayValue, borderValue) {
+  document.getElementById('baCodOtpInvalid').style.display = displayValue;
+  const otpInputs = document.querySelectorAll('.ba-cod-otp');
+
+  otpInputs.forEach((input, index) => {
+    input.style.border = borderValue;
+  });
+}
+
 function onDisplayBaCodOTPModal() {
   sendBaCodOtp();
   let timerElement = document.getElementById('baCodOtpTimer');
@@ -2778,10 +2851,15 @@ function onDisplayBaCodOTPModal() {
   let cancelButton = document.getElementById('baCodOtpCancelBtn');
   let time = 29; // 29 seconds countdown
 
+  resendButton.disabled = true;
+  resendButton.style.border = '1px solid #ADB2C0';
+  resendButton.style.color = '#ADB2C0';
+  clearInterval(baOtpCountdown);
+
   const startTimer = () => {
-    const countdown = setInterval(() => {
+    baOtpCountdown = setInterval(() => {
       if (time <= 0) {
-        clearInterval(countdown);
+        clearInterval(baOtpCountdown);
         timerElement.textContent = '00:00';
         resendButton.disabled = false;
         resendButton.style.border = '1px solid #0A8047';
@@ -2798,10 +2876,11 @@ function onDisplayBaCodOTPModal() {
 
   resendButton.addEventListener('click', () => {
     time = 29; // reset timer
-    startTimer();
     resendButton.disabled = true;
     resendButton.style.border = '1px solid #ADB2C0';
     resendButton.style.color = '#ADB2C0';
+    clearInterval(baOtpCountdown);
+    startTimer();
     sendBaCodOtp();
   });
 
@@ -2836,14 +2915,18 @@ function sendBaCodOtp() {
     headers: headers
   };
 
-  let phone = document.getElementById('farmerMobile').value;
-  phone = `+91${phone}`;
+  let phone = getBaMobileValueWithFormat();
 
   fetch(`https://lcrks.leanagri.com/api/v2/getOtp/?phone_number=${phone}`, requestOptions)
     .then(response => response.json())
     .then(result => {
       console.log('OTP sent');
-    }).catch(error => console.log('error', error));
+    }).catch(error => console.log('error: ', error));
+}
+
+function getBaMobileValueWithFormat() {
+  let phone = document.getElementById('farmerMobile').value;
+  return `+91${phone}`;
 }
 
 function onConfirmationModalClick(value) {
