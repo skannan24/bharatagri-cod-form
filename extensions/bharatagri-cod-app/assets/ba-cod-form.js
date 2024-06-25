@@ -2803,6 +2803,7 @@ function onBaConfirmationModalNo() {
 
 function onBaOTPModalCancel() {
   document.getElementById('ba-confirmation-close').click();
+  baClearOtpCountdownInterval();
   resetCodFooter();
   resetCodConfirmationModal();
 }
@@ -2830,11 +2831,15 @@ function getBaOtpEnteredValue() {
   return String(otpInputs[0].value) + String(otpInputs[1].value) + String(otpInputs[2].value) +String(otpInputs[3].value);
 }
 function baCloseConfirmationModalAndReset() {
+  baClearOtpCountdownInterval();
+  document.getElementById('ba-confirmation-close').click();
+  resetCodConfirmationModal();
+}
+
+function baClearOtpCountdownInterval() {
   if (baOtpCountdown) {
     clearInterval(baOtpCountdown);
   }
-  document.getElementById('ba-confirmation-close').click();
-  resetCodConfirmationModal();
 }
 
 function baOtpInvalidSetAndReset(displayValue, borderValue) {
@@ -2865,9 +2870,7 @@ function startOtpTimer() {
   resendButton.style.color = '#ADB2C0';
 
   console.log(baOtpCountdown);
-  if (baOtpCountdown) {
-    clearInterval(baOtpCountdown);
-  }
+  baClearOtpCountdownInterval();
 
   baOtpCountdown = setInterval(() => {
     console.log(baOtpCountdown);
