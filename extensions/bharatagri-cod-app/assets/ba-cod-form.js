@@ -2816,8 +2816,6 @@ function onBaOTPModalSubmit() {
     document.getElementById('ba-cod-otp-submit-btn-loader').style.display = 'inline-block';
     obj.baO2['otp'] = {'phone': getBaMobileValueWithFormat(), 'otp': getBaOtpEnteredValue()}
     baProcessOrder(obj.baO2, obj.createOrderTotalValue, obj.createOrderLineItems, obj.mobileValue, obj.type);
-  } else {
-    console.log('not valid otp');
   }
 }
 
@@ -2914,6 +2912,8 @@ function onDisplayBaCodOTPModal() {
 }
 
 function onBaCodResendOtp() {
+  baOtpInvalidSetAndReset('none', '1px solid #ccc');
+  baResetOtpValues();
   sendBaCodOtp();
   startOtpTimer();
 }
