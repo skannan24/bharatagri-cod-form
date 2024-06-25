@@ -2766,6 +2766,8 @@ function displayConfirmationModal() {
   let confirmationModal = document.getElementById('ba-confirmation-modal-div');
   let otpModal = document.getElementById('ba-confirmation-otp-div');
 
+  baResetOtpValues();
+
   if (otpVerifyFlag) {
     otpModal.style.display = 'block';
     confirmationModal.style.display = 'none';
@@ -2830,6 +2832,9 @@ function getBaOtpEnteredValue() {
   return String(otpInputs[0].value) + String(otpInputs[1].value) + String(otpInputs[2].value) +String(otpInputs[3].value);
 }
 function baCloseConfirmationModalAndReset() {
+  if (baOtpCountdown) {
+    clearInterval(baOtpCountdown);
+  }
   document.getElementById('ba-confirmation-close').click();
   resetCodConfirmationModal();
 }
@@ -2843,48 +2848,50 @@ function baOtpInvalidSetAndReset(displayValue, borderValue) {
   });
 }
 
-function onDisplayBaCodOTPModal() {
-  sendBaCodOtp();
+function baResetOtpValues() {
+  document.getElementById('baCodOtpInvalid').style.display = 'none';
+  const otpInputs = document.querySelectorAll('.ba-cod-otp');
+  otpInputs.forEach((input, index) => {
+    input.value = '';
+    input.style.border = '1px solid #ccc';
+  });
+}
+
+function startOtpTimer() {
+  let time = 29;
   let timerElement = document.getElementById('baCodOtpTimer');
   let resendButton = document.getElementById('baCodResendOtpBtn');
-  let submitButton = document.getElementById('baCodOtpSubmitBtn');
-  let cancelButton = document.getElementById('baCodOtpCancelBtn');
-  let time = 29; // 29 seconds countdown
 
   resendButton.disabled = true;
   resendButton.style.border = '1px solid #ADB2C0';
   resendButton.style.color = '#ADB2C0';
-  clearInterval(baOtpCountdown);
 
-  const startTimer = () => {
-    baOtpCountdown = setInterval(() => {
-      if (time <= 0) {
-        clearInterval(baOtpCountdown);
-        timerElement.textContent = '00:00';
-        resendButton.disabled = false;
-        resendButton.style.border = '1px solid #0A8047';
-        resendButton.style.color = '#0A8047';
-      } else {
-        let seconds = time % 60;
-        timerElement.textContent = `00:${seconds < 10 ? '0' : ''}${seconds}`;
-        time--;
-      }
-    }, 1000);
-  };
-
-  startTimer();
-
-  resendButton.addEventListener('click', () => {
-    time = 29; // reset timer
-    resendButton.disabled = true;
-    resendButton.style.border = '1px solid #ADB2C0';
-    resendButton.style.color = '#ADB2C0';
+  console.log(baOtpCountdown);
+  if (baOtpCountdown) {
     clearInterval(baOtpCountdown);
-    startTimer();
-    sendBaCodOtp();
-  });
+  }
 
-  // Automatic focus shift for OTP input
+  baOtpCountdown = setInterval(() => {
+    console.log(baOtpCountdown);
+    if (time <= 0) {
+      clearInterval(baOtpCountdown);
+      timerElement.textContent = '00:00';
+      resendButton.disabled = false;
+      resendButton.style.border = '1px solid #0A8047';
+      resendButton.style.color = '#0A8047';
+    } else {
+      let seconds = time % 60;
+      timerElement.textContent = `00:${seconds < 10 ? '0' : ''}${seconds}`;
+      time--;
+    }
+  }, 1000);
+}
+
+function onDisplayBaCodOTPModal() {
+  sendBaCodOtp();
+
+  startOtpTimer();
+
   const otpInputs = document.querySelectorAll('.ba-cod-otp');
 
   otpInputs.forEach((input, index) => {
@@ -2906,6 +2913,11 @@ function onDisplayBaCodOTPModal() {
   });
 }
 
+function onBaCodResendOtp() {
+  sendBaCodOtp();
+  startOtpTimer();
+}
+
 function sendBaCodOtp() {
   let headers = new Headers();
   headers.append("UnxsUBYk", "OerRvTJlrQLc0A==");
@@ -2915,7 +2927,7 @@ function sendBaCodOtp() {
     headers: headers
   };
 
-  let phone = getBaMobileValueWithFormat();
+  let phone = getBaMobileValueTenDigits();
 
   fetch(`https://lcrks.leanagri.com/api/v2/getOtp/?phone_number=${phone}`, requestOptions)
     .then(response => response.json())
@@ -2927,6 +2939,10 @@ function sendBaCodOtp() {
 function getBaMobileValueWithFormat() {
   let phone = document.getElementById('farmerMobile').value;
   return `+91${phone}`;
+}
+
+function getBaMobileValueTenDigits() {
+  return document.getElementById('farmerMobile').value;
 }
 
 function onConfirmationModalClick(value) {

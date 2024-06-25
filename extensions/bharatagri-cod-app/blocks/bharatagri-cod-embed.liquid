@@ -413,12 +413,12 @@
             Invalid OTP
           </div>
           <div class="ba-cod-resend-otp">
-            <button id="baCodResendOtpBtn" disabled>Resend OTP</button>
+            <button id="baCodResendOtpBtn" onclick="onBaCodResendOtp()" disabled>Resend OTP</button>
             <span id="baCodOtpTimer">00:29</span>
           </div>
           <div class="ba-cod-otp-actions">
             <button id="baCodOtpSubmitBtn" onclick="onBaOTPModalSubmit()">
-              <span id="baCodOtpSubmitBtnLabel">Submit OTP & Place Order</span>
+              <span id="baCodOtpSubmitBtnLabel" style="margin-right: 4px">Submit OTP & Place Order</span>
               <div id="ba-cod-otp-submit-btn-loader" class="spinner-border text-secondary ml-2"
                    role="status" style="display: none; color: white!important;">
                 <span class="sr-only">Loading...</span>
