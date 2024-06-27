@@ -1727,28 +1727,28 @@ function getBaOrderObject() {
   let landmark = document.getElementById('baLandmark');
   let postOffice = document.getElementById('baPostOffice');
 
-  let nameValue = name.value;
+  let nameValue = getFormattedAndRightValues(name.value);
   let mobileValue = mobile.value;
   let  pincodeValue = pincode.value;
   let stateValue = state;
-  let districtValue = district.value;
-  let talukaValue = taluka.value ? taluka.value : '';
-  let villageValue = village.value ? village.value : '';
-  let addressValue = address.value;
-  let landmarkValue = landmark.value ? landmark.value : '';
-  let postOfficeValue = postOffice.value ? postOffice.value : '';
+  let districtValue = getFormattedAndRightValues(district.value);
+  let talukaValue = getFormattedAndRightValues(taluka.value ? taluka.value : '');
+  let villageValue = getFormattedAndRightValues(village.value ? village.value : '');
+  let addressValue = getFormattedAndRightValues(address.value);
+  let landmarkValue = getFormattedAndRightValues(landmark.value ? landmark.value : '');
+  let postOfficeValue = getFormattedAndRightValues(postOffice.value ? postOffice.value : '');
 
   let baOrder = {
-    name: name.value,
+    name: getFormattedAndRightValues(name.value),
     mobile: mobile.value,
     pincode: pincode.value,
     state: state,
-    district: district.value,
-    taluka: talukaValue,
-    village: villageValue,
-    address: address.value,
-    landmark: landmarkValue,
-    postOffice: postOfficeValue,
+    district: getFormattedAndRightValues(district.value),
+    taluka: getFormattedAndRightValues(talukaValue),
+    village: getFormattedAndRightValues(villageValue),
+    address: getFormattedAndRightValues(address.value),
+    landmark: getFormattedAndRightValues(landmarkValue),
+    postOffice: getFormattedAndRightValues(postOfficeValue),
     // is_confirmation_popup: highRiskProductFlag,
     is_confirmation_popup: false
   }
@@ -1847,6 +1847,19 @@ function getBaOrderObject() {
   }
 
   return baO2;
+}
+
+function getFormattedAndRightValues(value) {
+  // Matches any character not a-z, A-Z, 0-9, space, dot, slash or comma
+  const pattern = /[^a-zA-Z0-9 .,/]/g;
+  if (value) {
+    let newValue = value.replace(pattern, '');
+    newValue = newValue.replace(/\s+/g, ' ');
+    newValue = newValue.trim();
+    return newValue;
+  } else {
+    return value;
+  }
 }
 
 function baPaymentHandler(res) {
