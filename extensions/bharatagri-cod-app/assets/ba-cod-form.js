@@ -1134,6 +1134,14 @@ function createOrderObject(type) {
   let landmark = document.getElementById('baLandmark');
   let postOffice = document.getElementById('baPostOffice');
 
+  name.value = getFormattedAndRightValues(name.value);
+  address.value = getFormattedAndRightValues(address.value);
+  landmark.value = getFormattedAndRightValues(landmark.value);
+  district.value = getFormattedAndRightValues(district.value);
+  taluka.value = getFormattedAndRightValues(taluka.value);
+  // village.value = getFormattedAndRightValues(village.value);
+  // postOffice.value = getFormattedAndRightValues(postOffice.value);
+
   let validationError = false;
   let prePaidError = false;
 
@@ -1422,6 +1430,13 @@ setInterval(() => {
   let village = document.getElementById('villageName');
   let address = document.getElementById('baAddress');
   let landmark = document.getElementById('baLandmark');
+
+  name.value = getFormattedAndRightValues(name.value);
+  address.value = getFormattedAndRightValues(address.value);
+  landmark.value = getFormattedAndRightValues(landmark.value);
+  district.value = getFormattedAndRightValues(district.value);
+  taluka.value = getFormattedAndRightValues(taluka.value);
+  village.value = getFormattedAndRightValues(village.value);
 
 
   if (name.value) {
@@ -1727,28 +1742,28 @@ function getBaOrderObject() {
   let landmark = document.getElementById('baLandmark');
   let postOffice = document.getElementById('baPostOffice');
 
-  let nameValue = getFormattedAndRightValues(name.value);
+  let nameValue = name.value;
   let mobileValue = mobile.value;
   let  pincodeValue = pincode.value;
   let stateValue = state;
-  let districtValue = getFormattedAndRightValues(district.value);
-  let talukaValue = getFormattedAndRightValues(taluka.value ? taluka.value : '');
-  let villageValue = getFormattedAndRightValues(village.value ? village.value : '');
-  let addressValue = getFormattedAndRightValues(address.value);
-  let landmarkValue = getFormattedAndRightValues(landmark.value ? landmark.value : '');
-  let postOfficeValue = getFormattedAndRightValues(postOffice.value ? postOffice.value : '');
+  let districtValue = district.value;
+  let talukaValue = taluka.value ? taluka.value : '';
+  let villageValue = village.value ? village.value : '';
+  let addressValue = address.value;
+  let landmarkValue = landmark.value ? landmark.value : '';
+  let postOfficeValue =postOffice.value ? postOffice.value : '';
 
   let baOrder = {
-    name: getFormattedAndRightValues(name.value),
+    name: name.value,
     mobile: mobile.value,
     pincode: pincode.value,
     state: state,
-    district: getFormattedAndRightValues(district.value),
-    taluka: getFormattedAndRightValues(talukaValue),
-    village: getFormattedAndRightValues(villageValue),
-    address: getFormattedAndRightValues(address.value),
-    landmark: getFormattedAndRightValues(landmarkValue),
-    postOffice: getFormattedAndRightValues(postOfficeValue),
+    district: district.value,
+    taluka: talukaValue,
+    village: villageValue,
+    address: address.value,
+    landmark: landmarkValue,
+    postOffice: postOfficeValue,
     // is_confirmation_popup: highRiskProductFlag,
     is_confirmation_popup: false
   }
