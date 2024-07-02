@@ -1147,7 +1147,7 @@ function createOrderObject(type) {
 
   resetFormFieldsValidation();
 
-  if (!(name.value)) {
+  if (!(name.value) || name.value.length < 3) {
     name.classList.add('ba-mandatory-field-border');
     document.getElementById('farmerNameRequired').style.display = 'block';
     prePaidError = validationError = true;
@@ -1168,7 +1168,7 @@ function createOrderObject(type) {
     }
   }
 
-  if (!(address.value)) {
+  if (!(address.value) || address.value.length < 3) {
     address.classList.add('ba-mandatory-field-border');
     document.getElementById('baAddressRequired').style.display = 'block';
     if (!validationError) {
@@ -1186,7 +1186,7 @@ function createOrderObject(type) {
     prePaidError = validationError = true;
   }
 
-  if (!district.value) {
+  if (!district.value || district.value.length < 3) {
     district.classList.add('ba-mandatory-field-border');
     document.getElementById('baCodDistrictSelectRequired').style.display = 'block';
     if (!validationError) {
@@ -1439,7 +1439,7 @@ setInterval(() => {
   village.value = getFormattedAndRightValues(village.value);
 
 
-  if (name.value) {
+  if (name.value && name.value.length > 2) {
     name.classList.remove('ba-mandatory-field-border');
     document.getElementById('farmerNameRequired').style.display = 'none';
   }
@@ -1469,7 +1469,7 @@ setInterval(() => {
     document.getElementById('baCodStateSelectRequired').style.display = 'none';
   }
 
-  if (district.value) {
+  if (district.value && district.value.length > 2) {
     district.classList.remove('ba-mandatory-field-border');
     document.getElementById('baCodDistrictSelectRequired').style.display = 'none';
   }
@@ -1484,7 +1484,7 @@ setInterval(() => {
     document.getElementById('villageNameRequired').style.display = 'none';
   }
 
-  if (address.value) {
+  if (address.value && address.value.length > 2) {
     address.classList.remove('ba-mandatory-field-border');
     document.getElementById('baAddressRequired').style.display = 'none';
   }
@@ -1865,8 +1865,8 @@ function getBaOrderObject() {
 }
 
 function getFormattedAndRightValues(value) {
-  // Matches any character not a-z, A-Z, 0-9, space, dot, slash or comma
-  const pattern = /[^a-zA-Z0-9 .,/]/g;
+  // Matches any character not a-z, A-Z, 0-9, hindi, marathi, space, dot, slash or comma
+  const pattern = /[^a-zA-Z0-9\u0900-\u097F .,]/g;
   if (value) {
     let newValue = value.replace(pattern, '');
     newValue = newValue.replace(/\s+/g, ' ');
