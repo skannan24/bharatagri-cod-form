@@ -332,6 +332,8 @@ document.getElementById('baCodOtpCancelBtn').innerHTML = baCodOtpCancelLabel;
 document.getElementById('baCodOtpFooter').innerHTML = baCodOtpFooterLabel;
 document.getElementById('baCodOtpInvalid').innerHTML = baCodOtpInvalidLabel;
 
+document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
+
 
 document.getElementById('baCreditBanner').src = `https://shopify-krushidukan.leanagri.com/ba-cod-form-images/ba_credit_${lang}.webp`;
 
@@ -1071,6 +1073,7 @@ function applyCouponCodes(couponCode, couponObj, scrollFlag, showPopup) {
 
 let stateId = '';
 let districtId = '';
+let talukaId = '';
 let stateName = '';
 let districtName = '';
 let talukaName = '';
@@ -1111,8 +1114,58 @@ function setStates() {
 
     let stateOptionsBtn = document.createElement('option');
     stateOptionsBtn.innerHTML = stateName;
-    stateOptionsBtn.value = stateList[i].name_en;
+    stateOptionsBtn.value = stateList[i].id;
     stateDiv.add(stateOptionsBtn);
+  }
+}
+
+function loadDistricts(stateId, did = '', dname = '') {
+  document.getElementById('ba-cod-district-loader').style.display = 'inline-block';
+  let requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  fetch(`https://api-cache.leanagri.com/location/district_list/en/${stateId}/district_list.json`, requestOptions)
+    .then(response => {
+      if (response.status === 200) {
+        response.json().then(result => {
+          document.getElementById('ba-cod-district-loader').style.display = 'none';
+          setDistricts(result.data, did, dname);
+        });
+      } else {
+        console.log('Unable to fetch district list');
+        document.getElementById('ba-cod-district-loader').style.display = 'none';
+      }
+    }).catch(error => {
+    document.getElementById('ba-cod-district-loader').style.display = 'none';
+    console.log('error: ', error);
+  });
+}
+
+function setDistricts(districtList, did = '', dname = '') {
+  let districtDiv = document.getElementById('baCodDistrictSelect');
+  districtDiv.addEventListener("change", function() {
+    onSelectBoxDistrictChange(this);
+  });
+  const districtOptionFirstLabel = document.getElementById('baCodDistrictSelectLabel');
+  replaceChildrenAlternative2(districtDiv);
+  districtOptionFirstLabel.innerHTML = districtLabel;
+  districtDiv.add(districtOptionFirstLabel);
+
+  console.log(districtList);
+
+  for (let i = 0; i < districtList.length; i++) {
+    // let stateName = lang === 'en' ? stateList[i].name_en : ( lang === 'mr' ? stateList[i].name_mr : stateList[i].name_hi);
+    let districtName = districtList[i].name_en;
+
+    let districtOptionsBtn = document.createElement('option');
+    districtOptionsBtn.innerHTML = districtName;
+    districtOptionsBtn.value = districtList[i].id;
+    districtDiv.add(districtOptionsBtn);
+  }
+
+  if (did) {
+    document.getElementById('baCodDistrictSelect').value = did;
   }
 }
 
@@ -1126,8 +1179,9 @@ function createOrderObject(type) {
   let mobile = document.getElementById('farmerMobile');
   let pincode = document.getElementById('baCodPincode');
   let stateField = document.getElementById('baCodStateSelect');
+  let districtField = document.getElementById('baCodDistrictSelect');
   let state = stateNameEn;
-  let district = document.getElementById('baCodDistrictSelect');
+  let district = districtNameEn;
   let taluka = document.getElementById('talukaName');
   let village = document.getElementById('villageName');
   let address = document.getElementById('baAddress');
@@ -1137,7 +1191,7 @@ function createOrderObject(type) {
   name.value = getFormattedAndRightValues(name.value);
   address.value = getFormattedAndRightValues(address.value);
   landmark.value = getFormattedAndRightValues(landmark.value);
-  district.value = getFormattedAndRightValues(district.value);
+  // district.value = getFormattedAndRightValues(district.value);
   taluka.value = getFormattedAndRightValues(taluka.value);
   // village.value = getFormattedAndRightValues(village.value);
   // postOffice.value = getFormattedAndRightValues(postOffice.value);
@@ -1177,7 +1231,7 @@ function createOrderObject(type) {
     prePaidError = validationError = true;
   }
 
-  if (!state) {
+  if (!stateId) {
     stateField.classList.add('ba-mandatory-field-border');
     document.getElementById('baCodStateSelectRequired').style.display = 'block';
     if (!validationError) {
@@ -1186,8 +1240,8 @@ function createOrderObject(type) {
     prePaidError = validationError = true;
   }
 
-  if (!district.value || district.value.length < 3) {
-    district.classList.add('ba-mandatory-field-border');
+  if (!districtId) {
+    districtField.classList.add('ba-mandatory-field-border');
     document.getElementById('baCodDistrictSelectRequired').style.display = 'block';
     if (!validationError) {
       baScrollToId('baCodDistrictSelect');
@@ -1424,8 +1478,9 @@ setInterval(() => {
   let mobile = document.getElementById('farmerMobile');
   let pincode = document.getElementById('baCodPincode');
   let stateField = document.getElementById('baCodStateSelect');
-  let district = document.getElementById('baCodDistrictSelect');
+  let districtField = document.getElementById('baCodDistrictSelect');
   let state = stateName;
+  let district = districtNameEn;
   let taluka = document.getElementById('talukaName');
   let village = document.getElementById('villageName');
   let address = document.getElementById('baAddress');
@@ -1434,7 +1489,7 @@ setInterval(() => {
   name.value = getFormattedAndRightValues(name.value);
   address.value = getFormattedAndRightValues(address.value);
   landmark.value = getFormattedAndRightValues(landmark.value);
-  district.value = getFormattedAndRightValues(district.value);
+  // district.value = getFormattedAndRightValues(district.value);
   taluka.value = getFormattedAndRightValues(taluka.value);
   village.value = getFormattedAndRightValues(village.value);
 
@@ -1464,13 +1519,13 @@ setInterval(() => {
     }
   }
 
-  if (state) {
+  if (stateId) {
     stateField.classList.remove('ba-mandatory-field-border');
     document.getElementById('baCodStateSelectRequired').style.display = 'none';
   }
 
-  if (district.value && district.value.length > 2) {
-    district.classList.remove('ba-mandatory-field-border');
+  if (districtId) {
+    districtField.classList.remove('ba-mandatory-field-border');
     document.getElementById('baCodDistrictSelectRequired').style.display = 'none';
   }
 
@@ -1735,7 +1790,7 @@ function getBaOrderObject() {
   let pincode = document.getElementById('baCodPincode');
   let stateField = document.getElementById('baCodStateSelect');
   let state = stateNameEn;
-  let district = document.getElementById('baCodDistrictSelect');
+  let district = districtNameEn;
   let taluka = document.getElementById('talukaName');
   let village = document.getElementById('villageName');
   let address = document.getElementById('baAddress');
@@ -1746,7 +1801,7 @@ function getBaOrderObject() {
   let mobileValue = mobile.value;
   let  pincodeValue = pincode.value;
   let stateValue = state;
-  let districtValue = district.value;
+  let districtValue = district;
   let talukaValue = taluka.value ? taluka.value : '';
   let villageValue = village.value ? village.value : '';
   let addressValue = address.value;
@@ -1758,9 +1813,11 @@ function getBaOrderObject() {
     mobile: mobile.value,
     pincode: pincode.value,
     state: state,
-    district: district.value,
+    district: district,
     taluka: talukaValue,
     village: villageValue,
+    stateId,
+    districtId,
     address: address.value,
     landmark: landmarkValue,
     postOffice: postOfficeValue,
@@ -2218,13 +2275,21 @@ function autoFillUserDetails() {
       sendBaCodGEvents('ba_cod_auto_address', {'ba_phone_number': info.value});
       document.getElementById('farmerMobile').value = info.value;
     }
-    if (info.name === 'state') {
+    if (info.name === 'stateId') {
       document.getElementById('baCodStateSelect').value = info.value;
+      stateId = info.value;
+    }
+    if (info.name === 'state') {
       stateName = info.value;
       stateNameEn = info.value;
     }
-    if (info.name === 'district') {
+    if (info.name === 'districtId') {
       document.getElementById('baCodDistrictSelect').value = info.value;
+      districtId = info.value;
+    }
+    if (info.name === 'district') {
+      districtName = info.value;
+      districtNameEn = info.value;
     }
     if (info.name === 'taluka') {
       document.getElementById('talukaName').value = info.value;
@@ -2301,6 +2366,7 @@ function resetCodFormFields() {
 function resetLocationFields() {
   stateId = '';
   districtId = '';
+  talukaId = '';
   stateName = '';
   stateNameEn = '';
   districtName = '';
@@ -2345,21 +2411,47 @@ function resetFormFieldsValidation() {
   document.getElementById('baLandmarkRequired').style.display = 'none';
 }
 
+function resetDistrictValues() {
+  districtId = '';
+  districtNameEn = '';
+  districtName = '';
+}
+
+function resetTalukaValues() {
+  talukaId = '';
+  talukaNameEn = '';
+  talukaName = '';
+}
+
 function onSelectBoxStateChange(selectValue) {
   stateName = selectValue.options[selectValue.selectedIndex].text;
-  stateNameEn = selectValue.options[selectValue.selectedIndex].value;
+  stateNameEn = selectValue.options[selectValue.selectedIndex].text;
+  stateId = selectValue.options[selectValue.selectedIndex].value;
+  resetDistrictValues();
+  resetTalukaValues();
+  loadDistricts(stateId);
 }
 
-function setStateFromPincode(id, name, nameEn) {
-  document.getElementById('baCodStateSelect').value = nameEn;
+function onSelectBoxDistrictChange(selectValue) {
+  console.log('district change', selectValue);
+  districtName = selectValue.options[selectValue.selectedIndex].text;
+  districtNameEn = selectValue.options[selectValue.selectedIndex].text;
+  districtId = selectValue.options[selectValue.selectedIndex].value;
+  resetTalukaValues();
+}
+
+function setStateFromPincode(id, name, nameEn, tid, tName) {
+  document.getElementById('baCodStateSelect').value = id;
   stateName = name;
   stateNameEn = nameEn;
+  stateId = id;
 }
 
-function setDistrictFromPincode(id, name, nameEn) {
+function setDistrictFromPincode(id, name, nameEn, sid) {
   districtName = name;
   districtNameEn = nameEn;
-  document.getElementById('baCodDistrictSelect').value = nameEn;
+  districtId = id;
+  loadDistricts(sid, id, name);
 }
 
 function setTalukaFromPincode(id, name, nameEn) {
@@ -2368,49 +2460,26 @@ function setTalukaFromPincode(id, name, nameEn) {
   document.getElementById('talukaName').value = nameEn;
 }
 
-function onStateClick(id, name, nameEn) {
-  // document.getElementById('baCodStateSelect').innerHTML = name.length > 18 ? name.slice(0,18) + '..' : name;
-  // document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
-  stateId = id;
-  stateName = name;
-  stateNameEn = nameEn;
-  districtId = '';
-  districtName = '';
-  districtNameEn = '';
-  loadDistricts(id);
-}
+// function onStateClick(id, name, nameEn) {
+//   // document.getElementById('baCodStateSelect').innerHTML = name.length > 18 ? name.slice(0,18) + '..' : name;
+//   // document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
+//   stateId = id;
+//   stateName = name;
+//   stateNameEn = nameEn;
+//   districtId = '';
+//   districtName = '';
+//   districtNameEn = '';
+//   loadDistricts(id);
+// }
+//
+// function onDistrictClick(id, name, nameEn) {
+//   districtId = id;
+//   districtName = name;
+//   districtNameEn = nameEn;
+//   // document.getElementById('baCodDistrictSelectLabel').innerHTML = name.length > 18 ? name.slice(0,18) + '..' : name;
+// }
 
-function onDistrictClick(id, name, nameEn) {
-  districtId = id;
-  districtName = name;
-  districtNameEn = nameEn;
-  // document.getElementById('baCodDistrictSelectLabel').innerHTML = name.length > 18 ? name.slice(0,18) + '..' : name;
-}
-
-function loadDistricts(stateId) {
-  document.getElementById('ba-cod-district-loader').style.display = 'inline-block';
-  let requestOptions = {
-    method: 'GET',
-    redirect: 'follow'
-  };
-  fetch(`https://api-cache.leanagri.com/location/district_list/en/${stateId}/district_list.json`, requestOptions)
-    .then(response => {
-      if (response.status === 200) {
-        response.json().then(result => {
-          document.getElementById('ba-cod-district-loader').style.display = 'none';
-          setDistricts(result.data);
-        });
-      } else {
-        console.log('Unable to fetch district list');
-        document.getElementById('ba-cod-district-loader').style.display = 'none';
-      }
-    }).catch(error => {
-    document.getElementById('ba-cod-district-loader').style.display = 'none';
-    console.log('error: ', error);
-  });
-}
-
-function setDistricts(districts) {
+// function setDistricts(districts) {
   // const districtDiv = document.getElementById('baCodDistrictOptions');
   // replaceChildrenAlternative(districtDiv);
   //
@@ -2431,7 +2500,7 @@ function setDistricts(districts) {
   //   districtOptionsBtn.addEventListener("click", function(){ onDistrictClick(stateList[i].id, districtName, districts[i].name_en); });
   //   districtDiv.appendChild(districtOptionsBtn);
   // }
-}
+// }
 
 function onInputElementClick(fieldName) {
   let mobileValue = document.getElementById('farmerMobile').value;
@@ -2608,7 +2677,7 @@ function setPincodeLocation(data) {
       if (type === 'state') {
         setStateFromPincode(dataItem.id, name, dataItem.name_en)
       } else if (type === 'district') {
-        setDistrictFromPincode(dataItem.id, name, dataItem.name_en);
+        setDistrictFromPincode(dataItem.id, name, dataItem.name_en, data.state.id);
       } else {
         setTalukaFromPincode(dataItem.id, name, dataItem.name_en);
       }

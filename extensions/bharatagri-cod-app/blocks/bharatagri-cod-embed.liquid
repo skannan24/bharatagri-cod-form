@@ -156,10 +156,13 @@
 
           <div class="row mt-3 pb-2">
             <div class="col-12">
-              <div class="ba-cod-input-container">
-                <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="District" />
-                <input onclick="onInputElementClick('district')" class="ba-cod-input-box form-control ba-cod-input-field" id="baCodDistrictSelect"
-                       maxlength="150" name="city" placeholder="District"/>
+              <div class="form-group has-float-label dropdown mb-0" style="display: flex; align-items: center;">
+                <select onclick="onInputElementClick('district')" id="baCodDistrictSelect" class="ba-cod-select-box form-control ba-form-select ba-cod-input-field">
+                  <option id="baCodDistrictSelectLabel" value="">Select district</option>
+                </select>
+                <div id="ba-cod-district-loader" style="display: none" class="spinner-border text-secondary ml-2" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
               </div>
               <span id="baCodDistrictSelectRequired" class="ba-mandatory-field-text pl-1">Enter District</span>
             </div>
