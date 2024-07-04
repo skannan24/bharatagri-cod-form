@@ -170,10 +170,13 @@
 
           <div class="row mt-3 pb-2">
             <div class="col-12">
-              <div class="ba-cod-input-container">
+              <div class="ba-assist-dropdown">
                 <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Taluka" />
                 <input onclick="onInputElementClick('taluka')" class="ba-cod-input-box form-control ba-cod-input-field" id="talukaName"
-                       maxlength="180" name="Taluka" placeholder="Taluka"/>
+                       maxlength="180" name="Taluka" placeholder="Taluka" onkeyup="baFilterDropdownFunction('talukaName', 'baCodTalukaDropdown')"/>
+                <div id="baCodTalukaDropdown" class="ba-assist-dropdown-content">
+                  <!-- Dropdown options will be set from the DOM -->
+                </div>
               </div>
               <span id="talukaNameRequired" class="ba-mandatory-field-text pl-1">Enter taluka</span>
             </div>

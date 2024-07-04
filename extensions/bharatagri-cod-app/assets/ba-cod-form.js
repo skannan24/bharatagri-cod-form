@@ -1144,18 +1144,23 @@ function loadDistricts(stateId, did = '', dname = '') {
 
 function setDistricts(districtList, did = '', dname = '') {
   let districtDiv = document.getElementById('baCodDistrictSelect');
+
+  districtDiv.removeEventListener("change", onSelectBoxDistrictChange);
+
   districtDiv.addEventListener("change", function() {
     onSelectBoxDistrictChange(this);
   });
-  const districtOptionFirstLabel = document.getElementById('baCodDistrictSelectLabel');
+
+  const districtOptionFirstLabel = document.createElement('option');
+  districtOptionFirstLabel.innerHTML = 'Select District';
+  districtOptionFirstLabel.value = '';
+
   replaceChildrenAlternative2(districtDiv);
-  districtOptionFirstLabel.innerHTML = districtLabel;
   districtDiv.add(districtOptionFirstLabel);
 
   console.log(districtList);
 
   for (let i = 0; i < districtList.length; i++) {
-    // let stateName = lang === 'en' ? stateList[i].name_en : ( lang === 'mr' ? stateList[i].name_mr : stateList[i].name_hi);
     let districtName = districtList[i].name_en;
 
     let districtOptionsBtn = document.createElement('option');
@@ -1165,8 +1170,29 @@ function setDistricts(districtList, did = '', dname = '') {
   }
 
   if (did) {
-    document.getElementById('baCodDistrictSelect').value = did;
+    districtDiv.value = did;
   }
+}
+
+function loadTalukas(districtId, tid = '', tname = '') {
+  let requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  fetch(`https://api-cache.leanagri.com/location/taluka_list/en/${districtId}/taluka_list.json`, requestOptions)
+    .then(response => {
+      if (response.status === 200) {
+        response.json().then(result => {
+          setBaAssistDropdownOptions(result.data, 'baCodTalukaDropdown', 'talukaName', tname);
+        });
+      } else {
+        setBaAssistDropdownOptions([], 'baCodTalukaDropdown', 'talukaName', tname);
+        console.log('Unable to fetch taluka list');
+      }
+    }).catch(error => {
+    setBaAssistDropdownOptions([], 'baCodTalukaDropdown', 'talukaName', tname);
+    console.log('error: ', error);
+  });
 }
 
 function createOrderObject(type) {
@@ -1818,6 +1844,7 @@ function getBaOrderObject() {
     village: villageValue,
     stateId,
     districtId,
+    talukaId: talukaId ? talukaId : '',
     address: address.value,
     landmark: landmarkValue,
     postOffice: postOfficeValue,
@@ -2292,8 +2319,13 @@ function autoFillUserDetails() {
       districtName = info.value;
       districtNameEn = info.value;
     }
+    if (info.name === 'talukaId') {
+      talukaId = info.value ? info.value : '';
+    }
     if (info.name === 'taluka') {
       document.getElementById('talukaName').value = info.value;
+      talukaName = info.value;
+      talukaNameEn = info.value;
     }
     if (info.name === 'address') {
       document.getElementById('baAddress').value = info.value;
@@ -2305,6 +2337,14 @@ function autoFillUserDetails() {
       document.getElementById('baCodPincode').value = info.value;
     }
   } );
+
+  if (stateId) {
+    loadDistricts(stateId, districtId ? districtId : '', districtNameEn ? districtNameEn : '');
+  }
+
+  if (districtId) {
+    loadTalukas(districtId, talukaId ? talukaId : '',talukaNameEn ? talukaNameEn : '');
+  }
 }
 
 function resetPlaceOrderButton() {
@@ -2439,6 +2479,7 @@ function onSelectBoxDistrictChange(selectValue) {
   districtNameEn = selectValue.options[selectValue.selectedIndex].text;
   districtId = selectValue.options[selectValue.selectedIndex].value;
   resetTalukaValues();
+  loadTalukas(districtId);
 }
 
 function setStateFromPincode(id, name, nameEn, tid, tName) {
@@ -2455,10 +2496,12 @@ function setDistrictFromPincode(id, name, nameEn, sid) {
   loadDistricts(sid, id, name);
 }
 
-function setTalukaFromPincode(id, name, nameEn) {
+function setTalukaFromPincode(id, name, nameEn, did) {
   talukaName = name;
   talukaNameEn = nameEn;
+  talukaId = id;
   document.getElementById('talukaName').value = nameEn;
+  loadTalukas(did, id, name);
 }
 
 // function onStateClick(id, name, nameEn) {
@@ -2504,6 +2547,10 @@ function setTalukaFromPincode(id, name, nameEn) {
 // }
 
 function onInputElementClick(fieldName) {
+  if (fieldName === 'taluka') {
+    baScrollToId('talukaName');
+  }
+
   let mobileValue = document.getElementById('farmerMobile').value;
   if (mobileValue && mobileValue.length === 10) {
     sendBaCodGEvents('BA_cart_phn', {
@@ -2650,7 +2697,7 @@ function loadBaLocation(value) {
             if (result.data) {setPincodeLocation(result.data);}
           });
         } else {
-          resetTalukaAndVillage();
+          // resetTalukaAndVillage();
           console.log('Unable to get location');
         }
       }).catch(error => {
@@ -2680,7 +2727,7 @@ function setPincodeLocation(data) {
       } else if (type === 'district') {
         setDistrictFromPincode(dataItem.id, name, dataItem.name_en, data.state.id);
       } else {
-        setTalukaFromPincode(dataItem.id, name, dataItem.name_en);
+        setTalukaFromPincode(dataItem.id, name, dataItem.name_en, data.district.id);
       }
     }
   });
@@ -3045,6 +3092,61 @@ function getBaMobileValueWithFormat() {
 function getBaMobileValueTenDigits() {
   return document.getElementById('farmerMobile').value;
 }
+
+// Functions to handle assisted dropdowns
+
+// Function to set dropdown options from the DOM
+function setBaAssistDropdownOptions(options, dropdownId, inputId, inputValue) {
+  let dropdown = document.getElementById(dropdownId);
+  dropdown.innerHTML = ""; // Clear existing options
+  options.forEach(function(option) {
+    let span = document.createElement("span");
+    span.textContent = option.name_en;
+    span.onclick = function() {
+      document.getElementById(inputId).value = option.name_en;
+      dropdown.classList.remove("ba-assist-show");
+      handleBaAssistDropdownOptionClick(option.id, option.name_en);
+    };
+    dropdown.appendChild(span);
+  });
+
+  if (!inputValue) {
+    document.getElementById(inputId).value = '';
+  }
+}
+
+function baFilterDropdownFunction(inputId, dropdownId) {
+  var input, filter, div, span, i, txtValue;
+  input = document.getElementById(inputId);
+  filter = input.value.toUpperCase();
+  div = document.getElementById(dropdownId);
+  span = div.getElementsByTagName("span");
+  for (i = 0; i < span.length; i++) {
+    txtValue = span[i].textContent || span[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      span[i].style.display = "";
+    } else {
+      span[i].style.display = "none";
+    }
+  }
+  div.classList.add("ba-assist-show");
+}
+
+function handleBaAssistDropdownOptionClick(id, name) {
+  console.log("Dropdown option clicked: " + id + ', ' + name);
+  // Village actions will be done here.
+}
+
+document.addEventListener("click", function(event) {
+  let baCodTalukaDropdown = document.getElementById("baCodTalukaDropdown");
+  let baCodTalukaInput = document.getElementById("talukaName");
+  if (event.target !== baCodTalukaInput && !baCodTalukaInput.contains(event.target)) {
+    baCodTalukaDropdown.classList.remove("ba-assist-show");
+  }
+});
+
+// end of assisted dropdown functions
+
 
 function onConfirmationModalClick(value) {
   // document.getElementById('ba-cod-confirm-no-btn').disabled = true;
