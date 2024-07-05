@@ -2530,7 +2530,6 @@ function onSelectBoxStateChange(selectValue) {
 }
 
 function onSelectBoxDistrictChange(selectValue) {
-  console.log('district change', selectValue);
   districtName = selectValue.options[selectValue.selectedIndex].text;
   districtNameEn = selectValue.options[selectValue.selectedIndex].text;
   districtId = selectValue.options[selectValue.selectedIndex].value;
