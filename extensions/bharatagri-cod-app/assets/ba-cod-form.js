@@ -51,7 +51,7 @@ let pincodeLabel = 'पिनकोड';
 let stateLabel = 'राज्य';
 let districtLabel = 'ज़िला';
 let talukaLabel = 'तहसील';
-let villageLabel = 'Village';
+let villageLabel = 'गावं';
 let addressLabel = 'मकान नंबर, रोड, कॉलोनी';
 let landmarkLabel = 'लैंडमार्क (उदाहरण: गोपाल मंदिर के पास)';
 let postOfficeLabel = 'डाकघर (वैकल्पिक)';
@@ -209,7 +209,7 @@ if (lang === 'mr') {
   stateLabel = 'राज्य';
   districtLabel = 'ज़िला';
   talukaLabel = 'तहसील';
-  villageLabel = 'Village';
+  villageLabel = 'गावं';
   addressLabel = 'घर क्रमांक, रस्ता, कॉलनी';
   landmarkLabel = 'लैंडमार्क (उदाहरण: गोपाळ मंदिराजवळ)';
   postOfficeLabel = 'पोस्ट ऑफिस (पर्यायी)';
@@ -1074,12 +1074,15 @@ function applyCouponCodes(couponCode, couponObj, scrollFlag, showPopup) {
 let stateId = '';
 let districtId = '';
 let talukaId = '';
+let villageId = '';
 let stateName = '';
 let districtName = '';
 let talukaName = '';
+let villageName = '';
 let stateNameEn = '';
 let districtNameEn = '';
 let talukaNameEn = '';
+let villageNameEn = '';
 let numericalNumberRegex = /^[0-9]+$/;
 
 let stateList = [];
@@ -1195,6 +1198,27 @@ function loadTalukas(districtId, tid = '', tname = '') {
   });
 }
 
+function loadVillages(talukaId, vid = '', vname = '') {
+  let requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  fetch(`https://api-cache.leanagri.com/location/village_list/en/${talukaId}/village_list.json`, requestOptions)
+    .then(response => {
+      if (response.status === 200) {
+        response.json().then(result => {
+          setBaAssistDropdownOptions(result.data, 'baCodVillageDropdown', 'villageName', vname);
+        });
+      } else {
+        setBaAssistDropdownOptions([], 'baCodVillageDropdown', 'villageName', vname);
+        console.log('Unable to fetch taluka list');
+      }
+    }).catch(error => {
+    setBaAssistDropdownOptions([], 'baCodVillageDropdown', 'villageName', vname);
+    console.log('error: ', error);
+  });
+}
+
 function createOrderObject(type) {
   sendBaCodGEvents('ba_cod_order_submit_click', {});
   document.getElementById('ba-cod-create-order-button').disabled = true;
@@ -1219,7 +1243,7 @@ function createOrderObject(type) {
   landmark.value = getFormattedAndRightValues(landmark.value);
   // district.value = getFormattedAndRightValues(district.value);
   taluka.value = getFormattedAndRightValues(taluka.value);
-  // village.value = getFormattedAndRightValues(village.value);
+  village.value = getFormattedAndRightValues(village.value);
   // postOffice.value = getFormattedAndRightValues(postOffice.value);
 
   let validationError = false;
@@ -1280,6 +1304,15 @@ function createOrderObject(type) {
     document.getElementById('talukaNameRequired').style.display = 'block';
     if (!validationError) {
       baScrollToId('talukaName');
+    }
+    prePaidError = validationError = true;
+  }
+
+  if (!village.value) {
+    village.classList.add('ba-mandatory-field-border');
+    document.getElementById('villageNameRequired').style.display = 'block';
+    if (!validationError) {
+      baScrollToId('villageName');
     }
     prePaidError = validationError = true;
   }
@@ -1845,6 +1878,7 @@ function getBaOrderObject() {
     stateId,
     districtId,
     talukaId: talukaId ? talukaId : '',
+    villageId: villageId ? villageId : '',
     address: address.value,
     landmark: landmarkValue,
     postOffice: postOfficeValue,
@@ -2327,6 +2361,14 @@ function autoFillUserDetails() {
       talukaName = info.value;
       talukaNameEn = info.value;
     }
+    if (info.name === 'villageId') {
+      villageId = info.value ? info.value : '';
+    }
+    if (info.name === 'village') {
+      document.getElementById('villageName').value = info.value;
+      villageName = info.value;
+      villageNameEn = info.value;
+    }
     if (info.name === 'address') {
       document.getElementById('baAddress').value = info.value;
     }
@@ -2344,6 +2386,10 @@ function autoFillUserDetails() {
 
   if (districtId) {
     loadTalukas(districtId, talukaId ? talukaId : '',talukaNameEn ? talukaNameEn : '');
+  }
+
+  if (talukaId) {
+    loadVillages(talukaId, villageId ? villageId : '',villageNameEn ? villageNameEn : '');
   }
 }
 
@@ -2408,12 +2454,15 @@ function resetLocationFields() {
   stateId = '';
   districtId = '';
   talukaId = '';
+  villageId = '';
   stateName = '';
   stateNameEn = '';
   districtName = '';
   districtNameEn = '';
   talukaName = '';
   talukaNameEn = '';
+  villageName = '';
+  villageNameEn = '';
   document.getElementById('baCodStateSelect').value = '';
   document.getElementById('baCodDistrictSelect').value = '';
   // document.getElementById('baCodStateSelectLabel').innerHTML = stateLabel;
@@ -2464,12 +2513,19 @@ function resetTalukaValues() {
   talukaName = '';
 }
 
+function resetVillageValues() {
+  villageId = '';
+  villageNameEn = '';
+  villageName = '';
+}
+
 function onSelectBoxStateChange(selectValue) {
   stateName = selectValue.options[selectValue.selectedIndex].text;
   stateNameEn = selectValue.options[selectValue.selectedIndex].text;
   stateId = selectValue.options[selectValue.selectedIndex].value;
   resetDistrictValues();
   resetTalukaValues();
+  resetVillageValues();
   loadDistricts(stateId);
 }
 
@@ -2479,6 +2535,7 @@ function onSelectBoxDistrictChange(selectValue) {
   districtNameEn = selectValue.options[selectValue.selectedIndex].text;
   districtId = selectValue.options[selectValue.selectedIndex].value;
   resetTalukaValues();
+  resetVillageValues();
   loadTalukas(districtId);
 }
 
@@ -2502,6 +2559,14 @@ function setTalukaFromPincode(id, name, nameEn, did) {
   talukaId = id;
   document.getElementById('talukaName').value = nameEn;
   loadTalukas(did, id, name);
+}
+
+function setVillageFromPincode(id, name, nameEn, tid) {
+  villageName = name;
+  villageNameEn = nameEn;
+  villageId = id;
+  document.getElementById('villageName').value = nameEn;
+  loadVillages(tid, id, name);
 }
 
 // function onStateClick(id, name, nameEn) {
@@ -2549,6 +2614,10 @@ function setTalukaFromPincode(id, name, nameEn, did) {
 function onInputElementClick(fieldName) {
   if (fieldName === 'taluka') {
     baScrollToId('talukaName');
+  }
+
+  if (fieldName === 'village') {
+    baScrollToId('villageName');
   }
 
   let mobileValue = document.getElementById('farmerMobile').value;
@@ -2718,19 +2787,25 @@ function setPincodeLocation(data) {
   // updateElement('talukaName', data?.taluka);
   // updateElement('villageName', data?.village);
 
-  ['state', 'district', 'taluka'].forEach((type) => {
-    const dataItem = data[type];
-    if (dataItem) {
-      let name = dataItem[langKey] || dataItem.name;
-      if (type === 'state') {
-        setStateFromPincode(dataItem.id, name, dataItem.name_en)
-      } else if (type === 'district') {
-        setDistrictFromPincode(dataItem.id, name, dataItem.name_en, data.state.id);
-      } else {
-        setTalukaFromPincode(dataItem.id, name, dataItem.name_en, data.district.id);
+  try {
+    ['state', 'district', 'taluka', 'village'].forEach((type) => {
+      const dataItem = data[type];
+      if (dataItem) {
+        let name = dataItem[langKey] || dataItem.name;
+        if (type === 'state') {
+          setStateFromPincode(dataItem.id, name, dataItem.name_en)
+        } else if (type === 'district') {
+          setDistrictFromPincode(dataItem.id, name, dataItem.name_en, data.state.id);
+        } else if (type === 'taluka') {
+          setTalukaFromPincode(dataItem.id, name, dataItem.name_en, data.district.id);
+        } else {
+          setVillageFromPincode(dataItem.id, name, dataItem.name_en, data.taluka.id);
+        }
       }
-    }
-  });
+    });
+  } catch (error) {
+    console.log('Error in setting location from pincode');
+  }
 }
 
 function checkPincodeServiceability(value) {
@@ -3105,7 +3180,10 @@ function setBaAssistDropdownOptions(options, dropdownId, inputId, inputValue) {
     span.onclick = function() {
       document.getElementById(inputId).value = option.name_en;
       dropdown.classList.remove("ba-assist-show");
-      handleBaAssistDropdownOptionClick(option.id, option.name_en);
+      if (inputId === 'talukaName') {
+        resetVillageValues();
+        loadVillages(option.id);
+      }
     };
     dropdown.appendChild(span);
   });
@@ -3132,16 +3210,17 @@ function baFilterDropdownFunction(inputId, dropdownId) {
   div.classList.add("ba-assist-show");
 }
 
-function handleBaAssistDropdownOptionClick(id, name) {
-  console.log("Dropdown option clicked: " + id + ', ' + name);
-  // Village actions will be done here.
-}
-
 document.addEventListener("click", function(event) {
   let baCodTalukaDropdown = document.getElementById("baCodTalukaDropdown");
   let baCodTalukaInput = document.getElementById("talukaName");
+
+  let baCodVillageDropdown = document.getElementById("baCodVillageDropdown");
+  let baCodVillageInput = document.getElementById("villageName");
   if (event.target !== baCodTalukaInput && !baCodTalukaInput.contains(event.target)) {
     baCodTalukaDropdown.classList.remove("ba-assist-show");
+  }
+  if (event.target !== baCodVillageInput && !baCodVillageInput.contains(event.target)) {
+    baCodVillageDropdown.classList.remove("ba-assist-show");
   }
 });
 
