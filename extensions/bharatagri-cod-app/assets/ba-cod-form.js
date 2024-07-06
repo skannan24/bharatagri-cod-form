@@ -1848,7 +1848,7 @@ function getBaOrderObject() {
   let mobile = document.getElementById('farmerMobile');
   let pincode = document.getElementById('baCodPincode');
   let stateField = document.getElementById('baCodStateSelect');
-  let state = stateNameEn;
+  let state = getStateNameInEnglish();
   let district = districtNameEn;
   let taluka = document.getElementById('talukaName');
   let village = document.getElementById('villageName');
@@ -1993,6 +1993,14 @@ function getFormattedAndRightValues(value) {
     return newValue;
   } else {
     return value;
+  }
+}
+
+function getStateNameInEnglish() {
+  for (let i = 0; i < stateList.length; i++) {
+    if (Number(stateId) === Number(stateList[i].id)) {
+      return stateList[i].name_en;
+    }
   }
 }
 
