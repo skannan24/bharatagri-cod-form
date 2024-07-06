@@ -2240,7 +2240,7 @@ function updateOnlinePaymentPrice(price) {
   let baCodAmount = Number(price);
   let baOnlineDiscount = getOnlinePayDiscountAmount();
   let baOnlineAmount = Number(price)- baOnlineDiscount;
-  if (price.toString().includes('.')) {
+  if (price.toString().indexOf('.') !== -1) {
     baOnlineAmount = baOnlineAmount.toFixed(2);
     baCodAmount = baCodAmount.toFixed(2);
   }
