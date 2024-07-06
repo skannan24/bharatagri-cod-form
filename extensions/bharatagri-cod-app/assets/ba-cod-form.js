@@ -1375,13 +1375,21 @@ function createOrderObject(type) {
       document.getElementById('ba-cod-footer-online-btn-loader').style.display = 'inline-block';
       document.getElementById('ba-cod-footer-online-amount').style.display = 'none';
       let onlineAmount = getOnlinePaymentPrice();
-      generateBaRazorpayOrder(mobile.value, onlineAmount, name.value);
+      if (onlineAmount && Number(onlineAmount) > 1) {
+        generateBaRazorpayOrder(mobile.value, onlineAmount, name.value);
+      } else {
+        resetCodFooter();
+      }
     } else if (type === 'emi' && !prePaidError) {
       sendBaCodGEvents('ba_cod_order_submit_emi_pay', {});
       document.getElementById('ba-cod-footer-online-btn-emi-loader').style.display = 'inline-block';
       document.getElementById('ba-cod-footer-online-emi-amount').style.display = 'none';
       let emiAmount = getOnlineEmiPaymentPrice();
-      generateBaBharatxOrder(mobile.value, emiAmount, name.value);
+      if (emiAmount && Number(emiAmount) > 1) {
+        generateBaBharatxOrder(mobile.value, emiAmount, name.value);
+      } else {
+        resetCodFooter();
+      }
     } else {
       baFormValidationErrorRest();
     }
@@ -2251,14 +2259,28 @@ function updateOnlinePaymentPrice(price) {
 
 function getOnlinePaymentPrice() {
   let onlinePrice = document.getElementById('ba-cod-footer-online-amount').innerHTML;
-  onlinePrice = onlinePrice.replace('₹ ', '');
-  return onlinePrice.replace('.00', '');
+  let onlinePriceAmt = onlinePrice;
+  onlinePriceAmt = onlinePriceAmt.replace('₹ ', '');
+  onlinePriceAmt =  onlinePriceAmt.replace('.00', '');
+  if (onlinePriceAmt && Number(onlinePriceAmt) > 1) {
+    return onlinePriceAmt;
+  } else {
+    let onlinePriceValue = onlinePrice.match(/\d+(\.\d+)?/);
+    return onlinePriceValue ? onlinePriceValue[0] : 0;
+  }
 }
 
 function getOnlineEmiPaymentPrice() {
   let onlinePrice = document.getElementById('ba-cod-footer-online-emi-amount').innerHTML;
-  onlinePrice = onlinePrice.replace('₹ ', '');
-  return onlinePrice.replace('.00', '');
+  let onlinePriceAmt = onlinePrice;
+  onlinePriceAmt = onlinePriceAmt.replace('₹ ', '');
+  onlinePriceAmt =  onlinePriceAmt.replace('.00', '');
+  if (onlinePriceAmt && Number(onlinePriceAmt) > 1) {
+    return onlinePriceAmt;
+  } else {
+    let onlinePriceValue = onlinePrice.match(/\d+(\.\d+)?/);
+    return onlinePriceValue ? onlinePriceValue[0] : 0;
+  }
 }
 
 const updateBaCartApiCaller = createUpdateBaCartApiCaller();
