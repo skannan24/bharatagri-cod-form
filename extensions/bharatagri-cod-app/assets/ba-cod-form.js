@@ -1161,15 +1161,17 @@ function setDistricts(districtList, did = '', dname = '') {
   replaceChildrenAlternative2(districtDiv);
   districtDiv.add(districtOptionFirstLabel);
 
-  console.log(districtList);
+  let addedDistrictNames = [];
 
   for (let i = 0; i < districtList.length; i++) {
     let districtName = districtList[i].name_en;
-
-    let districtOptionsBtn = document.createElement('option');
-    districtOptionsBtn.innerHTML = districtName;
-    districtOptionsBtn.value = districtList[i].id;
-    districtDiv.add(districtOptionsBtn);
+    if (addedDistrictNames.indexOf(districtName.toLowerCase()) === -1) {
+      let districtOptionsBtn = document.createElement('option');
+      districtOptionsBtn.innerHTML = districtName;
+      districtOptionsBtn.value = districtList[i].id;
+      districtDiv.add(districtOptionsBtn);
+      addedDistrictNames.push(districtName.toLowerCase());
+    }
   }
 
   if (did) {
@@ -3203,18 +3205,24 @@ function getBaMobileValueTenDigits() {
 function setBaAssistDropdownOptions(options, dropdownId, inputId, inputValue) {
   let dropdown = document.getElementById(dropdownId);
   dropdown.innerHTML = ""; // Clear existing options
+
+  let addedLocationNames = [];
   options.forEach(function(option) {
-    let span = document.createElement("span");
-    span.textContent = option.name_en;
-    span.onclick = function() {
-      document.getElementById(inputId).value = option.name_en;
-      dropdown.classList.remove("ba-assist-show");
-      if (inputId === 'talukaName') {
-        resetVillageValues();
-        loadVillages(option.id);
-      }
-    };
-    dropdown.appendChild(span);
+    let nameEn = option.name_en || '';
+    if (addedLocationNames.indexOf(nameEn.toLowerCase()) === -1) {
+      let span = document.createElement("span");
+      span.textContent = nameEn;
+      span.onclick = function() {
+        document.getElementById(inputId).value = nameEn;
+        dropdown.classList.remove("ba-assist-show");
+        if (inputId === 'talukaName') {
+          resetVillageValues();
+          loadVillages(option.id);
+        }
+      };
+      dropdown.appendChild(span);
+      addedLocationNames.push(nameEn.toLowerCase());
+    }
   });
 
   if (!inputValue) {
