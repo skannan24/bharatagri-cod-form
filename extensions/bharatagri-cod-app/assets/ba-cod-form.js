@@ -2235,7 +2235,34 @@ function getBaOnlineDiscountCodeObject(codes) {
 }
 
 function getOnlinePayDiscountAmount() {
-  return 40;
+  let data = getBaCodProductData();
+  let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
+  let onlineDiscountPercent = 0.1;
+  if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].prepaid_discount_pc) {
+    onlineDiscountPercent = Number(data.variant_prices[finalVariantId].prepaid_discount_pc);
+  }
+  let cartValue = document.getElementById('ba-price-details-total-value').innerHTML;
+  cartValue = getOnlyPriceWithoutTextValues(cartValue);
+
+  let prepaidDiscount = Math.min(onlineDiscountPercent * cartValue, 1000);
+  prepaidDiscount = Math.floor(prepaidDiscount);
+
+  if (!prepaidDiscount || !Number(prepaidDiscount) || Number(prepaidDiscount) < 40) {
+    prepaidDiscount = 40;
+  }
+
+  return prepaidDiscount;
+}
+
+function getOnlyPriceWithoutTextValues(value) {
+  let amount = value.replace('₹ ', '');
+  amount =  amount.replace('.00', '');
+  if (amount && Number(amount) > 1) {
+    return amount;
+  } else {
+    let amountValue = value.match(/\d+(\.\d+)?/);
+    return amountValue ? amountValue[0] : 0;
+  }
 }
 
 function updateOnlinePaymentPrice(price) {
