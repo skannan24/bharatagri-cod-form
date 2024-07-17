@@ -517,10 +517,10 @@ function clearCartEmbed() {
         // });
         addCartDetailsEmbed();
       } else {
-        console.log('Unable to clear cart');
+        // console.log('Unable to clear cart');
       }
     }).catch(error => {
-    console.log('error: ', error);
+    // console.log('error: ', error);
   });
 }
 
@@ -538,7 +538,6 @@ function addCartDetailsEmbed() {
       })
     }).then(res => res.json())
       .then(res => {
-        console.log(res);
         let baBubbleIcon = document.getElementById('ba-cart-icon-value');
         if (baBubbleIcon) {
           baBubbleIcon.innerHTML = (res && res.items) ? res.items.length : 0;
@@ -795,7 +794,6 @@ function onBaProductBundleRemoveClick(bundleId) {
       index = i;
     }
   }
-  console.log(bundleId, selectedBundles[index]);
   sendBaCodGEvents('BA_bundle_cart_removal', {
     'from_frag': currentUrl1,
     'product_title': (selectedBundles[index] && selectedBundles[index].secondary_product && selectedBundles[index].secondary_product.product) ?
@@ -1100,7 +1098,7 @@ fetch('https://api-cache.leanagri.com/location/state_list/en/state/state_list.js
     setStates();
   });
 }).catch(error => {
-  console.log('Unable to get states : ', error);
+  // console.log('Unable to get states : ', error);
 });
 
 function setStates() {
@@ -1138,12 +1136,10 @@ function loadDistricts(stateId, did = '', dname = '') {
           setDistricts(result.data, did, dname);
         });
       } else {
-        console.log('Unable to fetch district list');
         document.getElementById('ba-cod-district-loader').style.display = 'none';
       }
     }).catch(error => {
     document.getElementById('ba-cod-district-loader').style.display = 'none';
-    console.log('error: ', error);
   });
 }
 
@@ -1194,11 +1190,9 @@ function loadTalukas(districtId, tid = '', tname = '') {
         });
       } else {
         setBaAssistDropdownOptions([], 'baCodTalukaDropdown', 'talukaName', tname);
-        console.log('Unable to fetch taluka list');
       }
     }).catch(error => {
     setBaAssistDropdownOptions([], 'baCodTalukaDropdown', 'talukaName', tname);
-    console.log('error: ', error);
   });
 }
 
@@ -1215,11 +1209,9 @@ function loadVillages(talukaId, vid = '', vname = '') {
         });
       } else {
         setBaAssistDropdownOptions([], 'baCodVillageDropdown', 'villageName', vname);
-        console.log('Unable to fetch taluka list');
       }
     }).catch(error => {
     setBaAssistDropdownOptions([], 'baCodVillageDropdown', 'villageName', vname);
-    console.log('error: ', error);
   });
 }
 
@@ -1469,7 +1461,7 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
             'transaction_id': ''
           });
         } catch (error) {
-          console.log('gtag error');
+          // console.log('gtag error');
         }
         localStorage.setItem('BA_COD_FORM_NOTES_ATTRIBUTES', JSON.stringify(baO2["order"]["note_attributes"]));
         // window.open(result.order.order_status_url, '_self');
@@ -1493,7 +1485,6 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
       }
     }
   }).catch(error => {
-    console.log('error: ', error);
     onBaOrderCreationError();
   });
 
@@ -2118,7 +2109,9 @@ function generateBaRazorpayOrder(mobileValue, onlineAmount, nameValue) {
         updatePaymentStatus(false, 'ba_payment_failed');
       });
     })
-    .catch(error => console.log('error', error));
+    .catch(error => {
+      // console.log('error', error)
+    });
 }
 
 function onOnlinePaymentFail() {
@@ -2152,8 +2145,6 @@ function generateBaBharatxOrder(mobileValue, emiAmount, nameValue) {
     "ba_order": baO2
   };
 
-  console.log(generateOrderObj);
-
   fetch(`https://lcrks.leanagri.com/payments/vendors/bharatx/api/v1/external_payment/`, {
     method: 'POST',
     headers: {
@@ -2172,7 +2163,7 @@ function generateBaBharatxOrder(mobileValue, emiAmount, nameValue) {
       }
     }).catch(error => {
       onEmiPaymentFail();
-      console.log("error", error);
+      // console.log("error", error);
     });
 }
 
@@ -2193,7 +2184,7 @@ function triggerBharatxStatus() {
         }
       }).catch(error => {
       // onEmiPaymentFail();
-      console.log("error", error);
+      // console.log("error", error);
     });
   }, 5000)
 }
@@ -2710,7 +2701,7 @@ function sendBaCodGEvents(name, value) {
   try {
     gtag('event', name, value);
   } catch (error) {
-    console.log('gtag error');
+    // console.log('gtag error');
   }
 }
 
@@ -2738,7 +2729,7 @@ function sendBaCodGAConversionEvents(name) {
       ]
     });
   } catch (error) {
-    console.log('gtag error');
+    // console.log('gtag error');
   }
 }
 
@@ -2762,7 +2753,7 @@ function sendBaCodGAConversionOrderedEvents(totalAmount, orderId, paymentType) {
     });
     sendBaCodShopifyAnalyticsEvents('Purchase', totalAmount, orderId);
   } catch (error) {
-    console.log('gtag error');
+    // console.log('gtag error');
   }
 }
 
@@ -2808,7 +2799,7 @@ function sendBaCodShopifyAnalyticsEvents(name, totalAmount, orderId) {
     ShopifyAnalytics.lib.track(name, analyticsObj);
     // console.log(ShopifyAnalytics.lib.track(name, analyticsObj));
   } catch (error) {
-    console.log('shopify analytics error');
+    // console.log('shopify analytics error');
   }
 }
 
@@ -2821,7 +2812,7 @@ function sendBaFbEvents(name, value) {
     value['content_type'] = 'product_group';
     fbq('track', name, value);
   } catch (error) {
-    console.log('fbq error');
+    // console.log('fbq error');
   }
 }
 
@@ -2835,10 +2826,10 @@ function loadBaLocation(value) {
           });
         } else {
           // resetTalukaAndVillage();
-          console.log('Unable to get location');
+          // console.log('Unable to get location');
         }
       }).catch(error => {
-      console.log('Unable to get pincode location: ', error);
+      // console.log('Unable to get pincode location: ', error);
     });
   }
 }
@@ -2872,7 +2863,7 @@ function setPincodeLocation(data) {
       }
     });
   } catch (error) {
-    console.log('Error in setting location from pincode');
+    // console.log('Error in setting location from pincode');
   }
 }
 
@@ -3157,11 +3148,9 @@ function startOtpTimer() {
   resendButton.style.border = '1px solid #ADB2C0';
   resendButton.style.color = '#ADB2C0';
 
-  console.log(baOtpCountdown);
   baClearOtpCountdownInterval();
 
   baOtpCountdown = setInterval(() => {
-    console.log(baOtpCountdown);
     if (time <= 0) {
       clearInterval(baOtpCountdown);
       timerElement.textContent = '00:00';
@@ -3223,8 +3212,9 @@ function sendBaCodOtp() {
   fetch(`https://lcrks.leanagri.com/api/v2/getOtp/?phone_number=${phone}`, requestOptions)
     .then(response => response.json())
     .then(result => {
-      console.log('OTP sent');
-    }).catch(error => console.log('error: ', error));
+    }).catch(error => {
+      // console.log('error: ', error)
+    });
 }
 
 function getBaMobileValueWithFormat() {
@@ -3347,11 +3337,9 @@ function loadProductBundlesOldFunction() {
           }
         });
       } else {
-        console.log('Unable to fetch web bundle products');
         document.getElementById('ba-cod-bundle-div').style.display = 'none';
       }
     }).catch(error => {
-    console.log('error: ', error);
     document.getElementById('ba-cod-bundle-div').style.display = 'none';
   });
 }
@@ -3373,7 +3361,6 @@ function baAuthenticateOrderPageUrlAndRoute() {
     "mode": "cors",
     "credentials": "include"
   }).then(response => {
-    console.log(response)
     let baCodOrderFinalUrl = baCodOrderUrl.split('/authenticate')[0];
     window.open(baCodOrderFinalUrl, '_self');
   });
@@ -3525,18 +3512,15 @@ function applyCouponCodes_OLDFunction(couponCode, couponObj, scrollFlag, showPop
             // openSmileyModal();
           }
         } else {
-          console.log('Coupon not applicable');
           document.getElementById('ba-cod-discount-loader').style.display = 'none';
           localStorage.removeItem('BA_COD_Coupon_code');
         }
       });
     } else {
-      console.log('Unable to fetch wallet');
       document.getElementById('ba-cod-discount-loader').style.display = 'none';
       localStorage.removeItem('BA_COD_Coupon_code');
     }
   }).catch(error => {
-    console.log('error: ', error);
     document.getElementById('ba-cod-discount-loader').style.display = 'none';
     localStorage.removeItem('BA_COD_Coupon_code');
   });
