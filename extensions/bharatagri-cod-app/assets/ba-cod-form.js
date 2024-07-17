@@ -2085,6 +2085,7 @@ function sendMessage(message) {
 
 function generateBaRazorpayOrder(mobileValue, onlineAmount, nameValue) {
   let baO2 = getBaOrderObject();
+  let aValue = Number(onlineAmount) * 777;
   let baDiscountCodes = baO2["order"]["discount_codes"] || [];
   baO2["order"]["discount_codes"] = getBaOnlineDiscountCodeObject(baDiscountCodes);
   let generateOrderObj = {
@@ -2092,11 +2093,12 @@ function generateBaRazorpayOrder(mobileValue, onlineAmount, nameValue) {
     "cart_amount": onlineAmount,
     "order_details": baO2
   }
+  let myHeaders = new Headers();
+  myHeaders.append("scc-ix-platform", aValue.toString());
+  myHeaders.append("content-type", "application/json");
   fetch(`https://lcrks.leanagri.com/third_parties/shopify/api/v1/generate_order/`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: myHeaders,
     body: JSON.stringify(generateOrderObj)
   }).then(response => response.json())
     .then(result => {
