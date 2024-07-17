@@ -1455,9 +1455,10 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
         sendBaFbEvents('Purchase', {
           currency: "INR",
           value: createOrderTotalValue,
-          num_items: createOrderLineItems.length
+          num_items: createOrderLineItems.length,
+          payment_type: type
         });
-        sendBaCodGAConversionOrderedEvents(createOrderTotalValue, result.order.order_number);
+        sendBaCodGAConversionOrderedEvents(createOrderTotalValue, result.order.order_number, type);
         try {
           gtag('event', 'conversion', {
             'send_to': 'AW-682014322/--74CKG9_dcDEPLsmsUC',
@@ -2733,7 +2734,7 @@ function sendBaCodGAConversionEvents(name) {
   }
 }
 
-function sendBaCodGAConversionOrderedEvents(totalAmount, orderId) {
+function sendBaCodGAConversionOrderedEvents(totalAmount, orderId, paymentType) {
   let mainItem = getBaCartMainItemDetails();
   let price = (mainItem.final_line_price/100);
   try {
@@ -2748,7 +2749,8 @@ function sendBaCodGAConversionOrderedEvents(totalAmount, orderId) {
             quantity: mainItem.quantity,
             price: price
           }
-        ]
+        ],
+       payment_type: paymentType
     });
     sendBaCodShopifyAnalyticsEvents('Purchase', totalAmount, orderId);
   } catch (error) {
