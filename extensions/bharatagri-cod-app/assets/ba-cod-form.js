@@ -28,6 +28,8 @@ let baCodOrderNumber = '';
 let baRazorpayOrderId = '';
 let baRazorpayPaymentId = '';
 let baRazorpayReferenceId = '';
+let baRazorpayOnlineAmount = '';
+let baCodAmountFinal = '';
 
 let bharatxTransactionId = '';
 
@@ -2274,6 +2276,8 @@ function updateOnlinePaymentPrice(price) {
     baOnlineAmount = baOnlineAmount.toFixed(2);
     baCodAmount = baCodAmount.toFixed(2);
   }
+  baCodAmountFinal = baCodAmount;
+  baRazorpayOnlineAmount = baOnlineAmount;
   document.getElementById('ba-cod-footer-online-original-amount').innerHTML = `₹ ${baCodAmount}`;
   document.getElementById('ba-cod-footer-online-amount').innerHTML = `₹ ${baOnlineAmount}`;
   document.getElementById('baCodFooterOnlineDiscount').innerHTML = `₹${baOnlineDiscount} ${baOnlinePaymentDiscountLabel}`;
@@ -2288,7 +2292,7 @@ function updateOnlinePaymentPrice(price) {
 }
 
 function getOnlinePaymentPrice() {
-  let onlinePrice = document.getElementById('ba-cod-footer-online-amount').innerHTML;
+  let onlinePrice = baRazorpayOnlineAmount.toString();
   let onlinePriceAmt = onlinePrice;
   onlinePriceAmt = onlinePriceAmt.replace('₹ ', '');
   onlinePriceAmt =  onlinePriceAmt.replace('.00', '');
@@ -2301,7 +2305,7 @@ function getOnlinePaymentPrice() {
 }
 
 function getOnlineEmiPaymentPrice() {
-  let onlinePrice = document.getElementById('ba-cod-footer-online-emi-amount').innerHTML;
+  let onlinePrice = baCodAmountFinal.toString();
   let onlinePriceAmt = onlinePrice;
   onlinePriceAmt = onlinePriceAmt.replace('₹ ', '');
   onlinePriceAmt =  onlinePriceAmt.replace('.00', '');
@@ -2506,6 +2510,8 @@ function resetCodFormFields() {
   baRazorpayReferenceId = '';
   bharatxTransactionId = '';
   baOtpCountdown = '';
+  baRazorpayOnlineAmount = '';
+  baCodAmountFinal = '';
 
   resetFormFieldsValidation();
 }
