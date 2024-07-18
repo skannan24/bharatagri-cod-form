@@ -674,7 +674,7 @@ function setBaProductBundles(bundles) {
     bundleCardSelectDiv.appendChild(bundleCardSelectInput);
 
     let bundleCardPriceDiv = document.createElement('div');
-    bundleCardPriceDiv.className = 'col-8 pl-0';
+    bundleCardPriceDiv.className = 'col-7 pl-0';
     bundleCardImagePriceDiv.appendChild(bundleCardPriceDiv);
 
     let baBundleTitle = '';
@@ -706,7 +706,7 @@ function setBaProductBundles(bundles) {
     bundleCardPriceDiv.appendChild(bundleCardProductDescription);
 
     let bundleCardImageDiv = document.createElement('div');
-    bundleCardImageDiv.className = 'col-2 pl-0 pr-0';
+    bundleCardImageDiv.className = 'col-3 pl-0 pr-1';
     bundleCardImagePriceDiv.appendChild(bundleCardImageDiv);
 
     let bundleCardImage = document.createElement('img');
