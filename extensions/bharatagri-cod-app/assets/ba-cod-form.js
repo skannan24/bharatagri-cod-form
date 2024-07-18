@@ -2123,6 +2123,7 @@ function onOnlinePaymentFail() {
 
 function generateBaBharatxOrder(mobileValue, emiAmount, nameValue) {
   let baO2 = getBaOrderObject();
+  let aValue = Number(baCodAmountFinal) * 969;
   emiAmount = (Number(emiAmount) * 100).toFixed(0);
   emiAmount = Number(emiAmount);
   baO2["order"]["note_attributes"].push({"name": "bharatx_payment", "value": "yes"});
@@ -2147,12 +2148,16 @@ function generateBaBharatxOrder(mobileValue, emiAmount, nameValue) {
     "ba_order": baO2
   };
 
+  let gobj = simple2Jumble(generateOrderObj, mobileValue);
+  let myHeaders = new Headers();
+  myHeaders.append("scc-iz-platform", aValue.toString());
+  myHeaders.append("content-type", "application/json");
+  myHeaders.append("prority", gobj);
+  myHeaders.append("Extra-Auth", 'YmhhcmF0eGF1dGg=');
+
   fetch(`https://lcrks.leanagri.com/payments/vendors/bharatx/api/v1/external_payment/`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Extra-Auth': 'YmhhcmF0eGF1dGg='
-    },
+    headers: myHeaders,
     body: JSON.stringify(generateOrderObj)
   }).then(response => response.json())
     .then(result => {
@@ -2389,6 +2394,17 @@ function updateBaCart(operation, quantityValue) {
 function simpleJumble(m, mobile) {
   let amt = getOnlinePaymentPrice();
   let s = `${mobile}-${amt}-uqfKjsRrHg`;
+  let simple = CryptoJS.HmacSHA256(JSON.stringify(m), s);
+  let simpleSixFour = CryptoJS.enc.Base64.stringify(simple);
+  return simpleSixFour;
+}
+
+function simple2Jumble(m, mobile) {
+  let amt = getOnlineEmiPaymentPrice();
+  amt = (Number(amt) * 100).toFixed(0);
+  amt = Number(amt);
+  mobile = "+91" + mobile;
+  let s = `${mobile}-${amt}-2MvybzaKEM`;
   let simple = CryptoJS.HmacSHA256(JSON.stringify(m), s);
   let simpleSixFour = CryptoJS.enc.Base64.stringify(simple);
   return simpleSixFour;
