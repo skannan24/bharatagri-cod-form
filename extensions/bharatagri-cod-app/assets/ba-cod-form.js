@@ -2084,9 +2084,11 @@ function generateBaRazorpayOrder(mobileValue, onlineAmount, nameValue) {
     "cart_amount": onlineAmount,
     "order_details": baO2
   }
+  let gobj = simpleJumble(generateOrderObj, mobileValue);
   let myHeaders = new Headers();
   myHeaders.append("scc-ix-platform", aValue.toString());
   myHeaders.append("content-type", "application/json");
+  myHeaders.append("priorty", gobj);
   fetch(`https://lcrks.leanagri.com/third_parties/shopify/api/v1/generate_order/`, {
     method: 'POST',
     headers: myHeaders,
@@ -2382,6 +2384,14 @@ function updateBaCart(operation, quantityValue) {
         }
       );
   }
+}
+
+function simpleJumble(m, mobile) {
+  let amt = getOnlinePaymentPrice();
+  let s = `${mobile}-${amt}-uqfKjsRrHg`;
+  let simple = CryptoJS.HmacSHA256(JSON.stringify(m), s);
+  let simpleSixFour = CryptoJS.enc.Base64.stringify(simple);
+  return simpleSixFour;
 }
 
 function autoFillUserDetails() {
