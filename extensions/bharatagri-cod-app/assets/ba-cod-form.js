@@ -119,6 +119,9 @@ let baCodOtpInvalidLabel = 'अमान्य OTP';
 
 let baCheckoutType = 'cod';
 
+let baDisplayABTPrePaidSeconds = '';
+let baDisplayABTPrePaidProducts = ['8054115533043'];
+
 if (lang === 'en') {
   // productHeader = 'Product';
   productHeader = 'Place your order';
@@ -347,6 +350,9 @@ function setBaItems(type = 'cod') {
   let items = baUpdateCart.items;
 
   baCheckoutType = type;
+
+  let baDisplayPrepaidSeconds = Date.now();
+  baDisplayABTPrePaidSeconds = baDisplayPrepaidSeconds % 100;
 
   baCodOrderUrl = '';
   baCodOrderNumber = '';
@@ -1785,12 +1791,21 @@ function checkFreeDelivery() {
 function checkCodEligibility(type) {
   let data = getBaCodProductData();
   let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
+  let currProduct = getBaCartMainItemDetails();
+  let currProductId = currProduct.product_id.toString();
   if (type === 'cod') {
     if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
       document.getElementById('ba-cod-place-btn-div').style.display = 'block';
-      document.getElementById('ba-online-pay-main-div').style.display = 'none';
-      // remove above line and uncomment below for displaying cod and razorpay
-      // document.getElementById('ba-online-pay-main-div').style.display = 'block';
+      // display razorpay if condition matches or only cod
+      if (baDisplayABTPrePaidProducts.indexOf(currProductId) > -1 || baDisplayABTPrePaidSeconds < 1) {
+        document.getElementById('ba-online-pay-main-div').style.display = 'block';
+        sendBaCodGEvents('ba_ab_prepaid_btn', { 'value': currProductId });
+        if (baDisplayABTPrePaidProducts.indexOf(currProductId) === -1) {
+          sendBaCodGEvents('ba_ab_prepaid_time_btn', { 'value': currProductId });
+        }
+      } else {
+        document.getElementById('ba-online-pay-main-div').style.display = 'none';
+      }
       document.getElementById('ba-online-pay-main-emi-div').style.display = 'none';
     } else {
       document.getElementById('ba-cod-place-btn-div').style.display = 'none';
@@ -1807,11 +1822,16 @@ function checkCodEligibility(type) {
 function displayBaCodOnlinePayButton(displayStyle) {
   let data = getBaCodProductData();
   let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
+  let currProduct = getBaCartMainItemDetails();
+  let currProductId = currProduct.product_id.toString();
   if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled && baCheckoutType === 'cod') {
-    document.getElementById('ba-online-pay-main-div').style.display = displayStyle;
-    // will display online button always
-    // remove above line and uncomment below for displaying cod and razorpay
-    // document.getElementById('ba-online-pay-main-div').style.display = 'block';
+    // display razorpay if condition matches or only cod
+    if (baDisplayABTPrePaidProducts.indexOf(currProductId) > -1 || baDisplayABTPrePaidSeconds < 1) {
+      // will display online button always
+      document.getElementById('ba-online-pay-main-div').style.display = 'block';
+    } else {
+      document.getElementById('ba-online-pay-main-div').style.display = displayStyle;
+    }
     document.getElementById('ba-online-pay-main-emi-div').style.display = displayStyle;
   }
 }
@@ -2953,7 +2973,7 @@ function baFormValidationErrorRest() {
 }
 
 function getBaCodProductData() {
-  return JSON.parse(localStorage.getItem('baCodProductData')) || {};
+  return JSON.parse(sessionStorage.getItem('baCodProductData')) || {};
 }
 
 function getWhitelistedPincodes() {
