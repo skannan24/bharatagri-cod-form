@@ -1805,6 +1805,7 @@ function checkCodEligibility(type) {
         }
       } else {
         document.getElementById('ba-online-pay-main-div').style.display = 'none';
+        sendBaCodGEvents('ba_ab_prepaid_no_display', { 'value': currProductId });
       }
       document.getElementById('ba-online-pay-main-emi-div').style.display = 'none';
     } else {
