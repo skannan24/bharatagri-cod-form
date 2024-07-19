@@ -2073,6 +2073,7 @@ function triggerOnlineOrderCreation() {
   baO2["order"]["discount_codes"] = getBaOnlineDiscountCodeObject(baDiscountCodes);
   baO2["order"]["note_attributes"].push({"name": "order_id", "value": baRazorpayOrderId});
   baO2["order"]["note_attributes"].push({"name": "payment_id", "value": baRazorpayPaymentId});
+  baO2["order"]["note_attributes"].push({"name": "online_amount", "value": baRazorpayOnlineAmount});
   let createOrderLineItems = getLineItemsObject();
   let createOrderTotalValue = getBaTotalOrderAmount();
   baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, 'online');
@@ -2088,6 +2089,7 @@ function triggerEmiOrderCreation() {
   // baO2["order"]["discount_codes"] = getBaOnlineDiscountCodeObject(baDiscountCodes);
   baO2["order"]["note_attributes"].push({"name": "order_id", "value": bharatxTransactionId});
   baO2["order"]["note_attributes"].push({"name": "bharatx_payment", "value": "yes"});
+  baO2["order"]["note_attributes"].push({"name": "online_amount", "value": baCodAmountFinal});
   let createOrderLineItems = getLineItemsObject();
   let createOrderTotalValue = getBaTotalOrderAmount();
   baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, 'emi');
