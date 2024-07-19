@@ -1440,16 +1440,17 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
           'order_value': createOrderTotalValue,
           'ba_phone_number': mobileValue
         });
+        // Resetting if otp modal is displayed
+        if (baO2['otp']) {
+          sendBaCodGEvents('ba_cod_otp_success_and_ordered', {});
+          baCloseConfirmationModalAndReset();
+        }
         if (type === 'cod') {
           sendBaCodGEvents('ba_cod_ordered_cod', {});
         } else if (type === 'online') {
           sendBaCodGEvents('ba_cod_ordered_online', {});
         } else if (type === 'emi') {
           sendBaCodGEvents('ba_cod_ordered_emi', {});
-        }
-        // Resetting if otp modal is displayed
-        if (baO2['otp']) {
-          baCloseConfirmationModalAndReset();
         }
         document.getElementById('baCodTriggerRecovery').disabled = false;
         sendBaFbEvents('Purchase', {
@@ -1480,6 +1481,7 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
       if (response.status === 400) {
         response.json().then(result => {
           if (result.error && result.error === 'Invalid OTP') {
+            sendBaCodGEvents('ba_cod_otp_invalid', {});
             baOtpInvalidSetAndReset('block', '1px solid #EC463B');
             resetCodConfirmationModal();
           } else {
@@ -3128,6 +3130,7 @@ function onBaConfirmationModalNo() {
 // OTP functionalities
 
 function onBaOTPModalCancel() {
+  sendBaCodGEvents('ba_cod_otp_cancel_btn', {});
   document.getElementById('ba-confirmation-close').click();
   baClearOtpCountdownInterval();
   resetCodFooter();
@@ -3136,6 +3139,7 @@ function onBaOTPModalCancel() {
 
 function onBaOTPModalSubmit() {
   if (baOtpNumberValidation()) {
+    sendBaCodGEvents('ba_cod_otp_submit_btn', {});
     baOtpInvalidSetAndReset('none', '1px solid #ccc');
     let obj = JSON.parse(localStorage.getItem('baProcessOrder'));
     document.getElementById('baCodOtpSubmitBtn').disabled = true;
@@ -3213,6 +3217,7 @@ function startOtpTimer() {
 }
 
 function onDisplayBaCodOTPModal() {
+  sendBaCodGEvents('ba_cod_otp_display_modal', {});
   sendBaCodOtp();
 
   startOtpTimer();
@@ -3225,6 +3230,7 @@ function onDisplayBaCodOTPModal() {
         if (index < otpInputs.length - 1) {
           otpInputs[index + 1].focus();
         }
+        sendBaCodGEvents('ba_cod_otp_enter_input', {});
       }
     });
 
@@ -3239,6 +3245,7 @@ function onDisplayBaCodOTPModal() {
 }
 
 function onBaCodResendOtp() {
+  sendBaCodGEvents('ba_cod_otp_resend_btn', {});
   baOtpInvalidSetAndReset('none', '1px solid #ccc');
   baResetOtpValues();
   sendBaCodOtp();
@@ -3255,6 +3262,7 @@ function sendBaCodOtp() {
   };
 
   let phone = getBaMobileValueTenDigits();
+  sendBaCodGEvents('ba_cod_otp_sent', {value: phone.toString()});
 
   fetch(`https://lcrks.leanagri.com/api/v2/getOtp/?phone_number=${phone}`, requestOptions)
     .then(response => response.json())
