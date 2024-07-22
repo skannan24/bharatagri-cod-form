@@ -1464,7 +1464,7 @@ function checkBaCodOrderCount() {
   localStorage.setItem('storedBaOrderCount', storedBaOrderCount.toString());
 
   // return true (otp check should take place if >= 4 orders)
-  return storedBaOrderCount >= 4;
+  return storedBaOrderCount >= 6;
 }
 
 function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, type) {
