@@ -1418,11 +1418,53 @@ function baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mob
 
   localStorage.setItem('baProcessOrder', JSON.stringify(processOrderObj));
 
-  if ((highRiskProductFlag || otpVerifyFlag) && type === 'cod') {
-    displayConfirmationModal();
+  let multipleCodOrderCheck = false;
+
+  if (type === 'cod') {
+    multipleCodOrderCheck = checkBaCodOrderCount();
+  }
+
+  if (multipleCodOrderCheck) {
+    sendBaCodGEvents('ba_multiple_cod_otp_triggered', {value: mobileValue.toString()});
+  }
+
+  if (otpVerifyFlag && type === 'cod') {
+    sendBaCodGEvents('ba_otp_verify_modal_triggered', {value: mobileValue.toString()});
+  }
+
+  if ((highRiskProductFlag || otpVerifyFlag || multipleCodOrderCheck) && type === 'cod') {
+    displayConfirmationModal(multipleCodOrderCheck);
   } else {
     baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, type);
   }
+}
+
+function getBaCodCurrentTime() {
+  return new Date().getTime();
+}
+
+function checkBaCodOrderCount() {
+  let now = getBaCodCurrentTime();
+
+  let storedBaFirstOrderTime = localStorage.getItem('storedBaFirstOrderTime');
+  let storedBaLatestOrderTime = localStorage.getItem('storedBaLatestOrderTime');
+  let storedBaOrderCount = parseInt(localStorage.getItem('storedBaOrderCount')) || 0;
+
+  if (!storedBaFirstOrderTime || (now - parseInt(storedBaFirstOrderTime)) > (5 * 60 * 1000)) {
+    storedBaFirstOrderTime = now;
+    storedBaLatestOrderTime = now;
+    storedBaOrderCount = 1;
+  } else {
+    storedBaLatestOrderTime = now;
+    storedBaOrderCount++;
+  }
+
+  localStorage.setItem('storedBaFirstOrderTime', storedBaFirstOrderTime.toString());
+  localStorage.setItem('storedBaLatestOrderTime', storedBaLatestOrderTime.toString());
+  localStorage.setItem('storedBaOrderCount', storedBaOrderCount.toString());
+
+  // return true (otp check should take place if >= 4 orders)
+  return storedBaOrderCount >= 4;
 }
 
 function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, type) {
@@ -3082,7 +3124,7 @@ function checkHighRiskAndOTPVerifyOrder() {
   }
 }
 
-function displayConfirmationModal() {
+function displayConfirmationModal(multipleCodOrderCheck) {
   let codAmount = document.getElementById('ba-price-details-total-value').innerHTML;
   codAmount = codAmount.replace('₹ ', '');
   codAmount = Number(codAmount).toFixed(2);
@@ -3098,7 +3140,7 @@ function displayConfirmationModal() {
 
   baResetOtpValues();
 
-  if (otpVerifyFlag) {
+  if (otpVerifyFlag || multipleCodOrderCheck) {
     otpModal.style.display = 'block';
     confirmationModal.style.display = 'none';
     onDisplayBaCodOTPModal();
