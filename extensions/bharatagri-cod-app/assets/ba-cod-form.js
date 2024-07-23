@@ -1986,7 +1986,10 @@ function getBaOrderObject() {
 
   for (let i = 0; i < selectedBundles.length; i++) {
     if (selectedBundles[i].enabled && selectedBundles[i].selected) {
-      let variant = {'variant_id': selectedBundles[i].secondary_product.variant_id, 'quantity': 1, 'properties': {}};
+      let variant = {
+        'variant_id': selectedBundles[i].secondary_product.variant_id, 'quantity': 1,
+        'properties': {is_bundled: 'yes', bundle_price: selectedBundles[i].price}
+      };
       createOrderLineItems.push(variant);
     }
   }
