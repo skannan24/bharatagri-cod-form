@@ -1463,7 +1463,7 @@ function checkBaCodOrderCount() {
   localStorage.setItem('storedBaLatestOrderTime', storedBaLatestOrderTime.toString());
   localStorage.setItem('storedBaOrderCount', storedBaOrderCount.toString());
 
-  // return true (otp check should take place if >= 4 orders)
+  // return true (otp check should take place if >= 6 orders)
   return storedBaOrderCount >= 6;
 }
 
