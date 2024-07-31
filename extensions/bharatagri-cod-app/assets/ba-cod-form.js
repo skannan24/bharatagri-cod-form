@@ -28,6 +28,8 @@ let baCodOrderNumber = '';
 let baRazorpayOrderId = '';
 let baRazorpayPaymentId = '';
 let baRazorpayReferenceId = '';
+let baRazorpayOnlineAmount = '';
+let baCodAmountFinal = '';
 
 let bharatxTransactionId = '';
 
@@ -37,6 +39,7 @@ let baRecoveryApplied = false;
 let baOnlinePaySuccess = false;
 
 let baOtpCountdown = '';
+let baRecoveryOnlineBtnEnable = false;
 
 // let productHeader = 'प्रोडक्ट';
 let productHeader = 'अपना आर्डर दें';
@@ -51,7 +54,7 @@ let pincodeLabel = 'पिनकोड';
 let stateLabel = 'राज्य';
 let districtLabel = 'ज़िला';
 let talukaLabel = 'तहसील';
-let villageLabel = 'Village';
+let villageLabel = 'गावं';
 let addressLabel = 'मकान नंबर, रोड, कॉलोनी';
 let landmarkLabel = 'लैंडमार्क (उदाहरण: गोपाल मंदिर के पास)';
 let postOfficeLabel = 'डाकघर (वैकल्पिक)';
@@ -94,10 +97,10 @@ let confirmModalNoLabel = 'नहीं';
 
 let mainPriceAmountLabel = 'राशि';
 
-let baSpecialDiscount = '🌱 स्पेशल डिस्काउंट 🌱';
+let baSpecialDiscount = '🌱 स्पेशल PhonePe डिस्काउंट 🌱';
 let baSpecialOffer = 'सीमित समय के लिए एक ख़ास ऑफर';
-let baRecoveryOrderNow = 'अभी आर्डर करें और 2% डिस्काउंट पाएं';
-let baRecoveryOrderBtnLabel = 'स्पेशल डिस्काउंट पर आर्डर करें';
+let baRecoveryOrderNow = 'अभी आर्डर करें और ###% डिस्काउंट पाएं';
+let baRecoveryOrderBtnLabel = 'PhonePe पर अभी आर्डर करें';
 let baRecoveryCancelBtnLabel = 'मुझे डिस्काउंट नहीं चाहिए';
 
 let baOnlinePaymentLabel = 'UPI से पेमेंट करें';
@@ -114,8 +117,12 @@ let baCodOtpSubmitLabel = 'OTP सबमिट करके ऑर्डर प�
 let baCodOtpCancelLabel = 'ऑर्डर कैंसिल करें';
 let baCodOtpFooterLabel = '*इस ऑर्डर की पुष्टि के लिए भारतअ‍ॅग्री से कॉल किया जाएगा।';
 let baCodOtpInvalidLabel = 'अमान्य OTP';
+let baCodLocateMeLabel = 'मेरी लोकेशन ढूंढे';
 
 let baCheckoutType = 'cod';
+
+let baDisplayABTPrePaidSeconds = '';
+let baDisplayABTPrePaidProducts = ['8054115533043'];
 
 if (lang === 'en') {
   // productHeader = 'Product';
@@ -173,10 +180,10 @@ if (lang === 'en') {
   confirmModalNoLabel = 'No';
   mainPriceAmountLabel = 'Amount';
 
-  baSpecialDiscount = '🌱 Special Discount 🌱';
+  baSpecialDiscount = '🌱 Special PhonePe Discount 🌱';
   baSpecialOffer = 'Special offer for a limited time';
-  baRecoveryOrderNow = 'Order now and get 2% discount';
-  baRecoveryOrderBtnLabel = 'Order with a special discount';
+  baRecoveryOrderNow = 'Order now and get ###% discount';
+  baRecoveryOrderBtnLabel = 'Order with PhonePe Now';
   baRecoveryCancelBtnLabel = "I don't want a discount";
 
   baOnlinePaymentLabel = 'Pay via UPI ';
@@ -193,6 +200,7 @@ if (lang === 'en') {
   baCodOtpCancelLabel = 'Cancel Order';
   baCodOtpFooterLabel = '*You will receive a call from BharatAgri to confirm this order.';
   baCodOtpInvalidLabel = 'Invalid OTP';
+  baCodLocateMeLabel = 'Find my Location';
 }
 
 if (lang === 'mr') {
@@ -209,7 +217,7 @@ if (lang === 'mr') {
   stateLabel = 'राज्य';
   districtLabel = 'ज़िला';
   talukaLabel = 'तहसील';
-  villageLabel = 'Village';
+  villageLabel = 'गावं';
   addressLabel = 'घर क्रमांक, रस्ता, कॉलनी';
   landmarkLabel = 'लैंडमार्क (उदाहरण: गोपाळ मंदिराजवळ)';
   postOfficeLabel = 'पोस्ट ऑफिस (पर्यायी)';
@@ -251,10 +259,10 @@ if (lang === 'mr') {
   confirmModalNoLabel = 'नाही';
   mainPriceAmountLabel = 'रक्कम';
 
-  baSpecialDiscount = '🌱 स्पेशल डिस्काउंट 🌱';
+  baSpecialDiscount = '🌱 स्पेशल PhonePe डिस्काउंट 🌱';
   baSpecialOffer = 'सीमित समय के लिए एक ख़ास ऑफर';
-  baRecoveryOrderNow = 'अभी आर्डर करें और 2% डिस्काउंट पाएं';
-  baRecoveryOrderBtnLabel = 'स्पेशल डिस्काउंट पर आर्डर करें';
+  baRecoveryOrderNow = 'अभी आर्डर करें और ###% डिस्काउंट पाएं';
+  baRecoveryOrderBtnLabel = 'PhonePe पर अभी आर्डर करें';
   baRecoveryCancelBtnLabel = 'मुझे डिस्काउंट नहीं चाहिए';
 
   baOnlinePaymentLabel = 'UPI से पेमेंट करें';
@@ -271,6 +279,7 @@ if (lang === 'mr') {
   baCodOtpCancelLabel = 'ऑर्डर कैंसिल करें';
   baCodOtpFooterLabel = '*इस ऑर्डर की पुष्टि के लिए भारतअ‍ॅग्री से कॉल किया जाएगा।';
   baCodOtpInvalidLabel = 'अमान्य OTP';
+  baCodLocateMeLabel = 'मेरी लोकेशन ढूंढे';
 }
 document.getElementById('product-header-id').innerHTML = productHeader;
 document.getElementById('discount-header-id').innerHTML = discountHeader;
@@ -316,7 +325,6 @@ document.getElementById('ba-cod-confirm-no-btn-label').innerHTML = confirmModalN
 
 document.getElementById('baSpecialDiscount').innerHTML = baSpecialDiscount;
 document.getElementById('baSpecialOffer').innerHTML = baSpecialOffer;
-document.getElementById('baRecoveryOrderNow').innerHTML = baRecoveryOrderNow;
 document.getElementById('baRecoveryOrderBtnLabel').innerHTML = baRecoveryOrderBtnLabel;
 document.getElementById('baRecoveryCancelBtnLabel').innerHTML = baRecoveryCancelBtnLabel;
 
@@ -332,6 +340,9 @@ document.getElementById('baCodOtpCancelBtn').innerHTML = baCodOtpCancelLabel;
 document.getElementById('baCodOtpFooter').innerHTML = baCodOtpFooterLabel;
 document.getElementById('baCodOtpInvalid').innerHTML = baCodOtpInvalidLabel;
 
+document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
+document.getElementById('baCodLocateMeLabel').innerHTML = baCodLocateMeLabel;
+
 
 document.getElementById('baCreditBanner').src = `https://shopify-krushidukan.leanagri.com/ba-cod-form-images/ba_credit_${lang}.webp`;
 
@@ -343,6 +354,9 @@ function setBaItems(type = 'cod') {
   let items = baUpdateCart.items;
 
   baCheckoutType = type;
+
+  let baDisplayPrepaidSeconds = Date.now();
+  baDisplayABTPrePaidSeconds = baDisplayPrepaidSeconds % 100;
 
   baCodOrderUrl = '';
   baCodOrderNumber = '';
@@ -513,10 +527,10 @@ function clearCartEmbed() {
         // });
         addCartDetailsEmbed();
       } else {
-        console.log('Unable to clear cart');
+        // console.log('Unable to clear cart');
       }
     }).catch(error => {
-    console.log('error: ', error);
+    // console.log('error: ', error);
   });
 }
 
@@ -534,7 +548,6 @@ function addCartDetailsEmbed() {
       })
     }).then(res => res.json())
       .then(res => {
-        console.log(res);
         let baBubbleIcon = document.getElementById('ba-cart-icon-value');
         if (baBubbleIcon) {
           baBubbleIcon.innerHTML = (res && res.items) ? res.items.length : 0;
@@ -651,7 +664,7 @@ function setBaProductBundles(bundles) {
     bundlesDiv.appendChild(bundleCardColDiv);
 
     let bundleCardImagePriceDiv = document.createElement('div');
-    bundleCardImagePriceDiv.className = 'row align-items-center mb-2';
+    bundleCardImagePriceDiv.className = 'row align-items-center h-100 mb-2';
     bundleCardColDiv.appendChild(bundleCardImagePriceDiv);
 
     let bundleCardSelectDiv = document.createElement('div');
@@ -665,7 +678,7 @@ function setBaProductBundles(bundles) {
     bundleCardSelectDiv.appendChild(bundleCardSelectInput);
 
     let bundleCardPriceDiv = document.createElement('div');
-    bundleCardPriceDiv.className = 'col-8 pl-0';
+    bundleCardPriceDiv.className = 'col-7 pl-0';
     bundleCardImagePriceDiv.appendChild(bundleCardPriceDiv);
 
     let baBundleTitle = '';
@@ -697,7 +710,7 @@ function setBaProductBundles(bundles) {
     bundleCardPriceDiv.appendChild(bundleCardProductDescription);
 
     let bundleCardImageDiv = document.createElement('div');
-    bundleCardImageDiv.className = 'col-2 pl-0';
+    bundleCardImageDiv.className = 'col-3 pl-0 pr-1';
     bundleCardImagePriceDiv.appendChild(bundleCardImageDiv);
 
     let bundleCardImage = document.createElement('img');
@@ -791,7 +804,6 @@ function onBaProductBundleRemoveClick(bundleId) {
       index = i;
     }
   }
-  console.log(bundleId, selectedBundles[index]);
   sendBaCodGEvents('BA_bundle_cart_removal', {
     'from_frag': currentUrl1,
     'product_title': (selectedBundles[index] && selectedBundles[index].secondary_product && selectedBundles[index].secondary_product.product) ?
@@ -1071,12 +1083,16 @@ function applyCouponCodes(couponCode, couponObj, scrollFlag, showPopup) {
 
 let stateId = '';
 let districtId = '';
+let talukaId = '';
+let villageId = '';
 let stateName = '';
 let districtName = '';
 let talukaName = '';
+let villageName = '';
 let stateNameEn = '';
 let districtNameEn = '';
 let talukaNameEn = '';
+let villageNameEn = '';
 let numericalNumberRegex = /^[0-9]+$/;
 
 let stateList = [];
@@ -1092,7 +1108,7 @@ fetch('https://api-cache.leanagri.com/location/state_list/en/state/state_list.js
     setStates();
   });
 }).catch(error => {
-  console.log('Unable to get states : ', error);
+  // console.log('Unable to get states : ', error);
 });
 
 function setStates() {
@@ -1111,9 +1127,102 @@ function setStates() {
 
     let stateOptionsBtn = document.createElement('option');
     stateOptionsBtn.innerHTML = stateName;
-    stateOptionsBtn.value = stateList[i].name_en;
+    stateOptionsBtn.value = stateList[i].id;
     stateDiv.add(stateOptionsBtn);
   }
+}
+
+function loadDistricts(stateId, did = '', dname = '') {
+  document.getElementById('ba-cod-district-loader').style.display = 'inline-block';
+  let requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  fetch(`https://api-cache.leanagri.com/location/district_list/en/${stateId}/district_list.json`, requestOptions)
+    .then(response => {
+      if (response.status === 200) {
+        response.json().then(result => {
+          document.getElementById('ba-cod-district-loader').style.display = 'none';
+          setDistricts(result.data, did, dname);
+        });
+      } else {
+        document.getElementById('ba-cod-district-loader').style.display = 'none';
+      }
+    }).catch(error => {
+    document.getElementById('ba-cod-district-loader').style.display = 'none';
+  });
+}
+
+function setDistricts(districtList, did = '', dname = '') {
+  let districtDiv = document.getElementById('baCodDistrictSelect');
+
+  districtDiv.removeEventListener("change", onSelectBoxDistrictChange);
+
+  districtDiv.addEventListener("change", function() {
+    onSelectBoxDistrictChange(this);
+  });
+
+  const districtOptionFirstLabel = document.createElement('option');
+  districtOptionFirstLabel.innerHTML = 'Select District';
+  districtOptionFirstLabel.value = '';
+
+  replaceChildrenAlternative2(districtDiv);
+  districtDiv.add(districtOptionFirstLabel);
+
+  let addedDistrictNames = [];
+
+  for (let i = 0; i < districtList.length; i++) {
+    let districtName = districtList[i].name_en;
+    if (addedDistrictNames.indexOf(districtName.toLowerCase()) === -1) {
+      let districtOptionsBtn = document.createElement('option');
+      districtOptionsBtn.innerHTML = districtName;
+      districtOptionsBtn.value = districtList[i].id;
+      districtDiv.add(districtOptionsBtn);
+      addedDistrictNames.push(districtName.toLowerCase());
+    }
+  }
+
+  if (did) {
+    districtDiv.value = did;
+  }
+}
+
+function loadTalukas(districtId, tid = '', tname = '') {
+  let requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  fetch(`https://api-cache.leanagri.com/location/taluka_list/en/${districtId}/taluka_list.json`, requestOptions)
+    .then(response => {
+      if (response.status === 200) {
+        response.json().then(result => {
+          setBaAssistDropdownOptions(result.data, 'baCodTalukaDropdown', 'talukaName', tname);
+        });
+      } else {
+        setBaAssistDropdownOptions([], 'baCodTalukaDropdown', 'talukaName', tname);
+      }
+    }).catch(error => {
+    setBaAssistDropdownOptions([], 'baCodTalukaDropdown', 'talukaName', tname);
+  });
+}
+
+function loadVillages(talukaId, vid = '', vname = '') {
+  let requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  fetch(`https://api-cache.leanagri.com/location/village_list/en/${talukaId}/village_list.json`, requestOptions)
+    .then(response => {
+      if (response.status === 200) {
+        response.json().then(result => {
+          setBaAssistDropdownOptions(result.data, 'baCodVillageDropdown', 'villageName', vname);
+        });
+      } else {
+        setBaAssistDropdownOptions([], 'baCodVillageDropdown', 'villageName', vname);
+      }
+    }).catch(error => {
+    setBaAssistDropdownOptions([], 'baCodVillageDropdown', 'villageName', vname);
+  });
 }
 
 function createOrderObject(type) {
@@ -1126,8 +1235,9 @@ function createOrderObject(type) {
   let mobile = document.getElementById('farmerMobile');
   let pincode = document.getElementById('baCodPincode');
   let stateField = document.getElementById('baCodStateSelect');
+  let districtField = document.getElementById('baCodDistrictSelect');
   let state = stateNameEn;
-  let district = document.getElementById('baCodDistrictSelect');
+  let district = districtNameEn;
   let taluka = document.getElementById('talukaName');
   let village = document.getElementById('villageName');
   let address = document.getElementById('baAddress');
@@ -1137,9 +1247,9 @@ function createOrderObject(type) {
   name.value = getFormattedAndRightValues(name.value);
   address.value = getFormattedAndRightValues(address.value);
   landmark.value = getFormattedAndRightValues(landmark.value);
-  district.value = getFormattedAndRightValues(district.value);
+  // district.value = getFormattedAndRightValues(district.value);
   taluka.value = getFormattedAndRightValues(taluka.value);
-  // village.value = getFormattedAndRightValues(village.value);
+  village.value = getFormattedAndRightValues(village.value);
   // postOffice.value = getFormattedAndRightValues(postOffice.value);
 
   let validationError = false;
@@ -1177,7 +1287,7 @@ function createOrderObject(type) {
     prePaidError = validationError = true;
   }
 
-  if (!state) {
+  if (!stateId) {
     stateField.classList.add('ba-mandatory-field-border');
     document.getElementById('baCodStateSelectRequired').style.display = 'block';
     if (!validationError) {
@@ -1186,8 +1296,8 @@ function createOrderObject(type) {
     prePaidError = validationError = true;
   }
 
-  if (!district.value || district.value.length < 3) {
-    district.classList.add('ba-mandatory-field-border');
+  if (!districtId) {
+    districtField.classList.add('ba-mandatory-field-border');
     document.getElementById('baCodDistrictSelectRequired').style.display = 'block';
     if (!validationError) {
       baScrollToId('baCodDistrictSelect');
@@ -1200,6 +1310,15 @@ function createOrderObject(type) {
     document.getElementById('talukaNameRequired').style.display = 'block';
     if (!validationError) {
       baScrollToId('talukaName');
+    }
+    prePaidError = validationError = true;
+  }
+
+  if (!village.value) {
+    village.classList.add('ba-mandatory-field-border');
+    document.getElementById('villageNameRequired').style.display = 'block';
+    if (!validationError) {
+      baScrollToId('villageName');
     }
     prePaidError = validationError = true;
   }
@@ -1262,13 +1381,21 @@ function createOrderObject(type) {
       document.getElementById('ba-cod-footer-online-btn-loader').style.display = 'inline-block';
       document.getElementById('ba-cod-footer-online-amount').style.display = 'none';
       let onlineAmount = getOnlinePaymentPrice();
-      generateBaRazorpayOrder(mobile.value, onlineAmount, name.value);
+      if (onlineAmount && Number(onlineAmount) > 1) {
+        generateBaRazorpayOrder(mobile.value, onlineAmount, name.value);
+      } else {
+        resetCodFooter();
+      }
     } else if (type === 'emi' && !prePaidError) {
       sendBaCodGEvents('ba_cod_order_submit_emi_pay', {});
       document.getElementById('ba-cod-footer-online-btn-emi-loader').style.display = 'inline-block';
       document.getElementById('ba-cod-footer-online-emi-amount').style.display = 'none';
       let emiAmount = getOnlineEmiPaymentPrice();
-      generateBaBharatxOrder(mobile.value, emiAmount, name.value);
+      if (emiAmount && Number(emiAmount) > 1) {
+        generateBaBharatxOrder(mobile.value, emiAmount, name.value);
+      } else {
+        resetCodFooter();
+      }
     } else {
       baFormValidationErrorRest();
     }
@@ -1295,11 +1422,53 @@ function baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mob
 
   localStorage.setItem('baProcessOrder', JSON.stringify(processOrderObj));
 
-  if ((highRiskProductFlag || otpVerifyFlag) && type === 'cod') {
-    displayConfirmationModal();
+  let multipleCodOrderCheck = false;
+
+  if (type === 'cod') {
+    multipleCodOrderCheck = checkBaCodOrderCount();
+  }
+
+  if (multipleCodOrderCheck) {
+    sendBaCodGEvents('ba_multiple_cod_otp_triggered', {value: mobileValue.toString()});
+  }
+
+  if (otpVerifyFlag && type === 'cod') {
+    sendBaCodGEvents('ba_otp_verify_modal_triggered', {value: mobileValue.toString()});
+  }
+
+  if ((highRiskProductFlag || otpVerifyFlag || multipleCodOrderCheck) && type === 'cod') {
+    displayConfirmationModal(multipleCodOrderCheck);
   } else {
     baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, type);
   }
+}
+
+function getBaCodCurrentTime() {
+  return new Date().getTime();
+}
+
+function checkBaCodOrderCount() {
+  let now = getBaCodCurrentTime();
+
+  let storedBaFirstOrderTime = localStorage.getItem('storedBaFirstOrderTime');
+  let storedBaLatestOrderTime = localStorage.getItem('storedBaLatestOrderTime');
+  let storedBaOrderCount = parseInt(localStorage.getItem('storedBaOrderCount')) || 0;
+
+  if (!storedBaFirstOrderTime || (now - parseInt(storedBaFirstOrderTime)) > (5 * 60 * 1000)) {
+    storedBaFirstOrderTime = now;
+    storedBaLatestOrderTime = now;
+    storedBaOrderCount = 1;
+  } else {
+    storedBaLatestOrderTime = now;
+    storedBaOrderCount++;
+  }
+
+  localStorage.setItem('storedBaFirstOrderTime', storedBaFirstOrderTime.toString());
+  localStorage.setItem('storedBaLatestOrderTime', storedBaLatestOrderTime.toString());
+  localStorage.setItem('storedBaOrderCount', storedBaOrderCount.toString());
+
+  // return true (otp check should take place if >= 6 orders)
+  return storedBaOrderCount >= 6;
 }
 
 function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, type) {
@@ -1317,6 +1486,11 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
           'order_value': createOrderTotalValue,
           'ba_phone_number': mobileValue
         });
+        // Resetting if otp modal is displayed
+        if (baO2['otp']) {
+          sendBaCodGEvents('ba_cod_otp_success_and_ordered', {});
+          baCloseConfirmationModalAndReset();
+        }
         if (type === 'cod') {
           sendBaCodGEvents('ba_cod_ordered_cod', {});
         } else if (type === 'online') {
@@ -1324,17 +1498,14 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
         } else if (type === 'emi') {
           sendBaCodGEvents('ba_cod_ordered_emi', {});
         }
-        // Resetting if otp modal is displayed
-        if (baO2['otp']) {
-          baCloseConfirmationModalAndReset();
-        }
         document.getElementById('baCodTriggerRecovery').disabled = false;
         sendBaFbEvents('Purchase', {
           currency: "INR",
           value: createOrderTotalValue,
-          num_items: createOrderLineItems.length
+          num_items: createOrderLineItems.length,
+          payment_type: type
         });
-        sendBaCodGAConversionOrderedEvents(createOrderTotalValue, result.order.order_number);
+        sendBaCodGAConversionOrderedEvents(createOrderTotalValue, result.order.order_number, type);
         try {
           gtag('event', 'conversion', {
             'send_to': 'AW-682014322/--74CKG9_dcDEPLsmsUC',
@@ -1343,7 +1514,7 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
             'transaction_id': ''
           });
         } catch (error) {
-          console.log('gtag error');
+          // console.log('gtag error');
         }
         localStorage.setItem('BA_COD_FORM_NOTES_ATTRIBUTES', JSON.stringify(baO2["order"]["note_attributes"]));
         // window.open(result.order.order_status_url, '_self');
@@ -1356,6 +1527,7 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
       if (response.status === 400) {
         response.json().then(result => {
           if (result.error && result.error === 'Invalid OTP') {
+            sendBaCodGEvents('ba_cod_otp_invalid', {});
             baOtpInvalidSetAndReset('block', '1px solid #EC463B');
             resetCodConfirmationModal();
           } else {
@@ -1367,7 +1539,6 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
       }
     }
   }).catch(error => {
-    console.log('error: ', error);
     onBaOrderCreationError();
   });
 
@@ -1424,8 +1595,9 @@ setInterval(() => {
   let mobile = document.getElementById('farmerMobile');
   let pincode = document.getElementById('baCodPincode');
   let stateField = document.getElementById('baCodStateSelect');
-  let district = document.getElementById('baCodDistrictSelect');
+  let districtField = document.getElementById('baCodDistrictSelect');
   let state = stateName;
+  let district = districtNameEn;
   let taluka = document.getElementById('talukaName');
   let village = document.getElementById('villageName');
   let address = document.getElementById('baAddress');
@@ -1434,7 +1606,7 @@ setInterval(() => {
   name.value = getFormattedAndRightValues(name.value);
   address.value = getFormattedAndRightValues(address.value);
   landmark.value = getFormattedAndRightValues(landmark.value);
-  district.value = getFormattedAndRightValues(district.value);
+  // district.value = getFormattedAndRightValues(district.value);
   taluka.value = getFormattedAndRightValues(taluka.value);
   village.value = getFormattedAndRightValues(village.value);
 
@@ -1464,13 +1636,13 @@ setInterval(() => {
     }
   }
 
-  if (state) {
+  if (stateId) {
     stateField.classList.remove('ba-mandatory-field-border');
     document.getElementById('baCodStateSelectRequired').style.display = 'none';
   }
 
-  if (district.value && district.value.length > 2) {
-    district.classList.remove('ba-mandatory-field-border');
+  if (districtId) {
+    districtField.classList.remove('ba-mandatory-field-border');
     document.getElementById('baCodDistrictSelectRequired').style.display = 'none';
   }
 
@@ -1667,12 +1839,22 @@ function checkFreeDelivery() {
 function checkCodEligibility(type) {
   let data = getBaCodProductData();
   let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
+  let currProduct = getBaCartMainItemDetails();
+  let currProductId = currProduct.product_id.toString();
   if (type === 'cod') {
     if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
       document.getElementById('ba-cod-place-btn-div').style.display = 'block';
-      document.getElementById('ba-online-pay-main-div').style.display = 'none';
-      // remove above line and uncomment below for displaying cod and razorpay
-      // document.getElementById('ba-online-pay-main-div').style.display = 'block';
+      // display razorpay if condition matches or only cod
+      if (baDisplayABTPrePaidProducts.indexOf(currProductId) > -1 || baDisplayABTPrePaidSeconds < 10 || baRecoveryOnlineBtnEnable) {
+        document.getElementById('ba-online-pay-main-div').style.display = 'block';
+        sendBaCodGEvents('ba_ab_prepaid_btn', { 'value': currProductId });
+        if (baDisplayABTPrePaidProducts.indexOf(currProductId) === -1) {
+          sendBaCodGEvents('ba_ab_prepaid_time_btn', { 'value': currProductId });
+        }
+      } else {
+        document.getElementById('ba-online-pay-main-div').style.display = 'none';
+        sendBaCodGEvents('ba_ab_prepaid_no_display', { 'value': currProductId });
+      }
       document.getElementById('ba-online-pay-main-emi-div').style.display = 'none';
     } else {
       document.getElementById('ba-cod-place-btn-div').style.display = 'none';
@@ -1689,11 +1871,16 @@ function checkCodEligibility(type) {
 function displayBaCodOnlinePayButton(displayStyle) {
   let data = getBaCodProductData();
   let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
+  let currProduct = getBaCartMainItemDetails();
+  let currProductId = currProduct.product_id.toString();
   if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled && baCheckoutType === 'cod') {
-    document.getElementById('ba-online-pay-main-div').style.display = displayStyle;
-    // will display online button always
-    // remove above line and uncomment below for displaying cod and razorpay
-    // document.getElementById('ba-online-pay-main-div').style.display = 'block';
+    // display razorpay if condition matches or only cod
+    if (baDisplayABTPrePaidProducts.indexOf(currProductId) > -1 || baDisplayABTPrePaidSeconds < 10 || baRecoveryOnlineBtnEnable) {
+      // will display online button always
+      document.getElementById('ba-online-pay-main-div').style.display = 'block';
+    } else {
+      document.getElementById('ba-online-pay-main-div').style.display = displayStyle;
+    }
     document.getElementById('ba-online-pay-main-emi-div').style.display = displayStyle;
   }
 }
@@ -1734,8 +1921,8 @@ function getBaOrderObject() {
   let mobile = document.getElementById('farmerMobile');
   let pincode = document.getElementById('baCodPincode');
   let stateField = document.getElementById('baCodStateSelect');
-  let state = stateNameEn;
-  let district = document.getElementById('baCodDistrictSelect');
+  let state = getStateNameInEnglish();
+  let district = districtNameEn;
   let taluka = document.getElementById('talukaName');
   let village = document.getElementById('villageName');
   let address = document.getElementById('baAddress');
@@ -1746,7 +1933,7 @@ function getBaOrderObject() {
   let mobileValue = mobile.value;
   let  pincodeValue = pincode.value;
   let stateValue = state;
-  let districtValue = district.value;
+  let districtValue = district;
   let talukaValue = taluka.value ? taluka.value : '';
   let villageValue = village.value ? village.value : '';
   let addressValue = address.value;
@@ -1758,9 +1945,13 @@ function getBaOrderObject() {
     mobile: mobile.value,
     pincode: pincode.value,
     state: state,
-    district: district.value,
+    district: district,
     taluka: talukaValue,
     village: villageValue,
+    stateId,
+    districtId,
+    talukaId: talukaId ? talukaId : '',
+    villageId: villageId ? villageId : '',
     address: address.value,
     landmark: landmarkValue,
     postOffice: postOfficeValue,
@@ -1799,7 +1990,10 @@ function getBaOrderObject() {
 
   for (let i = 0; i < selectedBundles.length; i++) {
     if (selectedBundles[i].enabled && selectedBundles[i].selected) {
-      let variant = {'variant_id': selectedBundles[i].secondary_product.variant_id, 'quantity': 1, 'properties': {}};
+      let variant = {
+        'variant_id': selectedBundles[i].secondary_product.variant_id, 'quantity': 1,
+        'properties': {is_bundled: 'yes', bundle_price: selectedBundles[i].price}
+      };
       createOrderLineItems.push(variant);
     }
   }
@@ -1878,6 +2072,14 @@ function getFormattedAndRightValues(value) {
   }
 }
 
+function getStateNameInEnglish() {
+  for (let i = 0; i < stateList.length; i++) {
+    if (Number(stateId) === Number(stateList[i].id)) {
+      return stateList[i].name_en;
+    }
+  }
+}
+
 function baPaymentHandler(res) {
   if (res && res.razorpay_payment_id) {
     baRazorpayPaymentId = res.razorpay_payment_id;
@@ -1920,6 +2122,7 @@ function triggerOnlineOrderCreation() {
   baO2["order"]["discount_codes"] = getBaOnlineDiscountCodeObject(baDiscountCodes);
   baO2["order"]["note_attributes"].push({"name": "order_id", "value": baRazorpayOrderId});
   baO2["order"]["note_attributes"].push({"name": "payment_id", "value": baRazorpayPaymentId});
+  baO2["order"]["note_attributes"].push({"name": "online_amount", "value": baRazorpayOnlineAmount});
   let createOrderLineItems = getLineItemsObject();
   let createOrderTotalValue = getBaTotalOrderAmount();
   baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, 'online');
@@ -1935,6 +2138,7 @@ function triggerEmiOrderCreation() {
   // baO2["order"]["discount_codes"] = getBaOnlineDiscountCodeObject(baDiscountCodes);
   baO2["order"]["note_attributes"].push({"name": "order_id", "value": bharatxTransactionId});
   baO2["order"]["note_attributes"].push({"name": "bharatx_payment", "value": "yes"});
+  baO2["order"]["note_attributes"].push({"name": "online_amount", "value": baCodAmountFinal});
   let createOrderLineItems = getLineItemsObject();
   let createOrderTotalValue = getBaTotalOrderAmount();
   baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, 'emi');
@@ -1946,6 +2150,7 @@ function sendMessage(message) {
 
 function generateBaRazorpayOrder(mobileValue, onlineAmount, nameValue) {
   let baO2 = getBaOrderObject();
+  let aValue = Number(onlineAmount) * 777;
   let baDiscountCodes = baO2["order"]["discount_codes"] || [];
   baO2["order"]["discount_codes"] = getBaOnlineDiscountCodeObject(baDiscountCodes);
   let generateOrderObj = {
@@ -1953,11 +2158,14 @@ function generateBaRazorpayOrder(mobileValue, onlineAmount, nameValue) {
     "cart_amount": onlineAmount,
     "order_details": baO2
   }
+  let gobj = simpleJumble(generateOrderObj, mobileValue);
+  let myHeaders = new Headers();
+  myHeaders.append("scc-ix-platform", aValue.toString());
+  myHeaders.append("content-type", "application/json");
+  myHeaders.append("priorty", gobj);
   fetch(`https://lcrks.leanagri.com/third_parties/shopify/api/v1/generate_order/`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: myHeaders,
     body: JSON.stringify(generateOrderObj)
   }).then(response => response.json())
     .then(result => {
@@ -1977,7 +2185,9 @@ function generateBaRazorpayOrder(mobileValue, onlineAmount, nameValue) {
         updatePaymentStatus(false, 'ba_payment_failed');
       });
     })
-    .catch(error => console.log('error', error));
+    .catch(error => {
+      // console.log('error', error)
+    });
 }
 
 function onOnlinePaymentFail() {
@@ -1987,6 +2197,7 @@ function onOnlinePaymentFail() {
 
 function generateBaBharatxOrder(mobileValue, emiAmount, nameValue) {
   let baO2 = getBaOrderObject();
+  let aValue = Number(baCodAmountFinal) * 969;
   emiAmount = (Number(emiAmount) * 100).toFixed(0);
   emiAmount = Number(emiAmount);
   baO2["order"]["note_attributes"].push({"name": "bharatx_payment", "value": "yes"});
@@ -2011,14 +2222,16 @@ function generateBaBharatxOrder(mobileValue, emiAmount, nameValue) {
     "ba_order": baO2
   };
 
-  console.log(generateOrderObj);
+  let gobj = simple2Jumble(generateOrderObj, mobileValue);
+  let myHeaders = new Headers();
+  myHeaders.append("scc-iz-platform", aValue.toString());
+  myHeaders.append("content-type", "application/json");
+  myHeaders.append("prority", gobj);
+  myHeaders.append("Extra-Auth", 'YmhhcmF0eGF1dGg=');
 
   fetch(`https://lcrks.leanagri.com/payments/vendors/bharatx/api/v1/external_payment/`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Extra-Auth': 'YmhhcmF0eGF1dGg='
-    },
+    headers: myHeaders,
     body: JSON.stringify(generateOrderObj)
   }).then(response => response.json())
     .then(result => {
@@ -2031,7 +2244,7 @@ function generateBaBharatxOrder(mobileValue, emiAmount, nameValue) {
       }
     }).catch(error => {
       onEmiPaymentFail();
-      console.log("error", error);
+      // console.log("error", error);
     });
 }
 
@@ -2052,7 +2265,7 @@ function triggerBharatxStatus() {
         }
       }).catch(error => {
       // onEmiPaymentFail();
-      console.log("error", error);
+      // console.log("error", error);
     });
   }, 5000)
 }
@@ -2099,17 +2312,56 @@ function getBaOnlineDiscountCodeObject(codes) {
 }
 
 function getOnlinePayDiscountAmount() {
-  return 40;
+  let data = getBaCodProductData();
+  let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
+  let onlineDiscountPercent = 0.1;
+  if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].prepaid_discount_pc) {
+    onlineDiscountPercent = Number(data.variant_prices[finalVariantId].prepaid_discount_pc);
+  }
+  let cartValue = document.getElementById('ba-price-details-total-value').innerHTML;
+  cartValue = getOnlyPriceWithoutTextValues(cartValue);
+
+  let prepaidDiscount = Math.min(onlineDiscountPercent * cartValue, 1000);
+  prepaidDiscount = Math.floor(prepaidDiscount);
+
+  if (!prepaidDiscount || !Number(prepaidDiscount) || Number(prepaidDiscount) < 40) {
+    prepaidDiscount = 40;
+  }
+
+  return prepaidDiscount;
+}
+
+function getOnlinePayDiscountPercentage() {
+  let data = getBaCodProductData();
+  let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
+  let onlineDiscountPercent = 0.1;
+  if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].prepaid_discount_pc) {
+    onlineDiscountPercent = Number(data.variant_prices[finalVariantId].prepaid_discount_pc);
+  }
+  return (onlineDiscountPercent * 100);
+}
+
+function getOnlyPriceWithoutTextValues(value) {
+  let amount = value.replace('₹ ', '');
+  amount =  amount.replace('.00', '');
+  if (amount && Number(amount) > 1) {
+    return amount;
+  } else {
+    let amountValue = value.match(/\d+(\.\d+)?/);
+    return amountValue ? amountValue[0] : 0;
+  }
 }
 
 function updateOnlinePaymentPrice(price) {
   let baCodAmount = Number(price);
   let baOnlineDiscount = getOnlinePayDiscountAmount();
   let baOnlineAmount = Number(price)- baOnlineDiscount;
-  if (price.toString().includes('.')) {
+  if (price.toString().indexOf('.') !== -1) {
     baOnlineAmount = baOnlineAmount.toFixed(2);
     baCodAmount = baCodAmount.toFixed(2);
   }
+  baCodAmountFinal = baCodAmount;
+  baRazorpayOnlineAmount = baOnlineAmount;
   document.getElementById('ba-cod-footer-online-original-amount').innerHTML = `₹ ${baCodAmount}`;
   document.getElementById('ba-cod-footer-online-amount').innerHTML = `₹ ${baOnlineAmount}`;
   document.getElementById('baCodFooterOnlineDiscount').innerHTML = `₹${baOnlineDiscount} ${baOnlinePaymentDiscountLabel}`;
@@ -2124,15 +2376,29 @@ function updateOnlinePaymentPrice(price) {
 }
 
 function getOnlinePaymentPrice() {
-  let onlinePrice = document.getElementById('ba-cod-footer-online-amount').innerHTML;
-  onlinePrice = onlinePrice.replace('₹ ', '');
-  return onlinePrice.replace('.00', '');
+  let onlinePrice = baRazorpayOnlineAmount.toString();
+  let onlinePriceAmt = onlinePrice;
+  onlinePriceAmt = onlinePriceAmt.replace('₹ ', '');
+  onlinePriceAmt =  onlinePriceAmt.replace('.00', '');
+  if (onlinePriceAmt && Number(onlinePriceAmt) > 1) {
+    return onlinePriceAmt;
+  } else {
+    let onlinePriceValue = onlinePrice.match(/\d+(\.\d+)?/);
+    return onlinePriceValue ? onlinePriceValue[0] : 0;
+  }
 }
 
 function getOnlineEmiPaymentPrice() {
-  let onlinePrice = document.getElementById('ba-cod-footer-online-emi-amount').innerHTML;
-  onlinePrice = onlinePrice.replace('₹ ', '');
-  return onlinePrice.replace('.00', '');
+  let onlinePrice = baCodAmountFinal.toString();
+  let onlinePriceAmt = onlinePrice;
+  onlinePriceAmt = onlinePriceAmt.replace('₹ ', '');
+  onlinePriceAmt =  onlinePriceAmt.replace('.00', '');
+  if (onlinePriceAmt && Number(onlinePriceAmt) > 1) {
+    return onlinePriceAmt;
+  } else {
+    let onlinePriceValue = onlinePrice.match(/\d+(\.\d+)?/);
+    return onlinePriceValue ? onlinePriceValue[0] : 0;
+  }
 }
 
 const updateBaCartApiCaller = createUpdateBaCartApiCaller();
@@ -2209,6 +2475,25 @@ function updateBaCart(operation, quantityValue) {
   }
 }
 
+function simpleJumble(m, mobile) {
+  let amt = getOnlinePaymentPrice();
+  let s = `${mobile}-${amt}-uqfKjsRrHg`;
+  let simple = CryptoJS.HmacSHA256(JSON.stringify(m), s);
+  let simpleSixFour = CryptoJS.enc.Base64.stringify(simple);
+  return simpleSixFour;
+}
+
+function simple2Jumble(m, mobile) {
+  let amt = getOnlineEmiPaymentPrice();
+  amt = (Number(amt) * 100).toFixed(0);
+  amt = Number(amt);
+  mobile = "+91" + mobile;
+  let s = `${mobile}-${amt}-2MvybzaKEM`;
+  let simple = CryptoJS.HmacSHA256(JSON.stringify(m), s);
+  let simpleSixFour = CryptoJS.enc.Base64.stringify(simple);
+  return simpleSixFour;
+}
+
 function autoFillUserDetails() {
   let infos = JSON.parse(localStorage.getItem('BA_COD_FORM_NOTES_ATTRIBUTES')) || [];
   infos.forEach( info => {
@@ -2219,16 +2504,37 @@ function autoFillUserDetails() {
       sendBaCodGEvents('ba_cod_auto_address', {'ba_phone_number': info.value});
       document.getElementById('farmerMobile').value = info.value;
     }
-    if (info.name === 'state') {
+    if (info.name === 'stateId') {
       document.getElementById('baCodStateSelect').value = info.value;
+      stateId = info.value;
+    }
+    if (info.name === 'state') {
       stateName = info.value;
       stateNameEn = info.value;
     }
-    if (info.name === 'district') {
+    if (info.name === 'districtId') {
       document.getElementById('baCodDistrictSelect').value = info.value;
+      districtId = info.value;
+    }
+    if (info.name === 'district') {
+      districtName = info.value;
+      districtNameEn = info.value;
+    }
+    if (info.name === 'talukaId') {
+      talukaId = info.value ? info.value : '';
     }
     if (info.name === 'taluka') {
       document.getElementById('talukaName').value = info.value;
+      talukaName = info.value;
+      talukaNameEn = info.value;
+    }
+    if (info.name === 'villageId') {
+      villageId = info.value ? info.value : '';
+    }
+    if (info.name === 'village') {
+      document.getElementById('villageName').value = info.value;
+      villageName = info.value;
+      villageNameEn = info.value;
     }
     if (info.name === 'address') {
       document.getElementById('baAddress').value = info.value;
@@ -2240,6 +2546,100 @@ function autoFillUserDetails() {
       document.getElementById('baCodPincode').value = info.value;
     }
   } );
+
+  if (stateId) {
+    loadDistricts(stateId, districtId ? districtId : '', districtNameEn ? districtNameEn : '');
+  }
+
+  if (districtId) {
+    loadTalukas(districtId, talukaId ? talukaId : '',talukaNameEn ? talukaNameEn : '');
+  }
+
+  if (talukaId) {
+    loadVillages(talukaId, villageId ? villageId : '',villageNameEn ? villageNameEn : '');
+  }
+
+  if (infos.length === 0) {
+    let location = JSON.parse(sessionStorage.getItem('ba_ip_location_details')) || {};
+    setBaIpOrGpsLocation(location, false);
+  }
+}
+
+function setBaIpOrGpsLocation(location, isGps) {
+  if (isGps) {
+    document.getElementById('baCodLocateMeIconLoader').style.display = 'none';
+    document.getElementById('baCodLocateMeIcon').style.display = 'block';
+  }
+  if (location.state) {
+    document.getElementById('baCodStateSelect').value = location.state;
+    stateId = location.state;
+  }
+  if (location.state_name) {
+    stateName = location.state_name;
+    stateNameEn = location.state_name;
+  }
+  if (location.district) {
+    document.getElementById('baCodDistrictSelect').value = location.district;
+    districtId = location.district;
+  }
+  if (location.district_name) {
+    districtName = location.district_name;
+    districtNameEn = location.district_name;
+  }
+  if (location.taluka) {
+    talukaId = location.taluka ? location.taluka : '';
+  }
+  if (location.taluka_name) {
+    document.getElementById('talukaName').value = location.taluka_name;
+    talukaName = location.taluka_name;
+    talukaNameEn = location.taluka_name;
+  }
+  if (location.village) {
+    villageId = location.village ? location.village : '';
+  }
+  if (location.village_name) {
+    document.getElementById('villageName').value = location.village_name;
+    villageName = location.village_name;
+    villageNameEn = location.village_name;
+  }
+  if (location.pin_code) {
+    document.getElementById('baCodPincode').value = location.pin_code;
+    if (isGps) {
+      sendBaCodGEvents('ba_address_populated_gps', { 'value': location.pin_code });
+    } else {
+      sendBaCodGEvents('ba_address_populated_ip', { 'value': location.pin_code });
+    }
+  }
+
+  if (stateId) {
+    loadDistricts(stateId, districtId ? districtId : '', districtNameEn ? districtNameEn : '');
+  }
+
+  if (districtId) {
+    loadTalukas(districtId, talukaId ? talukaId : '',talukaNameEn ? talukaNameEn : '');
+  }
+
+  if (talukaId) {
+    loadVillages(talukaId, villageId ? villageId : '',villageNameEn ? villageNameEn : '');
+  }
+}
+
+function getBaGPSLocation() {
+  sendBaCodGEvents('ba_address_populated_gps_btn_clk', {});
+  document.getElementById('baCodLocateMeIconLoader').style.display = 'inline-block';
+  document.getElementById('baCodLocateMeIcon').style.display = 'none';
+  let location = JSON.parse(sessionStorage.getItem('ba_gps_location_details')) || {};
+  if (location.state) {
+    setBaIpOrGpsLocation(location, true);
+  } else {
+    try {
+      getBaLocationFromGPS().then(data => {
+        setBaIpOrGpsLocation(data ? data : {}, true);
+      });
+    } catch (error) {
+      // console.log(error);
+    }
+  }
 }
 
 function resetPlaceOrderButton() {
@@ -2295,6 +2695,8 @@ function resetCodFormFields() {
   baRazorpayReferenceId = '';
   bharatxTransactionId = '';
   baOtpCountdown = '';
+  baRazorpayOnlineAmount = '';
+  baCodAmountFinal = '';
 
   resetFormFieldsValidation();
 }
@@ -2302,12 +2704,18 @@ function resetCodFormFields() {
 function resetLocationFields() {
   stateId = '';
   districtId = '';
+  talukaId = '';
+  villageId = '';
   stateName = '';
   stateNameEn = '';
   districtName = '';
   districtNameEn = '';
   talukaName = '';
   talukaNameEn = '';
+  villageName = '';
+  villageNameEn = '';
+  document.getElementById('baCodLocateMeIconLoader').style.display = 'none';
+  document.getElementById('baCodLocateMeIcon').style.display = 'block';
   document.getElementById('baCodStateSelect').value = '';
   document.getElementById('baCodDistrictSelect').value = '';
   // document.getElementById('baCodStateSelectLabel').innerHTML = stateLabel;
@@ -2346,72 +2754,93 @@ function resetFormFieldsValidation() {
   document.getElementById('baLandmarkRequired').style.display = 'none';
 }
 
+function resetDistrictValues() {
+  districtId = '';
+  districtNameEn = '';
+  districtName = '';
+}
+
+function resetTalukaValues() {
+  talukaId = '';
+  talukaNameEn = '';
+  talukaName = '';
+}
+
+function resetVillageValues() {
+  villageId = '';
+  villageNameEn = '';
+  villageName = '';
+}
+
 function onSelectBoxStateChange(selectValue) {
   stateName = selectValue.options[selectValue.selectedIndex].text;
-  stateNameEn = selectValue.options[selectValue.selectedIndex].value;
+  stateNameEn = selectValue.options[selectValue.selectedIndex].text;
+  stateId = selectValue.options[selectValue.selectedIndex].value;
+  resetDistrictValues();
+  resetTalukaValues();
+  resetVillageValues();
+  loadDistricts(stateId);
 }
 
-function setStateFromPincode(id, name, nameEn) {
-  document.getElementById('baCodStateSelect').value = nameEn;
+function onSelectBoxDistrictChange(selectValue) {
+  districtName = selectValue.options[selectValue.selectedIndex].text;
+  districtNameEn = selectValue.options[selectValue.selectedIndex].text;
+  districtId = selectValue.options[selectValue.selectedIndex].value;
+  resetTalukaValues();
+  resetVillageValues();
+  loadTalukas(districtId);
+}
+
+function setStateFromPincode(id, name, nameEn, tid, tName) {
+  document.getElementById('baCodStateSelect').value = id;
   stateName = name;
   stateNameEn = nameEn;
+  stateId = id;
 }
 
-function setDistrictFromPincode(id, name, nameEn) {
+function setDistrictFromPincode(id, name, nameEn, sid) {
   districtName = name;
   districtNameEn = nameEn;
-  document.getElementById('baCodDistrictSelect').value = nameEn;
+  districtId = id;
+  loadDistricts(sid, id, name);
 }
 
-function setTalukaFromPincode(id, name, nameEn) {
+function setTalukaFromPincode(id, name, nameEn, did) {
   talukaName = name;
   talukaNameEn = nameEn;
+  talukaId = id;
   document.getElementById('talukaName').value = nameEn;
+  loadTalukas(did, id, name);
 }
 
-function onStateClick(id, name, nameEn) {
-  // document.getElementById('baCodStateSelect').innerHTML = name.length > 18 ? name.slice(0,18) + '..' : name;
-  // document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
-  stateId = id;
-  stateName = name;
-  stateNameEn = nameEn;
-  districtId = '';
-  districtName = '';
-  districtNameEn = '';
-  loadDistricts(id);
+function setVillageFromPincode(id, name, nameEn, tid) {
+  villageName = name;
+  villageNameEn = nameEn;
+  villageId = id;
+  document.getElementById('villageName').value = nameEn;
+  loadVillages(tid, id, name);
 }
 
-function onDistrictClick(id, name, nameEn) {
-  districtId = id;
-  districtName = name;
-  districtNameEn = nameEn;
-  // document.getElementById('baCodDistrictSelectLabel').innerHTML = name.length > 18 ? name.slice(0,18) + '..' : name;
-}
+// function onStateClick(id, name, nameEn) {
+//   // document.getElementById('baCodStateSelect').innerHTML = name.length > 18 ? name.slice(0,18) + '..' : name;
+//   // document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
+//   stateId = id;
+//   stateName = name;
+//   stateNameEn = nameEn;
+//   districtId = '';
+//   districtName = '';
+//   districtNameEn = '';
+//   loadDistricts(id);
+// }
+//
+// function onDistrictClick(id, name, nameEn) {
+//   districtId = id;
+//   districtName = name;
+//   districtNameEn = nameEn;
+//   // document.getElementById('baCodDistrictSelectLabel').innerHTML = name.length > 18 ? name.slice(0,18) + '..' : name;
+// }
 
-function loadDistricts(stateId) {
-  document.getElementById('ba-cod-district-loader').style.display = 'inline-block';
-  let requestOptions = {
-    method: 'GET',
-    redirect: 'follow'
-  };
-  fetch(`https://api-cache.leanagri.com/location/district_list/en/${stateId}/district_list.json`, requestOptions)
-    .then(response => {
-      if (response.status === 200) {
-        response.json().then(result => {
-          document.getElementById('ba-cod-district-loader').style.display = 'none';
-          setDistricts(result.data);
-        });
-      } else {
-        console.log('Unable to fetch district list');
-        document.getElementById('ba-cod-district-loader').style.display = 'none';
-      }
-    }).catch(error => {
-    document.getElementById('ba-cod-district-loader').style.display = 'none';
-    console.log('error: ', error);
-  });
-}
-
-function setDistricts(districts) {
+// function setDistricts(districts) {
   // const districtDiv = document.getElementById('baCodDistrictOptions');
   // replaceChildrenAlternative(districtDiv);
   //
@@ -2432,9 +2861,17 @@ function setDistricts(districts) {
   //   districtOptionsBtn.addEventListener("click", function(){ onDistrictClick(stateList[i].id, districtName, districts[i].name_en); });
   //   districtDiv.appendChild(districtOptionsBtn);
   // }
-}
+// }
 
 function onInputElementClick(fieldName) {
+  if (fieldName === 'taluka') {
+    baScrollToId('talukaName');
+  }
+
+  if (fieldName === 'village') {
+    baScrollToId('villageName');
+  }
+
   let mobileValue = document.getElementById('farmerMobile').value;
   if (mobileValue && mobileValue.length === 10) {
     sendBaCodGEvents('BA_cart_phn', {
@@ -2458,7 +2895,7 @@ function sendBaCodGEvents(name, value) {
   try {
     gtag('event', name, value);
   } catch (error) {
-    console.log('gtag error');
+    // console.log('gtag error');
   }
 }
 
@@ -2486,11 +2923,11 @@ function sendBaCodGAConversionEvents(name) {
       ]
     });
   } catch (error) {
-    console.log('gtag error');
+    // console.log('gtag error');
   }
 }
 
-function sendBaCodGAConversionOrderedEvents(totalAmount, orderId) {
+function sendBaCodGAConversionOrderedEvents(totalAmount, orderId, paymentType) {
   let mainItem = getBaCartMainItemDetails();
   let price = (mainItem.final_line_price/100);
   try {
@@ -2505,11 +2942,12 @@ function sendBaCodGAConversionOrderedEvents(totalAmount, orderId) {
             quantity: mainItem.quantity,
             price: price
           }
-        ]
+        ],
+       payment_type: paymentType
     });
     sendBaCodShopifyAnalyticsEvents('Purchase', totalAmount, orderId);
   } catch (error) {
-    console.log('gtag error');
+    // console.log('gtag error');
   }
 }
 
@@ -2555,7 +2993,7 @@ function sendBaCodShopifyAnalyticsEvents(name, totalAmount, orderId) {
     ShopifyAnalytics.lib.track(name, analyticsObj);
     // console.log(ShopifyAnalytics.lib.track(name, analyticsObj));
   } catch (error) {
-    console.log('shopify analytics error');
+    // console.log('shopify analytics error');
   }
 }
 
@@ -2568,7 +3006,7 @@ function sendBaFbEvents(name, value) {
     value['content_type'] = 'product_group';
     fbq('track', name, value);
   } catch (error) {
-    console.log('fbq error');
+    // console.log('fbq error');
   }
 }
 
@@ -2581,11 +3019,11 @@ function loadBaLocation(value) {
             if (result.data) {setPincodeLocation(result.data);}
           });
         } else {
-          resetTalukaAndVillage();
-          console.log('Unable to get location');
+          // resetTalukaAndVillage();
+          // console.log('Unable to get location');
         }
       }).catch(error => {
-      console.log('Unable to get pincode location: ', error);
+      // console.log('Unable to get pincode location: ', error);
     });
   }
 }
@@ -2602,19 +3040,25 @@ function setPincodeLocation(data) {
   // updateElement('talukaName', data?.taluka);
   // updateElement('villageName', data?.village);
 
-  ['state', 'district', 'taluka'].forEach((type) => {
-    const dataItem = data[type];
-    if (dataItem) {
-      let name = dataItem[langKey] || dataItem.name;
-      if (type === 'state') {
-        setStateFromPincode(dataItem.id, name, dataItem.name_en)
-      } else if (type === 'district') {
-        setDistrictFromPincode(dataItem.id, name, dataItem.name_en);
-      } else {
-        setTalukaFromPincode(dataItem.id, name, dataItem.name_en);
+  try {
+    ['state', 'district', 'taluka', 'village'].forEach((type) => {
+      const dataItem = data[type];
+      if (dataItem) {
+        let name = dataItem[langKey] || dataItem.name;
+        if (type === 'state') {
+          setStateFromPincode(dataItem.id, name, dataItem.name_en)
+        } else if (type === 'district') {
+          setDistrictFromPincode(dataItem.id, name, dataItem.name_en, data.state.id);
+        } else if (type === 'taluka') {
+          setTalukaFromPincode(dataItem.id, name, dataItem.name_en, data.district.id);
+        } else {
+          setVillageFromPincode(dataItem.id, name, dataItem.name_en, data.taluka.id);
+        }
       }
-    }
-  });
+    });
+  } catch (error) {
+    // console.log('Error in setting location from pincode');
+  }
 }
 
 function checkPincodeServiceability(value) {
@@ -2677,7 +3121,7 @@ function baFormValidationErrorRest() {
 }
 
 function getBaCodProductData() {
-  return JSON.parse(localStorage.getItem('baCodProductData')) || {};
+  return JSON.parse(sessionStorage.getItem('baCodProductData')) || {};
 }
 
 function getWhitelistedPincodes() {
@@ -2688,7 +3132,19 @@ function getWhitelistedPincodes() {
 function displayBaRecoveryDiscount() {
   let createOrderDiscount = document.getElementById('ba-price-details-discount-value').innerHTML;
   createOrderDiscount = createOrderDiscount.replace('-₹ ', '');
-  if (baRecoveryOrder && !Number(createOrderDiscount) > 0) {
+  let discountPercent = getOnlinePayDiscountPercentage();
+  document.getElementById('baOffer5Percent').innerHTML = `${discountPercent}%`;
+  document.getElementById('baRecoveryOrderNow').innerHTML = baRecoveryOrderNow.replace('###', discountPercent);
+
+  // Old logic to display recovery discount modal
+  // if (baRecoveryOrder && !Number(createOrderDiscount) > 0) {
+  //   document.getElementById('ba-cod-recovery-discount-btn').click();
+  // } else {
+  //   document.getElementById('baCodFormClose').click();
+  // }
+
+  // New logic for displaying recovery discount modal
+  if (baRecoveryOrder && !baRecoveryOnlineBtnEnable) {
     document.getElementById('ba-cod-recovery-discount-btn').click();
   } else {
     document.getElementById('baCodFormClose').click();
@@ -2696,27 +3152,36 @@ function displayBaRecoveryDiscount() {
 }
 
 function applyBaRecoveryDiscount(closeModal) {
-  let mainItem = getBaCartMainItemDetails();
-  let fivePercentAmt = Number(mainItem.final_line_price)/100;
-  // changed 5 % to 2 %
-  fivePercentAmt = ((fivePercentAmt * 0.02).toFixed(2)).toString();
-  baRecoveryApplied = true;
-  localStorage.setItem('BA_COD_Coupon_code', 'BA Recovery Discount');
+  // Old logic to apply recovery discount
+  // let mainItem = getBaCartMainItemDetails();
+  // let fivePercentAmt = Number(mainItem.final_line_price)/100;
+  // // changed 5 % to 2 %
+  // fivePercentAmt = ((fivePercentAmt * 0.02).toFixed(2)).toString();
+  // baRecoveryApplied = true;
+  // localStorage.setItem('BA_COD_Coupon_code', 'BA Recovery Discount');
+  //
+  // let bundleCartOrderTotalValue = getBundlesTotalPrice();
+  // let mainItemPrice = Number(mainItem.final_line_price)/100;
+  // mainItemPrice = mainItemPrice + bundleCartOrderTotalValue - fivePercentAmt;
+  // mainItemPrice = Number(mainItemPrice);
+  //
+  // document.getElementById('ba-price-details-discount-value').innerHTML = `-₹ ${fivePercentAmt.replace('.00', '')}`;
+  // document.getElementById('ba-price-details-discount-row').style.display = 'flex';
+  //
+  // document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
+  // document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
+  // updateOnlinePaymentPrice(mainItemPrice.toFixed(2));
+  // if (closeModal) {
+  //   document.getElementById('baRecoveryClose').click();
+  //   sendBaCodGEvents('ba_cod_order_recovery_apply', { 'amount': fivePercentAmt });
+  // }
 
-  let bundleCartOrderTotalValue = getBundlesTotalPrice();
-  let mainItemPrice = Number(mainItem.final_line_price)/100;
-  mainItemPrice = mainItemPrice + bundleCartOrderTotalValue - fivePercentAmt;
-  mainItemPrice = Number(mainItemPrice);
-
-  document.getElementById('ba-price-details-discount-value').innerHTML = `-₹ ${fivePercentAmt.replace('.00', '')}`;
-  document.getElementById('ba-price-details-discount-row').style.display = 'flex';
-
-  document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
-  document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
-  updateOnlinePaymentPrice(mainItemPrice.toFixed(2));
+  // New logic for displaying recovery online button
+  baRecoveryOnlineBtnEnable = true;
+  document.getElementById('ba-online-pay-main-div').style.display = 'block';
   if (closeModal) {
     document.getElementById('baRecoveryClose').click();
-    sendBaCodGEvents('ba_cod_order_recovery_apply', { 'amount': fivePercentAmt });
+    sendBaCodGEvents('ba_cod_recovery_display_online_btn', {});
   }
 }
 
@@ -2781,7 +3246,7 @@ function checkHighRiskAndOTPVerifyOrder() {
   }
 }
 
-function displayConfirmationModal() {
+function displayConfirmationModal(multipleCodOrderCheck) {
   let codAmount = document.getElementById('ba-price-details-total-value').innerHTML;
   codAmount = codAmount.replace('₹ ', '');
   codAmount = Number(codAmount).toFixed(2);
@@ -2797,7 +3262,7 @@ function displayConfirmationModal() {
 
   baResetOtpValues();
 
-  if (otpVerifyFlag) {
+  if (otpVerifyFlag || multipleCodOrderCheck) {
     otpModal.style.display = 'block';
     confirmationModal.style.display = 'none';
     onDisplayBaCodOTPModal();
@@ -2831,6 +3296,7 @@ function onBaConfirmationModalNo() {
 // OTP functionalities
 
 function onBaOTPModalCancel() {
+  sendBaCodGEvents('ba_cod_otp_cancel_btn', {});
   document.getElementById('ba-confirmation-close').click();
   baClearOtpCountdownInterval();
   resetCodFooter();
@@ -2839,6 +3305,7 @@ function onBaOTPModalCancel() {
 
 function onBaOTPModalSubmit() {
   if (baOtpNumberValidation()) {
+    sendBaCodGEvents('ba_cod_otp_submit_btn', {});
     baOtpInvalidSetAndReset('none', '1px solid #ccc');
     let obj = JSON.parse(localStorage.getItem('baProcessOrder'));
     document.getElementById('baCodOtpSubmitBtn').disabled = true;
@@ -2898,11 +3365,9 @@ function startOtpTimer() {
   resendButton.style.border = '1px solid #ADB2C0';
   resendButton.style.color = '#ADB2C0';
 
-  console.log(baOtpCountdown);
   baClearOtpCountdownInterval();
 
   baOtpCountdown = setInterval(() => {
-    console.log(baOtpCountdown);
     if (time <= 0) {
       clearInterval(baOtpCountdown);
       timerElement.textContent = '00:00';
@@ -2918,6 +3383,7 @@ function startOtpTimer() {
 }
 
 function onDisplayBaCodOTPModal() {
+  sendBaCodGEvents('ba_cod_otp_display_modal', {});
   sendBaCodOtp();
 
   startOtpTimer();
@@ -2930,6 +3396,7 @@ function onDisplayBaCodOTPModal() {
         if (index < otpInputs.length - 1) {
           otpInputs[index + 1].focus();
         }
+        sendBaCodGEvents('ba_cod_otp_enter_input', {});
       }
     });
 
@@ -2944,6 +3411,7 @@ function onDisplayBaCodOTPModal() {
 }
 
 function onBaCodResendOtp() {
+  sendBaCodGEvents('ba_cod_otp_resend_btn', {});
   baOtpInvalidSetAndReset('none', '1px solid #ccc');
   baResetOtpValues();
   sendBaCodOtp();
@@ -2960,12 +3428,14 @@ function sendBaCodOtp() {
   };
 
   let phone = getBaMobileValueTenDigits();
+  sendBaCodGEvents('ba_cod_otp_sent', {value: phone.toString()});
 
   fetch(`https://lcrks.leanagri.com/api/v2/getOtp/?phone_number=${phone}`, requestOptions)
     .then(response => response.json())
     .then(result => {
-      console.log('OTP sent');
-    }).catch(error => console.log('error: ', error));
+    }).catch(error => {
+      // console.log('error: ', error)
+    });
 }
 
 function getBaMobileValueWithFormat() {
@@ -2976,6 +3446,71 @@ function getBaMobileValueWithFormat() {
 function getBaMobileValueTenDigits() {
   return document.getElementById('farmerMobile').value;
 }
+
+// Functions to handle assisted dropdowns
+
+// Function to set dropdown options from the DOM
+function setBaAssistDropdownOptions(options, dropdownId, inputId, inputValue) {
+  let dropdown = document.getElementById(dropdownId);
+  dropdown.innerHTML = ""; // Clear existing options
+
+  let addedLocationNames = [];
+  options.forEach(function(option) {
+    let nameEn = option.name_en || '';
+    if (addedLocationNames.indexOf(nameEn.toLowerCase()) === -1) {
+      let span = document.createElement("span");
+      span.textContent = nameEn;
+      span.onclick = function() {
+        document.getElementById(inputId).value = nameEn;
+        dropdown.classList.remove("ba-assist-show");
+        if (inputId === 'talukaName') {
+          resetVillageValues();
+          loadVillages(option.id);
+        }
+      };
+      dropdown.appendChild(span);
+      addedLocationNames.push(nameEn.toLowerCase());
+    }
+  });
+
+  if (!inputValue) {
+    document.getElementById(inputId).value = '';
+  }
+}
+
+function baFilterDropdownFunction(inputId, dropdownId) {
+  var input, filter, div, span, i, txtValue;
+  input = document.getElementById(inputId);
+  filter = input.value.toUpperCase();
+  div = document.getElementById(dropdownId);
+  span = div.getElementsByTagName("span");
+  for (i = 0; i < span.length; i++) {
+    txtValue = span[i].textContent || span[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      span[i].style.display = "";
+    } else {
+      span[i].style.display = "none";
+    }
+  }
+  div.classList.add("ba-assist-show");
+}
+
+document.addEventListener("click", function(event) {
+  let baCodTalukaDropdown = document.getElementById("baCodTalukaDropdown");
+  let baCodTalukaInput = document.getElementById("talukaName");
+
+  let baCodVillageDropdown = document.getElementById("baCodVillageDropdown");
+  let baCodVillageInput = document.getElementById("villageName");
+  if (event.target !== baCodTalukaInput && !baCodTalukaInput.contains(event.target)) {
+    baCodTalukaDropdown.classList.remove("ba-assist-show");
+  }
+  if (event.target !== baCodVillageInput && !baCodVillageInput.contains(event.target)) {
+    baCodVillageDropdown.classList.remove("ba-assist-show");
+  }
+});
+
+// end of assisted dropdown functions
+
 
 function onConfirmationModalClick(value) {
   // document.getElementById('ba-cod-confirm-no-btn').disabled = true;
@@ -3023,11 +3558,9 @@ function loadProductBundlesOldFunction() {
           }
         });
       } else {
-        console.log('Unable to fetch web bundle products');
         document.getElementById('ba-cod-bundle-div').style.display = 'none';
       }
     }).catch(error => {
-    console.log('error: ', error);
     document.getElementById('ba-cod-bundle-div').style.display = 'none';
   });
 }
@@ -3049,7 +3582,6 @@ function baAuthenticateOrderPageUrlAndRoute() {
     "mode": "cors",
     "credentials": "include"
   }).then(response => {
-    console.log(response)
     let baCodOrderFinalUrl = baCodOrderUrl.split('/authenticate')[0];
     window.open(baCodOrderFinalUrl, '_self');
   });
@@ -3201,18 +3733,15 @@ function applyCouponCodes_OLDFunction(couponCode, couponObj, scrollFlag, showPop
             // openSmileyModal();
           }
         } else {
-          console.log('Coupon not applicable');
           document.getElementById('ba-cod-discount-loader').style.display = 'none';
           localStorage.removeItem('BA_COD_Coupon_code');
         }
       });
     } else {
-      console.log('Unable to fetch wallet');
       document.getElementById('ba-cod-discount-loader').style.display = 'none';
       localStorage.removeItem('BA_COD_Coupon_code');
     }
   }).catch(error => {
-    console.log('error: ', error);
     document.getElementById('ba-cod-discount-loader').style.display = 'none';
     localStorage.removeItem('BA_COD_Coupon_code');
   });

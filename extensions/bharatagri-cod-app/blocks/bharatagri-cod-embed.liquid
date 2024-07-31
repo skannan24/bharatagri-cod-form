@@ -1,5 +1,6 @@
 {{ 'ba-cod-form-style.css' | asset_url | stylesheet_tag }}
 <script src="https://checkout.razorpay.com/v1/checkout.js" defer="defer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js" defer="defer"></script>
 
 <!-- Button trigger modal -->
 <div class="d-flex justify-content-end">
@@ -156,10 +157,13 @@
 
           <div class="row mt-3 pb-2">
             <div class="col-12">
-              <div class="ba-cod-input-container">
-                <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="District" />
-                <input onclick="onInputElementClick('district')" class="ba-cod-input-box form-control ba-cod-input-field" id="baCodDistrictSelect"
-                       maxlength="150" name="city" placeholder="District"/>
+              <div class="form-group has-float-label dropdown mb-0" style="display: flex; align-items: center;">
+                <select onclick="onInputElementClick('district')" id="baCodDistrictSelect" class="ba-cod-select-box form-control ba-form-select ba-cod-input-field">
+                  <option id="baCodDistrictSelectLabel" value="">Select district</option>
+                </select>
+                <div id="ba-cod-district-loader" style="display: none" class="spinner-border text-secondary ml-2" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
               </div>
               <span id="baCodDistrictSelectRequired" class="ba-mandatory-field-text pl-1">Enter District</span>
             </div>
@@ -167,10 +171,13 @@
 
           <div class="row mt-3 pb-2">
             <div class="col-12">
-              <div class="ba-cod-input-container">
+              <div class="ba-assist-dropdown">
                 <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Taluka" />
                 <input onclick="onInputElementClick('taluka')" class="ba-cod-input-box form-control ba-cod-input-field" id="talukaName"
-                       maxlength="180" name="Taluka" placeholder="Taluka"/>
+                       maxlength="180" name="Taluka" placeholder="Taluka" onkeyup="baFilterDropdownFunction('talukaName', 'baCodTalukaDropdown')"/>
+                <div id="baCodTalukaDropdown" class="ba-assist-dropdown-content">
+                  <!-- Dropdown options will be set from the DOM -->
+                </div>
               </div>
               <span id="talukaNameRequired" class="ba-mandatory-field-text pl-1">Enter taluka</span>
             </div>
@@ -178,6 +185,20 @@
 
           <div class="row mt-3 pb-2">
             <div class="col-12">
+              <div class="ba-assist-dropdown">
+                <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Village" />
+                <input onclick="onInputElementClick('village')" class="ba-cod-input-box form-control ba-cod-input-field" id="villageName"
+                       maxlength="180" name="Village" placeholder="Village" onkeyup="baFilterDropdownFunction('villageName', 'baCodVillageDropdown')"/>
+                <div id="baCodVillageDropdown" class="ba-assist-dropdown-content">
+                  <!-- Dropdown options will be set from the DOM -->
+                </div>
+              </div>
+              <span id="villageNameRequired" class="ba-mandatory-field-text pl-1">Enter village</span>
+            </div>
+          </div>
+
+          <div class="row mt-3 pb-2">
+            <div class="col-6 pr-1">
               <div class="ba-cod-input-container">
                 <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Pincode" />
                 <input onclick="onInputElementClick('pincode')" class="ba-cod-input-box form-control ba-cod-input-field" id="baCodPincode"
@@ -187,15 +208,15 @@
               <span id="baCodPincodeServiceableRequired" class="ba-mandatory-field-text ba-cod-pincode-restrict pl-1">Not a valid pincode</span>
               <span id="baCodPincodeNotWhitelistRequired" class="ba-mandatory-field-text pl-1">Not serviceable at pincode</span>
             </div>
-          </div>
-
-          <div style="display: none" class="row mt-3 pb-2">
-            <div class="col-6 pl-1">
-              <div class="form-group has-float-label mb-0">
-                <input onclick="onInputElementClick('village')" class="ba-cod-input-box form-control ba-cod-input-field" id="villageName" name="Village" placeholder="Village"/>
-                <label id="villageNameLabel" for="villageName">Village</label>
-              </div>
-              <span id="villageNameRequired" class="ba-mandatory-field-text pl-1">Enter village</span>
+            <div class="col-6 pl-2">
+              <button class="ba-cod-find-location-button" onclick="getBaGPSLocation()">
+                <img id="baCodLocateMeIcon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/locateMeIcon.svg" width="17" height="16" alt="Locate me" />
+                <div id="baCodLocateMeIconLoader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2"
+                     role="status" style="display: none; color: #0A8047!important;">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <span id="baCodLocateMeLabel" style="padding-left: 6px">Find my location</span>
+              </button>
             </div>
           </div>
 
@@ -396,11 +417,11 @@
         </div>
         <div id="ba-confirmation-otp-div">
           <div id="ba-cod-otp-header" class="ba-cod-otp-header">
-            Pay Cash on Delivery : ₹445
+            Pay Cash on Delivery :
           </div>
           <div class="ba-cod-otp-separator"></div>
           <div id="ba-cod-otp-instructions" class="ba-cod-otp-instructions">
-            To Confirm this order please enter the OTP sent to +91-8823456789
+            To Confirm this order please enter the OTP sent to +91-
           </div>
           <div id="baCodEnterOTP" class="baCodEnterOTP">Enter OTP</div>
           <div class="ba-cod-otp-input">
@@ -464,7 +485,7 @@
         </div>
         <div class="text-center">
           <button id="baRecoveryOrderBtn" onclick="applyBaRecoveryDiscount(true)" class="w-100 ba-cod-recovery-order-btn">
-            <span id="baRecoveryOrderBtnLabel">स्पेशल डिस्काउंट पर आर्डर करें</span>
+            <span id="baRecoveryOrderBtnLabel">PhonePe पर अभी आर्डर करें</span>
           </button>
         </div>
         <div class="text-center mt-4">
@@ -477,7 +498,7 @@
   </div>
 </div>
 
-<script src="{{ 'ba-cod-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'ba-cod-form.min.js' | asset_url }}" defer="defer"></script>
 
 <script>
   let imgUrl = ''
