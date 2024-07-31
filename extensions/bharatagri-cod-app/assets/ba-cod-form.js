@@ -39,6 +39,7 @@ let baRecoveryApplied = false;
 let baOnlinePaySuccess = false;
 
 let baOtpCountdown = '';
+let baRecoveryOnlineBtnEnable = false;
 
 // let productHeader = 'प्रोडक्ट';
 let productHeader = 'अपना आर्डर दें';
@@ -96,10 +97,10 @@ let confirmModalNoLabel = 'नहीं';
 
 let mainPriceAmountLabel = 'राशि';
 
-let baSpecialDiscount = '🌱 स्पेशल डिस्काउंट 🌱';
+let baSpecialDiscount = '🌱 स्पेशल PhonePe डिस्काउंट 🌱';
 let baSpecialOffer = 'सीमित समय के लिए एक ख़ास ऑफर';
-let baRecoveryOrderNow = 'अभी आर्डर करें और 2% डिस्काउंट पाएं';
-let baRecoveryOrderBtnLabel = 'स्पेशल डिस्काउंट पर आर्डर करें';
+let baRecoveryOrderNow = 'अभी आर्डर करें और ###% डिस्काउंट पाएं';
+let baRecoveryOrderBtnLabel = 'PhonePe पर अभी आर्डर करें';
 let baRecoveryCancelBtnLabel = 'मुझे डिस्काउंट नहीं चाहिए';
 
 let baOnlinePaymentLabel = 'UPI से पेमेंट करें';
@@ -179,10 +180,10 @@ if (lang === 'en') {
   confirmModalNoLabel = 'No';
   mainPriceAmountLabel = 'Amount';
 
-  baSpecialDiscount = '🌱 Special Discount 🌱';
+  baSpecialDiscount = '🌱 Special PhonePe Discount 🌱';
   baSpecialOffer = 'Special offer for a limited time';
-  baRecoveryOrderNow = 'Order now and get 2% discount';
-  baRecoveryOrderBtnLabel = 'Order with a special discount';
+  baRecoveryOrderNow = 'Order now and get ###% discount';
+  baRecoveryOrderBtnLabel = 'Order with PhonePe Now';
   baRecoveryCancelBtnLabel = "I don't want a discount";
 
   baOnlinePaymentLabel = 'Pay via UPI ';
@@ -258,10 +259,10 @@ if (lang === 'mr') {
   confirmModalNoLabel = 'नाही';
   mainPriceAmountLabel = 'रक्कम';
 
-  baSpecialDiscount = '🌱 स्पेशल डिस्काउंट 🌱';
+  baSpecialDiscount = '🌱 स्पेशल PhonePe डिस्काउंट 🌱';
   baSpecialOffer = 'सीमित समय के लिए एक ख़ास ऑफर';
-  baRecoveryOrderNow = 'अभी आर्डर करें और 2% डिस्काउंट पाएं';
-  baRecoveryOrderBtnLabel = 'स्पेशल डिस्काउंट पर आर्डर करें';
+  baRecoveryOrderNow = 'अभी आर्डर करें और ###% डिस्काउंट पाएं';
+  baRecoveryOrderBtnLabel = 'PhonePe पर अभी आर्डर करें';
   baRecoveryCancelBtnLabel = 'मुझे डिस्काउंट नहीं चाहिए';
 
   baOnlinePaymentLabel = 'UPI से पेमेंट करें';
@@ -324,7 +325,6 @@ document.getElementById('ba-cod-confirm-no-btn-label').innerHTML = confirmModalN
 
 document.getElementById('baSpecialDiscount').innerHTML = baSpecialDiscount;
 document.getElementById('baSpecialOffer').innerHTML = baSpecialOffer;
-document.getElementById('baRecoveryOrderNow').innerHTML = baRecoveryOrderNow;
 document.getElementById('baRecoveryOrderBtnLabel').innerHTML = baRecoveryOrderBtnLabel;
 document.getElementById('baRecoveryCancelBtnLabel').innerHTML = baRecoveryCancelBtnLabel;
 
@@ -1845,7 +1845,7 @@ function checkCodEligibility(type) {
     if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
       document.getElementById('ba-cod-place-btn-div').style.display = 'block';
       // display razorpay if condition matches or only cod
-      if (baDisplayABTPrePaidProducts.indexOf(currProductId) > -1 || baDisplayABTPrePaidSeconds < 10) {
+      if (baDisplayABTPrePaidProducts.indexOf(currProductId) > -1 || baDisplayABTPrePaidSeconds < 10 || baRecoveryOnlineBtnEnable) {
         document.getElementById('ba-online-pay-main-div').style.display = 'block';
         sendBaCodGEvents('ba_ab_prepaid_btn', { 'value': currProductId });
         if (baDisplayABTPrePaidProducts.indexOf(currProductId) === -1) {
@@ -1875,7 +1875,7 @@ function displayBaCodOnlinePayButton(displayStyle) {
   let currProductId = currProduct.product_id.toString();
   if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled && baCheckoutType === 'cod') {
     // display razorpay if condition matches or only cod
-    if (baDisplayABTPrePaidProducts.indexOf(currProductId) > -1 || baDisplayABTPrePaidSeconds < 10) {
+    if (baDisplayABTPrePaidProducts.indexOf(currProductId) > -1 || baDisplayABTPrePaidSeconds < 10 || baRecoveryOnlineBtnEnable) {
       // will display online button always
       document.getElementById('ba-online-pay-main-div').style.display = 'block';
     } else {
@@ -2329,6 +2329,16 @@ function getOnlinePayDiscountAmount() {
   }
 
   return prepaidDiscount;
+}
+
+function getOnlinePayDiscountPercentage() {
+  let data = getBaCodProductData();
+  let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
+  let onlineDiscountPercent = 0.1;
+  if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].prepaid_discount_pc) {
+    onlineDiscountPercent = Number(data.variant_prices[finalVariantId].prepaid_discount_pc);
+  }
+  return (onlineDiscountPercent * 100);
 }
 
 function getOnlyPriceWithoutTextValues(value) {
@@ -3122,7 +3132,19 @@ function getWhitelistedPincodes() {
 function displayBaRecoveryDiscount() {
   let createOrderDiscount = document.getElementById('ba-price-details-discount-value').innerHTML;
   createOrderDiscount = createOrderDiscount.replace('-₹ ', '');
-  if (baRecoveryOrder && !Number(createOrderDiscount) > 0) {
+  let discountPercent = getOnlinePayDiscountPercentage();
+  document.getElementById('baOffer5Percent').innerHTML = `${discountPercent}%`;
+  document.getElementById('baRecoveryOrderNow').innerHTML = baRecoveryOrderNow.replace('###', discountPercent);
+
+  // Old logic to display recovery discount modal
+  // if (baRecoveryOrder && !Number(createOrderDiscount) > 0) {
+  //   document.getElementById('ba-cod-recovery-discount-btn').click();
+  // } else {
+  //   document.getElementById('baCodFormClose').click();
+  // }
+
+  // New logic for displaying recovery discount modal
+  if (baRecoveryOrder && !baRecoveryOnlineBtnEnable) {
     document.getElementById('ba-cod-recovery-discount-btn').click();
   } else {
     document.getElementById('baCodFormClose').click();
@@ -3130,27 +3152,36 @@ function displayBaRecoveryDiscount() {
 }
 
 function applyBaRecoveryDiscount(closeModal) {
-  let mainItem = getBaCartMainItemDetails();
-  let fivePercentAmt = Number(mainItem.final_line_price)/100;
-  // changed 5 % to 2 %
-  fivePercentAmt = ((fivePercentAmt * 0.02).toFixed(2)).toString();
-  baRecoveryApplied = true;
-  localStorage.setItem('BA_COD_Coupon_code', 'BA Recovery Discount');
+  // Old logic to apply recovery discount
+  // let mainItem = getBaCartMainItemDetails();
+  // let fivePercentAmt = Number(mainItem.final_line_price)/100;
+  // // changed 5 % to 2 %
+  // fivePercentAmt = ((fivePercentAmt * 0.02).toFixed(2)).toString();
+  // baRecoveryApplied = true;
+  // localStorage.setItem('BA_COD_Coupon_code', 'BA Recovery Discount');
+  //
+  // let bundleCartOrderTotalValue = getBundlesTotalPrice();
+  // let mainItemPrice = Number(mainItem.final_line_price)/100;
+  // mainItemPrice = mainItemPrice + bundleCartOrderTotalValue - fivePercentAmt;
+  // mainItemPrice = Number(mainItemPrice);
+  //
+  // document.getElementById('ba-price-details-discount-value').innerHTML = `-₹ ${fivePercentAmt.replace('.00', '')}`;
+  // document.getElementById('ba-price-details-discount-row').style.display = 'flex';
+  //
+  // document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
+  // document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
+  // updateOnlinePaymentPrice(mainItemPrice.toFixed(2));
+  // if (closeModal) {
+  //   document.getElementById('baRecoveryClose').click();
+  //   sendBaCodGEvents('ba_cod_order_recovery_apply', { 'amount': fivePercentAmt });
+  // }
 
-  let bundleCartOrderTotalValue = getBundlesTotalPrice();
-  let mainItemPrice = Number(mainItem.final_line_price)/100;
-  mainItemPrice = mainItemPrice + bundleCartOrderTotalValue - fivePercentAmt;
-  mainItemPrice = Number(mainItemPrice);
-
-  document.getElementById('ba-price-details-discount-value').innerHTML = `-₹ ${fivePercentAmt.replace('.00', '')}`;
-  document.getElementById('ba-price-details-discount-row').style.display = 'flex';
-
-  document.getElementById('ba-price-details-total-value').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
-  document.getElementById('ba-cod-footer-total-amount').innerHTML = `₹ ${mainItemPrice.toFixed(2)}`;
-  updateOnlinePaymentPrice(mainItemPrice.toFixed(2));
+  // New logic for displaying recovery online button
+  baRecoveryOnlineBtnEnable = true;
+  document.getElementById('ba-online-pay-main-div').style.display = 'block';
   if (closeModal) {
     document.getElementById('baRecoveryClose').click();
-    sendBaCodGEvents('ba_cod_order_recovery_apply', { 'amount': fivePercentAmt });
+    sendBaCodGEvents('ba_cod_recovery_display_online_btn', {});
   }
 }
 
