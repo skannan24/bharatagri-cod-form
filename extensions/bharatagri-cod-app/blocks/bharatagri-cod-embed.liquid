@@ -198,7 +198,7 @@
           </div>
 
           <div class="row mt-3 pb-2">
-            <div class="col-12">
+            <div class="col-6 pr-1">
               <div class="ba-cod-input-container">
                 <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Pincode" />
                 <input onclick="onInputElementClick('pincode')" class="ba-cod-input-box form-control ba-cod-input-field" id="baCodPincode"
@@ -207,6 +207,16 @@
               <span id="baCodPincodeRequired" class="ba-mandatory-field-text pl-1">Enter pincode</span>
               <span id="baCodPincodeServiceableRequired" class="ba-mandatory-field-text ba-cod-pincode-restrict pl-1">Not a valid pincode</span>
               <span id="baCodPincodeNotWhitelistRequired" class="ba-mandatory-field-text pl-1">Not serviceable at pincode</span>
+            </div>
+            <div class="col-6 pl-2">
+              <button class="ba-cod-find-location-button" onclick="getBaGPSLocation()">
+                <img id="baCodLocateMeIcon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/locateMeIcon.svg" width="17" height="16" alt="Locate me" />
+                <div id="baCodLocateMeIconLoader" class="spinner-border ba-cod-main-divs-spinner text-secondary ml-2"
+                     role="status" style="display: none; color: #0A8047!important;">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <span id="baCodLocateMeLabel" style="padding-left: 6px">Find my location</span>
+              </button>
             </div>
           </div>
 

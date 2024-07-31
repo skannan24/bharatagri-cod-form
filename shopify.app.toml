@@ -2,7 +2,7 @@
 
 name = "bharatagri-cod-form"
 client_id = "0a4f33d76e6fccd9e087716b261a0f8f"
-application_url = "https://9a8b-36-255-87-0.ngrok-free.app"
+application_url = "https://b2b7-2409-408c-8710-2193-d849-2242-992e-23e1.ngrok-free.app"
 embedded = true
 
 [access_scopes]
@@ -11,9 +11,9 @@ scopes = "write_products,read_orders,write_orders"
 
 [auth]
 redirect_urls = [
-  "https://9a8b-36-255-87-0.ngrok-free.app/auth/callback",
-  "https://9a8b-36-255-87-0.ngrok-free.app/auth/shopify/callback",
-  "https://9a8b-36-255-87-0.ngrok-free.app/api/auth/callback"
+  "https://b2b7-2409-408c-8710-2193-d849-2242-992e-23e1.ngrok-free.app/auth/callback",
+  "https://b2b7-2409-408c-8710-2193-d849-2242-992e-23e1.ngrok-free.app/auth/shopify/callback",
+  "https://b2b7-2409-408c-8710-2193-d849-2242-992e-23e1.ngrok-free.app/api/auth/callback"
 ]
 
 [webhooks]

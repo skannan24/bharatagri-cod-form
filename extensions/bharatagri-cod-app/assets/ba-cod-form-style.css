@@ -1125,6 +1125,33 @@
   padding: 5px 8px;
 }
 
+.ba-cod-find-location-button {
+  width: 100%;
+  background: #F6FEFA;
+  border: 1px solid #0A8047;
+  border-radius: 5px;
+  color: #0A8047;
+  font-size: 13px;
+  font-weight: 600;
+  /*padding: 10px 20px;*/
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 47px;
+  cursor: pointer;
+}
+
+.ba-cod-find-location-button .icon {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ba-cod-find-location-button:hover {
+  background-color: #E8F5E9;
+}
+
 #baCodResendOtpBtn {
   padding: 5px 10px;
   border-radius: 48px;

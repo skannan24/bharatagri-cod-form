@@ -116,6 +116,7 @@ let baCodOtpSubmitLabel = 'OTP सबमिट करके ऑर्डर प�
 let baCodOtpCancelLabel = 'ऑर्डर कैंसिल करें';
 let baCodOtpFooterLabel = '*इस ऑर्डर की पुष्टि के लिए भारतअ‍ॅग्री से कॉल किया जाएगा।';
 let baCodOtpInvalidLabel = 'अमान्य OTP';
+let baCodLocateMeLabel = 'मेरी लोकेशन ढूंढे';
 
 let baCheckoutType = 'cod';
 
@@ -198,6 +199,7 @@ if (lang === 'en') {
   baCodOtpCancelLabel = 'Cancel Order';
   baCodOtpFooterLabel = '*You will receive a call from BharatAgri to confirm this order.';
   baCodOtpInvalidLabel = 'Invalid OTP';
+  baCodLocateMeLabel = 'Find my Location';
 }
 
 if (lang === 'mr') {
@@ -276,6 +278,7 @@ if (lang === 'mr') {
   baCodOtpCancelLabel = 'ऑर्डर कैंसिल करें';
   baCodOtpFooterLabel = '*इस ऑर्डर की पुष्टि के लिए भारतअ‍ॅग्री से कॉल किया जाएगा।';
   baCodOtpInvalidLabel = 'अमान्य OTP';
+  baCodLocateMeLabel = 'मेरी लोकेशन ढूंढे';
 }
 document.getElementById('product-header-id').innerHTML = productHeader;
 document.getElementById('discount-header-id').innerHTML = discountHeader;
@@ -338,6 +341,7 @@ document.getElementById('baCodOtpFooter').innerHTML = baCodOtpFooterLabel;
 document.getElementById('baCodOtpInvalid').innerHTML = baCodOtpInvalidLabel;
 
 document.getElementById('baCodDistrictSelectLabel').innerHTML = districtLabel;
+document.getElementById('baCodLocateMeLabel').innerHTML = baCodLocateMeLabel;
 
 
 document.getElementById('baCreditBanner').src = `https://shopify-krushidukan.leanagri.com/ba-cod-form-images/ba_credit_${lang}.webp`;
@@ -2544,6 +2548,88 @@ function autoFillUserDetails() {
   if (talukaId) {
     loadVillages(talukaId, villageId ? villageId : '',villageNameEn ? villageNameEn : '');
   }
+
+  if (infos.length === 0) {
+    let location = JSON.parse(sessionStorage.getItem('ba_ip_location_details')) || {};
+    setBaIpOrGpsLocation(location, false);
+  }
+}
+
+function setBaIpOrGpsLocation(location, isGps) {
+  if (isGps) {
+    document.getElementById('baCodLocateMeIconLoader').style.display = 'none';
+    document.getElementById('baCodLocateMeIcon').style.display = 'block';
+  }
+  if (location.state) {
+    document.getElementById('baCodStateSelect').value = location.state;
+    stateId = location.state;
+  }
+  if (location.state_name) {
+    stateName = location.state_name;
+    stateNameEn = location.state_name;
+  }
+  if (location.district) {
+    document.getElementById('baCodDistrictSelect').value = location.district;
+    districtId = location.district;
+  }
+  if (location.district_name) {
+    districtName = location.district_name;
+    districtNameEn = location.district_name;
+  }
+  if (location.taluka) {
+    talukaId = location.taluka ? location.taluka : '';
+  }
+  if (location.taluka_name) {
+    document.getElementById('talukaName').value = location.taluka_name;
+    talukaName = location.taluka_name;
+    talukaNameEn = location.taluka_name;
+  }
+  if (location.village) {
+    villageId = location.village ? location.village : '';
+  }
+  if (location.village_name) {
+    document.getElementById('villageName').value = location.village_name;
+    villageName = location.village_name;
+    villageNameEn = location.village_name;
+  }
+  if (location.pin_code) {
+    document.getElementById('baCodPincode').value = location.pin_code;
+    if (isGps) {
+      sendBaCodGEvents('ba_address_populated_gps', { 'value': location.pin_code });
+    } else {
+      sendBaCodGEvents('ba_address_populated_ip', { 'value': location.pin_code });
+    }
+  }
+
+  if (stateId) {
+    loadDistricts(stateId, districtId ? districtId : '', districtNameEn ? districtNameEn : '');
+  }
+
+  if (districtId) {
+    loadTalukas(districtId, talukaId ? talukaId : '',talukaNameEn ? talukaNameEn : '');
+  }
+
+  if (talukaId) {
+    loadVillages(talukaId, villageId ? villageId : '',villageNameEn ? villageNameEn : '');
+  }
+}
+
+function getBaGPSLocation() {
+  sendBaCodGEvents('ba_address_populated_gps_btn_clk', {});
+  document.getElementById('baCodLocateMeIconLoader').style.display = 'inline-block';
+  document.getElementById('baCodLocateMeIcon').style.display = 'none';
+  let location = JSON.parse(sessionStorage.getItem('ba_gps_location_details')) || {};
+  if (location.state) {
+    setBaIpOrGpsLocation(location, true);
+  } else {
+    try {
+      getBaLocationFromGPS().then(data => {
+        setBaIpOrGpsLocation(data ? data : {}, true);
+      });
+    } catch (error) {
+      // console.log(error);
+    }
+  }
 }
 
 function resetPlaceOrderButton() {
@@ -2618,6 +2704,8 @@ function resetLocationFields() {
   talukaNameEn = '';
   villageName = '';
   villageNameEn = '';
+  document.getElementById('baCodLocateMeIconLoader').style.display = 'none';
+  document.getElementById('baCodLocateMeIcon').style.display = 'block';
   document.getElementById('baCodStateSelect').value = '';
   document.getElementById('baCodDistrictSelect').value = '';
   // document.getElementById('baCodStateSelectLabel').innerHTML = stateLabel;
