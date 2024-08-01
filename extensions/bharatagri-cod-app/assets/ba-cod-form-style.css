@@ -833,6 +833,29 @@
   width: 43px;
 }
 
+.ba-cod-input-prefix {
+  position: absolute;
+  left: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  color: #888;
+  font-size: 16px;
+  padding: 0 5px;
+  pointer-events: none;
+}
+
+.ba-cod-input-mobile-box {
+  padding-left: 100px;
+  height: 47px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  font-size: 16px;
+  box-sizing: border-box;
+  width: 100%!important;
+}
+
 .ba-cod-input-box {
   padding-left: 52px; /* Adjust according to icon size */
   height: 47px;

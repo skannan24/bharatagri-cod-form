@@ -1154,6 +1154,7 @@ function loadDistricts(stateId, did = '', dname = '') {
 }
 
 function setDistricts(districtList, did = '', dname = '') {
+  let mappedDid = '';
   let districtDiv = document.getElementById('baCodDistrictSelect');
 
   districtDiv.removeEventListener("change", onSelectBoxDistrictChange);
@@ -1172,6 +1173,9 @@ function setDistricts(districtList, did = '', dname = '') {
   let addedDistrictNames = [];
 
   for (let i = 0; i < districtList.length; i++) {
+    if (did && Number(did) === Number(districtList[i].id)) {
+      mappedDid = districtList[i].id;
+    }
     let districtName = districtList[i].name_en;
     if (addedDistrictNames.indexOf(districtName.toLowerCase()) === -1) {
       let districtOptionsBtn = document.createElement('option');
@@ -1182,8 +1186,11 @@ function setDistricts(districtList, did = '', dname = '') {
     }
   }
 
-  if (did) {
+  if (did && mappedDid) {
     districtDiv.value = did;
+  } else {
+    districtDiv.value = '';
+    districtId = '';
   }
 }
 
@@ -1845,7 +1852,7 @@ function checkCodEligibility(type) {
     if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled) {
       document.getElementById('ba-cod-place-btn-div').style.display = 'block';
       // display razorpay if condition matches or only cod
-      if (baDisplayABTPrePaidProducts.indexOf(currProductId) > -1 || baDisplayABTPrePaidSeconds < 10 || baRecoveryOnlineBtnEnable) {
+      if (baDisplayABTPrePaidProducts.indexOf(currProductId) > -1 || baDisplayABTPrePaidSeconds < 25 || baRecoveryOnlineBtnEnable) {
         document.getElementById('ba-online-pay-main-div').style.display = 'block';
         sendBaCodGEvents('ba_ab_prepaid_btn', { 'value': currProductId });
         if (baDisplayABTPrePaidProducts.indexOf(currProductId) === -1) {
@@ -1855,16 +1862,16 @@ function checkCodEligibility(type) {
         document.getElementById('ba-online-pay-main-div').style.display = 'none';
         sendBaCodGEvents('ba_ab_prepaid_no_display', { 'value': currProductId });
       }
-      document.getElementById('ba-online-pay-main-emi-div').style.display = 'none';
+      // document.getElementById('ba-online-pay-main-emi-div').style.display = 'none';
     } else {
       document.getElementById('ba-cod-place-btn-div').style.display = 'none';
       document.getElementById('ba-online-pay-main-div').style.display = 'block';
-      document.getElementById('ba-online-pay-main-emi-div').style.display = 'block';
+      // document.getElementById('ba-online-pay-main-emi-div').style.display = 'block';
     }
   } else {
     document.getElementById('ba-cod-place-btn-div').style.display = 'none';
     document.getElementById('ba-online-pay-main-div').style.display = 'block';
-    document.getElementById('ba-online-pay-main-emi-div').style.display = 'block';
+    // document.getElementById('ba-online-pay-main-emi-div').style.display = 'block';
   }
 }
 
@@ -1875,13 +1882,13 @@ function displayBaCodOnlinePayButton(displayStyle) {
   let currProductId = currProduct.product_id.toString();
   if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].is_cod_enabled && baCheckoutType === 'cod') {
     // display razorpay if condition matches or only cod
-    if (baDisplayABTPrePaidProducts.indexOf(currProductId) > -1 || baDisplayABTPrePaidSeconds < 10 || baRecoveryOnlineBtnEnable) {
+    if (baDisplayABTPrePaidProducts.indexOf(currProductId) > -1 || baDisplayABTPrePaidSeconds < 25 || baRecoveryOnlineBtnEnable) {
       // will display online button always
       document.getElementById('ba-online-pay-main-div').style.display = 'block';
     } else {
       document.getElementById('ba-online-pay-main-div').style.display = displayStyle;
     }
-    document.getElementById('ba-online-pay-main-emi-div').style.display = displayStyle;
+    // document.getElementById('ba-online-pay-main-emi-div').style.display = displayStyle;
   }
 }
 

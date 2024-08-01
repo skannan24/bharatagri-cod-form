@@ -115,7 +115,8 @@
             <div class="col-12">
               <div class="ba-cod-input-container">
                 <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodCallIcon.svg" width="43" height="45" alt="Mobile" />
-                <input onclick="onInputElementClick('mobile')" class="ba-cod-input-box form-control ba-cod-input-field" id="farmerMobile"
+                <span class="ba-cod-input-prefix">+91 |</span>
+                <input onclick="onInputElementClick('mobile')" class="ba-cod-input-mobile-box form-control ba-cod-input-field" id="farmerMobile"
                        type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="10" name="Mobile Number" placeholder="Mobile Number"/>
               </div>
               <span id="farmerMobileRequired" class="ba-mandatory-field-text pl-1">Enter mobile number</span>
@@ -269,7 +270,7 @@
         </div>
 
         <!-- BA Online button EMI -->
-        <div id="ba-online-pay-main-emi-div" style="display: none">
+        <div id="ba-online-pay-main-emi-div" style="display: none!important;">
           <!-- BA credit banner -->
           <div class="d-flex justify-content-center">
             <img id="baCreditBanner" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/ba_credit_hi.webp"
