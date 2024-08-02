@@ -1457,25 +1457,40 @@ function getBaCodCurrentTime() {
 function checkBaCodOrderCount() {
   let now = getBaCodCurrentTime();
 
-  let storedBaFirstOrderTime = localStorage.getItem('storedBaFirstOrderTime');
-  let storedBaLatestOrderTime = localStorage.getItem('storedBaLatestOrderTime');
-  let storedBaOrderCount = parseInt(localStorage.getItem('storedBaOrderCount')) || 0;
+  let storedBaFirstOrderTime5Min = localStorage.getItem('storedBaFirstOrderTime5Min');
+  let storedBaOrderCount5Min = parseInt(localStorage.getItem('storedBaOrderCount5Min')) || 0;
 
-  if (!storedBaFirstOrderTime || (now - parseInt(storedBaFirstOrderTime)) > (5 * 60 * 1000)) {
-    storedBaFirstOrderTime = now;
-    storedBaLatestOrderTime = now;
-    storedBaOrderCount = 1;
+  let storedBaFirstOrderTime12Hr = localStorage.getItem('storedBaFirstOrderTime12Hr');
+  let storedBaOrderCount12Hr = parseInt(localStorage.getItem('storedBaOrderCount12Hr')) || 0;
+
+  // Handling the 5-minute logic
+  if (!storedBaFirstOrderTime5Min || (now - parseInt(storedBaFirstOrderTime5Min)) > (5 * 60 * 1000)) {
+    storedBaFirstOrderTime5Min = now;
+    storedBaOrderCount5Min = 1;
   } else {
-    storedBaLatestOrderTime = now;
-    storedBaOrderCount++;
+    storedBaOrderCount5Min++;
   }
 
-  localStorage.setItem('storedBaFirstOrderTime', storedBaFirstOrderTime.toString());
-  localStorage.setItem('storedBaLatestOrderTime', storedBaLatestOrderTime.toString());
-  localStorage.setItem('storedBaOrderCount', storedBaOrderCount.toString());
+  localStorage.setItem('storedBaFirstOrderTime5Min', storedBaFirstOrderTime5Min.toString());
+  localStorage.setItem('storedBaOrderCount5Min', storedBaOrderCount5Min.toString());
 
-  // return true (otp check should take place if >= 6 orders)
-  return storedBaOrderCount >= 6;
+  // Handling the 12-hour logic
+  if (!storedBaFirstOrderTime12Hr || (now - parseInt(storedBaFirstOrderTime12Hr)) > (12 * 60 * 60 * 1000)) {
+    storedBaFirstOrderTime12Hr = now;
+    storedBaOrderCount12Hr = 1;
+  } else {
+    storedBaOrderCount12Hr++;
+  }
+
+  localStorage.setItem('storedBaFirstOrderTime12Hr', storedBaFirstOrderTime12Hr.toString());
+  localStorage.setItem('storedBaOrderCount12Hr', storedBaOrderCount12Hr.toString());
+
+  // Check conditions for OTP verification - otp check should take place mins > 3 || hours > 5
+  if (storedBaOrderCount5Min > 3 || storedBaOrderCount12Hr > 5) {
+    return true;
+  }
+
+  return false;
 }
 
 function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, type) {
@@ -3437,7 +3452,7 @@ function sendBaCodOtp() {
   let phone = getBaMobileValueTenDigits();
   sendBaCodGEvents('ba_cod_otp_sent', {value: phone.toString()});
 
-  fetch(`https://lcrks.leanagri.com/api/v2/getOtp/?phone_number=${phone}`, requestOptions)
+  fetch(`https://lcrks.leanagri.com/api/v2/web/getOtp/?phone_number=${phone}`, requestOptions)
     .then(response => response.json())
     .then(result => {
     }).catch(error => {
