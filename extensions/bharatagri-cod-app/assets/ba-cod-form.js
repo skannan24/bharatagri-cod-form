@@ -2336,14 +2336,14 @@ function getBaOnlineDiscountCodeObject(codes) {
 function getOnlinePayDiscountAmount() {
   let data = getBaCodProductData();
   let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
-  let onlineDiscountPercent = 0.2;
+  let onlineDiscountPercent = 0.1;
   if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].prepaid_discount_pc) {
     onlineDiscountPercent = Number(data.variant_prices[finalVariantId].prepaid_discount_pc);
   }
   let cartValue = document.getElementById('ba-price-details-total-value').innerHTML;
   cartValue = getOnlyPriceWithoutTextValues(cartValue);
 
-  let prepaidDiscount = Math.min(onlineDiscountPercent * cartValue, 500);
+  let prepaidDiscount = Math.min(onlineDiscountPercent * cartValue, 100);
   prepaidDiscount = Math.floor(prepaidDiscount);
 
   if (!prepaidDiscount || !Number(prepaidDiscount) || Number(prepaidDiscount) < 40) {
@@ -2356,7 +2356,7 @@ function getOnlinePayDiscountAmount() {
 function getOnlinePayDiscountPercentage() {
   let data = getBaCodProductData();
   let finalVariantId = sessionStorage.getItem('baCodVariantId') || 1;
-  let onlineDiscountPercent = 0.2;
+  let onlineDiscountPercent = 0.1;
   if (data.variant_prices[finalVariantId] && data.variant_prices[finalVariantId].prepaid_discount_pc) {
     onlineDiscountPercent = Number(data.variant_prices[finalVariantId].prepaid_discount_pc);
   }
