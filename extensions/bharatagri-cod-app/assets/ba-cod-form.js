@@ -1189,6 +1189,9 @@ function setDistricts(districtList, did = '', dname = '') {
   if (did && mappedDid) {
     districtDiv.value = did;
   } else {
+    if (did) {
+      sendBaCodGEvents('district_mapping_error', {value: did});
+    }
     districtDiv.value = '';
     districtId = '';
   }
@@ -1432,11 +1435,7 @@ function baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mob
   let multipleCodOrderCheck = false;
 
   if (type === 'cod') {
-    multipleCodOrderCheck = checkBaCodOrderCount();
-  }
-
-  if (multipleCodOrderCheck) {
-    sendBaCodGEvents('ba_multiple_cod_otp_triggered', {value: mobileValue.toString()});
+    multipleCodOrderCheck = checkBaCodOrderCount(mobileValue);
   }
 
   if (otpVerifyFlag && type === 'cod') {
@@ -1454,7 +1453,24 @@ function getBaCodCurrentTime() {
   return new Date().getTime();
 }
 
-function checkBaCodOrderCount() {
+function checkBaCodOrderCount(mobileValue) {
+  let data = getBaCodProductData();
+  let otpPincodes = data.otp_verification_pincodes || [];
+  let pincode = document.getElementById('baCodPincode').value;
+  let otpAmount = data.otp_verification_amount || 2000;
+
+  // Check conditions for OTP verification - Pincode
+  if (otpPincodes.length > 0 && String(otpPincodes).indexOf(pincode) > -1) {
+    sendBaCodGEvents('ba_cod_otp_triggered_pincode', {value: mobileValue.toString()});
+    return true;
+  }
+
+  // Check conditions for OTP verification - Order value
+  if (baCodAmountFinal && Number(baCodAmountFinal) > otpAmount) {
+    sendBaCodGEvents('ba_cod_otp_triggered_amount', {value: mobileValue.toString()});
+    return true;
+  }
+
   let now = getBaCodCurrentTime();
 
   let storedBaFirstOrderTime5Min = localStorage.getItem('storedBaFirstOrderTime5Min');
@@ -1487,6 +1503,7 @@ function checkBaCodOrderCount() {
 
   // Check conditions for OTP verification - otp check should take place mins > 3 || hours > 5
   if (storedBaOrderCount5Min > 3 || storedBaOrderCount12Hr > 5) {
+    sendBaCodGEvents('ba_multiple_cod_otp_triggered', {value: mobileValue.toString()});
     return true;
   }
 
