@@ -2106,6 +2106,19 @@ function getBaOrderObject() {
   return baO2;
 }
 
+function validateSameDigitsPincode(value) {
+  if (/^\d{6}$/.test(value)) {
+    let firstDigit = value.charAt(0);
+    for (let i = 1; i < value.length; i++) {
+      if (value.charAt(i) !== firstDigit) {
+        return true;
+      }
+    }
+    return false;
+  }
+  return false;
+}
+
 function getFormattedAndRightValues(value) {
   // Matches any character not a-z, A-Z, 0-9, hindi, marathi, space, dot, slash or comma
   const pattern = /[^a-zA-Z0-9\u0900-\u097F .,]/g;
