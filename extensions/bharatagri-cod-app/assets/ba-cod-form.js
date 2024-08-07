@@ -1254,12 +1254,12 @@ function createOrderObject(type) {
   let landmark = document.getElementById('baLandmark');
   let postOffice = document.getElementById('baPostOffice');
 
-  name.value = getFormattedAndRightValues(name.value);
+  name.value = getFormattedNameAndRightValues(name.value);
   address.value = getFormattedAndRightValues(address.value);
   landmark.value = getFormattedAndRightValues(landmark.value);
   // district.value = getFormattedAndRightValues(district.value);
-  taluka.value = getFormattedAndRightValues(taluka.value);
-  village.value = getFormattedAndRightValues(village.value);
+  taluka.value = getFormattedLocationNameAndRightValues(taluka.value);
+  village.value = getFormattedLocationNameAndRightValues(village.value);
   // postOffice.value = getFormattedAndRightValues(postOffice.value);
 
   let validationError = false;
@@ -1288,7 +1288,7 @@ function createOrderObject(type) {
     }
   }
 
-  if (!(address.value) || address.value.length < 3) {
+  if (!(address.value) || address.value.length < 7) {
     address.classList.add('ba-mandatory-field-border');
     document.getElementById('baAddressRequired').style.display = 'block';
     if (!validationError) {
@@ -1315,7 +1315,7 @@ function createOrderObject(type) {
     prePaidError = validationError = true;
   }
 
-  if (!taluka.value) {
+  if (!taluka.value || taluka.value.length < 3) {
     taluka.classList.add('ba-mandatory-field-border');
     document.getElementById('talukaNameRequired').style.display = 'block';
     if (!validationError) {
@@ -1324,11 +1324,20 @@ function createOrderObject(type) {
     prePaidError = validationError = true;
   }
 
-  if (!village.value) {
+  if (!village.value || village.value.length < 3) {
     village.classList.add('ba-mandatory-field-border');
     document.getElementById('villageNameRequired').style.display = 'block';
     if (!validationError) {
       baScrollToId('villageName');
+    }
+    prePaidError = validationError = true;
+  }
+
+  if (!landmark.value || landmark.value.length < 5) {
+    landmark.classList.add('ba-mandatory-field-border');
+    document.getElementById('baLandmarkRequired').style.display = 'block';
+    if (!validationError) {
+      baScrollToId('baLandmark');
     }
     prePaidError = validationError = true;
   }
@@ -1457,7 +1466,7 @@ function checkBaCodOrderCount(mobileValue) {
   let data = getBaCodProductData();
   let otpPincodes = data.otp_verification_pincodes || [];
   let pincode = document.getElementById('baCodPincode').value;
-  let otpAmount = data.otp_verification_amount || 2000;
+  let otpAmount = data.otp_verification_amount || 5000;
 
   // Check conditions for OTP verification - Pincode
   if (otpPincodes.length > 0 && String(otpPincodes).indexOf(pincode) > -1) {
@@ -1642,15 +1651,15 @@ setInterval(() => {
   let address = document.getElementById('baAddress');
   let landmark = document.getElementById('baLandmark');
 
-  name.value = getFormattedAndRightValues(name.value);
+  name.value = getFormattedNameAndRightValues(name.value);
   address.value = getFormattedAndRightValues(address.value);
   landmark.value = getFormattedAndRightValues(landmark.value);
   // district.value = getFormattedAndRightValues(district.value);
-  taluka.value = getFormattedAndRightValues(taluka.value);
-  village.value = getFormattedAndRightValues(village.value);
+  taluka.value = getFormattedLocationNameAndRightValues(taluka.value);
+  village.value = getFormattedLocationNameAndRightValues(village.value);
 
 
-  if (name.value && name.value.length > 2) {
+  if (name.value && name.value.length >= 3) {
     name.classList.remove('ba-mandatory-field-border');
     document.getElementById('farmerNameRequired').style.display = 'none';
   }
@@ -1685,22 +1694,22 @@ setInterval(() => {
     document.getElementById('baCodDistrictSelectRequired').style.display = 'none';
   }
 
-  if (taluka.value) {
+  if (taluka.value && taluka.value.length >= 3) {
     taluka.classList.remove('ba-mandatory-field-border');
     document.getElementById('talukaNameRequired').style.display = 'none';
   }
 
-  if (village.value) {
+  if (village.value && village.value.length >= 3) {
     village.classList.remove('ba-mandatory-field-border');
     document.getElementById('villageNameRequired').style.display = 'none';
   }
 
-  if (address.value && address.value.length > 2) {
+  if (address.value && address.value.length >= 7) {
     address.classList.remove('ba-mandatory-field-border');
     document.getElementById('baAddressRequired').style.display = 'none';
   }
 
-  if (landmark.value) {
+  if (landmark.value  && landmark.value.length >= 5) {
     landmark.classList.remove('ba-mandatory-field-border');
     document.getElementById('baLandmarkRequired').style.display = 'none';
   }
@@ -2100,6 +2109,34 @@ function getBaOrderObject() {
 function getFormattedAndRightValues(value) {
   // Matches any character not a-z, A-Z, 0-9, hindi, marathi, space, dot, slash or comma
   const pattern = /[^a-zA-Z0-9\u0900-\u097F .,]/g;
+  // const pattern =  /[^a-zA-Z0-9 .,/]/g;
+  if (value) {
+    let newValue = value.replace(pattern, '');
+    newValue = newValue.replace(/\s+/g, ' ');
+    newValue = newValue.trim();
+    return newValue;
+  } else {
+    return value;
+  }
+}
+
+function getFormattedNameAndRightValues(value) {
+  // Matches any character not a-z, A-Z,hindi, marathi, space, dot
+  const pattern = /[^a-zA-Z\u0900-\u097F .]/g;
+  // const pattern =  /[^a-zA-Z0-9 .,/]/g;
+  if (value) {
+    let newValue = value.replace(pattern, '');
+    newValue = newValue.replace(/\s+/g, ' ');
+    newValue = newValue.trim();
+    return newValue;
+  } else {
+    return value;
+  }
+}
+
+function getFormattedLocationNameAndRightValues(value) {
+  // Matches any character not a-z, A-Z,hindi, marathi, space, dot, slash or comma
+  const pattern = /[^a-zA-Z\u0900-\u097F .,]/g;
   // const pattern =  /[^a-zA-Z0-9 .,/]/g;
   if (value) {
     let newValue = value.replace(pattern, '');
