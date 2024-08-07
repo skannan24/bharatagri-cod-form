@@ -105,7 +105,7 @@
             <div class="col-12">
               <div class="ba-cod-input-container">
                 <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodUserIcon.svg" width="43" height="45" alt="Name" />
-                <input onclick="onInputElementClick('name')" class="ba-cod-input-box form-control ba-cod-input-field" id="farmerName" name="Name" placeholder="Name"/>
+                <input onclick="onInputElementClick('name')" class="ba-cod-input-box form-control ba-cod-input-field" id="farmerName" maxlength="30" name="Name" placeholder="Name"/>
               </div>
               <span id="farmerNameRequired" class="ba-mandatory-field-text pl-1">Enter name</span>
             </div>
@@ -126,9 +126,9 @@
           <div class="row mt-3 pb-2">
             <div class="col-12">
               <div class="ba-cod-input-container">
-                <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Pincode" />
+                <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Address" />
                 <input onclick="onInputElementClick('address')" class="ba-cod-input-box form-control ba-cod-input-field" id="baAddress"
-                       maxlength="150" name="Address" placeholder="Address (ex : plot no, street name, road etc)"/>
+                       maxlength="70" name="Address" placeholder="Address (ex : plot no, street name, road etc)"/>
               </div>
               <span id="baAddressRequired" class="ba-mandatory-field-text pl-1">Enter address</span>
             </div>
@@ -137,9 +137,9 @@
           <div class="row mt-3 pb-2">
             <div class="col-12">
               <div class="ba-cod-input-container">
-                <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Pincode" />
+                <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Landmark" />
                 <input onclick="onInputElementClick('landmark')" class="ba-cod-input-box form-control ba-cod-input-field" id="baLandmark"
-                       maxlength="150" name="Landmark" placeholder="Landmark (ex : near gopal mandir, school etc)"/>
+                       maxlength="50" name="Landmark" placeholder="Landmark (ex : near gopal mandir, school etc)"/>
               </div>
               <span id="baLandmarkRequired" class="ba-mandatory-field-text pl-1">Enter landmark</span>
             </div>
@@ -175,7 +175,7 @@
               <div class="ba-assist-dropdown">
                 <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Taluka" />
                 <input onclick="onInputElementClick('taluka')" class="ba-cod-input-box form-control ba-cod-input-field" id="talukaName"
-                       maxlength="180" name="Taluka" placeholder="Taluka" onkeyup="baFilterDropdownFunction('talukaName', 'baCodTalukaDropdown')"/>
+                       maxlength="30" name="Taluka" placeholder="Taluka" onkeyup="baFilterDropdownFunction('talukaName', 'baCodTalukaDropdown')"/>
                 <div id="baCodTalukaDropdown" class="ba-assist-dropdown-content">
                   <!-- Dropdown options will be set from the DOM -->
                 </div>
@@ -189,7 +189,7 @@
               <div class="ba-assist-dropdown">
                 <img class="ba-cod-input-icon" src="https://shopify-krushidukan.leanagri.com/ba-cod-form-images/baCodLocationIcon.svg" width="43" height="45" alt="Village" />
                 <input onclick="onInputElementClick('village')" class="ba-cod-input-box form-control ba-cod-input-field" id="villageName"
-                       maxlength="180" name="Village" placeholder="Village" onkeyup="baFilterDropdownFunction('villageName', 'baCodVillageDropdown')"/>
+                       maxlength="30" name="Village" placeholder="Village" onkeyup="baFilterDropdownFunction('villageName', 'baCodVillageDropdown')"/>
                 <div id="baCodVillageDropdown" class="ba-assist-dropdown-content">
                   <!-- Dropdown options will be set from the DOM -->
                 </div>
