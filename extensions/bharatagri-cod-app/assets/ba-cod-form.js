@@ -41,6 +41,8 @@ let baOnlinePaySuccess = false;
 let baOtpCountdown = '';
 let baRecoveryOnlineBtnEnable = false;
 
+let farmerDetailsTimeOut = '';
+
 // let productHeader = 'प्रोडक्ट';
 let productHeader = 'अपना आर्डर दें';
 let discountHeader = 'डिस्काउंट कूपन';
@@ -1451,6 +1453,13 @@ function baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mob
     sendBaCodGEvents('ba_otp_verify_modal_triggered', {value: mobileValue.toString()});
   }
 
+  // Check conditions for OTP verification - Farmer details
+  let farmerDetails = getFarmerDetails();
+  if (farmerDetails.is_otp_required) {
+    sendBaCodGEvents('ba_cod_otp_triggered_user', {value: mobileValue.toString()});
+    multipleCodOrderCheck =  true;
+  }
+
   if ((highRiskProductFlag || otpVerifyFlag || multipleCodOrderCheck) && type === 'cod') {
     displayConfirmationModal(multipleCodOrderCheck);
   } else {
@@ -1477,6 +1486,12 @@ function checkBaCodOrderCount(mobileValue) {
   // Check conditions for OTP verification - Order value
   if (baCodAmountFinal && Number(baCodAmountFinal) > otpAmount) {
     sendBaCodGEvents('ba_cod_otp_triggered_amount', {value: mobileValue.toString()});
+    return true;
+  }
+
+  // Check conditions for OTP verification - Farmer details
+  let farmerDetails = getFarmerDetails();
+  if (farmerDetails.is_otp_required) {
     return true;
   }
 
@@ -1805,7 +1820,179 @@ function populatePriceDetailsCard() {
   updateOnlinePaymentPrice(baUpdateCart.total_price / 100);
 }
 
+document.getElementById('farmerMobile').addEventListener('input', function() {
+  if (this.value.length === 10) {
+    try {
+      if (farmerDetailsTimeOut) {
+        clearTimeout(this.farmerDetailsTimeOut);
+      }
 
+      // Set a new timeout for making the API call
+      farmerDetailsTimeOut = setTimeout(() => {
+        checkAndLoadFarmerDetails();
+      }, 600);
+    } catch (error) {
+      // error on loading the numbers
+    }
+  }
+});
+
+function checkAndLoadFarmerDetails() {
+  let farmerMobile = getMobileValue();
+  let farmerDetails = getFarmerDetails();
+  let loadedAt24Hr = farmerDetails.loaded_at || '';
+  let now = getBaCodCurrentTime();
+  if (!farmerDetails || farmerMobile !== farmerDetails.mobile || !loadedAt24Hr || (now - parseInt(loadedAt24Hr)) > (24 * 60 * 60 * 1000)) {
+    loadFarmerDetails(farmerMobile);
+  } else {
+    resetFarmerDetailsNotAvailable(farmerDetails);
+  }
+}
+
+function resetFarmerDetailsNotAvailable(farmerDetails) {
+  if (farmerDetails) {
+    setFarmerAddress();
+  }
+  if (baCheckoutType === 'cod' && farmerDetails) {
+    document.getElementById('ba-cod-place-btn-div').style.display = farmerDetails.is_cod_enabled ? 'block' : 'none';
+  } else if (baCheckoutType === 'cod') {
+    document.getElementById('ba-cod-place-btn-div').style.display = 'block';
+  }
+}
+
+initialCheckAndLoadFarmerDetails();
+
+function initialCheckAndLoadFarmerDetails() {
+  let farmerMobile = '';
+  let infos = JSON.parse(localStorage.getItem('BA_COD_FORM_NOTES_ATTRIBUTES')) || [];
+  infos.forEach( info => {
+    if (info.name === 'mobile') {
+      farmerMobile = info.value;
+    }
+  });
+
+  let farmerDetails = getFarmerDetails();
+  let loadedAt24Hr = farmerDetails.loaded_at || '';
+  let now = getBaCodCurrentTime();
+  if (farmerMobile || farmerDetails.mobile) {
+    if (!loadedAt24Hr || (now - parseInt(loadedAt24Hr)) > (24 * 60 * 60 * 1000)) {
+      loadFarmerDetails(farmerMobile ? farmerMobile : farmerDetails.mobile);
+    } else {
+      resetFarmerDetailsNotAvailable(farmerDetails);
+    }
+  }
+}
+
+function loadFarmerDetails(farmerMobile) {
+  let now = getBaCodCurrentTime();
+  fetch(`https://shopify-krushidukan.leanagri.com/user_config/en/${farmerMobile}/user_data.json`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(res => res.json())
+    .then(res => {
+      if (res) {
+        res['mobile'] = farmerMobile.toString();
+        res['loaded_at'] = now.toString();
+        localStorage.setItem('baFarmerDetails', JSON.stringify(res));
+        setFarmerAddress();
+        if (baCheckoutType === 'cod') {
+          document.getElementById('ba-cod-place-btn-div').style.display = res.is_cod_enabled ? 'block' : 'none';
+        }
+      } else {
+        localStorage.setItem('baFarmerDetails', JSON.stringify({}));
+        if (baCheckoutType === 'cod') {
+          document.getElementById('ba-cod-place-btn-div').style.display = 'block';
+        }
+      }
+    }).catch(error => {
+    localStorage.setItem('baFarmerDetails', JSON.stringify({}));
+    if (baCheckoutType === 'cod') {
+      document.getElementById('ba-cod-place-btn-div').style.display = 'block';
+    }
+  });
+}
+
+function setFarmerAddress() {
+  let name = document.getElementById('farmerName');
+  let mobile = document.getElementById('farmerMobile');
+  let pincode = document.getElementById('baCodPincode');
+  let stateField = document.getElementById('baCodStateSelect');
+  let districtField = document.getElementById('baCodDistrictSelect');
+  let taluka = document.getElementById('talukaName');
+  let village = document.getElementById('villageName');
+  let address = document.getElementById('baAddress');
+  let landmark = document.getElementById('baLandmark');
+  let postOffice = document.getElementById('baPostOffice');
+
+  let mainLocation = getFarmerDetails();
+
+  if (mainLocation.address) {
+    let location = mainLocation.address;
+    if (!name.value && location.name) {
+      name.value = location.name;
+    }
+    if (location.address) {
+      address.value = location.address;
+    }
+    if (location.landmark) {
+      landmark.value = location.landmark;
+    }
+    if (location.pin_code) {
+      pincode.value = location.pin_code;
+      sendBaCodGEvents('ba_address_populated_user', { 'value': location.pin_code });
+    }
+    if (location.state) {
+      stateField.value = location.state;
+      stateId = location.state;
+    }
+    if (location.state_name) {
+      stateName = location.state_name;
+      stateNameEn = location.state_name;
+    }
+    if (location.district) {
+      districtField.value = location.district;
+      districtId = location.district;
+    }
+    if (location.district_name) {
+      districtName = location.district_name;
+      districtNameEn = location.district_name;
+    }
+    if (location.taluka) {
+      talukaId = location.taluka ? location.taluka : '';
+    }
+    if (location.taluka_name) {
+      taluka.value = location.taluka_name;
+      talukaName = location.taluka_name;
+      talukaNameEn = location.taluka_name;
+    }
+    if (location.village) {
+      villageId = location.village ? location.village : '';
+    }
+    if (location.village_name) {
+      village.value = location.village_name;
+      villageName = location.village_name;
+      villageNameEn = location.village_name;
+    }
+  }
+
+  if (stateId) {
+    loadDistricts(stateId, districtId ? districtId : '', districtNameEn ? districtNameEn : '');
+  }
+
+  if (districtId) {
+    loadTalukas(districtId, talukaId ? talukaId : '',talukaNameEn ? talukaNameEn : '');
+  }
+
+  if (talukaId) {
+    loadVillages(talukaId, villageId ? villageId : '',villageNameEn ? villageNameEn : '');
+  }
+}
+
+function getFarmerDetails() {
+  return JSON.parse(localStorage.getItem('baFarmerDetails')) || {};
+}
 
 document.getElementById('baCodPincode').addEventListener('input', function() {
   if (this.value.length === 6) {
@@ -1815,8 +2002,6 @@ document.getElementById('baCodPincode').addEventListener('input', function() {
     checkWhiteListedPincodes(this.value);
   }
 });
-
-
 
 // Blacklisted pincode api - will be called once when page is loaded
 function loadBlackListedPincodes() {
@@ -2592,6 +2777,7 @@ function autoFillUserDetails() {
     if (info.name === 'mobile') {
       sendBaCodGEvents('ba_cod_auto_address', {'ba_phone_number': info.value});
       document.getElementById('farmerMobile').value = info.value;
+      checkAndLoadFarmerDetails();
     }
     if (info.name === 'stateId') {
       document.getElementById('baCodStateSelect').value = info.value;
@@ -2650,7 +2836,13 @@ function autoFillUserDetails() {
 
   if (infos.length === 0) {
     let location = JSON.parse(sessionStorage.getItem('ba_ip_location_details')) || {};
-    setBaIpOrGpsLocation(location, false);
+    let farmerDetails = getFarmerDetails();
+    if (farmerDetails && farmerDetails.state) {
+      setFarmerAddress();
+    }
+    if (!farmerDetails || !farmerDetails.taluka_name) {
+      setBaIpOrGpsLocation(location, false);
+    }
   }
 }
 
