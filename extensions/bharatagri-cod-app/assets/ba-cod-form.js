@@ -1484,7 +1484,8 @@ function setBaToken(token, mobile) {
   localStorage.setItem('baToken', baTokenData);
 }
 
-function getBaToken(mobile) {
+function getBaToken() {
+  let mobile = getMobileValue();
   let itemStr = localStorage.getItem('baToken');
   if (!itemStr) {
     return false;
@@ -1504,8 +1505,6 @@ function getBaToken(mobile) {
     return false;
   }
 }
-
-
 
 function checkBaCodOrderCount(mobileValue) {
   let data = getBaCodProductData();
@@ -1725,60 +1724,62 @@ setInterval(() => {
   taluka.value = getFormattedLocationNameAndRightValues(taluka.value);
   village.value = getFormattedLocationNameAndRightValues(village.value);
 
+  let cartItems = getBaCartMainItemDetails();
+  if (cartItems && cartItems.product_id) {
+    if (name.value && name.value.length >= 3) {
+      name.classList.remove('ba-mandatory-field-border');
+      document.getElementById('farmerNameRequired').style.display = 'none';
+    }
 
-  if (name.value && name.value.length >= 3) {
-    name.classList.remove('ba-mandatory-field-border');
-    document.getElementById('farmerNameRequired').style.display = 'none';
-  }
+    if (mobile && mobile.value && mobile.value.length === 10 && mobile.value.match(numericalNumberRegex)) {
+      mobile.classList.remove('ba-mandatory-field-border');
+      document.getElementById('farmerMobileRequired').style.display = 'none';
+    }
 
-  if (mobile && mobile.value && mobile.value.length === 10 && mobile.value.match(numericalNumberRegex)) {
-    mobile.classList.remove('ba-mandatory-field-border');
-    document.getElementById('farmerMobileRequired').style.display = 'none';
-  }
-
-  if (pincode && pincode.value && pincode.value.length === 6 && pincode.value.match(numericalNumberRegex) && pincode.value[0] !== "0") {
-    document.getElementById('baCodPincodeRequired').style.display = 'none';
-    let whitelistedPincodes = getWhitelistedPincodes();
-    if (whitelistedPincodes.length > 0) {
-      if (validateWhiteListedPincode(pincode.value)) {
-        pincode.classList.remove('ba-mandatory-field-border');
-        document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'none';
+    if (pincode && pincode.value && pincode.value.length === 6 && pincode.value.match(numericalNumberRegex) && pincode.value[0] !== "0") {
+      document.getElementById('baCodPincodeRequired').style.display = 'none';
+      let whitelistedPincodes = getWhitelistedPincodes();
+      if (whitelistedPincodes.length > 0) {
+        if (validateWhiteListedPincode(pincode.value)) {
+          pincode.classList.remove('ba-mandatory-field-border');
+          document.getElementById('baCodPincodeNotWhitelistRequired').style.display = 'none';
+        } else {
+          checkAndRemovePincodeError(pincode);
+        }
       } else {
         checkAndRemovePincodeError(pincode);
       }
-    } else {
-      checkAndRemovePincodeError(pincode);
     }
-  }
 
-  if (stateId) {
-    stateField.classList.remove('ba-mandatory-field-border');
-    document.getElementById('baCodStateSelectRequired').style.display = 'none';
-  }
+    if (stateId) {
+      stateField.classList.remove('ba-mandatory-field-border');
+      document.getElementById('baCodStateSelectRequired').style.display = 'none';
+    }
 
-  if (districtId) {
-    districtField.classList.remove('ba-mandatory-field-border');
-    document.getElementById('baCodDistrictSelectRequired').style.display = 'none';
-  }
+    if (districtId) {
+      districtField.classList.remove('ba-mandatory-field-border');
+      document.getElementById('baCodDistrictSelectRequired').style.display = 'none';
+    }
 
-  if (taluka.value && taluka.value.length >= 3) {
-    taluka.classList.remove('ba-mandatory-field-border');
-    document.getElementById('talukaNameRequired').style.display = 'none';
-  }
+    if (taluka.value && taluka.value.length >= 3) {
+      taluka.classList.remove('ba-mandatory-field-border');
+      document.getElementById('talukaNameRequired').style.display = 'none';
+    }
 
-  if (village.value && village.value.length >= 3) {
-    village.classList.remove('ba-mandatory-field-border');
-    document.getElementById('villageNameRequired').style.display = 'none';
-  }
+    if (village.value && village.value.length >= 3) {
+      village.classList.remove('ba-mandatory-field-border');
+      document.getElementById('villageNameRequired').style.display = 'none';
+    }
 
-  if (address.value && address.value.length >= 7) {
-    address.classList.remove('ba-mandatory-field-border');
-    document.getElementById('baAddressRequired').style.display = 'none';
-  }
+    if (address.value && address.value.length >= 7) {
+      address.classList.remove('ba-mandatory-field-border');
+      document.getElementById('baAddressRequired').style.display = 'none';
+    }
 
-  if (landmark.value  && landmark.value.length >= 5) {
-    landmark.classList.remove('ba-mandatory-field-border');
-    document.getElementById('baLandmarkRequired').style.display = 'none';
+    if (landmark.value  && landmark.value.length >= 5) {
+      landmark.classList.remove('ba-mandatory-field-border');
+      document.getElementById('baLandmarkRequired').style.display = 'none';
+    }
   }
 }, 2500);
 
@@ -3527,9 +3528,9 @@ function closeBaRecoveryDiscountAndForm() {
 }
 
 function getBaCartMainItemDetails() {
-  let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse'));
-  let items = baUpdateCart.items;
-  return items[0];
+  let baUpdateCart = JSON.parse(localStorage.getItem('baUpdateCartResponse')) || {};
+  let items = baUpdateCart.items || [];
+  return items.length > 0 ? items[0] : {};
 }
 
 function replaceChildrenAlternative(parentNode) {
