@@ -1725,7 +1725,8 @@ setInterval(() => {
   village.value = getFormattedLocationNameAndRightValues(village.value);
 
   let cartItems = getBaCartMainItemDetails();
-  if (cartItems && cartItems.product_id) {
+  let variantId = sessionStorage.getItem('baCodVariantId') || '';
+  if (cartItems && cartItems.product_id && variantId) {
     if (name.value && name.value.length >= 3) {
       name.classList.remove('ba-mandatory-field-border');
       document.getElementById('farmerNameRequired').style.display = 'none';
