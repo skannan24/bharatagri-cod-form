@@ -21,6 +21,7 @@ let highRiskProductFlag = false;
 
 let otpVerifyProducts = [];
 let otpVerifyFlag = false;
+let otpBackendVerifyFlag = false;
 
 let baCodOrderUrl = '';
 let baCodOrderNumber = '';
@@ -1449,6 +1450,12 @@ function baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mob
     multipleCodOrderCheck = checkBaCodOrderCount(mobileValue);
   }
 
+  let userToken = getBaToken();
+
+  if (userToken) {
+    otpVerifyFlag = false;
+  }
+
   if (otpVerifyFlag && type === 'cod') {
     sendBaCodGEvents('ba_otp_verify_modal_triggered', {value: mobileValue.toString()});
   }
@@ -1460,7 +1467,7 @@ function baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mob
     multipleCodOrderCheck =  true;
   }
 
-  if ((highRiskProductFlag || otpVerifyFlag || multipleCodOrderCheck) && type === 'cod') {
+  if ((highRiskProductFlag || otpVerifyFlag || otpBackendVerifyFlag || multipleCodOrderCheck) && type === 'cod') {
     displayConfirmationModal(multipleCodOrderCheck);
   } else {
     baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, type);
@@ -1470,6 +1477,35 @@ function baCreateOrderApi(baO2, createOrderTotalValue, createOrderLineItems, mob
 function getBaCodCurrentTime() {
   return new Date().getTime();
 }
+
+function setBaToken(token, mobile) {
+  let timestamp = getBaCodCurrentTime();
+  let baTokenData = JSON.stringify({ token: token, mobile: mobile, timestamp: timestamp });
+  localStorage.setItem('baToken', baTokenData);
+}
+
+function getBaToken(mobile) {
+  let itemStr = localStorage.getItem('baToken');
+  if (!itemStr) {
+    return false;
+  }
+
+  try {
+    let item = JSON.parse(itemStr);
+    let now = getBaCodCurrentTime();
+    let oneWeek = 7 * 24 * 60 * 60 * 1000; // 7 days window
+
+    if (now - item.timestamp < oneWeek && item.mobile === mobile) {
+      return item.token;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    return false;
+  }
+}
+
+
 
 function checkBaCodOrderCount(mobileValue) {
   let data = getBaCodProductData();
@@ -1534,6 +1570,14 @@ function checkBaCodOrderCount(mobileValue) {
   return false;
 }
 
+function resetBaCodCounter() {
+  localStorage.removeItem('storedBaFirstOrderTime5Min');
+  localStorage.removeItem('storedBaOrderCount5Min');
+
+  localStorage.removeItem('storedBaFirstOrderTime12Hr');
+  localStorage.removeItem('storedBaOrderCount12Hr');
+}
+
 function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobileValue, type) {
   fetch('https://lcrks.leanagri.com/third_parties/shopify_cod_app/api/v1/create-order/', {
     method: 'POST',
@@ -1552,6 +1596,10 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
         // Resetting if otp modal is displayed
         if (baO2['otp']) {
           sendBaCodGEvents('ba_cod_otp_success_and_ordered', {});
+          if (result.auth_token) {
+            setBaToken(result.auth_token, mobileValue);
+          }
+          resetBaCodCounter();
           baCloseConfirmationModalAndReset();
         }
         if (type === 'cod') {
@@ -1593,6 +1641,10 @@ function baProcessOrder(baO2, createOrderTotalValue, createOrderLineItems, mobil
             sendBaCodGEvents('ba_cod_otp_invalid', {});
             baOtpInvalidSetAndReset('block', '1px solid #EC463B');
             resetCodConfirmationModal();
+          } else if (result.error && result.error === 'OTP Authentication required') {
+            sendBaCodGEvents('ba_cod_otp_auth_required', {});
+            otpBackendVerifyFlag = true;
+            displayConfirmationModal(false);
           } else {
             onBaOrderCreationError();
           }
@@ -2966,6 +3018,7 @@ function resetCodFormFields() {
   // reset high risk product modal flag
   highRiskProductFlag = false;
   otpVerifyFlag = false;
+  otpBackendVerifyFlag = false;
 
   // reset cod order url
   baCodOrderUrl = '';
@@ -3543,7 +3596,7 @@ function displayConfirmationModal(multipleCodOrderCheck) {
 
   baResetOtpValues();
 
-  if (otpVerifyFlag || multipleCodOrderCheck) {
+  if (otpVerifyFlag || multipleCodOrderCheck || otpBackendVerifyFlag) {
     otpModal.style.display = 'block';
     confirmationModal.style.display = 'none';
     onDisplayBaCodOTPModal();
