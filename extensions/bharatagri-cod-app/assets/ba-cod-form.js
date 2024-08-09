@@ -3365,7 +3365,9 @@ function loadBaLocation(value) {
 }
 
 function setPincodeLocation(data) {
-  resetLocationFields();
+  // Commented the reset values - coz it shouldn't change the values entered by farmer
+  // resetLocationFields();
+
   // const updateElement = (elementId, dataItem) => {
   //   if (dataItem?.id && dataItem?.name) {
   //     document.getElementById(elementId).value = dataItem[langKey] || dataItem.name;
@@ -3376,19 +3378,32 @@ function setPincodeLocation(data) {
   // updateElement('talukaName', data?.taluka);
   // updateElement('villageName', data?.village);
 
+  let stateValue = document.getElementById('baCodStateSelect').value;
+  let districtValue = document.getElementById('baCodDistrictSelect').value;
+  let talukaValue = document.getElementById('talukaName').value;
+  let villageValue = document.getElementById('villageName').value;
+
   try {
     ['state', 'district', 'taluka', 'village'].forEach((type) => {
       const dataItem = data[type];
       if (dataItem) {
         let name = dataItem[langKey] || dataItem.name;
         if (type === 'state') {
-          setStateFromPincode(dataItem.id, name, dataItem.name_en)
+          setStateFromPincode(dataItem.id, name, dataItem.name_en);
         } else if (type === 'district') {
           setDistrictFromPincode(dataItem.id, name, dataItem.name_en, data.state.id);
         } else if (type === 'taluka') {
-          setTalukaFromPincode(dataItem.id, name, dataItem.name_en, data.district.id);
+          if (!talukaValue) {
+            setTalukaFromPincode(dataItem.id, name, dataItem.name_en, data.district.id);
+          } else {
+            loadTalukas(data.district.id, talukaId ? talukaId : '', talukaValue ? talukaValue : '');
+          }
         } else {
-          setVillageFromPincode(dataItem.id, name, dataItem.name_en, data.taluka.id);
+          if (!villageValue) {
+            setVillageFromPincode(dataItem.id, name, dataItem.name_en, data.taluka.id);
+          } else {
+            loadVillages(data.taluka.id, villageId ? villageId : '', villageValue ? villageValue : '');
+          }
         }
       }
     });
